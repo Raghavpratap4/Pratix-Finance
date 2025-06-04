@@ -1,26 +1,52 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GST Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="calculator-card">
-    <h2>🧾 GST Calculator</h2>
-    <div class="input-group">
-      <label for="amount">Original Amount (₹)</label>
-      <input type="number" id="amount" placeholder="Enter amount" />
+  <div class="container">
+    <h1>🧾 GST Calculator</h1>
+    <div class="calculator">
+      <label for="amount">Enter Amount (₹):</label>
+      <input type="number" id="amount" placeholder="Enter amount">
+
+      <label for="gstRate">Select GST Rate (%):</label>
+      <select id="gstRate">
+        <option value="5">5%</option>
+        <option value="12">12%</option>
+        <option value="18" selected>18%</option>
+        <option value="28">28%</option>
+      </select>
+
+      <button onclick="calculateGST()">Calculate</button>
+
+      <div id="result" class="result"></div>
     </div>
-    <div class="input-group">
-      <label for="gstRate">GST Rate (%)</label>
-      <input type="number" id="gstRate" placeholder="Enter GST rate" />
-    </div>
-    <button onclick="calculateGST()">Calculate</button>
-    <div class="result" id="result"></div>
+    <a href="index.html" class="back-link">⬅️ Back to Home</a>
   </div>
 
-  <script src="gst.js"></script>
+  <script>
+    function calculateGST() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const rate = parseFloat(document.getElementById('gstRate').value);
+
+      if (isNaN(amount)) {
+        document.getElementById('result').innerHTML = "Please enter a valid amount.";
+        return;
+      }
+
+      const gstAmount = (amount * rate) / 100;
+      const total = amount + gstAmount;
+
+      document.getElementById('result').innerHTML = `
+        <p>GST Amount: ₹${gstAmount.toFixed(2)}</p>
+        <p>Total Amount (Including GST): ₹${total.toFixed(2)}</p>
+      `;
+    }
+  </script>
 </body>
 </html>
