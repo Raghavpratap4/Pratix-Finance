@@ -41,3 +41,31 @@ button {
   margin-top: 1em;
   font-size: 1.2em;
 }
+/* Responsive Styling */
+body {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+button, input, select {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 600px;
+  }
+}
