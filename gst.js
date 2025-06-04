@@ -1,21 +1,19 @@
+
 function calculateGST() {
-  const amount = parseFloat(document.getElementById("amount").value);
-  const gstRate = parseFloat(document.getElementById("gstRate").value);
+  const amount = parseFloat(document.getElementById('amount').value);
+  const gstRate = parseFloat(document.getElementById('gstRate').value);
+  const resultDiv = document.getElementById('result');
 
   if (isNaN(amount) || isNaN(gstRate)) {
-    document.getElementById("result").innerHTML = "<p>Please enter valid inputs.</p>";
+    resultDiv.innerHTML = "<p style='color:red;'>Please enter valid numbers.</p>";
     return;
   }
 
-  const gstAmount = amount * gstRate / 100;
-  const totalAmount = amount + gstAmount;
-  const cgst = gstAmount / 2;
-  const sgst = gstAmount / 2;
+  const gstAmount = (amount * gstRate) / 100;
+  const total = amount + gstAmount;
 
-  document.getElementById("result").innerHTML = `
-    <p><strong>GST Amount:</strong> ₹${gstAmount.toFixed(2)}</p>
-    <p><strong>CGST (50%):</strong> ₹${cgst.toFixed(2)}</p>
-    <p><strong>SGST (50%):</strong> ₹${sgst.toFixed(2)}</p>
-    <p><strong>Total Amount (incl. GST):</strong> ₹${totalAmount.toFixed(2)}</p>
+  resultDiv.innerHTML = `
+    <p>GST Amount: ₹${gstAmount.toFixed(2)}</p>
+    <p>Total with GST: ₹${total.toFixed(2)}</p>
   `;
 }
