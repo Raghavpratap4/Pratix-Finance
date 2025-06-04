@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMI Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <button onclick="location.href='index.html'" class="home-btn">🏠 Home</button>
+    <h2>EMI Calculator</h2>
+    <input type="number" id="principal" placeholder="Loan Amount (₹)" />
+    <input type="number" id="rate" placeholder="Annual Interest Rate (%)" />
+    <input type="number" id="tenure" placeholder="Tenure (in months)" />
+    <button onclick="calculateEMI()">Calculate</button>
+    <p id="emi-result"></p>
+  </div>
+  <script src="theme.js"></script>
+  <script>
+    function calculateEMI() {
+      let P = parseFloat(document.getElementById("principal").value);
+      let r = parseFloat(document.getElementById("rate").value) / 12 / 100;
+      let n = parseFloat(document.getElementById("tenure").value);
+      let emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      document.getElementById("emi-result").innerText = "Monthly EMI: ₹" + emi.toFixed(2);
+    }
+  </script>
+</body>
+</html>

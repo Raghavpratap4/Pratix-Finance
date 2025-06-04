@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <button onclick="location.href='index.html'" class="home-btn">🏠 Home</button>
+    <h2>SIP Calculator</h2>
+    <input type="number" id="monthly" placeholder="Monthly Investment (₹)" />
+    <input type="number" id="rate" placeholder="Annual Rate (%)" />
+    <input type="number" id="years" placeholder="Years" />
+    <button onclick="calculateSIP()">Calculate</button>
+    <p id="sip-result"></p>
+  </div>
+  <script src="theme.js"></script>
+  <script>
+    function calculateSIP() {
+      let P = parseFloat(document.getElementById("monthly").value);
+      let r = parseFloat(document.getElementById("rate").value) / 12 / 100;
+      let n = parseFloat(document.getElementById("years").value) * 12;
+      let result = P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+      document.getElementById("sip-result").innerText = "Future Value: ₹" + result.toFixed(2);
+    }
+  </script>
+</body>
+</html>
