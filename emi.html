@@ -1,28 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EMI Calculator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMI Calculator - Pratix Finance</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6fc;
+      padding: 20px;
+      margin: 0;
+    }
+    .calculator {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .calculator h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #3f51b5;
+    }
+    .input-container input, .input-container button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .input-container button {
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .input-container button:hover {
+      background-color: #303f9f;
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f5f7ff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+    }
+    .result-box h3 {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-    <img src="logo.png" alt="Pratix Finance Logo" style="max-width: 150px; display: block; margin: 20px auto;">
-<div style='text-align:center; margin: 10px 0;'><img src='logo.png' alt='Pratix Finance Logo' style='max-width:100px; height:auto;'/></div>
-  <header>
-    <h1>EMI Calculator</h1>
-    <a href="index.html" class="nav-button">🏠 Home</a>
-    <button id="toggle-theme">⭐</button>
-  </header>
-  <main>
-    <input type="number" id="loan" placeholder="Loan Amount">
-    <input type="number" id="interest" placeholder="Annual Interest Rate (%)">
-    <input type="number" id="tenure" placeholder="Tenure (months)">
-    <button onclick="calculateEMI()">Calculate</button>
-    <div id="emi-result"></div>
-  </main>
-  <script src="theme-toggle.js"></script>
-  <script src="emi.js"></script>
+  <section class="calculator">
+    <h2>EMI Calculator 🧮</h2>
+    <div class="input-container">
+      <input type="number" id="loanAmount" placeholder="Loan Amount (₹)" />
+      <input type="number" id="interestRate" placeholder="Annual Interest Rate (%)" />
+      <input type="number" id="loanTenure" placeholder="Loan Tenure (in years)" />
+      <button onclick="calculateEMI()">Calculate EMI</button>
+    </div>
+    <div id="emiResult" class="result-box" style="display: none;"></div>
+  </section>
+
+  <script>
+    function calculateEMI() {
+      const principal = parseFloat(document.getElementById("loanAmount").value);
+      const annualRate = parseFloat(document.getElementById("interestRate").value);
+      const tenureYears = parseFloat(document.getElementById("loanTenure").value);
+
+      if (isNaN(principal) || isNaN(annualRate) || isNaN(tenureYears)) {
+        alert("Please enter all values correctly.");
+        return;
+      }
+
+      const monthlyRate = annualRate / 12 / 100;
+      const months = tenureYears * 12;
+
+      const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                  (Math.pow(1 + monthlyRate, months) - 1);
+      const totalPayment = emi * months;
+      const totalInterest = totalPayment - principal;
+
+      document.getElementById("emiResult").innerHTML = `
+        <h3>📊 EMI Calculation Result</h3>
+        <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
+        <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>
+        <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}</p>
+      `;
+      document.getElementById("emiResult").style.display = "block";
+    }
+  </script>
 </body>
 </html>
