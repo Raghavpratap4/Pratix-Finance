@@ -1,34 +1,145 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EMI Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1NSSQW00JS');
+</script>
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pratix Finance - Smart Financial Calculators</title>
+<link href="style.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #f3f4f6, #dbeafe);
+            text-align: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #ff5722;
+        }
+        h1 span {
+            color: #333;
+        }
+        p.tagline {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 90%;
+            max-width: 320px;
+        }
+        .calc-button {
+            background: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            text-decoration: none;
+            color: #111;
+            font-weight: 500;
+        }
+        .calc-button:hover {
+            background-color: #f0f0f0;
+        }
+        .coming-soon {
+            background: #eee;
+            color: #999;
+            cursor: not-allowed;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📊 EMI Calculator</h1>
-    <div class="input-panel">
-      <label>Loan Amount (₹)</label>
-      <input type="number" id="loanAmount" placeholder="Enter loan amount">
+<img alt="Pratix Logo" class="logo" src="logo.png"/>
+<h1><span>Pratix</span> Finance</h1>
+<p class="tagline">Finance Tools for Everyone</p>
+<div class="button-container">
+<a class="calc-button" href="emi-calculator.html">🏠 EMI Calculator</a>
+<a class="calc-button" href="income-tax-calculator.html">💰 Income Tax Calculator</a>
+<a class="calc-button" href="gst-calculator.html">🧾 GST Calculator</a>
+<a class="calc-button" href="sip-calculator.html">📈 SIP Calculator</a>
+<a class="calc-button" href="fd-calculator.html">🏦 FD Calculator</a>
 
-      <label>Interest Rate (%)</label>
-      <input type="number" id="interestRate" placeholder="Enter annual interest rate">
 
-      <label>Loan Tenure (Months)</label>
-      <input type="number" id="loanTenure" placeholder="Enter tenure in months">
+<script>
+  const dropdown = document.querySelector('.dropdown');
+  const content = document.querySelector('.dropdown-content');
+  dropdown.addEventListener('click', () => {
+    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+  });
+</script>
+<style>
+  .dropdown a {
+    text-decoration: none;
+    display: block;
+    padding: 6px 12px;
+    color: #333;
+    border-radius: 8px;
+  }
+  .dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+</style>
 
-      <button onclick="calculateEMI()">Calculate</button>
+</div>
+<footer>
+        
+    <div style="text-align: center;">
+      <div class="calculator-button" onclick="toggleAboutMenu()" style="cursor: pointer; text-align: center;">📘 About</div>
+      <div id="aboutDropdown" style="display: none; margin-top: 16px; background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <a href="about.html" style="display: block; padding: 8px;">📘 About Pratix Finance</a>
+        <a href="contact.html" style="display: block; padding: 8px;">📞 Contact</a>
+        <a href="privacy-policy.html" style="display: block; padding: 8px;">🔒 Privacy Policy</a>
+        <a href="blog.html" style="display: block; padding: 8px;">📝 Blogs</a>
+      </div>
     </div>
+    
+<p>Crafted with ❤️ by Raghav Pratap • © 2025 Pratix Finance
+    </footer>
 
-    <div class="result-panel" id="result">
-      <h2>Result</h2>
-      <p id="emiResult">EMI: ₹0</p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <script>
+      function toggleAboutMenu() {
+        const dropdown = document.getElementById("aboutDropdown");
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        if (dropdown.style.display === "block") {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+      }
+    </script>
+    
 </body>
 </html>

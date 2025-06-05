@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
+
 <!-- Google tag (gtag.js) -->
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -12,11 +12,12 @@
 
   gtag('config', 'G-1NSSQW00JS');
 </script>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIP Calculator - Pratix Finance</title>
-<link href="style.css" rel="stylesheet"/>
-<style>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIP Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -81,45 +82,59 @@
     }
   </style>
 </head>
-<body style="max-width: 500px; margin: auto; background: #fff; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 20px;">
+<body>
+
 <!-- AdSense Header Ad -->
 <div style="margin-bottom: 16px;">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle" data-ad-client="ca-pub-xxxxxxxxxxxxxxxx" data-ad-format="auto" data-ad-slot="1234567890" data-full-width-responsive="true" style="display:block; text-align:center;"></ins>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div>
-<div class="container">
-<img alt="Logo" class="logo" src="logo.png"/>
-<h1>SIP Calculator</h1>
-<div class="input-group">
-<label for="monthlyInvestment">Monthly Investment (₹)</label>
-<input id="monthlyInvestment" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 15px;" type="number"/>
-</div>
-<div class="input-group">
-<label for="annualReturn">Expected Annual Return (%)</label>
-<input id="annualReturn" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 15px;" type="number"/>
-</div>
-<div class="input-group">
-<label for="years">Investment Duration (Years)</label>
-<input id="years" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 15px;" type="number"/>
-</div>
-<button class="btn" onclick="calculateSIP()" style="width: 100%; background: #ff5722; color: #fff; padding: 12px; border: none; border-radius: 10px; font-size: 16px;">Calculate</button>
-<div class="results" id="sipResults" style="display:none;">
-<p><strong>Total Investment:</strong> ₹<span id="totalInvested"></span></p>
-<p><strong>Estimated Returns:</strong> ₹<span id="estimatedReturns"></span></p>
-<p><strong>Future Value:</strong> ₹<span id="futureValue"></span></p>
-</div>
-</div>
-<script src="sip.js"></script>
+
+  <div class="container">
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>SIP Calculator</h1>
+    <div class="input-group">
+      <label for="monthlyInvestment">Monthly Investment (₹)</label>
+      <input type="number" id="monthlyInvestment" />
+    </div>
+    <div class="input-group">
+      <label for="annualReturn">Expected Annual Return (%)</label>
+      <input type="number" id="annualReturn" />
+    </div>
+    <div class="input-group">
+      <label for="years">Investment Duration (Years)</label>
+      <input type="number" id="years" />
+    </div>
+    <button class="btn" onclick="calculateSIP()">Calculate</button>
+    <div class="results" id="sipResults" style="display:none;">
+      <p><strong>Total Investment:</strong> ₹<span id="totalInvested"></span></p>
+      <p><strong>Estimated Returns:</strong> ₹<span id="estimatedReturns"></span></p>
+      <p><strong>Future Value:</strong> ₹<span id="futureValue"></span></p>
+    </div>
+  </div>
+  <script src="sip.js"></script>
+
 <!-- AdSense Footer Ad -->
 <div style="margin-top: 32px;">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle" data-ad-client="ca-pub-xxxxxxxxxxxxxxxx" data-ad-format="auto" data-ad-slot="1234567890" data-full-width-responsive="true" style="display:block; text-align:center;"></ins>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div>
+
 </body>
 </html>

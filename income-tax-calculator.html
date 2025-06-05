@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
+
 <!-- Google tag (gtag.js) -->
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -11,45 +11,63 @@
 
   gtag('config', 'G-1NSSQW00JS');
 </script>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Income Tax Calculator - Pratix Finance</title>
-<link href="style.css" rel="stylesheet"/>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Income Tax Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body style="max-width: 500px; margin: auto; background: #fff; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 20px;">
+<body>
+
 <!-- AdSense Header Ad -->
 <div style="margin-bottom: 16px;">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle" data-ad-client="ca-pub-xxxxxxxxxxxxxxxx" data-ad-format="auto" data-ad-slot="1234567890" data-full-width-responsive="true" style="display:block; text-align:center;"></ins>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div>
-<div class="container">
-<h1>💰 Income Tax Calculator</h1>
-<form id="taxForm">
-<label for="income">Annual Income (₹):</label>
-<input id="income" required="" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 15px;" type="number"/>
-<label for="age">Age:</label>
-<select id="age">
-<option value="below60">Below 60</option>
-<option value="between60and80">60 - 80</option>
-<option value="above80">Above 80</option>
-</select>
-<label for="deductions">Deductions (₹):</label>
-<input id="deductions" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 15px;" type="number" value="0"/>
-<button style="width: 100%; background: #ff5722; color: #fff; padding: 12px; border: none; border-radius: 10px; font-size: 16px;" type="submit">Calculate Tax</button>
-</form>
-<div id="result" style="margin-top: 20px; padding: 15px; background: #e0f7fa; border-radius: 10px; font-weight: bold; color: #006064;"></div>
-</div>
-<script src="script.js"></script>
+
+  <div class="container">
+    <h1>💰 Income Tax Calculator</h1>
+    <form id="taxForm">
+      <label for="income">Annual Income (₹):</label>
+      <input type="number" id="income" required />
+      
+      <label for="age">Age:</label>
+      <select id="age">
+        <option value="below60">Below 60</option>
+        <option value="between60and80">60 - 80</option>
+        <option value="above80">Above 80</option>
+      </select>
+      
+      <label for="deductions">Deductions (₹):</label>
+      <input type="number" id="deductions" value="0" />
+
+      <button type="submit">Calculate Tax</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
+
 <!-- AdSense Footer Ad -->
 <div style="margin-top: 32px;">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle" data-ad-client="ca-pub-xxxxxxxxxxxxxxxx" data-ad-format="auto" data-ad-slot="1234567890" data-full-width-responsive="true" style="display:block; text-align:center;"></ins>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div>
+
 </body>
 </html>
