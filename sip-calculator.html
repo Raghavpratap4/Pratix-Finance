@@ -1,282 +1,185 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-1NSSQW00JS');
-  </script>
-
-  <!-- AdSense -->
-  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SIP Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #f5f7fa, #e4ecf7);
+      background: linear-gradient(to bottom right, #fff8e1, #ffffff);
       margin: 0;
+      padding: 0;
       color: #333;
     }
     .container {
-      max-width: 500px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 20px;
+      max-width: 480px;
+      margin: auto;
       padding: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    img.logo {
+      display: block;
+      margin: 0 auto 1rem;
+      height: 60px;
     }
     h1 {
       text-align: center;
-      color: #4caf50;
+      font-size: 1.75rem;
       margin-bottom: 1rem;
     }
     .input-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
-    .input-group label {
+    label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
-    .input-group input {
+    input {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #ccc;
       border-radius: 10px;
+      border: 1px solid #ccc;
       font-size: 1rem;
     }
-    .btn {
+    button {
       width: 100%;
       padding: 0.75rem;
-      font-size: 1.1rem;
-      background: #4caf50;
+      font-size: 1rem;
+      background-color: #ff9800;
       color: #fff;
-      font-weight: bold;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
+      margin-top: 1rem;
     }
-    .btn:hover {
-      background: #388e3c;
+    button:hover {
+      background-color: #fb8c00;
     }
     .results {
-      margin-top: 2rem;
+      background-color: #f3e5f5;
       padding: 1rem;
-      background: #f9f9f9;
-      border-radius: 12px;
+      border-radius: 10px;
+      margin-top: 1rem;
     }
     .results p {
-      font-weight: 500;
       margin: 0.5rem 0;
     }
     canvas {
       margin-top: 1rem;
-      width: 100% !important;
-      height: auto !important;
-    }
-    .back-home {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .back-home a {
-      text-decoration: none;
-      color: #2196f3;
     }
     footer {
       text-align: center;
+      font-size: 0.875rem;
       margin-top: 2rem;
+      padding: 1rem;
       color: #777;
-      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
+    <img src="./assets/logo.png" alt="Pratix Logo" class="logo" />
     <h1>📈 SIP Calculator</h1>
-
     <div class="input-group">
-      <label>💸 Monthly Investment (₹)</label>
-      <input type="number" id="monthlyInvestment" placeholder="Enter SIP amount" />
+      <label for="monthlyInvestment">Monthly Investment (₹)</label>
+      <input type="number" id="monthlyInvestment" placeholder="Enter monthly amount" />
     </div>
-
     <div class="input-group">
-      <label>⏳ Investment Period (Years)</label>
-      <input type="number" id="investmentPeriod" placeholder="Enter years" />
+      <label for="annualRate">Expected Annual Return (%)</label>
+      <input type="number" id="annualRate" placeholder="e.g., 12" />
     </div>
-
     <div class="input-group">
-      <label>📊 Expected Annual Return (%)</label>
-      <input type="number" id="expectedReturn" placeholder="Enter rate" />
+      <label for="investmentPeriod">Investment Period (years)</label>
+      <input type="number" id="investmentPeriod" placeholder="e.g., 10" />
+    </div>
+    <button onclick="calculateSIP()">Calculate SIP</button>
+
+    <div class="results" id="resultBox" style="display:none">
+      <p>💰 <strong>Total Investment:</strong> ₹<span id="totalInvestment"></span></p>
+      <p>📈 <strong>Expected Returns:</strong> ₹<span id="gainAmount"></span></p>
+      <p>🏁 <strong>Total Value:</strong> ₹<span id="maturityValue"></span></p>
     </div>
 
-    <button class="btn" onclick="calculateSIP()">Calculate</button>
+    <canvas id="donutChart" height="200" style="display:none"></canvas>
+    <canvas id="lineChart" height="200" style="display:none"></canvas>
 
-    <div class="results" id="results" style="display: none;">
-      <p>Total Investment: ₹<span id="totalInvestment">0</span></p>
-      <p>Expected Returns: ₹<span id="maturityAmount">0</span></p>
-      <canvas id="sipChart"></canvas>
-      <canvas id="sipLineChart"></canvas>
-    </div>
-
-    <div style="margin-top: 2rem; text-align: center;">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="XXXXXXXXXX"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <div class="back-home">
-      <a href="index.html">← Back to Homepage</a>
-    </div>
-
-    <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
+    <footer>© Pratix Finance | Built by Raghav Pratap</footer>
   </div>
 
   <script>
     function calculateSIP() {
-      const P = parseFloat(document.getElementById("monthlyInvestment").value);
-      const Y = parseFloat(document.getElementById("investmentPeriod").value);
-      const r = parseFloat(document.getElementById("expectedReturn").value) / 100 / 12;
-      const n = Y * 12;
+      const monthly = parseFloat(document.getElementById('monthlyInvestment').value);
+      const rate = parseFloat(document.getElementById('annualRate').value);
+      const years = parseFloat(document.getElementById('investmentPeriod').value);
+      const months = years * 12;
+      const monthlyRate = rate / 12 / 100;
 
-      if (!P || !Y || !r) return;
+      if (!monthly || !rate || !years) return;
 
-      const maturity = P * ((Math.pow(1 + r, n) - 1) * (1 + r) / r);
-      const invested = P * n;
-      const gain = maturity - invested;
+      const maturityValue = monthly * ((Math.pow(1 + monthlyRate, months) - 1) * (1 + monthlyRate)) / monthlyRate;
+      const totalInvestment = monthly * months;
+      const gain = maturityValue - totalInvestment;
 
-      document.getElementById("totalInvestment").innerText = invested.toFixed(2);
-      document.getElementById("maturityAmount").innerText = maturity.toFixed(2);
-      document.getElementById("results").style.display = "block";
+      document.getElementById('totalInvestment').innerText = totalInvestment.toFixed(2);
+      document.getElementById('gainAmount').innerText = gain.toFixed(2);
+      document.getElementById('maturityValue').innerText = maturityValue.toFixed(2);
+      document.getElementById('resultBox').style.display = "block";
+      document.getElementById('donutChart').style.display = "block";
+      document.getElementById('lineChart').style.display = "block";
 
-      const ctx = document.getElementById("sipChart").getContext("2d");
-      if (window.sipChartInstance) window.sipChartInstance.destroy();
-      window.sipChartInstance = new Chart(ctx, {
+      const donutCtx = document.getElementById('donutChart').getContext('2d');
+      if (window.donutChartInstance) window.donutChartInstance.destroy();
+      window.donutChartInstance = new Chart(donutCtx, {
         type: 'doughnut',
         data: {
-          labels: ['Invested Amount', 'Returns'],
+          labels: ['Investment', 'Returns'],
           datasets: [{
-            data: [invested, gain],
-            backgroundColor: ['#66bb6a', '#ffa726'],
-            borderColor: '#fff',
-            borderWidth: 2
+            data: [totalInvestment, gain],
+            backgroundColor: ['#4caf50', '#ff9800']
           }]
         },
         options: {
           responsive: true,
-          plugins: { legend: { position: 'bottom' } }
+          plugins: {
+            legend: { position: 'bottom' }
+          }
         }
       });
 
-      const lineCtx = document.getElementById("sipLineChart").getContext("2d");
-      const labels = Array.from({ length: n }, (_, i) => `Month ${i + 1}`);
-      const data = labels.map((_, i) => (P * ((Math.pow(1 + r, i + 1) - 1) * (1 + r) / r)).toFixed(2));
+      const lineCtx = document.getElementById('lineChart').getContext('2d');
+      if (window.lineChartInstance) window.lineChartInstance.destroy();
+      const values = [];
+      for (let i = 1; i <= months; i++) {
+        const val = monthly * ((Math.pow(1 + monthlyRate, i) - 1) * (1 + monthlyRate)) / monthlyRate;
+        values.push(val.toFixed(2));
+      }
 
-      if (window.sipLineChartInstance) window.sipLineChartInstance.destroy();
-      window.sipLineChartInstance = new Chart(lineCtx, {
+      window.lineChartInstance = new Chart(lineCtx, {
         type: 'line',
         data: {
-          labels: labels,
+          labels: Array.from({length: months}, (_, i) => `M${i + 1}`),
           datasets: [{
-            label: 'Wealth Over Time',
-            data: data,
-            borderColor: '#66bb6a',
-            backgroundColor: 'rgba(102,187,106,0.1)',
+            label: 'Maturity Over Time',
+            data: values,
             fill: true,
+            borderColor: '#0288d1',
+            backgroundColor: 'rgba(2,136,209,0.2)',
             tension: 0.3
           }]
         },
         options: {
           responsive: true,
-          plugins: { legend: { position: 'top' } },
-          scales: { y: { beginAtZero: true } }
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: { display: false }
+          }
         }
       });
     }
   </script>
-
-
-<div style="margin-top: 30px;">
-  <h2>📈 SIP Investment Growth</h2>
-  <canvas id="sipChart" style="max-width: 100%; height: 400px;"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-function calculateSIP() {
-  const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
-  const annualRate = parseFloat(document.getElementById('expectedReturnRate').value);
-  const years = parseInt(document.getElementById('investmentPeriod').value);
-  const months = years * 12;
-  const monthlyRate = annualRate / 12 / 100;
-
-  let futureValue = 0;
-  let investedAmount = 0;
-  const fvData = [], invData = [], labels = [];
-
-  for (let i = 1; i <= months; i++) {
-    investedAmount += monthlyInvestment;
-    futureValue = (futureValue + monthlyInvestment) * (1 + monthlyRate);
-
-    if (i % 12 === 0 || i === months) {
-      labels.push('Year ' + Math.ceil(i / 12));
-      fvData.push(futureValue.toFixed(2));
-      invData.push(investedAmount.toFixed(2));
-    }
-  }
-
-  document.getElementById('sipResult').innerHTML = `₹${futureValue.toFixed(2)}`;
-
-  new Chart(document.getElementById('sipChart'), {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Invested Amount',
-          data: invData,
-          borderColor: '#4caf50',
-          backgroundColor: 'rgba(76, 175, 80, 0.2)',
-          fill: true,
-          tension: 0.3
-        },
-        {
-          label: 'Future Value',
-          data: fvData,
-          borderColor: '#2196f3',
-          backgroundColor: 'rgba(33, 150, 243, 0.2)',
-          fill: true,
-          tension: 0.3
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top'
-        },
-        title: {
-          display: true,
-          text: 'SIP Growth Over Time'
-        }
-      }
-    }
-  });
-}
-</script>
 </body>
 </html>
