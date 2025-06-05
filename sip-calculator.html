@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SIP Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #fff8e1, #ffffff);
+      background: linear-gradient(to bottom right, #e8f5e9, #ffffff);
       margin: 0;
       padding: 0;
       color: #333;
@@ -47,7 +47,7 @@
       width: 100%;
       padding: 0.75rem;
       font-size: 1rem;
-      background-color: #ff9800;
+      background-color: #4caf50;
       color: #fff;
       border: none;
       border-radius: 10px;
@@ -55,10 +55,10 @@
       margin-top: 1rem;
     }
     button:hover {
-      background-color: #fb8c00;
+      background-color: #388e3c;
     }
     .results {
-      background-color: #f3e5f5;
+      background-color: #f1f8e9;
       padding: 1rem;
       border-radius: 10px;
       margin-top: 1rem;
@@ -67,7 +67,7 @@
       margin: 0.5rem 0;
     }
     canvas {
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
     footer {
       text-align: center;
@@ -83,99 +83,73 @@
     <img src="./assets/logo.png" alt="Pratix Logo" class="logo" />
     <h1>📈 SIP Calculator</h1>
     <div class="input-group">
-      <label for="monthlyInvestment">Monthly Investment (₹)</label>
-      <input type="number" id="monthlyInvestment" placeholder="Enter monthly amount" />
+      <label for="monthly">Monthly Investment (₹)</label>
+      <input type="number" id="monthly" placeholder="e.g. 5000" />
     </div>
     <div class="input-group">
-      <label for="annualRate">Expected Annual Return (%)</label>
-      <input type="number" id="annualRate" placeholder="e.g., 12" />
+      <label for="rate">Annual Interest Rate (%)</label>
+      <input type="number" id="rate" placeholder="e.g. 12" />
     </div>
     <div class="input-group">
-      <label for="investmentPeriod">Investment Period (years)</label>
-      <input type="number" id="investmentPeriod" placeholder="e.g., 10" />
+      <label for="period">Investment Duration (Years)</label>
+      <input type="number" id="period" placeholder="e.g. 10" />
     </div>
     <button onclick="calculateSIP()">Calculate SIP</button>
 
     <div class="results" id="resultBox" style="display:none">
-      <p>💰 <strong>Total Investment:</strong> ₹<span id="totalInvestment"></span></p>
-      <p>📈 <strong>Expected Returns:</strong> ₹<span id="gainAmount"></span></p>
-      <p>🏁 <strong>Total Value:</strong> ₹<span id="maturityValue"></span></p>
+      <p>📦 <strong>Total Invested:</strong> ₹<span id="invested"></span></p>
+      <p>📈 <strong>Estimated Returns:</strong> ₹<span id="returns"></span></p>
+      <p>🏁 <strong>Maturity Amount:</strong> ₹<span id="maturity"></span></p>
     </div>
 
-    <canvas id="donutChart" height="200" style="display:none"></canvas>
-    <canvas id="lineChart" height="200" style="display:none"></canvas>
+    <canvas id="sipChart" width="100%" height="100" style="display:none"></canvas>
 
     <footer>© Pratix Finance | Built by Raghav Pratap</footer>
   </div>
 
   <script>
     function calculateSIP() {
-      const monthly = parseFloat(document.getElementById('monthlyInvestment').value);
-      const rate = parseFloat(document.getElementById('annualRate').value);
-      const years = parseFloat(document.getElementById('investmentPeriod').value);
-      const months = years * 12;
+      const monthly = parseFloat(document.getElementById('monthly').value);
+      const rate = parseFloat(document.getElementById('rate').value);
+      const period = parseFloat(document.getElementById('period').value);
+
+      if (!monthly || !rate || !period) return;
+
+      const months = period * 12;
       const monthlyRate = rate / 12 / 100;
+      const maturity = monthly * ((Math.pow(1 + monthlyRate, months) - 1) * (1 + monthlyRate)) / monthlyRate;
+      const invested = monthly * months;
+      const returns = maturity - invested;
 
-      if (!monthly || !rate || !years) return;
-
-      const maturityValue = monthly * ((Math.pow(1 + monthlyRate, months) - 1) * (1 + monthlyRate)) / monthlyRate;
-      const totalInvestment = monthly * months;
-      const gain = maturityValue - totalInvestment;
-
-      document.getElementById('totalInvestment').innerText = totalInvestment.toFixed(2);
-      document.getElementById('gainAmount').innerText = gain.toFixed(2);
-      document.getElementById('maturityValue').innerText = maturityValue.toFixed(2);
+      document.getElementById('invested').innerText = invested.toFixed(2);
+      document.getElementById('returns').innerText = returns.toFixed(2);
+      document.getElementById('maturity').innerText = maturity.toFixed(2);
       document.getElementById('resultBox').style.display = "block";
-      document.getElementById('donutChart').style.display = "block";
-      document.getElementById('lineChart').style.display = "block";
 
-      const donutCtx = document.getElementById('donutChart').getContext('2d');
-      if (window.donutChartInstance) window.donutChartInstance.destroy();
-      window.donutChartInstance = new Chart(donutCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Investment', 'Returns'],
-          datasets: [{
-            data: [totalInvestment, gain],
-            backgroundColor: ['#4caf50', '#ff9800']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      });
+      const ctx = document.getElementById('sipChart').getContext('2d');
+      document.getElementById('sipChart').style.display = "block";
 
-      const lineCtx = document.getElementById('lineChart').getContext('2d');
-      if (window.lineChartInstance) window.lineChartInstance.destroy();
-      const values = [];
-      for (let i = 1; i <= months; i++) {
-        const val = monthly * ((Math.pow(1 + monthlyRate, i) - 1) * (1 + monthlyRate)) / monthlyRate;
-        values.push(val.toFixed(2));
+      if (window.sipChart) {
+        window.sipChart.destroy();
       }
 
-      window.lineChartInstance = new Chart(lineCtx, {
-        type: 'line',
+      window.sipChart = new Chart(ctx, {
+        type: 'doughnut',
         data: {
-          labels: Array.from({length: months}, (_, i) => `M${i + 1}`),
+          labels: ['Invested', 'Returns'],
           datasets: [{
-            label: 'Maturity Over Time',
-            data: values,
-            fill: true,
-            borderColor: '#0288d1',
-            backgroundColor: 'rgba(2,136,209,0.2)',
-            tension: 0.3
+            label: 'SIP Breakdown',
+            data: [invested, returns],
+            backgroundColor: ['#81c784', '#388e3c'],
+            borderWidth: 1
           }]
         },
         options: {
           responsive: true,
           plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: { display: false }
+            legend: {
+              position: 'bottom'
+            }
           }
         }
       });
