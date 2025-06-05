@@ -83,7 +83,26 @@
 <a class="calc-button" href="sip-calculator.html">📈 SIP Calculator</a>
 <div class="calc-button coming-soon">🏦 FD Calculator Coming Soon</div>
 
-
+<div class="dropdown calc-button" style="position: relative;">
+  📘 About ▼
+  <div class="dropdown-content" style="
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 220px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border-radius: 12px;
+    padding: 10px;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+  ">
+    <a href="about.html">📘 About Pratix Finance</a><br>
+    <a href="contact.html">📞 Contact</a><br>
+    <a href="privacy.html">🔒 Privacy Policy</a><br>
+    <a href="blogs.html">📝 Blogs</a>
+  </div>
+</div>
 <script>
   const dropdown = document.querySelector('.dropdown');
   const content = document.querySelector('.dropdown-content');
@@ -106,29 +125,7 @@
 
 </div>
 <footer>
-        
-    <div style="text-align: center;">
-      <div class="calculator-button" onclick="toggleAboutMenu()" style="cursor: pointer; text-align: center;">📘 About</div>
-      <div id="aboutDropdown" style="display: none; margin-top: 16px; background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-        <a href="about.html" style="display: block; padding: 8px;">📘 About Pratix Finance</a>
-        <a href="contact.html" style="display: block; padding: 8px;">📞 Contact</a>
-        <a href="privacy-policy.html" style="display: block; padding: 8px;">🔒 Privacy Policy</a>
-        <a href="blogs.html" style="display: block; padding: 8px;">📝 Blogs</a>
-      </div>
-    </div>
-    
-<p>Crafted with ❤️ by Raghav Pratap • © 2025 Pratix Finance
+        Crafted with ❤️ by Raghav Pratap • © 2025 Pratix Finance
     </footer>
-
-    <script>
-      function toggleAboutMenu() {
-        const dropdown = document.getElementById("aboutDropdown");
-        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-        if (dropdown.style.display === "block") {
-          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
-      }
-    </script>
-    
 </body>
 </html>
