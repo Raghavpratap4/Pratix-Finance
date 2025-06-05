@@ -208,5 +208,75 @@
     }
   </script>
 
+
+<div style="margin-top: 30px;">
+  <h2>📈 SIP Investment Growth</h2>
+  <canvas id="sipChart" style="max-width: 100%; height: 400px;"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function calculateSIP() {
+  const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
+  const annualRate = parseFloat(document.getElementById('expectedReturnRate').value);
+  const years = parseInt(document.getElementById('investmentPeriod').value);
+  const months = years * 12;
+  const monthlyRate = annualRate / 12 / 100;
+
+  let futureValue = 0;
+  let investedAmount = 0;
+  const fvData = [], invData = [], labels = [];
+
+  for (let i = 1; i <= months; i++) {
+    investedAmount += monthlyInvestment;
+    futureValue = (futureValue + monthlyInvestment) * (1 + monthlyRate);
+
+    if (i % 12 === 0 || i === months) {
+      labels.push('Year ' + Math.ceil(i / 12));
+      fvData.push(futureValue.toFixed(2));
+      invData.push(investedAmount.toFixed(2));
+    }
+  }
+
+  document.getElementById('sipResult').innerHTML = `₹${futureValue.toFixed(2)}`;
+
+  new Chart(document.getElementById('sipChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Invested Amount',
+          data: invData,
+          borderColor: '#4caf50',
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          fill: true,
+          tension: 0.3
+        },
+        {
+          label: 'Future Value',
+          data: fvData,
+          borderColor: '#2196f3',
+          backgroundColor: 'rgba(33, 150, 243, 0.2)',
+          fill: true,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        title: {
+          display: true,
+          text: 'SIP Growth Over Time'
+        }
+      }
+    }
+  });
+}
+</script>
 </body>
 </html>
