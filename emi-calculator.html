@@ -149,6 +149,7 @@
 
   <script>
     function calculateEMI() {
+    document.getElementById("emiResult").innerHTML = "✅ EMI Calculation Complete!";
       const P = parseFloat(document.getElementById("loanAmount").value);
       const N = parseFloat(document.getElementById("loanTenure").value);
       const R = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
@@ -244,6 +245,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 function calculateEMI() {
+    document.getElementById("emiResult").innerHTML = "✅ EMI Calculation Complete!";
   const p = parseFloat(document.getElementById('loanAmount').value);
   const r = parseFloat(document.getElementById('interestRate').value) / 1200;
   const n = parseInt(document.getElementById('loanTenure').value) * 12;
