@@ -1,56 +1,60 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #8fd3f4, #84fab0);
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  background: linear-gradient(to right, #e0f7fa, #80deea);
+  color: #333;
 }
 
 .container {
-  background: #fff;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  width: 90%;
   max-width: 400px;
-  text-align: center;
+  margin: 50px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  margin-bottom: 20px;
-  font-size: 28px;
+  text-align: center;
+  color: #00796b;
 }
 
-.calculator input, .calculator button {
+.input-panel label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.input-panel input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 12px;
   border: 1px solid #ccc;
-  font-size: 16px;
+  margin-top: 5px;
 }
 
 button {
-  background: #00c6ff;
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background-color: #00796b;
   color: white;
-  font-weight: bold;
   border: none;
-  transition: background 0.3s;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
-  background: #0072ff;
+  background-color: #004d40;
 }
 
-.result-box {
+.result-panel {
   margin-top: 20px;
-  background: #e6f7ff;
+  background-color: #e0f2f1;
   padding: 15px;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
+  border-radius: 12px;
+  text-align: center;
 }
