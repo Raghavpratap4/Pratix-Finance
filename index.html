@@ -3,27 +3,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EMI Calculator - Pratix Finance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>📊 EMI Calculator</h1>
+    <h1>SIP Calculator</h1>
     <div class="calculator">
-      <label>Loan Amount (₹)
-        <input type="number" id="loan" placeholder="e.g. 500000"/>
-      </label>
-      <label>Interest Rate (%)
-        <input type="number" id="rate" step="0.01" placeholder="e.g. 7.5"/>
-      </label>
-      <label>Loan Tenure (Years)
-        <input type="number" id="tenure" placeholder="e.g. 5"/>
-      </label>
-      <button onclick="calculateEMI()">Calculate EMI</button>
-      <div class="result" id="resultBox">
-        <h2>💰 Monthly EMI: ₹<span id="emi">0.00</span></h2>
-      </div>
+      <label for="monthly">Monthly Investment (₹)</label>
+      <input type="number" id="monthly" placeholder="e.g., 5000" />
+      
+      <label for="rate">Expected Annual Return (%)</label>
+      <input type="number" id="rate" placeholder="e.g., 12" />
+      
+      <label for="years">Investment Duration (Years)</label>
+      <input type="number" id="years" placeholder="e.g., 10" />
+      
+      <button onclick="calculateSIP()">Calculate</button>
+      
+      <div id="result" class="result-box"></div>
     </div>
   </div>
   <script src="script.js"></script>
