@@ -2,26 +2,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratix Finance - Smart Financial Calculators</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pratix Finance</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, #f2f3f7, #e0ecff);
+            color: #333;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            margin: 30px auto 10px;
+            display: block;
+            border-radius: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .brand-orange {
+            color: #ff6600;
+        }
+        .description {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .calc-button {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        .calc-button:hover {
+            transform: scale(1.02);
+        }
+        .disabled-button {
+            background: #f0f0f0;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+        footer {
+            margin-top: 40px;
+            padding-bottom: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>📊 Pratix Finance</h1>
-        <p>Simple. Smart. Accurate Financial Tools.</p>
-    </header>
+    <img src="logo.png" alt="Pratix Logo" class="logo" />
+    <h1><span class="brand-orange">Pratix</span> Finance</h1>
+    <p class="description">Finance Tools for Everyone</p>
 
-    <main class="calculator-grid">
-        <a href="sip-calculator.html" class="calc-button">💹 SIP Calculator</a>
-        <a href="emi-calculator.html" class="calc-button">🏦 EMI Calculator</a>
-        <a href="gst-calculator.html" class="calc-button">🧾 GST Calculator</a>
+    <div class="button-container">
+        <a href="emi-calculator.html" class="calc-button">🏠 EMI Calculator</a>
         <a href="income-tax-calculator.html" class="calc-button">💰 Income Tax Calculator</a>
-    </main>
+        <a href="gst-calculator.html" class="calc-button">🧾 GST Calculator</a>
+        <div class="calc-button disabled-button">📈 SIP Calculator <small>Coming Soon</small></div>
+        <div class="calc-button disabled-button">🏦 FD Calculator <small>Coming Soon</small></div>
+    </div>
 
     <footer>
-        <p>© 2025 Pratix Finance | Contact: pratixfinance@gmail.com</p>
+        Crafted with ❤️ by Raghav Pratap • © 2025 Pratix Finance
     </footer>
 </body>
 </html>
