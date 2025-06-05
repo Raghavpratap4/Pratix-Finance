@@ -2,81 +2,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Pratix Finance</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratix Finance - Smart Financial Calculators</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             margin: 0;
+            padding: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to bottom right, #f2f3f7, #e0ecff);
-            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #f3f4f6, #dbeafe);
             text-align: center;
         }
         .logo {
-            width: 100px;
-            margin: 30px auto 10px;
-            display: block;
+            width: 80px;
+            height: 80px;
             border-radius: 20px;
+            margin-bottom: 10px;
         }
         h1 {
-            font-size: 2.5em;
-            margin: 0;
+            font-size: 2.2rem;
+            color: #ff5722;
         }
-        .brand-orange {
-            color: #ff6600;
+        h1 span {
+            color: #333;
         }
-        .description {
-            font-size: 1.2em;
-            margin-bottom: 30px;
+        p.tagline {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
         }
         .button-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             width: 90%;
-            max-width: 400px;
-            margin: 0 auto;
+            max-width: 320px;
         }
         .calc-button {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 15px;
-            font-size: 1.1em;
-            font-weight: 600;
+            background: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: 0.3s;
             text-decoration: none;
-            color: #333;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
+            color: #111;
+            font-weight: 500;
         }
         .calc-button:hover {
-            transform: scale(1.02);
+            background-color: #f0f0f0;
         }
-        .disabled-button {
-            background: #f0f0f0;
-            color: #aaa;
+        .coming-soon {
+            background: #eee;
+            color: #999;
             cursor: not-allowed;
         }
         footer {
-            margin-top: 40px;
-            padding-bottom: 20px;
-            font-size: 0.9em;
-            color: #555;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <img src="logo.png" alt="Pratix Logo" class="logo" />
-    <h1><span class="brand-orange">Pratix</span> Finance</h1>
-    <p class="description">Finance Tools for Everyone</p>
+    <img src="logo.png" alt="Pratix Logo" class="logo">
+    <h1><span>Pratix</span> Finance</h1>
+    <p class="tagline">Finance Tools for Everyone</p>
 
     <div class="button-container">
         <a href="emi-calculator.html" class="calc-button">🏠 EMI Calculator</a>
         <a href="income-tax-calculator.html" class="calc-button">💰 Income Tax Calculator</a>
         <a href="gst-calculator.html" class="calc-button">🧾 GST Calculator</a>
-        <div class="calc-button disabled-button">📈 SIP Calculator <small>Coming Soon</small></div>
-        <div class="calc-button disabled-button">🏦 FD Calculator <small>Coming Soon</small></div>
+        <div class="calc-button coming-soon">📈 SIP Calculator Coming Soon</div>
+        <div class="calc-button coming-soon">🏦 FD Calculator Coming Soon</div>
     </div>
 
     <footer>
