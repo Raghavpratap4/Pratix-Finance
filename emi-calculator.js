@@ -1,4 +1,7 @@
 
+alert("✅ EMI script loaded successfully.");
+console.log("✅ EMI calculator JS is working.");
+
 document.getElementById("emi-form").addEventListener("submit", function(e) {
     e.preventDefault();
 
