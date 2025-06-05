@@ -1,42 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Income Tax Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Income Tax Calculator</h1>
-  </header>
-  <main>
-    <section class="calculator">
-      <label for="income">Enter Annual Income (₹):</label>
-      <input type="number" id="income" placeholder="e.g. 800000" />
-      <button onclick="calculateTax()">Calculate Tax</button>
-      <div id="result"></div>
-    </section>
-  </main>
-  <footer>
-    <p>&copy; 2025 Pratix Finance</p>
-  </footer>
-  <script>
-    function calculateTax() {
-      const income = parseFloat(document.getElementById('income').value);
-      let tax = 0;
-      if (income <= 250000) {
-        tax = 0;
-      } else if (income <= 500000) {
-        tax = (income - 250000) * 0.05;
-      } else if (income <= 1000000) {
-        tax = (250000 * 0.05) + (income - 500000) * 0.2;
-      } else {
-        tax = (250000 * 0.05) + (500000 * 0.2) + (income - 1000000) * 0.3;
-      }
-      document.getElementById('result').innerText = `Estimated Tax: ₹${tax.toFixed(2)}`;
-    }
-  </script>
+  <div class="container">
+    <h1>💰 Income Tax Calculator</h1>
+    <form id="taxForm">
+      <label for="income">Annual Income (₹):</label>
+      <input type="number" id="income" required />
+      
+      <label for="age">Age:</label>
+      <select id="age">
+        <option value="below60">Below 60</option>
+        <option value="between60and80">60 - 80</option>
+        <option value="above80">Above 80</option>
+      </select>
+      
+      <label for="deductions">Deductions (₹):</label>
+      <input type="number" id="deductions" value="0" />
+
+      <button type="submit">Calculate Tax</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
