@@ -1,149 +1,327 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-1NSSQW00JS');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EMI Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #e0f7fa, #fff);
+      background: linear-gradient(to bottom, #f5f7fa, #e4ecf7);
       color: #333;
     }
     .container {
-      max-width: 480px;
-      margin: auto;
+      max-width: 500px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       padding: 2rem;
     }
     h1 {
       text-align: center;
-      font-size: 2rem;
+      color: #ff5722;
       margin-bottom: 1rem;
     }
     .input-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-    label {
+    .input-group label {
+      font-weight: 600;
       display: block;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
     }
-    input {
+    .input-group input {
       width: 100%;
       padding: 0.75rem;
       font-size: 1rem;
       border-radius: 10px;
       border: 1px solid #ccc;
     }
-    button {
+    .btn {
       width: 100%;
-      background: #0288d1;
-      color: #fff;
       padding: 0.75rem;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      background: #ff5722;
+      color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      margin-top: 1rem;
     }
-    button:hover {
-      background: #0277bd;
+    .btn:hover {
+      background: #e64a19;
     }
     .results {
-      background: #f1f8e9;
-      border-radius: 10px;
+      background: #f9f9f9;
+      border-radius: 12px;
       padding: 1rem;
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
     .results p {
       margin: 0.5rem 0;
+      font-weight: 500;
+    }
+    canvas {
+      margin-top: 1rem;
+      width: 100% !important;
+      height: auto !important;
     }
     footer {
       text-align: center;
-      font-size: 0.875rem;
+      font-size: 0.9rem;
       margin-top: 2rem;
-      padding: 1rem;
       color: #777;
     }
-    canvas {
-      margin-top: 1.5rem;
+    .back-home {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .back-home a {
+      text-decoration: none;
+      color: #2196f3;
     }
   </style>
 </head>
 <body>
+    <div style="text-align:center; margin-top:15px;">
+        <img src="assets/logo.png" alt="Pratix Finance Logo" style="max-width: 150px; height:auto;">
+    </div>
+
   <div class="container">
-    <div style="text-align:center;"><img src="assets/logo.png" alt="Pratix Finance Logo" style="height:60px; margin-bottom: 10px;"></div>
+    <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
     <h1>📊 EMI Calculator</h1>
+
     <div class="input-group">
-      <label for="loanAmount">Loan Amount (₹)</label>
+      <label>💰 Loan Amount (₹)</label>
       <input type="number" id="loanAmount" placeholder="Enter loan amount" />
     </div>
+
     <div class="input-group">
-      <label for="interestRate">Interest Rate (% per annum)</label>
-      <input type="number" id="interestRate" placeholder="Enter annual interest rate" />
-    </div>
-    <div class="input-group">
-      <label for="loanTenure">Loan Tenure (months)</label>
+      <label>📅 Loan Tenure (Months)</label>
       <input type="number" id="loanTenure" placeholder="Enter tenure in months" />
     </div>
-    <button onclick="calculateEMI()">Calculate EMI</button>
 
-    <div class="results" id="resultBox" style="display:none">
-      <p>💸 <strong>Monthly EMI:</strong> ₹<span id="emiResult"></span></p>
-      <p>📈 <strong>Total Interest:</strong> ₹<span id="interestResult"></span></p>
-      <p>💰 <strong>Total Payment:</strong> ₹<span id="totalResult"></span></p>
+    <div class="input-group">
+      <label>📈 Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="Enter annual interest rate" />
     </div>
 
-    <canvas id="emiChart" width="400" height="200" style="display:none"></canvas>
+    <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
 
-    <footer>
-      © Pratix Finance | Built by Raghav Pratap 
-    </footer>
+    <div class="results" id="results" style="display: none;">
+      <p>EMI: ₹<span id="emiValue">0</span></p>
+      <p>Total Payment: ₹<span id="totalPayment">0</span></p>
+      <p>Total Interest: ₹<span id="totalInterest">0</span></p>
+      <canvas id="emiChart"></canvas>
+      <canvas id="lineChart"></canvas>
+    </div>
+
+    <!-- AdSense Block -->
+    <div style="margin-top: 2rem; text-align: center;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="back-home">
+      <a href="index.html">← Back to Homepage</a>
+    </div>
+
+    <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
   </div>
 
   <script>
     function calculateEMI() {
+    document.getElementById("emiResult").innerHTML = "✅ EMI Calculation Complete!";
       const P = parseFloat(document.getElementById("loanAmount").value);
-      const annualRate = parseFloat(document.getElementById("interestRate").value);
-      const N = parseInt(document.getElementById("loanTenure").value);
+      const N = parseFloat(document.getElementById("loanTenure").value);
+      const R = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
 
-      if (!P || !annualRate || !N) return;
+      if (!P || !N || !R) return;
 
-      const R = annualRate / 12 / 100;
       const emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-      const total = emi * N;
-      const interest = total - P;
+      const totalPayment = emi * N;
+      const totalInterest = totalPayment - P;
 
-      document.getElementById("emiResult").innerText = emi.toFixed(2);
-      document.getElementById("interestResult").innerText = interest.toFixed(2);
-      document.getElementById("totalResult").innerText = total.toFixed(2);
-      document.getElementById("resultBox").style.display = "block";
-      document.getElementById("emiChart").style.display = "block";
+      document.getElementById("emiValue").innerText = emi.toFixed(2);
+      document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
+      document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
+      document.getElementById("results").style.display = "block";
 
+      // Doughnut Chart
       const ctx = document.getElementById("emiChart").getContext("2d");
       if (window.emiChartInstance) window.emiChartInstance.destroy();
       window.emiChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Principal Amount', 'Interest Amount'],
+          labels: ['Principal', 'Interest'],
           datasets: [{
-            data: [P, interest],
-            backgroundColor: ['#4caf50', '#f44336'],
-            borderWidth: 1
+            data: [P, totalInterest],
+            backgroundColor: ['#42a5f5', '#ef5350'],
+            borderWidth: 2,
+            borderColor: '#fff',
+            hoverOffset: 10
           }]
         },
         options: {
           responsive: true,
           plugins: {
-            legend: {
-              position: 'bottom'
-            }
+            legend: { position: 'bottom' }
+          }
+        }
+      });
+
+      // Line Chart (Cumulative EMI)
+      const lineCtx = document.getElementById("lineChart").getContext("2d");
+      const labels = Array.from({ length: N }, (_, i) => `Month ${i + 1}`);
+      const cumulativeData = labels.map((_, i) => (emi * (i + 1)).toFixed(2));
+
+      if (window.lineChartInstance) window.lineChartInstance.destroy();
+      window.lineChartInstance = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Cumulative Payment',
+            data: cumulativeData,
+            borderColor: '#42a5f5',
+            backgroundColor: 'rgba(66,165,245,0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' }
+          },
+          scales: {
+            y: { beginAtZero: true }
           }
         }
       });
     }
   </script>
+
+
+<div style="margin-top: 30px;">
+  <h2>📉 Loan Balance Over Time</h2>
+  <canvas id="balanceChart" style="max-width: 100%; height: 400px;"></canvas>
+</div>
+
+<div style="margin-top: 40px;">
+  <h2>📋 Amortization Schedule</h2>
+  <table id="amortizationTable" border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; text-align:center;">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>EMI</th>
+        <th>Principal</th>
+        <th>Interest</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function calculateEMI() {
+    document.getElementById("emiResult").innerHTML = "✅ EMI Calculation Complete!";
+  const p = parseFloat(document.getElementById('loanAmount').value);
+  const r = parseFloat(document.getElementById('interestRate').value) / 1200;
+  const n = parseInt(document.getElementById('loanTenure').value) * 12;
+
+  const emi = p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+  const totalPayment = emi * n;
+  const totalInterest = totalPayment - p;
+
+  document.getElementById('emiResult').innerHTML = `₹${emi.toFixed(2)} / month`;
+
+  // Pie Chart
+  const pieChart = new Chart(document.getElementById('emiChart'), {
+    type: 'pie',
+    data: {
+      labels: ['Principal', 'Interest'],
+      datasets: [{
+        data: [p, totalInterest],
+        backgroundColor: ['#4caf50', '#f44336']
+      }]
+    }
+  });
+
+  // Line Chart for Balance
+  const balanceData = [], emiData = [], principalData = [], interestData = [], labels = [];
+  let balance = p;
+
+  for (let i = 1; i <= n; i++) {
+    const interest = balance * r;
+    const principalPart = emi - interest;
+    balance -= principalPart;
+
+    labels.push('Month ' + i);
+    balanceData.push(balance > 0 ? balance : 0);
+    emiData.push(emi);
+    interestData.push(interest);
+    principalData.push(principalPart);
+  }
+
+  new Chart(document.getElementById('balanceChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Loan Balance',
+        data: balanceData,
+        borderColor: '#2196f3',
+        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+        fill: true,
+        tension: 0.3
+      }]
+    }
+  });
+
+  // Amortization Table
+  const tableBody = document.getElementById('amortizationTable').querySelector('tbody');
+  tableBody.innerHTML = '';
+  balance = p;
+
+  for (let i = 1; i <= n; i++) {
+    const interest = balance * r;
+    const principalPart = emi - interest;
+    balance -= principalPart;
+
+    const row = `<tr>
+      <td>${i}</td>
+      <td>₹${emi.toFixed(2)}</td>
+      <td>₹${principalPart.toFixed(2)}</td>
+      <td>₹${interest.toFixed(2)}</td>
+      <td>₹${balance > 0 ? balance.toFixed(2) : '0.00'}</td>
+    </tr>`;
+    tableBody.innerHTML += row;
+  }
+}
+</script>
 </body>
 </html>
