@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FD Calculator - Pratix Finance</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #0277bd;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      color: #444;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      background-color: #0288d1;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0277bd;
+    }
+    .result {
+      margin-top: 30px;
+      background: #e1f5fe;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      color: #0277bd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>FD Calculator 🏦</h2>
+    <label for="principal">Principal Amount (₹)</label>
+    <input type="number" id="principal" placeholder="Enter principal amount" />
+
+    <label for="rate">Annual Interest Rate (%)</label>
+    <input type="number" id="rate" placeholder="Enter interest rate" />
+
+    <label for="time">Time Period (years)</label>
+    <input type="number" id="time" placeholder="Enter time period in years" />
+
+    <button onclick="calculateFD()">Calculate Maturity Amount</button>
+
+    <div id="result" class="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    function calculateFD() {
+      const P = parseFloat(document.getElementById('principal').value);
+      const R = parseFloat(document.getElementById('rate').value);
+      const T = parseFloat(document.getElementById('time').value);
+      if (isNaN(P) || isNaN(R) || isNaN(T)) {
+        alert("Please enter valid numbers.");
+        return;
+      }
+      const A = P * Math.pow(1 + (R / 100), T);
+      document.getElementById('result').style.display = "block";
+      document.getElementById('result').innerHTML = `Maturity Amount: ₹${A.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
