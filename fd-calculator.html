@@ -179,51 +179,5 @@
   }
 </script>
 
-
-<div style="margin-top: 30px;">
-  <h2>📊 FD Maturity Breakdown</h2>
-  <canvas id="fdChart" style="max-width: 100%; height: 350px;"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-function calculateFD() {
-  const principal = parseFloat(document.getElementById('principal').value);
-  const rate = parseFloat(document.getElementById('rate').value);
-  const years = parseFloat(document.getElementById('time').value);
-  const frequency = 4; // Quarterly compounding
-
-  const maturity = principal * Math.pow((1 + (rate / (100 * frequency))), frequency * years);
-  const interest = maturity - principal;
-
-  document.getElementById('fdResult').innerHTML = `
-    <strong>Maturity Amount:</strong> ₹${maturity.toFixed(2)}<br>
-    <strong>Interest Earned:</strong> ₹${interest.toFixed(2)}
-  `;
-
-  new Chart(document.getElementById('fdChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Principal', 'Interest'],
-      datasets: [{
-        label: 'Amount',
-        data: [principal, interest],
-        backgroundColor: ['#4caf50', '#2196f3']
-      }]
-    },
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'FD Amount Breakdown'
-        },
-        legend: {
-          display: false
-        }
-      }
-    }
-  });
-}
-</script>
 </body>
 </html>

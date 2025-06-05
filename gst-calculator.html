@@ -173,48 +173,5 @@
   }
 </script>
 
-
-<div style="margin-top: 30px;">
-  <h2>🧾 GST Tax Breakdown</h2>
-  <canvas id="gstChart" style="max-width: 100%; height: 300px;"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-function calculateGST() {
-  const originalAmount = parseFloat(document.getElementById('originalAmount').value);
-  const gstRate = parseFloat(document.getElementById('gstRate').value);
-
-  const gstAmount = originalAmount * (gstRate / 100);
-  const finalAmount = originalAmount + gstAmount;
-
-  document.getElementById('gstResult').innerHTML = `
-    <strong>GST Amount:</strong> ₹${gstAmount.toFixed(2)}<br>
-    <strong>Total Amount:</strong> ₹${finalAmount.toFixed(2)}
-  `;
-
-  new Chart(document.getElementById('gstChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Original Price', 'GST'],
-      datasets: [{
-        data: [originalAmount, gstAmount],
-        backgroundColor: ['#4caf50', '#f44336']
-      }]
-    },
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'GST Composition'
-        },
-        legend: {
-          position: 'bottom'
-        }
-      }
-    }
-  });
-}
-</script>
 </body>
 </html>
