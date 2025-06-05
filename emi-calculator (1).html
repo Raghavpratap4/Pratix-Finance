@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-1NSSQW00JS');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMI Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #f5f7fa, #e4ecf7);
+      color: #333;
+    }
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #ff5722;
+      margin-bottom: 1rem;
+    }
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    .input-group label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #e64a19;
+    }
+    .results {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .results p {
+      margin: 0.5rem 0;
+      font-weight: 500;
+    }
+    canvas {
+      margin-top: 1rem;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="logo.png" alt="Pratix Finance Logo" class="logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
+    <h1>📊 EMI Calculator</h1>
+
+    <div class="input-group">
+      <label>💰 Loan Amount (₹)</label>
+      <input type="number" id="loanAmount" placeholder="Enter loan amount" />
+    </div>
+
+    <div class="input-group">
+      <label>📅 Loan Tenure (Months)</label>
+      <input type="number" id="loanTenure" placeholder="Enter tenure in months" />
+    </div>
+
+    <div class="input-group">
+      <label>📈 Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="Enter annual interest rate" />
+    </div>
+
+    <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
+
+    <div class="results" id="results" style="display: none;">
+      <p>EMI: ₹<span id="emiValue">0</span></p>
+      <p>Total Payment: ₹<span id="totalPayment">0</span></p>
+      <p>Total Interest: ₹<span id="totalInterest">0</span></p>
+      <canvas id="emiChart" width="400" height="300"></canvas>
+    </div>
+
+    <!-- AdSense Block (Placed after results) -->
+    <div style="margin-top: 2rem; text-align: center;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
+  </div>
+
+  <script>
+    function calculateEMI() {
+      const P = parseFloat(document.getElementById("loanAmount").value);
+      const N = parseFloat(document.getElementById("loanTenure").value);
+      const R = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
+
+      const emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      const totalPayment = emi * N;
+      const totalInterest = totalPayment - P;
+
+      document.getElementById("emiValue").innerText = emi.toFixed(2);
+      document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
+      document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
+      document.getElementById("results").style.display = "block";
+
+      const ctx = document.getElementById("emiChart").getContext("2d");
+      if (window.emiChartInstance) window.emiChartInstance.destroy();
+      window.emiChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Principal', 'Interest'],
+          datasets: [{
+            data: [P, totalInterest],
+            backgroundColor: ['#42a5f5', '#ef5350']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom' }
+          }
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
