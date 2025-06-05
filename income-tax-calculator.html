@@ -178,5 +178,57 @@
   }
 </script>
 
+
+<div style="margin-top: 30px;">
+  <h2>🧾 Income Tax Breakdown</h2>
+  <canvas id="taxChart" style="max-width: 100%; height: 350px;"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function calculateTax() {
+  const income = parseFloat(document.getElementById('income').value);
+  const deductions = parseFloat(document.getElementById('deductions').value || 0);
+  const taxableIncome = income - deductions;
+
+  let tax = 0;
+  if (taxableIncome <= 250000) {
+    tax = 0;
+  } else if (taxableIncome <= 500000) {
+    tax = (taxableIncome - 250000) * 0.05;
+  } else if (taxableIncome <= 1000000) {
+    tax = (250000 * 0.05) + (taxableIncome - 500000) * 0.2;
+  } else {
+    tax = (250000 * 0.05) + (500000 * 0.2) + (taxableIncome - 1000000) * 0.3;
+  }
+
+  document.getElementById('taxResult').innerHTML = `
+    <strong>Taxable Income:</strong> ₹${taxableIncome.toFixed(2)}<br>
+    <strong>Estimated Tax:</strong> ₹${tax.toFixed(2)}
+  `;
+
+  new Chart(document.getElementById('taxChart'), {
+    type: 'pie',
+    data: {
+      labels: ['Tax', 'Remaining Income'],
+      datasets: [{
+        data: [tax, income - tax],
+        backgroundColor: ['#f44336', '#4caf50']
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Income vs Tax Distribution'
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+}
+</script>
 </body>
 </html>
