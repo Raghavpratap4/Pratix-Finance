@@ -1,29 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pratix Finance</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Income Tax Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Pratix Logo" class="logo"/>
-    <h1><span class="highlight">Pratix</span> Finance</h1>
-    <p class="subtitle">Finance Tools for Everyone</p>
-    
-    <div class="buttons">
-      <a href="emi-calculator.html" class="btn">🏠 EMI Calculator</a>
-      <a href="#" class="btn">💰 Income Tax Calculator</a>
-      <a href="gst-calculator.html" class="btn">🧾 GST Calculator</a>
-      <div class="btn disabled">📈 SIP Calculator <span>Coming Soon</span></div>
-      <div class="btn disabled">🏦 FD Calculator <span>Coming Soon</span></div>
-    </div>
+    <h1>💰 Income Tax Calculator</h1>
+    <form id="taxForm">
+      <label for="income">Annual Income (₹):</label>
+      <input type="number" id="income" required />
+      
+      <label for="age">Age:</label>
+      <select id="age">
+        <option value="below60">Below 60</option>
+        <option value="between60and80">60 - 80</option>
+        <option value="above80">Above 80</option>
+      </select>
+      
+      <label for="deductions">Deductions (₹):</label>
+      <input type="number" id="deductions" value="0" />
 
-    <footer>
-      <p>Crafted with ❤️ by Raghav Pratap • © 2025 Pratix Finance</p>
-    </footer>
+      <button type="submit">Calculate Tax</button>
+    </form>
+    <div id="result"></div>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
