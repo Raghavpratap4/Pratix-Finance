@@ -1,86 +1,177 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-1NSSQW00JS');
+  </script>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-1NSSQW00JS');
-</script>
+  <!-- AdSense -->
+  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GST Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #fdfbfb, #ebedee);
+      margin: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    h1 {
+      text-align: center;
+      color: #2196f3;
+      margin-bottom: 1rem;
+    }
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1.1rem;
+      background: #2196f3;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #1976d2;
+    }
+    .results {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-radius: 12px;
+    }
+    .results p {
+      font-weight: 500;
+      margin: 0.5rem 0;
+    }
+    canvas {
+      margin-top: 1rem;
+      width: 100% !important;
+      height: auto !important;
+    }
+    .back-home {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .back-home a {
+      text-decoration: none;
+      color: #2196f3;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
+<body>
 
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background: linear-gradient(to right, #d1f4ff, #fddde6);">
-  <div style="max-width: 500px; margin: 40px auto; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+<div class="container">
+  <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
+  <h1>💰 GST Calculator</h1>
 
-
-<!-- Header Ad -->
-<div style="width:100%; text-align:center; padding:10px 0; background:#f5f5f5; border-bottom:1px solid #ddd;">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190" crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3291480910940190"
-     data-ad-slot="2384610826"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-  <div class="calculator-card">
-    <h2>🧾 GST Calculator</h2>
-    <div class="input-group">
-      <label for="amount">Original Amount (₹)</label>
-      <input type="number" id="amount" placeholder="Enter amount" />
-    </div>
-    <div class="input-group">
-      <label for="gstRate">GST Rate (%)</label>
-      <input type="number" id="gstRate" placeholder="Enter GST rate" />
-    </div>
-    <button onclick="calculateGST()">Calculate</button>
-    <div class="result" id="result"></div>
+  <div class="input-group">
+    <label>🧾 Enter Base Price (₹)</label>
+    <input type="number" id="basePrice" placeholder="Enter base price" />
   </div>
 
-  <script src="gst.js"></script>
-
-<!-- Footer Ad -->
-<div style="width:100%; text-align:center; padding:10px 0; background:#f5f5f5; border-top:1px solid #ddd;">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190" crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3291480910940190"
-     data-ad-slot="3391404887"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
+  <div class="input-group">
+    <label>📊 GST Rate (%)</label>
+    <input type="number" id="gstRate" placeholder="Enter GST rate" />
   </div>
 
-<!-- AdSense Footer Ad -->
-<div style="margin-top: 32px;">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
-     data-ad-slot="1234567890"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+  <button class="btn" onclick="calculateGST()">Calculate</button>
+
+  <div class="results" id="results" style="display: none;">
+    <p>GST Amount: ₹<span id="gstAmount">0</span></p>
+    <p>Total Price (Incl. GST): ₹<span id="totalAmount">0</span></p>
+    <canvas id="gstChart"></canvas>
+  </div>
+
+  <div style="margin-top: 2rem; text-align: center;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <div class="back-home">
+    <a href="index.html">← Back to Homepage</a>
+  </div>
+
+  <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
 </div>
+
+<script>
+  function calculateGST() {
+    const base = parseFloat(document.getElementById("basePrice").value);
+    const rate = parseFloat(document.getElementById("gstRate").value);
+
+    if (!base || !rate) return;
+
+    const gst = base * rate / 100;
+    const total = base + gst;
+
+    document.getElementById("gstAmount").innerText = gst.toFixed(2);
+    document.getElementById("totalAmount").innerText = total.toFixed(2);
+    document.getElementById("results").style.display = "block";
+
+    const ctx = document.getElementById("gstChart").getContext("2d");
+    if (window.gstChartInstance) window.gstChartInstance.destroy();
+    window.gstChartInstance = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Base Price', 'GST'],
+        datasets: [{
+          data: [base, gst],
+          backgroundColor: ['#42a5f5', '#ef5350'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
