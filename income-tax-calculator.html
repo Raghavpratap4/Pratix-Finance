@@ -1,234 +1,172 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-1NSSQW00JS');
-  </script>
-
-  <!-- AdSense -->
-  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Income Tax Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #fefcea, #f1da36);
+      background: linear-gradient(to bottom right, #ede7f6, #ffffff);
       margin: 0;
       padding: 0;
+      color: #333;
     }
     .container {
-      max-width: 500px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 20px;
+      max-width: 480px;
+      margin: auto;
       padding: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    img.logo {
+      display: block;
+      margin: 0 auto 1rem;
+      height: 60px;
     }
     h1 {
       text-align: center;
-      color: #e65100;
+      font-size: 1.75rem;
       margin-bottom: 1rem;
     }
     .input-group {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
-    .input-group label {
+    label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.25rem;
     }
-    .input-group input {
+    input, select {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #ccc;
       border-radius: 10px;
+      border: 1px solid #ccc;
       font-size: 1rem;
     }
-    .btn {
+    button {
       width: 100%;
-      padding: 0.8rem;
-      font-size: 1.1rem;
-      background: #ff9800;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #7e57c2;
       color: #fff;
-      font-weight: bold;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-    }
-    .btn:hover {
-      background: #f57c00;
-    }
-    .results {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: #f9f9f9;
-      border-radius: 12px;
-    }
-    .results p {
-      font-weight: 500;
-      margin: 0.4rem 0;
-    }
-    canvas {
-      margin-top: 1.5rem;
-      width: 100% !important;
-      height: auto !important;
-    }
-    .back-home {
-      text-align: center;
       margin-top: 1rem;
     }
-    .back-home a {
-      text-decoration: none;
-      color: #e65100;
+    button:hover {
+      background-color: #5e35b1;
+    }
+    .results {
+      background-color: #ede7f6;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+    .results p {
+      margin: 0.5rem 0;
+    }
+    canvas {
+      margin-top: 2rem;
     }
     footer {
       text-align: center;
+      font-size: 0.875rem;
       margin-top: 2rem;
+      padding: 1rem;
       color: #777;
-      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <img src="./assets/logo.png" alt="Pratix Logo" class="logo" />
+    <h1>💼 Income Tax Calculator</h1>
+    <div class="input-group">
+      <label for="income">Annual Income (₹)</label>
+      <input type="number" id="income" placeholder="Enter total income" />
+    </div>
+    <div class="input-group">
+      <label for="age">Select Age Group</label>
+      <select id="age">
+        <option value="normal">Below 60</option>
+        <option value="senior">60 - 80</option>
+        <option value="super_senior">Above 80</option>
+      </select>
+    </div>
+    <button onclick="calculateTax()">Calculate Tax</button>
 
-<div class="container">
-  <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
-  <h1>📑 Income Tax Calculator</h1>
+    <div class="results" id="resultBox" style="display:none">
+      <p>💸 <strong>Tax Payable:</strong> ₹<span id="taxDisplay"></span></p>
+      <p>💰 <strong>Taxable Income:</strong> ₹<span id="taxableIncome"></span></p>
+      <p>🧾 <strong>Exempted Income:</strong> ₹<span id="exemptedIncome"></span></p>
+    </div>
 
-  <div class="input-group">
-    <label>💼 Enter Annual Income (₹)</label>
-    <input type="number" id="income" placeholder="Enter total annual income" />
+    <canvas id="taxChart" width="100%" height="100" style="display:none"></canvas>
+
+    <footer>© Pratix Finance | Built by Raghav Pratap</footer>
   </div>
 
-  <button class="btn" onclick="calculateTax()">Calculate Tax</button>
+  <script>
+    function calculateTax() {
+      const income = parseFloat(document.getElementById('income').value);
+      const ageGroup = document.getElementById('age').value;
 
-  <div class="results" id="results" style="display: none;">
-    <p>Tax Payable: ₹<span id="taxAmount">0</span></p>
-    <p>Net Income After Tax: ₹<span id="netIncome">0</span></p>
-    <canvas id="taxChart"></canvas>
-  </div>
+      if (!income) return;
 
-  <div style="margin-top: 2rem; text-align: center;">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+      let tax = 0;
+      let slab1 = 250000, slab2 = 500000, slab3 = 1000000;
 
-  <div class="back-home">
-    <a href="index.html">← Back to Homepage</a>
-  </div>
+      if (ageGroup === 'senior') {
+        slab1 = 300000;
+      } else if (ageGroup === 'super_senior') {
+        slab1 = 500000;
+      }
 
-  <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
-</div>
+      if (income <= slab1) {
+        tax = 0;
+      } else if (income <= slab2) {
+        tax = (income - slab1) * 0.05;
+      } else if (income <= slab3) {
+        tax = (slab2 - slab1) * 0.05 + (income - slab2) * 0.2;
+      } else {
+        tax = (slab2 - slab1) * 0.05 + (slab3 - slab2) * 0.2 + (income - slab3) * 0.3;
+      }
 
-<script>
-  function calculateTax() {
-    const income = parseFloat(document.getElementById("income").value);
-    if (!income || income <= 0) return;
+      const exempt = Math.min(slab1, income);
+      const taxable = income - exempt;
 
-    let tax = 0;
+      document.getElementById('taxDisplay').innerText = tax.toFixed(2);
+      document.getElementById('taxableIncome').innerText = taxable.toFixed(2);
+      document.getElementById('exemptedIncome').innerText = exempt.toFixed(2);
+      document.getElementById('resultBox').style.display = "block";
 
-    if (income <= 250000) tax = 0;
-    else if (income <= 500000) tax = (income - 250000) * 0.05;
-    else if (income <= 1000000) tax = 12500 + (income - 500000) * 0.2;
-    else tax = 112500 + (income - 1000000) * 0.3;
+      const ctx = document.getElementById('taxChart').getContext('2d');
+      document.getElementById('taxChart').style.display = "block";
 
-    const net = income - tax;
+      if (window.taxChart) window.taxChart.destroy();
 
-    document.getElementById("taxAmount").innerText = tax.toFixed(2);
-    document.getElementById("netIncome").innerText = net.toFixed(2);
-    document.getElementById("results").style.display = "block";
-
-    const ctx = document.getElementById("taxChart").getContext("2d");
-    if (window.taxChartInstance) window.taxChartInstance.destroy();
-    window.taxChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Total Income', 'Tax Payable', 'Net Income'],
-        datasets: [{
-          label: '₹ Amount',
-          data: [income, tax, net],
-          backgroundColor: ['#fbc02d', '#ef5350', '#66bb6a'],
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
+      window.taxChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Exempted Income', 'Taxable Income'],
+          datasets: [{
+            label: 'Income Breakdown',
+            data: [exempt, taxable],
+            backgroundColor: ['#b39ddb', '#5e35b1'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
           }
-        },
-        plugins: { legend: { display: false } }
-      }
-    });
-  }
-</script>
-
-
-<div style="margin-top: 30px;">
-  <h2>🧾 Income Tax Breakdown</h2>
-  <canvas id="taxChart" style="max-width: 100%; height: 350px;"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-function calculateTax() {
-  const income = parseFloat(document.getElementById('income').value);
-  const deductions = parseFloat(document.getElementById('deductions').value || 0);
-  const taxableIncome = income - deductions;
-
-  let tax = 0;
-  if (taxableIncome <= 250000) {
-    tax = 0;
-  } else if (taxableIncome <= 500000) {
-    tax = (taxableIncome - 250000) * 0.05;
-  } else if (taxableIncome <= 1000000) {
-    tax = (250000 * 0.05) + (taxableIncome - 500000) * 0.2;
-  } else {
-    tax = (250000 * 0.05) + (500000 * 0.2) + (taxableIncome - 1000000) * 0.3;
-  }
-
-  document.getElementById('taxResult').innerHTML = `
-    <strong>Taxable Income:</strong> ₹${taxableIncome.toFixed(2)}<br>
-    <strong>Estimated Tax:</strong> ₹${tax.toFixed(2)}
-  `;
-
-  new Chart(document.getElementById('taxChart'), {
-    type: 'pie',
-    data: {
-      labels: ['Tax', 'Remaining Income'],
-      datasets: [{
-        data: [tax, income - tax],
-        backgroundColor: ['#f44336', '#4caf50']
-      }]
-    },
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'Income vs Tax Distribution'
-        },
-        legend: {
-          position: 'bottom'
         }
-      }
+      });
     }
-  });
-}
-</script>
+  </script>
 </body>
 </html>
