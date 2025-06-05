@@ -81,17 +81,49 @@
 <a class="calc-button" href="income-tax-calculator.html">💰 Income Tax Calculator</a>
 <a class="calc-button" href="gst-calculator.html">🧾 GST Calculator</a>
 <a class="calc-button" href="sip-calculator.html">📈 SIP Calculator</a>
-<div class="calc-button coming-soon">🏦 FD Calculator Coming Soon</div></div>
-<div class="button-container" style="text-align: center; margin-top: 20px;">
-  <select class="calculator-button" onchange="if (this.value) window.location.href=this.value;">
-    <option value="">📘 About</option>
-    <option value="about.html">About Pratix Finance</option>
-    <option value="contact.html">Contact</option>
-    <option value="privacy.html">Privacy Policy</option>
-    <option value="blogs.html">Blogs</option>
-  </select>
-</div>
+<div class="calc-button coming-soon">🏦 FD Calculator Coming Soon</div>
 
+<div class="dropdown calc-button" style="position: relative;">
+  📘 About ▼
+  <div class="dropdown-content" style="
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 220px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border-radius: 12px;
+    padding: 10px;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+  ">
+    <a href="about.html">📘 About Pratix Finance</a><br>
+    <a href="contact.html">📞 Contact</a><br>
+    <a href="privacy.html">🔒 Privacy Policy</a><br>
+    <a href="blogs.html">📝 Blogs</a>
+  </div>
+</div>
+<script>
+  const dropdown = document.querySelector('.dropdown');
+  const content = document.querySelector('.dropdown-content');
+  dropdown.addEventListener('click', () => {
+    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+  });
+</script>
+<style>
+  .dropdown a {
+    text-decoration: none;
+    display: block;
+    padding: 6px 12px;
+    color: #333;
+    border-radius: 8px;
+  }
+  .dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+</style>
+
+</div>
 <footer>
         Crafted with ❤️ by Raghav Pratap • © 2025 Pratix Finance
     </footer>
