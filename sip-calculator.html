@@ -2,42 +2,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-1NSSQW00JS');
+  </script>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- AdSense -->
+  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
 
-  gtag('config', 'G-1NSSQW00JS');
-</script>
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIP Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #f5f7fa, #e4ecf7);
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #f8f9fb, #dce0e5);
+      color: #333;
     }
     .container {
-      max-width: 480px;
+      max-width: 500px;
       margin: 2rem auto;
-      background: #ffffff;
+      background: #fff;
       border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       padding: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
     h1 {
       text-align: center;
-      color: #ff5722;
+      color: #4caf50;
+      margin-bottom: 1rem;
     }
     .input-group {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
     }
     .input-group label {
       display: block;
@@ -46,95 +48,165 @@
     }
     .input-group input {
       width: 100%;
-      padding: 0.8rem;
-      border-radius: 12px;
+      padding: 0.75rem;
       border: 1px solid #ccc;
+      border-radius: 10px;
       font-size: 1rem;
     }
     .btn {
       width: 100%;
-      padding: 0.8rem;
+      padding: 0.75rem;
+      font-size: 1.1rem;
+      background: #4caf50;
+      color: #fff;
+      font-weight: bold;
       border: none;
       border-radius: 12px;
-      background: #ff5722;
-      color: white;
-      font-size: 1.1rem;
-      font-weight: bold;
       cursor: pointer;
-      margin-top: 1rem;
     }
     .btn:hover {
-      background: #e64a19;
+      background: #388e3c;
     }
     .results {
       margin-top: 2rem;
-      background: #f4f4f4;
       padding: 1rem;
+      background: #f9f9f9;
       border-radius: 12px;
     }
     .results p {
+      font-weight: 500;
       margin: 0.5rem 0;
     }
-    .logo {
-      display: block;
-      margin: 0 auto 1rem;
-      width: 100px;
+    canvas {
+      margin-top: 1rem;
+      width: 100% !important;
+      height: auto !important;
+    }
+    .back-home {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .back-home a {
+      text-decoration: none;
+      color: #2196f3;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #777;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
-<!-- AdSense Header Ad -->
-<div style="margin-bottom: 16px;">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
-     data-ad-slot="1234567890"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h1>SIP Calculator</h1>
-    <div class="input-group">
-      <label for="monthlyInvestment">Monthly Investment (₹)</label>
-      <input type="number" id="monthlyInvestment" />
-    </div>
-    <div class="input-group">
-      <label for="annualReturn">Expected Annual Return (%)</label>
-      <input type="number" id="annualReturn" />
-    </div>
-    <div class="input-group">
-      <label for="years">Investment Duration (Years)</label>
-      <input type="number" id="years" />
-    </div>
-    <button class="btn" onclick="calculateSIP()">Calculate</button>
-    <div class="results" id="sipResults" style="display:none;">
-      <p><strong>Total Investment:</strong> ₹<span id="totalInvested"></span></p>
-      <p><strong>Estimated Returns:</strong> ₹<span id="estimatedReturns"></span></p>
-      <p><strong>Future Value:</strong> ₹<span id="futureValue"></span></p>
-    </div>
-  </div>
-  <script src="sip.js"></script>
+    <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
+    <h1>📈 SIP Calculator</h1>
 
-<!-- AdSense Footer Ad -->
-<div style="margin-top: 32px;">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
-     data-ad-slot="1234567890"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
+    <div class="input-group">
+      <label>💸 Monthly Investment (₹)</label>
+      <input type="number" id="monthlyInvestment" placeholder="Enter SIP amount" />
+    </div>
+
+    <div class="input-group">
+      <label>⏳ Investment Period (Years)</label>
+      <input type="number" id="investmentPeriod" placeholder="Enter years" />
+    </div>
+
+    <div class="input-group">
+      <label>📊 Expected Annual Return (%)</label>
+      <input type="number" id="expectedReturn" placeholder="Enter rate" />
+    </div>
+
+    <button class="btn" onclick="calculateSIP()">Calculate</button>
+
+    <div class="results" id="results" style="display: none;">
+      <p>Total Investment: ₹<span id="totalInvestment">0</span></p>
+      <p>Expected Returns: ₹<span id="maturityAmount">0</span></p>
+      <canvas id="sipChart"></canvas>
+      <canvas id="sipLineChart"></canvas>
+    </div>
+
+    <div style="margin-top: 2rem; text-align: center;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="back-home">
+      <a href="index.html">← Back to Homepage</a>
+    </div>
+
+    <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
+  </div>
+
+  <script>
+    function calculateSIP() {
+      const P = parseFloat(document.getElementById("monthlyInvestment").value);
+      const Y = parseFloat(document.getElementById("investmentPeriod").value);
+      const r = parseFloat(document.getElementById("expectedReturn").value) / 100 / 12;
+      const n = Y * 12;
+
+      if (!P || !Y || !r) return;
+
+      const maturity = P * ((Math.pow(1 + r, n) - 1) * (1 + r) / r);
+      const invested = P * n;
+      const gain = maturity - invested;
+
+      document.getElementById("totalInvestment").innerText = invested.toFixed(2);
+      document.getElementById("maturityAmount").innerText = maturity.toFixed(2);
+      document.getElementById("results").style.display = "block";
+
+      const ctx = document.getElementById("sipChart").getContext("2d");
+      if (window.sipChartInstance) window.sipChartInstance.destroy();
+      window.sipChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Invested Amount', 'Returns'],
+          datasets: [{
+            data: [invested, gain],
+            backgroundColor: ['#66bb6a', '#ffa726'],
+            borderColor: '#fff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+
+      const lineCtx = document.getElementById("sipLineChart").getContext("2d");
+      const labels = Array.from({ length: n }, (_, i) => `Month ${i + 1}`);
+      const data = labels.map((_, i) => (P * ((Math.pow(1 + r, i + 1) - 1) * (1 + r) / r)).toFixed(2));
+
+      if (window.sipLineChartInstance) window.sipLineChartInstance.destroy();
+      window.sipLineChartInstance = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Wealth Over Time',
+            data: data,
+            borderColor: '#66bb6a',
+            backgroundColor: 'rgba(102,187,106,0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>
