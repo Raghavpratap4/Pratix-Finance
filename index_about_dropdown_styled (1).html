@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fce4ec);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .logo {
+      width: 80px;
+      margin-top: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+
+    h1 span {
+      color: orangered;
+    }
+
+    p.subtitle {
+      color: #555;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border: none;
+      padding: 15px 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      font-size: 1em;
+      margin: 10px auto;
+      width: 100%;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .button span {
+      margin-left: 10px;
+    }
+
+    .disabled-button {
+      background-color: #f0f0f0;
+      color: #999;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #888;
+      font-size: 0.9em;
+    }
+
+    .dropdown-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      min-width: 100%;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+      z-index: 1;
+      border-radius: 12px;
+      margin-top: 5px;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown-container:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Pratix Logo" class="logo" />
+    <h1><strong>Pratix</strong> <span>Finance</span></h1>
+    <p class="subtitle">Finance Tools for Everyone</p>
+
+    <button class="button">🏠 <span>EMI Calculator</span></button>
+    <button class="button">💰 <span>Income Tax Calculator</span></button>
+    <button class="button">🧾 <span>GST Calculator</span></button>
+    <button class="button">📈 <span>SIP Calculator</span></button>
+    <button class="button disabled-button">🏦 <span>FD Calculator Coming Soon</span></button>
+
+    <div class="dropdown-container">
+      <button class="button">📘 <span>About</span></button>
+      <div class="dropdown-content">
+        <a href="about.html">About Pratix Finance</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="blogs.html">Blogs</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Crafted with ❤️ by Raghav Pratap • © 2025 Pratix
+    </div>
+  </div>
+</body>
+</html>
