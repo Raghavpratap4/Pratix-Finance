@@ -1,47 +1,55 @@
 
 function calculateEMI() {
-    const loan = parseFloat(document.getElementById("loanAmount").value);
-    const interestRate = parseFloat(document.getElementById("interestRate").value);
-    const tenureYears = parseFloat(document.getElementById("loanTenure").value);
+  const P = parseFloat(document.getElementById("loanAmount").value);
+  const annualRate = parseFloat(document.getElementById("interestRate").value);
+  const years = parseFloat(document.getElementById("loanTenure").value);
 
-    if (isNaN(loan) || isNaN(interestRate) || isNaN(tenureYears)) {
-        alert("Please fill in all fields correctly.");
-        return;
+  const R = annualRate / 12 / 100;
+  const N = years * 12;
+
+  const EMI = P * R * Math.pow(1 + R, N) / (Math.pow(1 + R, N) - 1);
+  const totalPayment = EMI * N;
+  const totalInterest = totalPayment - P;
+
+  document.getElementById("emi").innerText = EMI.toFixed(2);
+  document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
+  document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
+
+  renderCharts(P, totalInterest, EMI, N);
+}
+
+function renderCharts(principal, interest, emi, months) {
+  const ctxPie = document.getElementById("emiPieChart").getContext("2d");
+  const ctxLine = document.getElementById("emiLineChart").getContext("2d");
+
+  if (window.pieChart) window.pieChart.destroy();
+  if (window.lineChart) window.lineChart.destroy();
+
+  window.pieChart = new Chart(ctxPie, {
+    type: 'pie',
+    data: {
+      labels: ['Principal', 'Interest'],
+      datasets: [{
+        data: [principal, interest],
+        backgroundColor: ['#4caf50', '#f44336']
+      }]
     }
+  });
 
-    const interest = interestRate / 100 / 12;
-    const tenure = tenureYears * 12;
+  const labels = Array.from({length: months}, (_, i) => `Month ${i + 1}`);
+  const emiData = Array(months).fill(emi);
 
-    const emi = loan * interest * Math.pow(1 + interest, tenure) / (Math.pow(1 + interest, tenure) - 1);
-    const totalPayment = emi * tenure;
-    const totalInterest = totalPayment - loan;
-
-    document.getElementById("results").style.display = "block";
-    document.getElementById("emiResult").innerText = "EMI: ₹" + emi.toFixed(2);
-    document.getElementById("totalInterest").innerText = "Total Interest: ₹" + totalInterest.toFixed(2);
-    document.getElementById("totalPayment").innerText = "Total Payment: ₹" + totalPayment.toFixed(2);
-
-    setTimeout(() => {
-        const ctx = document.getElementById("emiChart").getContext("2d");
-        if (window.emiChart) window.emiChart.destroy();
-        window.emiChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ["Principal", "Interest"],
-                datasets: [{
-                    data: [loan, totalInterest],
-                    backgroundColor: ["#00bcd4", "#ff5722"],
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-    }, 100);
+  window.lineChart = new Chart(ctxLine, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Monthly EMI',
+        data: emiData,
+        borderColor: '#007BFF',
+        fill: false,
+        tension: 0.1
+      }]
+    }
+  });
 }
