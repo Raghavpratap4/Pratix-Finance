@@ -21,24 +21,27 @@ function calculateEMI() {
     document.getElementById("totalInterest").innerText = "Total Interest: ₹" + totalInterest.toFixed(2);
     document.getElementById("totalPayment").innerText = "Total Payment: ₹" + totalPayment.toFixed(2);
 
-    const ctx = document.getElementById("emiChart").getContext("2d");
-    if (window.emiChart) window.emiChart.destroy();
-    window.emiChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Principal", "Interest"],
-            datasets: [{
-                data: [loan, totalInterest],
-                backgroundColor: ["#00bcd4", "#ff5722"],
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    position: 'bottom'
+    setTimeout(() => {
+        const ctx = document.getElementById("emiChart").getContext("2d");
+        if (window.emiChart) window.emiChart.destroy();
+        window.emiChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Principal", "Interest"],
+                datasets: [{
+                    data: [loan, totalInterest],
+                    backgroundColor: ["#00bcd4", "#ff5722"],
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
                 }
             }
-        }
-    });
+        });
+    }, 100);
 }
