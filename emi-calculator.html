@@ -15,6 +15,7 @@
     </header>
 
     <main class="container">
+        <form id="emi-form" class="calculator-card">
         <div class="calculator-card">
             <label>💰 Loan Amount (₹)
                 <input type="number" id="loanAmount" placeholder="Enter loan amount" />
@@ -29,6 +30,11 @@
             </label>
 
             <button onclick="calculateEMI()">Calculate EMI</button>
+        <button type="submit" class="calculate-btn">Calculate EMI</button>
+        </form>
+        <div class="result-section">
+            <div id="emi-result"></div>
+            <canvas id="emiChart" width="400" height="400"></canvas>
         </div>
 
         <div class="results-card" id="results" style="display:none;">

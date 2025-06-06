@@ -16,6 +16,32 @@ document.getElementById("emi-form").addEventListener("submit", function(e) {
     const totalPayment = emi * loanTenure;
     const totalInterest = totalPayment - loanAmount;
 
+    
+    const ctx = document.getElementById('emiChart').getContext('2d');
+    if (window.emiChart) {
+        window.emiChart.destroy();
+    }
+    window.emiChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Principal', 'Interest'],
+            datasets: [{
+                label: 'EMI Breakdown',
+                data: [loanAmount, totalInterest],
+                backgroundColor: ['#4CAF50', '#FF5733'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
     document.getElementById("emi-result").innerHTML = `
         <h3>EMI Result</h3>
         <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
