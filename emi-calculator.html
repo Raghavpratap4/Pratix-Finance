@@ -1,79 +1,133 @@
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>EMI Calculator - Pratix Finance</title>
-<link href="style.css" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EMI Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #121212;
+      color: #fff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    body.dark .container {
+      background: #1e1e1e;
+    }
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .logo {
+      width: 120px;
+    }
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    button {
+      flex: 1;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .reset-btn {
+      background-color: #ffcdd2;
+    }
+    .results {
+      margin-top: 2rem;
+    }
+    canvas {
+      margin-top: 1rem;
+      width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<header class="app-header">
-<img alt="Pratix Finance Logo" class="logo" src="logo.png"/>
-<button class="theme-toggle" onclick="toggleTheme()">⭐</button>
-</header>
-<div class="form-card">
-<div class="input-group">
-<label>💰 Loan Amount (₹)</label>
-<div class="input-wrapper">
-<input id="loanAmount" placeholder="Enter loan amount" type="number"/>
-<span class="clear-btn" onclick="clearInput('loanAmount')">×</span>
-</div>
-</div>
-<div class="input-group">
-<label>📉 Interest Rate (%)</label>
-<div class="input-wrapper">
-<input id="interestRate" placeholder="Enter annual interest rate" type="number"/>
-<span class="clear-btn" onclick="clearInput('interestRate')">×</span>
-</div>
-</div>
-<div class="input-group">
-<label>📅 Loan Tenure (Years)</label>
-<div class="input-wrapper">
-<input id="loanTenure" placeholder="Enter tenure in years" type="number"/>
-<span class="clear-btn" onclick="clearInput('loanTenure')">×</span>
-</div>
-</div>
-<div class="button-row">
-<button class="reset-btn" onclick="resetCalculator()">🔁 Reset</button>
-<button onclick="calculateEMI()">✅ Calculate EMI</button>
-</div>
-</div>
-<div class="results fade-in" id="resultsContainer">
-<h2>📈 EMI Breakdown</h2>
-<p><strong>Monthly EMI: <span id="emi-result">₹ 0</span></strong></p>
-<p>Total Payment: <span id="total-payment">₹ 0</span></p>
-<p>Total Interest: <span id="total-interest">₹ 0</span></p>
-<canvas id="emiChart" width="300" height="300"></canvas>
-<!-- Chart and animated values added -->
-<!-- DO NOT REMOVE SPAN IDs -->
-<p><em>Note: This is an estimated calculation.</em></p>
-</strong> ₹<span id="emi"></span></p>
-<p><strong>Total Interest:</strong> ₹<span id="totalInterest"></span></p>
-<p><strong>Total Payment:</strong> ₹<span id="totalPayment"></span></p>
-</div>
-<div class="chart-container">
-<canvas id="emiPieChart"></canvas>
-</div>
-<div class="chart-container">
-<canvas id="emiLineChart"></canvas>
-</div>
-<footer>
-<p>© 2025 Pratix Finance. Made with ❤️ by Raghav Pratap</p>
-</footer>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
-<script>
-    const toggle = document.getElementById("themeToggle");
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      toggle.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "🌟";
-    });
+  <div class="container">
+    <header class="app-header">
+      <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
+      <button class="theme-toggle" onclick="toggleTheme()">⭐</button>
+    </header>
+
+    <div class="input-group">
+      <label for="loanAmount">💰 Loan Amount (₹)</label>
+      <input type="number" id="loanAmount" placeholder="Enter loan amount" />
+    </div>
+
+    <div class="input-group">
+      <label for="interestRate">📉 Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="Enter interest rate" />
+    </div>
+
+    <div class="input-group">
+      <label for="loanTenure">📅 Loan Tenure (Years)</label>
+      <input type="number" id="loanTenure" placeholder="Enter tenure in years" />
+    </div>
+
+    <div class="button-row">
+      <button class="reset-btn" onclick="resetCalculator()">🔁 Reset</button>
+      <button onclick="calculateEMI()">✅ Calculate EMI</button>
+    </div>
+
+    <div class="results" id="resultsContainer" style="display:none;">
+      <h2>📈 EMI Breakdown</h2>
+      <p><strong>Monthly EMI:</strong> ₹ <span id="emiResult">0</span></p>
+      <p><strong>Total Interest:</strong> ₹ <span id="interestResult">0</span></p>
+      <p><strong>Total Payment:</strong> ₹ <span id="totalPayment">0</span></p>
+      <canvas id="emiChart"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="emi.js"></script>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
   </script>
-<script src="emi-calculator-updated.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
