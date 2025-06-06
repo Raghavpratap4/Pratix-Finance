@@ -215,30 +215,3 @@ body.dark .reset-btn:hover {
   cursor: pointer;
   color: inherit;
 }
-
-
-/* Floating star toggle button */
-.theme-toggle {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 1000;
-  color: #333;
-}
-
-body.dark {
-  background-color: #121212;
-  color: #ffffff;
-}
-
-body.dark input,
-body.dark button,
-body.dark .results,
-body.dark .chart-container {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
