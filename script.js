@@ -88,3 +88,40 @@ function previewExport(type) {
     }
   });
 }
+
+function previewSIP() {
+  const exportArea = document.getElementById("export-area");
+  html2canvas(exportArea).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const previewArea = document.getElementById("previewArea");
+    previewArea.innerHTML = "";  // Clear previous
+    const img = new Image();
+    img.src = imgData;
+    previewArea.appendChild(img);
+    document.getElementById("previewModal").style.display = "flex";
+    window.lastPreviewCanvas = canvas;
+  });
+}
+
+function closePreview() {
+  document.getElementById("previewModal").style.display = "none";
+}
+
+function downloadPreview(type) {
+  if (!window.lastPreviewCanvas) return;
+  const imgData = window.lastPreviewCanvas.toDataURL("image/png");
+  if (type === "image") {
+    const link = document.createElement("a");
+    link.href = imgData;
+    link.download = "sip-summary.png";
+    link.click();
+  } else if (type === "pdf") {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("sip-summary.pdf");
+  }
+}
