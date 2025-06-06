@@ -2,64 +2,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EMI Calculator - Pratix Finance</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>EMI Calculator | Pratix Finance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header class="header">
-        <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
-        <h1>📊 EMI Calculator</h1>
-    </header>
-
-    <main class="container">
-        <form id="emi-form" class="calculator-card">
-        <div class="calculator-card">
-            <label>💰 Loan Amount (₹)
-                <input type="number" id="loanAmount" placeholder="Enter loan amount" />
-            </label>
-
-            <label>📈 Interest Rate (%)
-                <input type="number" id="interestRate" step="0.1" placeholder="Enter interest rate" />
-            </label>
-
-            <label>📅 Tenure (Years)
-                <input type="number" id="loanTenure" placeholder="Enter tenure in years" />
-            </label>
-
-            <button onclick="calculateEMI()">Calculate EMI</button>
-        <button type="submit" class="calculate-btn">Calculate EMI</button>
-        </form>
-        <div class="result-section">
-            <div id="emi-result" class="result-box">
+    <div class="container">
+        <div class="calculator">
+            <img src="logo.png" alt="Pratix Finance Logo" class="logo">
+            <h2>📊 EMI Calculator</h2>
+            <form id="emi-form">
+                <label>💰 Loan Amount (₹)</label>
+                <input type="number" id="loanAmount" required>
+                <label>📉 Interest Rate (%)</label>
+                <input type="number" id="interestRate" step="0.01" required>
+                <label>📅 Tenure (Years)</label>
+                <input type="number" id="tenure" required>
+                <button type="submit" class="calculate-btn">Calculate EMI</button>
+            </form>
+            <div class="result-section" style="margin-top: 20px;">
                 <h3>EMI Details 📊</h3>
-                <p><strong>EMI:</strong> ₹<span id="emiValue"></span></p>
-                <p><strong>Total Interest:</strong> ₹<span id="totalInterestValue"></span></p>
-                <p><strong>Total Payment:</strong> ₹<span id="totalPaymentValue"></span></p>
+                <p><strong>EMI:</strong> ₹<span id="emiValue">-</span></p>
+                <p><strong>Total Interest:</strong> ₹<span id="totalInterestValue">-</span></p>
+                <p><strong>Total Payment:</strong> ₹<span id="totalPaymentValue">-</span></p>
+                <canvas id="emiChart" width="300" height="300"></canvas>
             </div>
-            <canvas id="emiChart" width="400" height="400"></canvas>
+            <div class="ad-placeholder">Ad Placeholder</div>
         </div>
-
-        <div class="results-card" id="results" style="display:none;">
-            <h2>Results</h2>
-            <p id="emiResult">EMI: ₹0</p>
-            <p id="totalInterest">Total Interest: ₹0</p>
-            <p id="totalPayment">Total Payment: ₹0</p>
-            <canvas id="emiChart" width="300" height="300"></canvas>
-        </div>
-
-        <div class="adsense">
-            <!-- AdSense block placeholder -->
-            <p>Ad Placeholder</p>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <p>© 2025 Pratix Finance. Made with ❤️ by Raghav Pratap</p>
-    </footer>
-
-    <script src="script.js"></script>
+        <footer>
+            © 2025 Pratix Finance. Made with ❤️ by Raghav Pratap
+        </footer>
+    </div>
+    <script src="emi-calculator.js"></script>
 </body>
 </html>
