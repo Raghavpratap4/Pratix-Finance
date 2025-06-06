@@ -3,6 +3,11 @@
 
 <html lang="en">
 <head>
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190"
+     crossorigin="anonymous"></script>
+
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>EMI Calculator - Pratix Finance</title>
@@ -285,7 +290,19 @@
 
 </head>
 <body>
-<div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+
+<!-- Header Ad (Horizontal) -->
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-3291480910940190"
+     data-ad-slot="1234567890"
+     data-ad-format="horizontal"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
 <div class="container">
 <div class="title">💸 EMI Calculator</div>
 <div class="input-group">
@@ -302,7 +319,7 @@
 </div>
 <div class="buttons" style="flex-direction: row-reverse;">
 <button onclick="calculateEMI()">🧮 Calculate</button>
-<button class="reset" onclick="resetForm()">♻️ Reset</button>
+<button onclick="resetEMI()">🔄 Reset</button>
 </div>
 <div class="result animate" id="emiResult">Your EMI: ₹ 0</div>
 <div class="result-breakdown" id="breakdown" style="margin-top: 1rem; font-size: 1rem;">
@@ -516,14 +533,16 @@
     }
     </script>
 
-<!-- Footer Ad -->
+<!-- Footer Ad (Horizontal) -->
 <ins class="adsbygoogle"
-     style="display:block; text-align:center; margin: 20px 0;"
+     style="display:block; text-align:center;"
      data-ad-client="ca-pub-3291480910940190"
-     data-ad-slot="3391404887"
-     data-ad-format="auto"
+     data-ad-slot="0987654321"
+     data-ad-format="horizontal"
      data-full-width-responsive="true"></ins>
-<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
 
 
@@ -721,34 +740,25 @@
 </script>
 
 
-<div class="theme-toggle" onclick="toggleTheme()">🌓 Toggle Theme</div>
+
+
+
+
 <script>
-  function toggleTheme() {
-    const current = document.body.classList.contains('dark-mode');
-    document.body.classList.toggle('dark-mode', !current);
-    document.body.classList.toggle('light-mode', current);
-    localStorage.setItem('theme', !current ? 'dark' : 'light');
-
-    if (window.chart1 && window.chart1.options) {
-      window.chart1.options.plugins.title.color = !current ? '#fff' : '#111';
-      window.chart1.update();
-    }
-    if (window.chart2 && window.chart2.options) {
-      window.chart2.options.plugins.title.color = !current ? '#fff' : '#111';
-      window.chart2.options.scales.y.ticks.color = !current ? '#ccc' : '#222';
-      window.chart2.update();
-    }
+  function resetEMI() {
+    location.reload(); // Fully reload the page to clear all data
   }
+</script>
 
-  // Load theme from storage
-  window.onload = function() {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.add('light-mode');
-    }
-  }
+<!-- Footer Ad (Horizontal) -->
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-3291480910940190"
+     data-ad-slot="0987654321"
+     data-ad-format="horizontal"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 
 </body>
