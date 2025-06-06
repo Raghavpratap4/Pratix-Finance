@@ -150,3 +150,56 @@ footer {
 .reset-btn:hover {
   background-color: #e0e0e0;
 }
+
+/* Header and Logo */
+.app-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.logo {
+  max-height: 60px;
+}
+
+.theme-toggle {
+  position: absolute;
+  right: 0;
+  padding: 5px 10px;
+  font-size: 20px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+/* Dark theme */
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark .form-card,
+body.dark .results,
+body.dark .chart-container {
+  background-color: #1e1e1e;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+body.dark input,
+body.dark button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+body.dark .reset-btn {
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+}
+
+body.dark .reset-btn:hover {
+  background-color: #3a3a3a;
+}

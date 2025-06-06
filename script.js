@@ -94,3 +94,7 @@ function resetCalculator() {
     if (window.lineChart) window.lineChart.destroy();
   });
 });
+
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+}
