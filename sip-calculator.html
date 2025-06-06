@@ -1,45 +1,54 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIP Calculator - Pratix Finance</title>
-<link href="style.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script async="True" data-ad-client="pub-3291480910940190" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script></head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIP Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    data-ad-client="pub-3291480910940190"></script>
+</head>
 <body>
-<img alt="Logo" class="logo" src="logo.png" style="display: block; margin: 0 auto; max-width: 150px;"/>
-<h1 style="text-align: center;">💹 SIP Calculator</h1>
+
+<!-- Ad placeholder (header) -->
+<div class="ad-header" style="width:100%; height:90px; background:#e0e0e0; text-align:center; line-height:90px;">🔷 Header Ad Space (728x90)</div>
+
+<!-- Logo -->
+<img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
+
+<h1 style="text-align:center;">💹 SIP Calculator</h1>
+
 <div class="calculator-container" id="export-area">
-<label for="monthlyInvestment">Monthly Investment (₹):</label>
-<input id="monthlyInvestment" placeholder="Enter amount" type="number"/>
-<label for="expectedReturn">Expected Annual Return (%):</label>
-<input id="expectedReturn" placeholder="e.g. 12" type="number"/>
-<label for="investmentPeriod">Investment Period (years):</label>
-<input id="investmentPeriod" placeholder="e.g. 10" type="number"/><div style="text-align: center; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 1rem;"><button class="button reset" onclick="resetCalculator()">🔄 Reset</button><button class="button calculate" onclick="calculateSIP()">🧮 Calculate</button><button class="button" onclick="previewExport('pdf')">📄 Preview PDF</button><button class="button" onclick="previewExport('image')">🖼️ Preview Image</button></div>
-<div id="results">
-<p><strong>Invested Amount:</strong> ₹<span id="investedAmount">0</span></p>
-<p><strong>Est. Returns:</strong> ₹<span id="returns">0</span></p>
-<p><strong>Total Value:</strong> ₹<span id="totalValue">0</span></p>
+  <label>Monthly Investment (₹):</label>
+  <input type="number" id="monthlyInvestment" placeholder="Enter amount"/>
+  <label>Expected Annual Return (%):</label>
+  <input type="number" id="expectedReturn" placeholder="e.g. 12"/>
+  <label>Investment Period (years):</label>
+  <input type="number" id="investmentPeriod" placeholder="e.g. 10"/>
+
+  <div style="margin-top:10px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+    <button onclick="resetCalculator()">🔄 Reset</button>
+    <button onclick="calculateSIP()">🧮 Calculate</button>
+    <button onclick="previewExport('pdf')">📄 Preview PDF</button>
+    <button onclick="previewExport('image')">🖼️ Preview Image</button>
+  </div>
+
+  <div id="results">
+    <p><strong>Invested Amount:</strong> ₹<span id="investedAmount">0</span></p>
+    <p><strong>Est. Returns:</strong> ₹<span id="returns">0</span></p>
+    <p><strong>Total Value:</strong> ₹<span id="totalValue">0</span></p>
+  </div>
+
+  <canvas id="sipChart" width="400" height="300"></canvas>
 </div>
-<canvas height="300" id="sipChart" width="400"></canvas>
-</div><div class="ad-space" style="margin-top:40px;"><ins class="adsbygoogle" data-ad-client="pub-3291480910940190" data-ad-format="auto" data-ad-slot="1234567890" data-full-width-responsive="true" style="display:block"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div class="ad-space" style="width: 100%; height: 90px; background-color: #f5f5f5; text-align: center; line-height: 90px; margin-top: 40px; font-weight: bold; color: #555;">🔶 [Ad Space - Footer 728x90]</div>
-<div id="previewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
-<div style="background:#fff; padding:20px; border-radius:8px; max-width:90%; max-height:90%; overflow:auto;">
-<h2 style="text-align:center;">📋 Export Preview</h2>
-<div id="previewArea"></div>
-<div style="text-align:center; margin-top:1rem;">
-<button class="button" onclick="downloadFinalExport()">⬇️ Download</button>
-<button class="button" onclick="shareExportedImage()">🔗 Share</button>
-<button class="button" onclick="closePreview()">❌ Close</button>
-</div>
-</div>
-</div>
-<script src="sip.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Ad placeholder (footer) -->
+<div class="ad-footer" style="width:100%; height:90px; background:#e0e0e0; text-align:center; line-height:90px; margin-top:40px;">🔶 Footer Ad Space (728x90)</div>
+
+<script src="script.js"></script>
 </body>
 </html>
