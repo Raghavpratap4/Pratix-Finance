@@ -76,3 +76,21 @@ function renderCharts(principal, interest, emi, months) {
 function clearInput(id) {
   document.getElementById(id).value = '';
 }
+
+function resetCalculator() {
+  ['loanAmount', 'interestRate', 'loanTenure'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById("resultsContainer").style.display = "none";
+  if (window.pieChart) window.pieChart.destroy();
+  if (window.lineChart) window.lineChart.destroy();
+}
+
+// Auto-hide results if user starts editing inputs
+['loanAmount', 'interestRate', 'loanTenure'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    document.getElementById("resultsContainer").style.display = "none";
+    if (window.pieChart) window.pieChart.destroy();
+    if (window.lineChart) window.lineChart.destroy();
+  });
+});

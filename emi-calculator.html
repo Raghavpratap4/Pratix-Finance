@@ -32,7 +32,12 @@
           <span class="clear-btn" onclick="clearInput('loanTenure')">&times;</span>
         </div>
       </div>
-      <button onclick="calculateEMI()">Calculate EMI</button>
+      
+    <div class="button-row">
+      <button class="reset-btn" onclick="resetCalculator()">🔁 Reset</button>
+      <button onclick="calculateEMI()">✅ Calculate EMI</button>
+    </div>
+    
     </div>
 
     <div class="results fade-in" id="resultsContainer">
