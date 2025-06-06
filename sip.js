@@ -118,3 +118,64 @@ function shareExportedImage() {
     alert("Sharing is not supported on this device/browser.");
   }
 }
+
+
+
+let currentExportType = "";
+let exportedCanvasDataURL = "";
+
+function previewExport(type) {
+  currentExportType = type;
+  const exportArea = document.getElementById("export-area") || document.body;
+  html2canvas(exportArea).then(canvas => {
+    exportedCanvasDataURL = canvas.toDataURL("image/png");
+    const previewArea = document.getElementById("previewArea");
+    previewArea.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = exportedCanvasDataURL;
+    img.style.maxWidth = "100%";
+    previewArea.appendChild(img);
+    document.getElementById("previewModal").style.display = "flex";
+  });
+}
+
+function closePreview() {
+  document.getElementById("previewModal").style.display = "none";
+}
+
+function downloadFinalExport() {
+  if (currentExportType === "pdf") {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    const imgProps = pdf.getImageProperties(exportedCanvasDataURL);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(exportedCanvasDataURL, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("sip-calculation.pdf");
+  } else {
+    const link = document.createElement("a");
+    link.href = exportedCanvasDataURL;
+    link.download = "sip-calculation.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+}
+
+function shareExportedImage() {
+  if (navigator.canShare && navigator.canShare({ files: [] })) {
+    fetch(exportedCanvasDataURL)
+      .then(res => res.blob())
+      .then(blob => {
+        const file = new File([blob], "sip-calculation.png", { type: blob.type });
+        navigator.share({
+          files: [file],
+          title: "SIP Calculation - Pratix Finance",
+          text: "Here is my SIP result from Pratix Finance."
+        });
+      })
+      .catch(console.error);
+  } else {
+    alert("Sharing is not supported on this device/browser.");
+  }
+}
