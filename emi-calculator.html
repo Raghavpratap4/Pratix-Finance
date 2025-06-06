@@ -4,35 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EMI Calculator</title>
+  <title>EMI Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <h1>📊 EMI Calculator</h1>
-    <div class="input-group">
-      <label>💰 Loan Amount (₹)</label>
-      <input type="number" id="loanAmount" placeholder="Enter loan amount">
+    <div class="form-card">
+      <div class="input-group">
+        <label>💰 Loan Amount (₹)</label>
+        <input type="number" id="loanAmount" placeholder="Enter loan amount">
+      </div>
+      <div class="input-group">
+        <label>📉 Interest Rate (%)</label>
+        <input type="number" id="interestRate" placeholder="Enter annual interest rate">
+      </div>
+      <div class="input-group">
+        <label>📅 Loan Tenure (Years)</label>
+        <input type="number" id="loanTenure" placeholder="Enter tenure in years">
+      </div>
+      <button onclick="calculateEMI()">Calculate EMI</button>
     </div>
-    <div class="input-group">
-      <label>📉 Interest Rate (%)</label>
-      <input type="number" id="interestRate" placeholder="Enter interest rate">
-    </div>
-    <div class="input-group">
-      <label>📅 Tenure (Years)</label>
-      <input type="number" id="loanTenure" placeholder="Enter tenure in years">
-    </div>
-    <button onclick="calculateEMI()">Calculate EMI</button>
 
-    <div class="results">
-      <h2>EMI Details 📈</h2>
-      <p><strong>EMI:</strong> ₹<span id="emi"></span></p>
+    <div class="results fade-in" id="resultsContainer">
+      <h2>📈 EMI Breakdown</h2>
+      <p><strong>Monthly EMI:</strong> ₹<span id="emi"></span></p>
       <p><strong>Total Interest:</strong> ₹<span id="totalInterest"></span></p>
       <p><strong>Total Payment:</strong> ₹<span id="totalPayment"></span></p>
     </div>
 
-    <canvas id="emiPieChart"></canvas>
-    <canvas id="emiLineChart"></canvas>
+    <div class="chart-container">
+      <canvas id="emiPieChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="emiLineChart"></canvas>
+    </div>
 
     <footer>
       <p>© 2025 Pratix Finance. Made with ❤️ by Raghav Pratap</p>

@@ -15,6 +15,8 @@ function calculateEMI() {
   document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
   document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
 
+  document.getElementById("resultsContainer").style.display = "block";
+
   renderCharts(P, totalInterest, EMI, N);
 }
 
@@ -33,6 +35,13 @@ function renderCharts(principal, interest, emi, months) {
         data: [principal, interest],
         backgroundColor: ['#4caf50', '#f44336']
       }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
     }
   });
 
@@ -47,9 +56,19 @@ function renderCharts(principal, interest, emi, months) {
         label: 'Monthly EMI',
         data: emiData,
         borderColor: '#007BFF',
-        fill: false,
-        tension: 0.1
+        backgroundColor: '#cce5ff',
+        fill: true,
+        tension: 0.2
       }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
     }
   });
 }
