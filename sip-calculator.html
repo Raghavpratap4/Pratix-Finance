@@ -1,7 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190"
+     crossorigin="anonymous"></script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SIP Calculator - Pratix Finance</title>
@@ -9,67 +11,23 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-    data-ad-client="pub-3291480910940190"></script>
-  <style>
-    #previewModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    #previewContent {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 90%;
-      max-height: 90%;
-      overflow: auto;
-      text-align: center;
-    }
-    #previewContent img {
-      max-width: 100%;
-    }
-    #previewButtons {
-      margin-top: 15px;
-    }
-  </style>
 </head>
 <body>
+  <!-- Header Ad (Horizontal) -->
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-3291480910940190"
+     data-ad-slot="1234567890"
+     data-ad-format="horizontal"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
-<!-- Ad placeholder (header) -->
-<div class="ad-header" style="width:100%; height:90px; background:#e0e0e0; text-align:center; line-height:90px;">🔷 Header Ad Space (728x90)</div>
-
-<!-- Logo -->
 <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
-
 <h1 style="text-align:center;">💹 SIP Calculator</h1>
 
-
-<div class="calculator-container" id="export-area">
-  <img src="logo.png" alt="Logo" style="max-width:120px; display:block; margin:0 auto 10px;"/>
-  <h2 style="text-align:center;">SIP Calculator Summary</h2>
-
-  <div id="input-summary">
-    <p><strong>Monthly Investment (₹):</strong> <span id="previewMonthlyInvestment">0</span></p>
-    <p><strong>Expected Return Rate (%):</strong> <span id="previewExpectedReturn">0</span></p>
-    <p><strong>Investment Period (Years):</strong> <span id="previewInvestmentPeriod">0</span></p>
-  </div>
-
-  <div id="results">
-    <p><strong>Invested Amount:</strong> ₹<span id="investedAmount">0</span></p>
-    <p><strong>Est. Returns:</strong> ₹<span id="returns">0</span></p>
-    <p><strong>Total Value:</strong> ₹<span id="totalValue">0</span></p>
-  </div>
-
-  <canvas id="sipChart" width="400" height="300"></canvas>
-  <canvas id="sipLineChart" width="400" height="300" style="margin-top:20px;"></canvas>
-</div>
-
+<div class="calculator-container">
   <label>Monthly Investment (₹):</label>
   <input type="number" id="monthlyInvestment" placeholder="Enter amount"/>
   <label>Expected Annual Return (%):</label>
@@ -77,10 +35,10 @@
   <label>Investment Period (years):</label>
   <input type="number" id="investmentPeriod" placeholder="e.g. 10"/>
 
-  <div style="margin-top:10px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+  <div style="margin-top:10px;">
+    <button onclick="calculateSIP()">Calculate</button>
     <button onclick="resetCalculator()">🔄 Reset</button>
-    <button onclick="calculateSIP()">🧮 Calculate</button>
-    <button onclick="previewSIP()">👁️ Preview</button>
+    <button onclick="showPreview()">📊 Preview</button>
   </div>
 
   <div id="results">
@@ -89,26 +47,53 @@
     <p><strong>Total Value:</strong> ₹<span id="totalValue">0</span></p>
   </div>
 
-  <canvas id="sipChart" width="400" height="300"></canvas>
+  <canvas id="sipPieChart" width="400" height="300"></canvas>
   <canvas id="sipLineChart" width="400" height="300" style="margin-top:20px;"></canvas>
 </div>
 
 <!-- Preview Modal -->
-<div id="previewModal">
-  <div id="previewContent">
-    <p><strong>Preview SIP Summary</strong></p>
-    <div id="previewArea"></div>
-    <div id="previewButtons">
-      <button onclick="downloadPreview('pdf')">📄 Download PDF</button>
-      <button onclick="downloadPreview('image')">🖼️ Download Image</button>
-      <button onclick="closePreview()">❌ Close</button>
+<div id="previewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; z-index:1000;">
+  <div id="previewContent" style="background:white; padding:20px; border-radius:10px; max-width:90%; max-height:90%; overflow:auto;">
+    <img src="logo.png" alt="Logo" style="max-width:120px;"/>
+    <h2>SIP Preview</h2>
+    <div>
+      <p><strong>Monthly Investment:</strong> ₹<span id="previewMonthlyInvestment">0</span></p>
+      <p><strong>Return Rate:</strong> <span id="previewExpectedReturn">0</span>%</p>
+      <p><strong>Years:</strong> <span id="previewInvestmentPeriod">0</span></p>
+      <p><strong>Invested:</strong> ₹<span id="previewInvestedAmount">0</span></p>
+      <p><strong>Returns:</strong> ₹<span id="previewReturns">0</span></p>
+      <p><strong>Total Value:</strong> ₹<span id="previewTotalValue">0</span></p>
     </div>
+    <canvas id="sipPreviewPieChart" width="300" height="300"></canvas>
+    <canvas id="sipPreviewLineChart" width="300" height="300" style="margin-top:20px;"></canvas>
+    <button onclick="closePreview()" style="margin-top:10px;">❌ Close</button>
   </div>
 </div>
 
-<!-- Ad placeholder (footer) -->
-<div class="ad-footer" style="width:100%; height:90px; background:#e0e0e0; text-align:center; line-height:90px; margin-top:40px;">🔶 Footer Ad Space (728x90)</div>
+<script src="sip.js"></script>
+<!-- Footer Ad (Horizontal) -->
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-client="ca-pub-3291480910940190"
+     data-ad-slot="0987654321"
+     data-ad-format="horizontal"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- AdSense Footer -->
+<div class="adsense-footer" style="text-align:center; margin-top: 10px;">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-3291480910940190"
+       data-ad-slot="9876543210"
+       data-ad-format="horizontal"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
 
-<script src="script.js"></script>
+<div style="text-align:center; font-size:14px; color:#666; margin-top:20px;">
+  Made with ❤️ by <strong>Raghav Pratap</strong> · <strong>Pratix Finance © 2025</strong>
+</div>
 </body>
 </html>
