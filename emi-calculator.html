@@ -244,6 +244,45 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
+
+<style>
+  body.light-mode {
+    background: #f4f4f4;
+    color: #111;
+  }
+  body.dark-mode {
+    background: #121212;
+    color: #f4f4f4;
+  }
+  .result-box, .input-group input, .buttons button, #breakdown {
+    transition: all 0.3s ease;
+  }
+  body.dark-mode .input-group input {
+    background: #2a2a2a;
+    color: #f4f4f4;
+    border: 1px solid #555;
+  }
+  body.dark-mode .result-box {
+    background: #1e1e1e;
+    color: #f4f4f4;
+  }
+  body.dark-mode .buttons button {
+    border: none;
+  }
+  .theme-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    padding: 8px 12px;
+    background: #222;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+</style>
+
 </head>
 <body>
 <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
@@ -590,6 +629,125 @@
         }
       }
     });
+  }
+</script>
+
+
+<script>
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
+
+  function calculateEMI() {
+    const loan = parseFloat(document.getElementById("loanAmount").value);
+    const rate = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
+    const tenure = parseFloat(document.getElementById("loanTenure").value) * 12;
+
+    if (isNaN(loan) || isNaN(rate) || isNaN(tenure) || loan <= 0 || rate <= 0 || tenure <= 0) {
+      document.getElementById("emiResult").innerText = "Your EMI: ₹ 0";
+      return;
+    }
+
+    const emi = (loan * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+    const totalPayment = emi * tenure;
+    const totalInterest = totalPayment - loan;
+
+    document.getElementById("emiResult").innerText = "Your EMI: " + formatCurrency(emi);
+
+    document.getElementById("breakdown").innerHTML = `
+      <p>💰 Loan Amount: ${formatCurrency(loan)}</p>
+      <p>📈 Total Interest: ${formatCurrency(totalInterest)}</p>
+      <p>💵 Total Payment: ${formatCurrency(totalPayment)}</p>
+    `;
+
+
+    // PIE Chart
+    const ctx1 = document.getElementById("emiChart").getContext("2d");
+    if (window.chart1) window.chart1.destroy();
+    window.chart1 = new Chart(ctx1, {
+      type: "pie",
+      data: {
+        labels: ["Principal", "Interest"],
+        datasets: [{
+          data: [loan, totalInterest],
+          backgroundColor: ["#4CAF50", "#FF9800"]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" },
+          title: { display: true, text: "Loan vs Interest (Pie Chart)" }
+        }
+      }
+    });
+
+    // BAR Chart
+    const ctx2 = document.getElementById("barChart").getContext("2d");
+    if (window.chart2) window.chart2.destroy();
+    window.chart2 = new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: ["Loan Amount", "Interest", "Total Payment"],
+        datasets: [{
+          label: "₹ Amount",
+          data: [loan, totalInterest, totalPayment],
+          backgroundColor: ["#4CAF50", "#FF9800", "#3F51B5"]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: "Loan Breakdown (Bar Chart)" }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return "₹" + value.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
+
+
+<div class="theme-toggle" onclick="toggleTheme()">🌓 Toggle Theme</div>
+<script>
+  function toggleTheme() {
+    const current = document.body.classList.contains('dark-mode');
+    document.body.classList.toggle('dark-mode', !current);
+    document.body.classList.toggle('light-mode', current);
+    localStorage.setItem('theme', !current ? 'dark' : 'light');
+
+    if (window.chart1 && window.chart1.options) {
+      window.chart1.options.plugins.title.color = !current ? '#fff' : '#111';
+      window.chart1.update();
+    }
+    if (window.chart2 && window.chart2.options) {
+      window.chart2.options.plugins.title.color = !current ? '#fff' : '#111';
+      window.chart2.options.scales.y.ticks.color = !current ? '#ccc' : '#222';
+      window.chart2.update();
+    }
+  }
+
+  // Load theme from storage
+  window.onload = function() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
   }
 </script>
 
