@@ -8,62 +8,8 @@
 <title>EMI Calculator - Pratix Finance</title>
 <link href="style.css" rel="stylesheet"/>
 </head>
-<body>
-<div class="container">
-<header class="app-header">
-<img alt="Pratix Finance Logo" class="logo" src="logo.png"/>
-<button class="theme-toggle" onclick="toggleTheme()">⭐</button>
-</header>
-<div class="form-card">
-<div class="input-group">
-<label>💰 Loan Amount (₹)</label>
-<div class="input-wrapper">
-<input id="loanAmount" placeholder="Enter loan amount" type="number"/>
-<span class="clear-btn" onclick="clearInput('loanAmount')">×</span>
-</div>
-</div>
-<div class="input-group">
-<label>📉 Interest Rate (%)</label>
-<div class="input-wrapper">
-<input id="interestRate" placeholder="Enter annual interest rate" type="number"/>
-<span class="clear-btn" onclick="clearInput('interestRate')">×</span>
-</div>
-</div>
-<div class="input-group">
-<label>📅 Loan Tenure (Years)</label>
-<div class="input-wrapper">
-<input id="loanTenure" placeholder="Enter tenure in years" type="number"/>
-<span class="clear-btn" onclick="clearInput('loanTenure')">×</span>
-</div>
-</div>
-<div class="button-row">
-<button class="reset-btn" onclick="resetCalculator()">🔁 Reset</button>
-<button onclick="calculateEMI()">✅ Calculate EMI</button>
-</div>
-</div>
-<div class="results fade-in" id="resultsContainer">
-<h2>📈 EMI Breakdown</h2>
-<p><strong>Monthly EMI: <span id="emi-result">₹ 0</span></strong></p>
-<p>Total Payment: <span id="total-payment">₹ 0</span></p>
-<p>Total Interest: <span id="total-interest">₹ 0</span></p>
-<canvas id="emiChart" width="300" height="300"></canvas>
-<!-- Chart and animated values added -->
-<!-- DO NOT REMOVE SPAN IDs -->
-<p><em>Note: This is an estimated calculation.</em></p>
-</strong> ₹<span id="emi"></span></p>
-<p><strong>Total Interest:</strong> ₹<span id="totalInterest"></span></p>
-<p><strong>Total Payment:</strong> ₹<span id="totalPayment"></span></p>
-</div>
-<div class="chart-container">
-<canvas id="emiPieChart"></canvas>
-</div>
-<div class="chart-container">
-<canvas id="emiLineChart"></canvas>
-</div>
-<footer>
-<p>© 2025 Pratix Finance. Made with ❤️ by Raghav Pratap</p>
-</footer>
-</div>
+<body><div id="themeToggle" onclick="toggleTheme()" style="position: fixed; top: 10px; right: 15px; font-size: 24px; cursor: pointer; z-index: 999;">⭐</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 <script>
