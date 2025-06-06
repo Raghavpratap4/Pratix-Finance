@@ -49,7 +49,27 @@
 
 <h1 style="text-align:center;">💹 SIP Calculator</h1>
 
+
 <div class="calculator-container" id="export-area">
+  <img src="logo.png" alt="Logo" style="max-width:120px; display:block; margin:0 auto 10px;"/>
+  <h2 style="text-align:center;">SIP Calculator Summary</h2>
+
+  <div id="input-summary">
+    <p><strong>Monthly Investment (₹):</strong> <span id="previewMonthlyInvestment">0</span></p>
+    <p><strong>Expected Return Rate (%):</strong> <span id="previewExpectedReturn">0</span></p>
+    <p><strong>Investment Period (Years):</strong> <span id="previewInvestmentPeriod">0</span></p>
+  </div>
+
+  <div id="results">
+    <p><strong>Invested Amount:</strong> ₹<span id="investedAmount">0</span></p>
+    <p><strong>Est. Returns:</strong> ₹<span id="returns">0</span></p>
+    <p><strong>Total Value:</strong> ₹<span id="totalValue">0</span></p>
+  </div>
+
+  <canvas id="sipChart" width="400" height="300"></canvas>
+  <canvas id="sipLineChart" width="400" height="300" style="margin-top:20px;"></canvas>
+</div>
+
   <label>Monthly Investment (₹):</label>
   <input type="number" id="monthlyInvestment" placeholder="Enter amount"/>
   <label>Expected Annual Return (%):</label>

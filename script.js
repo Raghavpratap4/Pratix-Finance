@@ -125,3 +125,24 @@ function downloadPreview(type) {
     pdf.save("sip-summary.pdf");
   }
 }
+
+function updatePreviewInputs() {
+  document.getElementById("previewMonthlyInvestment").innerText = document.getElementById("monthlyInvestment").value;
+  document.getElementById("previewExpectedReturn").innerText = document.getElementById("expectedReturn").value;
+  document.getElementById("previewInvestmentPeriod").innerText = document.getElementById("investmentPeriod").value;
+}
+
+function previewSIP() {
+  updatePreviewInputs();
+  const exportArea = document.getElementById("export-area");
+  html2canvas(exportArea).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const previewArea = document.getElementById("previewArea");
+    previewArea.innerHTML = "";
+    const img = new Image();
+    img.src = imgData;
+    previewArea.appendChild(img);
+    document.getElementById("previewModal").style.display = "flex";
+    window.lastPreviewCanvas = canvas;
+  });
+}
