@@ -5,128 +5,190 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EMI Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="logo.png" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+      --bg-light: #f2f2f2;
+      --bg-dark: #1f1f1f;
+      --text-light: #000;
+      --text-dark: #fff;
+      --card-light: #ffffff;
+      --card-dark: #2a2a2a;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+      padding: 20px;
       transition: background 0.3s, color 0.3s;
     }
-    body.dark {
-      background: #121212;
-      color: #fff;
+
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
+
     .container {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.95);
+      max-width: 500px;
+      background: var(--card-light);
       border-radius: 16px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      margin: auto;
+      text-align: center;
+      transition: background 0.3s;
     }
-    body.dark .container {
-      background: #1e1e1e;
+
+    body.dark-mode .container {
+      background: var(--card-dark);
     }
-    .app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
+
+    h2 {
+      margin-bottom: 10px;
     }
-    .logo {
-      width: 120px;
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
     }
-    .theme-toggle {
-      background: none;
+
+    body.dark-mode input {
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+    }
+
+    button {
+      padding: 10px 20px;
       border: none;
-      font-size: 1.5rem;
+      margin: 5px;
+      border-radius: 8px;
       cursor: pointer;
-    }
-    .input-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
       font-weight: bold;
     }
-    input[type="number"] {
-      width: 100%;
-      padding: 0.6rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+
+    .calculate {
+      background-color: #007bff;
+      color: white;
     }
-    .button-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 1rem;
+
+    .reset {
+      background-color: #f44336;
+      color: white;
     }
-    button {
-      flex: 1;
-      padding: 0.8rem;
-      font-size: 1rem;
+
+    .mode-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #eee;
       border: none;
-      border-radius: 8px;
+      border-radius: 50px;
+      padding: 10px;
       cursor: pointer;
+      font-size: 18px;
     }
-    .reset-btn {
-      background-color: #ffcdd2;
+
+    .result {
+      margin-top: 20px;
+      font-size: 1rem;
+      text-align: left;
     }
-    .results {
-      margin-top: 2rem;
-    }
+
     canvas {
-      margin-top: 1rem;
-      width: 100%;
-      height: auto;
+      margin-top: 20px;
+      max-width: 100%;
+    }
+
+    img.logo {
+      width: 80px;
+      display: block;
+      margin: 0 auto 15px;
     }
   </style>
 </head>
 <body>
+  <button class="mode-toggle" onclick="toggleMode()">🌙</button>
   <div class="container">
-    <header class="app-header">
-      <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
-      <button class="theme-toggle" onclick="toggleTheme()">⭐</button>
-    </header>
-
-    <div class="input-group">
-      <label for="loanAmount">💰 Loan Amount (₹)</label>
-      <input type="number" id="loanAmount" placeholder="Enter loan amount" />
+    <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
+    <h2>📊 EMI Calculator</h2>
+    <input type="number" id="loan" placeholder="💰 Enter Loan Amount (₹)">
+    <input type="number" id="rate" placeholder="📉 Enter Interest Rate (%)">
+    <input type="number" id="years" placeholder="📅 Enter Loan Tenure (Years)">
+    <div>
+      <button class="reset" onclick="resetFields()">🔄 Reset</button>
+      <button class="calculate" onclick="calculateEMI()">✅ Calculate EMI</button>
     </div>
-
-    <div class="input-group">
-      <label for="interestRate">📉 Interest Rate (%)</label>
-      <input type="number" id="interestRate" placeholder="Enter interest rate" />
-    </div>
-
-    <div class="input-group">
-      <label for="loanTenure">📅 Loan Tenure (Years)</label>
-      <input type="number" id="loanTenure" placeholder="Enter tenure in years" />
-    </div>
-
-    <div class="button-row">
-      <button class="reset-btn" onclick="resetCalculator()">🔁 Reset</button>
-      <button onclick="calculateEMI()">✅ Calculate EMI</button>
-    </div>
-
-    <div class="results" id="resultsContainer" style="display:none;">
-      <h2>📈 EMI Breakdown</h2>
-      <p><strong>Monthly EMI:</strong> ₹ <span id="emiResult">0</span></p>
-      <p><strong>Total Interest:</strong> ₹ <span id="interestResult">0</span></p>
-      <p><strong>Total Payment:</strong> ₹ <span id="totalPayment">0</span></p>
-      <canvas id="emiChart"></canvas>
-    </div>
+    <div class="result" id="output"></div>
+    <canvas id="emiChart"></canvas>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="emi.js"></script>
   <script>
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
+    function calculateEMI() {
+      const loan = parseFloat(document.getElementById('loan').value);
+      const rate = parseFloat(document.getElementById('rate').value);
+      const years = parseFloat(document.getElementById('years').value);
+
+      if (isNaN(loan) || isNaN(rate) || isNaN(years) || loan <= 0 || rate <= 0 || years <= 0) {
+        alert("❗ Please enter valid inputs.");
+        return;
+      }
+
+      const monthlyRate = rate / (12 * 100);
+      const months = years * 12;
+      const emi = loan * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+      const totalPayment = emi * months;
+      const totalInterest = totalPayment - loan;
+
+      document.getElementById('output').innerHTML = `
+        <strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}<br>
+        <strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}<br>
+        <strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}
+      `;
+
+      const ctx = document.getElementById('emiChart').getContext('2d');
+      if (window.emiChart) window.emiChart.destroy();
+      window.emiChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Principal', 'Interest'],
+          datasets: [{
+            data: [loan, totalInterest],
+            backgroundColor: ['#4CAF50', '#FF9800'],
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+
+    function resetFields() {
+      document.getElementById('loan').value = '';
+      document.getElementById('rate').value = '';
+      document.getElementById('years').value = '';
+      document.getElementById('output').innerHTML = '';
+      if (window.emiChart) window.emiChart.destroy();
+    }
+
+    function toggleMode() {
+      const body = document.body;
+      const btn = document.querySelector('.mode-toggle');
+      body.classList.toggle('dark-mode');
+      btn.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
     }
   </script>
 </body>
