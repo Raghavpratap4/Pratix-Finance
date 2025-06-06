@@ -12,9 +12,9 @@ function calculateSIP() {
   document.getElementById("returns").innerText = returns.toFixed(0);
   document.getElementById("totalValue").innerText = FV.toFixed(0);
 
-  const ctx = document.getElementById("sipChart").getContext("2d");
-  if (window.chart) window.chart.destroy();
-  window.chart = new Chart(ctx, {
+  const pieCtx = document.getElementById("sipChart").getContext("2d");
+  if (window.pieChart) window.pieChart.destroy();
+  window.pieChart = new Chart(pieCtx, {
     type: 'doughnut',
     data: {
       labels: ["Invested", "Returns"],
@@ -22,6 +22,36 @@ function calculateSIP() {
         data: [invested, returns],
         backgroundColor: ["#3498db", "#2ecc71"]
       }]
+    }
+  });
+
+  const lineCtx = document.getElementById("sipLineChart").getContext("2d");
+  if (window.lineChart) window.lineChart.destroy();
+
+  let lineData = [];
+  for (let i = 1; i <= n; i++) {
+    let fv = P * (((Math.pow(1 + r, i) - 1) / r) * (1 + r));
+    lineData.push(fv.toFixed(0));
+  }
+
+  window.lineChart = new Chart(lineCtx, {
+    type: 'line',
+    data: {
+      labels: Array.from({ length: n }, (_, i) => i + 1),
+      datasets: [{
+        label: "SIP Growth Over Time",
+        data: lineData,
+        borderColor: "#8e44ad",
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true } },
+      scales: {
+        x: { display: false },
+        y: { beginAtZero: true }
+      }
     }
   });
 }
@@ -33,9 +63,28 @@ function resetCalculator() {
   document.getElementById("investedAmount").innerText = "0";
   document.getElementById("returns").innerText = "0";
   document.getElementById("totalValue").innerText = "0";
-  if (window.chart) window.chart.destroy();
+  if (window.pieChart) window.pieChart.destroy();
+  if (window.lineChart) window.lineChart.destroy();
 }
 
 function previewExport(type) {
-  alert("Preview for " + type + " would be shown here.");
+  const exportArea = document.getElementById("export-area");
+  html2canvas(exportArea).then(canvas => {
+    if (type === "image") {
+      const imgData = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "sip-summary.png";
+      link.click();
+    } else if (type === "pdf") {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/png");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("sip-summary.pdf");
+    }
+  });
 }
