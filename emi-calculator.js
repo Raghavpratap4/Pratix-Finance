@@ -42,13 +42,18 @@ document.getElementById("emi-form").addEventListener("submit", function(e) {
         }
     });
 
-    document.getElementById("emi-result").innerHTML = `
+    
+    document.getElementById("emiValue").textContent = emi.toLocaleString();
+    document.getElementById("totalInterestValue").textContent = totalInterest.toLocaleString();
+    document.getElementById("totalPaymentValue").textContent = totalPayment.toLocaleString();
+    // document.getElementById("emi-result").innerHTML = `
+
         <h3>EMI Result</h3>
         <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
         <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}</p>
         <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>
         <canvas id="emiChart" width="400" height="300"></canvas>
-    `;
+    `;// removed output overwrite
 
     setTimeout(() => {
         const ctx = document.getElementById("emiChart").getContext("2d");

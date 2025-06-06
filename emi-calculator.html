@@ -33,7 +33,12 @@
         <button type="submit" class="calculate-btn">Calculate EMI</button>
         </form>
         <div class="result-section">
-            <div id="emi-result"></div>
+            <div id="emi-result" class="result-box">
+                <h3>EMI Details 📊</h3>
+                <p><strong>EMI:</strong> ₹<span id="emiValue"></span></p>
+                <p><strong>Total Interest:</strong> ₹<span id="totalInterestValue"></span></p>
+                <p><strong>Total Payment:</strong> ₹<span id="totalPaymentValue"></span></p>
+            </div>
             <canvas id="emiChart" width="400" height="400"></canvas>
         </div>
 
