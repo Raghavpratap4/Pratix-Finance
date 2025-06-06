@@ -113,3 +113,23 @@ footer {
     display: block;
   }
 }
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 35px;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  user-select: none;
+}

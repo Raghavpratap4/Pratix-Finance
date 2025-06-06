@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EMI Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
@@ -13,15 +13,24 @@
     <div class="form-card">
       <div class="input-group">
         <label>💰 Loan Amount (₹)</label>
-        <input type="number" id="loanAmount" placeholder="Enter loan amount">
+        <div class="input-wrapper">
+          <input type="number" id="loanAmount" placeholder="Enter loan amount" />
+          <span class="clear-btn" onclick="clearInput('loanAmount')">&times;</span>
+        </div>
       </div>
       <div class="input-group">
         <label>📉 Interest Rate (%)</label>
-        <input type="number" id="interestRate" placeholder="Enter annual interest rate">
+        <div class="input-wrapper">
+          <input type="number" id="interestRate" placeholder="Enter annual interest rate" />
+          <span class="clear-btn" onclick="clearInput('interestRate')">&times;</span>
+        </div>
       </div>
       <div class="input-group">
         <label>📅 Loan Tenure (Years)</label>
-        <input type="number" id="loanTenure" placeholder="Enter tenure in years">
+        <div class="input-wrapper">
+          <input type="number" id="loanTenure" placeholder="Enter tenure in years" />
+          <span class="clear-btn" onclick="clearInput('loanTenure')">&times;</span>
+        </div>
       </div>
       <button onclick="calculateEMI()">Calculate EMI</button>
     </div>

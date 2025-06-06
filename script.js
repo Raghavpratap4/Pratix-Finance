@@ -72,3 +72,7 @@ function renderCharts(principal, interest, emi, months) {
     }
   });
 }
+
+function clearInput(id) {
+  document.getElementById(id).value = '';
+}
