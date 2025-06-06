@@ -1,65 +1,67 @@
 
-document.getElementById("emi-form").addEventListener("submit", function (e) {
-  e.preventDefault();
+function clearInput(id) {
+  document.getElementById(id).value = '';
+}
 
-  const loanAmount = parseFloat(document.getElementById("loanAmount").value);
-  const interestRate = parseFloat(document.getElementById("interestRate").value);
-  const tenure = parseFloat(document.getElementById("tenure").value);
+function resetCalculator() {
+  ['loanAmount', 'interestRate', 'loanTenure'].forEach(id => clearInput(id));
+  document.getElementById('resultsContainer').style.display = 'none';
+}
 
-  const monthlyRate = interestRate / 12 / 100;
-  const numPayments = tenure * 12;
+function animateValue(id, start, end, duration = 1000) {
+  let obj = document.getElementById(id);
+  let range = end - start;
+  let startTime = null;
 
-  const emi = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numPayments) /
-      (Math.pow(1 + monthlyRate, numPayments) - 1);
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let progress = timestamp - startTime;
+    let value = Math.floor(start + (range * (progress / duration)));
+    obj.innerText = "₹ " + (value > end ? end : value);
+    if (progress < duration) requestAnimationFrame(step);
+  }
 
-  const totalPayment = emi * numPayments;
-  const totalInterest = totalPayment - loanAmount;
+  requestAnimationFrame(step);
+}
 
-  document.getElementById("emiValue").textContent = emi.toFixed(2);
-  document.getElementById("totalInterestValue").textContent = totalInterest.toFixed(2);
-  document.getElementById("totalPaymentValue").textContent = totalPayment.toFixed(2);
+function calculateEMI() {
+  const P = parseFloat(document.getElementById("loanAmount").value);
+  const R = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
+  const N = parseFloat(document.getElementById("loanTenure").value) * 12;
 
-  const pieCtx = document.getElementById("pieChart").getContext("2d");
-  if (window.pieChart) window.pieChart.destroy();
-  window.pieChart = new Chart(pieCtx, {
-    type: "pie",
+  if (isNaN(P) || isNaN(R) || isNaN(N)) return alert("Please fill all fields.");
+
+  const emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+  const totalPayment = emi * N;
+  const totalInterest = totalPayment - P;
+
+  document.getElementById("resultsContainer").style.display = 'block';
+  animateValue("emi-result", 0, Math.round(emi));
+  animateValue("total-payment", 0, Math.round(totalPayment));
+  animateValue("total-interest", 0, Math.round(totalInterest));
+
+  const ctx = document.getElementById('emiChart').getContext('2d');
+  if (window.emiChart) window.emiChart.destroy();
+  window.emiChart = new Chart(ctx, {
+    type: 'pie',
     data: {
-      labels: ["Principal", "Interest"],
+      labels: ['Principal', 'Interest'],
       datasets: [{
-        data: [loanAmount, totalInterest],
-        backgroundColor: ["#4CAF50", "#FF5722"],
+        data: [P, totalInterest],
+        backgroundColor: ['#4caf50', '#ff9800']
       }]
     },
     options: {
       responsive: true,
       plugins: {
-        legend: { position: "bottom" }
+        legend: {
+          position: 'bottom'
+        }
       }
     }
   });
+}
 
-  const lineCtx = document.getElementById("lineChart").getContext("2d");
-  if (window.lineChart) window.lineChart.destroy();
-
-  const monthlyEMIs = Array.from({ length: numPayments }, () => emi.toFixed(2));
-
-  window.lineChart = new Chart(lineCtx, {
-    type: "line",
-    data: {
-      labels: Array.from({ length: numPayments }, (_, i) => i + 1),
-      datasets: [{
-        label: "Monthly EMI (₹)",
-        data: monthlyEMIs,
-        borderColor: "#3f51b5",
-        fill: false,
-        tension: 0.1
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { display: false }
-      }
-    }
-  });
-});
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme');
+}

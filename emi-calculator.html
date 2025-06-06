@@ -8,7 +8,7 @@
 <title>EMI Calculator - Pratix Finance</title>
 <link href="style.css" rel="stylesheet"/>
 </head>
-<body><button id="themeToggle">🌟</button>
+<body>
 <div class="container">
 <header class="app-header">
 <img alt="Pratix Finance Logo" class="logo" src="logo.png"/>
@@ -43,7 +43,14 @@
 </div>
 <div class="results fade-in" id="resultsContainer">
 <h2>📈 EMI Breakdown</h2>
-<p><strong>Monthly EMI:</strong> ₹<span id="emi"></span></p>
+<p><strong>Monthly EMI: <span id="emi-result">₹ 0</span></strong></p>
+<p>Total Payment: <span id="total-payment">₹ 0</span></p>
+<p>Total Interest: <span id="total-interest">₹ 0</span></p>
+<canvas id="emiChart" width="300" height="300"></canvas>
+<!-- Chart and animated values added -->
+<!-- DO NOT REMOVE SPAN IDs -->
+<p><em>Note: This is an estimated calculation.</em></p>
+</strong> ₹<span id="emi"></span></p>
 <p><strong>Total Interest:</strong> ₹<span id="totalInterest"></span></p>
 <p><strong>Total Payment:</strong> ₹<span id="totalPayment"></span></p>
 </div>
@@ -65,5 +72,8 @@
       document.body.classList.toggle("dark-mode");
       toggle.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "🌟";
     });
-  </script></body>
+  </script>
+<script src="emi-calculator-updated.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
 </html>
