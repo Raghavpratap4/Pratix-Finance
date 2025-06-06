@@ -1,13 +1,10 @@
 
-alert("✅ EMI script loaded successfully.");
-console.log("✅ EMI calculator JS is working.");
-
 document.getElementById("emi-form").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const loanAmount = parseFloat(document.getElementById("loan-amount").value);
-    const interestRate = parseFloat(document.getElementById("interest-rate").value) / 100 / 12;
-    const loanTenure = parseInt(document.getElementById("loan-tenure").value);
+    const loanAmount = parseFloat(document.getElementById("loanAmount").value);
+    const interestRate = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
+    const loanTenure = parseInt(document.getElementById("loanTenure").value) * 12;
 
     if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure)) {
         alert("Please enter valid numbers in all fields.");
@@ -24,27 +21,30 @@ document.getElementById("emi-form").addEventListener("submit", function(e) {
         <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
         <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}</p>
         <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>
+        <canvas id="emiChart" width="400" height="300"></canvas>
     `;
 
-    // Chart.js Visualization
-    const ctx = document.getElementById("emiChart").getContext("2d");
-    if (window.emiChartInstance) window.emiChartInstance.destroy();
-    window.emiChartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Principal", "Interest"],
-            datasets: [{
-                data: [loanAmount, totalInterest],
-                backgroundColor: ["#4caf50", "#f44336"],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+    setTimeout(() => {
+        const ctx = document.getElementById("emiChart").getContext("2d");
+        if (window.emiChart) window.emiChart.destroy();
+
+        window.emiChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Principal', 'Interest'],
+                datasets: [{
+                    data: [loanAmount, totalInterest],
+                    backgroundColor: ['#2196f3', '#ff9800']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
                 }
             }
-        }
-    });
+        });
+    }, 100);
 });
