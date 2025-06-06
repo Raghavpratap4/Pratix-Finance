@@ -2,228 +2,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-1NSSQW00JS');
-  </script>
-
-  <!-- AdSense -->
-  <script async src="https://www.googletagmanager.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FD Calculator - Pratix Finance</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #fdfbfb, #ebedee);
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 500px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    }
-    h1 {
-      text-align: center;
-      color: #4caf50;
-      margin-bottom: 1rem;
-    }
-    .input-group {
-      margin-bottom: 1.2rem;
-    }
-    .input-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-    }
-    .input-group input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 1rem;
-    }
-    .btn {
-      width: 100%;
-      padding: 0.8rem;
-      font-size: 1.1rem;
-      background: #4caf50;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background: #388e3c;
-    }
-    .results {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: #f9f9f9;
-      border-radius: 12px;
-    }
-    .results p {
-      font-weight: 500;
-      margin: 0.4rem 0;
-    }
-    canvas {
-      margin-top: 1.5rem;
-      width: 100% !important;
-      height: auto !important;
-    }
-    .back-home {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .back-home a {
-      text-decoration: none;
-      color: #4caf50;
-    }
-    footer {
-      text-align: center;
-      margin-top: 2rem;
-      color: #777;
-      font-size: 0.9rem;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FD Calculator | Pratix Finance</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <div class="container">
+        <div class="calculator-box">
+            <img src="logo.png" alt="Pratix Finance Logo" style="width: 120px; margin: 10px auto; display: block;" />
+            <h2>🏦 FD Calculator</h2>
+            <label>💵 Principal Amount (₹)</label>
+            <input type="number" id="principal" placeholder="Enter amount" />
 
-<div class="container">
-  <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; display:block; margin: 0 auto 1rem;" />
-  <h1>🏦 FD Calculator</h1>
+            <label>📈 Interest Rate (%)</label>
+            <input type="number" id="rate" placeholder="Enter interest rate" />
 
-  <div class="input-group">
-    <label>💵 Principal Amount (₹)</label>
-    <input type="number" id="principal" placeholder="Enter principal amount">
-  </div>
+            <label>📅 Time Period (Years)</label>
+            <input type="number" id="time" placeholder="Enter number of years" />
 
-  <div class="input-group">
-    <label>📈 Interest Rate (%)</label>
-    <input type="number" id="rate" placeholder="Annual interest rate">
-  </div>
+            <button onclick="calculateFD()">Calculate</button>
 
-  <div class="input-group">
-    <label>📅 Time Period (Years)</label>
-    <input type="number" id="time" placeholder="Investment duration">
-  </div>
+            <div id="results" style="margin-top: 20px;"></div>
 
-  <button class="btn" onclick="calculateFD()">Calculate</button>
+            <p style="text-align:center;"><a href="index.html">← Back to Homepage</a></p>
+            <p style="text-align:center; font-size: 12px; color: #888;">© 2025 Pratix Finance | Designed by Raghav Pratap</p>
+        </div>
 
-  <div class="results" id="results" style="display: none;">
-    <p>Interest Earned: ₹<span id="interest">0</span></p>
-    <p>Total Maturity Value: ₹<span id="maturity">0</span></p>
-    <canvas id="fdChart"></canvas>
-  </div>
+        <!-- Ads -->
+        <div style="margin: 20px auto; text-align: center;">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-3291480910940190"
+                data-ad-slot="1234567890"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+        </div>
 
-  <div style="margin-top: 2rem; text-align: center;">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+        <!-- Charts -->
+        <div class="chart-box">
+            <h3>📊 FD Maturity Breakdown</h3>
+            <canvas id="fdPieChart"></canvas>
+            <canvas id="fdLineChart" style="margin-top: 40px;"></canvas>
+        </div>
+    </div>
 
-  <div class="back-home">
-    <a href="index.html">← Back to Homepage</a>
-  </div>
+    <script>
+        let pieChart, lineChart;
 
-  <footer>© 2025 Pratix Finance | Designed by Raghav Pratap</footer>
-</div>
+        function calculateFD() {
+            const P = parseFloat(document.getElementById("principal").value);
+            const R = parseFloat(document.getElementById("rate").value);
+            const T = parseFloat(document.getElementById("time").value);
 
-<script>
-  function calculateFD() {
-    const principal = parseFloat(document.getElementById('principal').value);
-    const rate = parseFloat(document.getElementById('rate').value);
-    const time = parseFloat(document.getElementById('time').value);
+            const A = P * Math.pow((1 + R / 100), T);
+            const interest = A - P;
 
-    if (!principal || !rate || !time) return;
+            document.getElementById("results").innerHTML =
+                `<strong>Total Maturity Amount:</strong> ₹${A.toFixed(2)}<br><strong>Interest Earned:</strong> ₹${interest.toFixed(2)}`;
 
-    const interest = principal * Math.pow((1 + rate / 100), time) - principal;
-    const maturity = principal + interest;
+            // Pie Chart
+            const pieCtx = document.getElementById('fdPieChart').getContext('2d');
+            if (pieChart) pieChart.destroy();
+            pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{
+                        data: [P, interest],
+                        backgroundColor: ['#4CAF50', '#FFC107']
+                    }]
+                }
+            });
 
-    document.getElementById('interest').innerText = interest.toFixed(2);
-    document.getElementById('maturity').innerText = maturity.toFixed(2);
-    document.getElementById('results').style.display = 'block';
-
-    const ctx = document.getElementById("fdChart").getContext("2d");
-    if (window.fdChartInstance) window.fdChartInstance.destroy();
-    window.fdChartInstance = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Principal', 'Interest'],
-        datasets: [{
-          data: [principal, interest],
-          backgroundColor: ['#4caf50', '#ff9800'],
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: 'bottom' } }
-      }
-    });
-  }
-</script>
-
-
-<div style="margin-top: 30px;">
-  <h2>📊 FD Maturity Breakdown</h2>
-  <canvas id="fdChart" style="max-width: 100%; height: 350px;"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-function calculateFD() {
-  const principal = parseFloat(document.getElementById('principal').value);
-  const rate = parseFloat(document.getElementById('rate').value);
-  const years = parseFloat(document.getElementById('time').value);
-  const frequency = 4; // Quarterly compounding
-
-  const maturity = principal * Math.pow((1 + (rate / (100 * frequency))), frequency * years);
-  const interest = maturity - principal;
-
-  document.getElementById('fdResult').innerHTML = `
-    <strong>Maturity Amount:</strong> ₹${maturity.toFixed(2)}<br>
-    <strong>Interest Earned:</strong> ₹${interest.toFixed(2)}
-  `;
-
-  new Chart(document.getElementById('fdChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Principal', 'Interest'],
-      datasets: [{
-        label: 'Amount',
-        data: [principal, interest],
-        backgroundColor: ['#4caf50', '#2196f3']
-      }]
-    },
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'FD Amount Breakdown'
-        },
-        legend: {
-          display: false
+            // Line Chart (Yearly Growth)
+            const yearlyAmounts = [];
+            for (let year = 1; year <= T; year++) {
+                yearlyAmounts.push(P * Math.pow((1 + R / 100), year));
+            }
+            const lineCtx = document.getElementById('fdLineChart').getContext('2d');
+            if (lineChart) lineChart.destroy();
+            lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: [...Array(T).keys()].map(i => `Year ${i + 1}`),
+                    datasets: [{
+                        label: 'FD Growth Over Time',
+                        data: yearlyAmounts,
+                        fill: false,
+                        borderColor: '#3f51b5',
+                        tension: 0.2
+                    }]
+                }
+            });
         }
-      }
-    }
-  });
-}
-</script>
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 </body>
 </html>
