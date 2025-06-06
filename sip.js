@@ -104,3 +104,43 @@ function resetCalculator() {
   document.getElementById("returns").innerText = "0";
   document.getElementById("totalValue").innerText = "0";
 }
+const { jsPDF } = window.jspdf;
+const pdf = new jsPDF("p", "mm", "a4");
+function downloadPreviewAsImage() {
+  const previewContent = document.getElementById("previewContent");
+  html2canvas(previewContent).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "sip-preview.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+}
+
+function downloadPreviewAsPDF() {
+  const previewContent = document.getElementById("previewContent");
+  html2canvas(previewContent).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf; // ✅ Correct way for UMD
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = 210;
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("sip-preview.pdf");
+  });
+}
+
+function sharePreview() {
+  const shareData = {
+    title: "SIP Calculator - Pratix Finance",
+    text: "Check out this SIP preview result!",
+    url: window.location.href
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch((err) => {
+      console.error("Sharing failed:", err);
+    });
+  } else {
+    alert("Sharing not supported in this browser.");
+  }
+}
