@@ -272,6 +272,9 @@
 <p>💵 Total Payment: ₹ 0</p>
 </div>
 <canvas height="200" id="emiChart"></canvas>
+
+<canvas id="barChart" style="max-width: 500px; margin: 30px auto; display: block;"></canvas>
+
 <canvas height="200" id="barChart" style="margin-top: 2rem;"></canvas>
 </div>
 <div class="footer">© 2025 Pratix Finance | pratixfinance@gmail.com</div>
@@ -482,6 +485,113 @@
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+
+
+<div style="text-align:center; font-size:14px; color:#666; margin-top:20px;">
+  Made with ❤️ by <strong>Raghav Pratap</strong> · <strong>Pratix Finance © 2025</strong>
+</div>
+
+
+
+<script>
+  const barCtx = document.getElementById('barChart').getContext('2d');
+  const barChart = new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Principal Amount', 'Total Interest', 'Total Payment'],
+      datasets: [{
+        label: 'Loan Breakdown',
+        data: [principalAmount, totalInterest, totalPayment],
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderColor: [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'EMI Breakdown Bar Chart' }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+
+<script>
+  function drawCharts(principalAmount, totalInterest, totalPayment) {
+    // Pie Chart
+    const ctx = document.getElementById('emiChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Principal Amount', 'Total Interest'],
+        datasets: [{
+          data: [principalAmount, totalInterest],
+          backgroundColor: ['#4CAF50', '#FF5722']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: 'EMI Breakdown Pie Chart'
+          }
+        }
+      }
+    });
+
+    // Bar Chart
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Principal Amount', 'Total Interest', 'Total Payment'],
+        datasets: [{
+          label: 'Loan Breakdown',
+          data: [principalAmount, totalInterest, totalPayment],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(75, 192, 192, 0.6)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(75, 192, 192, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'EMI Breakdown Bar Chart' }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
