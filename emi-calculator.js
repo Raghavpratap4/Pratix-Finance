@@ -65,3 +65,30 @@ function calculateEMI() {
 function toggleTheme() {
   document.body.classList.toggle('dark-theme');
 }
+
+
+function renderChart(principal, interest) {
+  const ctx = document.getElementById('emiChart').getContext('2d');
+  if (window.emiChartInstance) {
+    window.emiChartInstance.destroy();
+  }
+  window.emiChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Principal', 'Interest'],
+      datasets: [{
+        data: [principal, interest],
+        backgroundColor: ['#4CAF50', '#FF5733'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+}

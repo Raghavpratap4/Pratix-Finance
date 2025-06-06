@@ -16,7 +16,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>EMI Calculator</title>
 <link href="style.css" rel="stylesheet"/>
-</meta></head>
+</meta><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 <body>
 
 <div id="theme-toggle-container" style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">
@@ -45,5 +46,23 @@
       document.body.classList.toggle("dark-mode");
       toggle.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "🌟";
     });
-  </script></body>
+  </script><canvas id="emiChart" style="max-width: 400px; margin: 20px auto; display: block;"></canvas>
+<script>
+document.querySelectorAll("input").forEach(input => {
+  const clearBtn = document.createElement("span");
+  clearBtn.innerHTML = "❌";
+  clearBtn.style.position = "absolute";
+  clearBtn.style.right = "10px";
+  clearBtn.style.top = "50%";
+  clearBtn.style.transform = "translateY(-50%)";
+  clearBtn.style.cursor = "pointer";
+  clearBtn.onclick = () => input.value = "";
+  const wrapper = document.createElement("div");
+  wrapper.style.position = "relative";
+  input.parentNode.insertBefore(wrapper, input);
+  wrapper.appendChild(input);
+  wrapper.appendChild(clearBtn);
+});
+</script>
+</body>
 </html>
