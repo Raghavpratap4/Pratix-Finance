@@ -1,60 +1,85 @@
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #e0f7fa, #fce4ec);
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #fff);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    padding: 1rem;
+    background-color: #ffffffcc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo {
+    height: 50px;
+    margin-bottom: 0.5rem;
 }
 
 .container {
-  background: white;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 400px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
 }
 
-h1 {
-  text-align: center;
-  color: #d32f2f;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
+.calculator-card, .results-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 2rem;
 }
 
 label {
-  margin-top: 1rem;
+    display: block;
+    margin-bottom: 1rem;
 }
 
-input, select {
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
 button {
-  margin-top: 1.5rem;
-  padding: 0.7rem;
-  background-color: #ff7043;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+    background-color: #00bcd4;
+    color: white;
+    padding: 0.8rem;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
 }
 
 button:hover {
-  background-color: #f4511e;
+    background-color: #0097a7;
 }
 
-#result {
-  margin-top: 1.5rem;
-  font-size: 1.2rem;
-  text-align: center;
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #f1f1f1;
+}
+
+.adsense {
+    margin-top: 2rem;
+    background-color: #fafafa;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #888;
 }

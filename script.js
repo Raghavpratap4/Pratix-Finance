@@ -1,29 +1,29 @@
-document.getElementById('taxForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const income = parseFloat(document.getElementById('income').value) || 0;
-  const ageGroup = document.getElementById('age').value;
-  const deductions = parseFloat(document.getElementById('deductions').value) || 0;
 
-  let taxableIncome = income - deductions;
-  if (taxableIncome < 0) taxableIncome = 0;
+function calculateEMI() {
+    const loan = parseFloat(document.getElementById("loanAmount").value);
+    const interest = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
+    const tenure = parseFloat(document.getElementById("loanTenure").value) * 12;
 
-  let tax = 0;
-  if (ageGroup === 'below60') {
-    if (taxableIncome <= 250000) tax = 0;
-    else if (taxableIncome <= 500000) tax = (taxableIncome - 250000) * 0.05;
-    else if (taxableIncome <= 1000000) tax = 12500 + (taxableIncome - 500000) * 0.2;
-    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
-  } else if (ageGroup === 'between60and80') {
-    if (taxableIncome <= 300000) tax = 0;
-    else if (taxableIncome <= 500000) tax = (taxableIncome - 300000) * 0.05;
-    else if (taxableIncome <= 1000000) tax = 10000 + (taxableIncome - 500000) * 0.2;
-    else tax = 110000 + (taxableIncome - 1000000) * 0.3;
-  } else if (ageGroup === 'above80') {
-    if (taxableIncome <= 500000) tax = 0;
-    else if (taxableIncome <= 1000000) tax = (taxableIncome - 500000) * 0.2;
-    else tax = 100000 + (taxableIncome - 1000000) * 0.3;
-  }
+    const emi = loan * interest * Math.pow(1 + interest, tenure) / (Math.pow(1 + interest, tenure) - 1);
+    const totalPayment = emi * tenure;
+    const totalInterest = totalPayment - loan;
 
-  document.getElementById('result').innerText = `Estimated Income Tax: ₹${tax.toFixed(2)}`;
-});
+    document.getElementById("results").style.display = "block";
+    document.getElementById("emiResult").innerText = "EMI: ₹" + emi.toFixed(2);
+    document.getElementById("totalInterest").innerText = "Total Interest: ₹" + totalInterest.toFixed(2);
+    document.getElementById("totalPayment").innerText = "Total Payment: ₹" + totalPayment.toFixed(2);
+
+    const ctx = document.getElementById("emiChart").getContext("2d");
+    if (window.emiChart) window.emiChart.destroy();
+    window.emiChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ["Principal", "Interest"],
+            datasets: [{
+                data: [loan, totalInterest],
+                backgroundColor: ["#00bcd4", "#ff5722"],
+                hoverOffset: 4
+            }]
+        }
+    });
+}
