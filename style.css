@@ -215,3 +215,15 @@ body.dark .reset-btn:hover {
   cursor: pointer;
   color: inherit;
 }
+
+
+#themeToggle {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 999;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
