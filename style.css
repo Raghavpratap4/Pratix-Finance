@@ -1,229 +1,77 @@
-
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom right, #f0faff, #ffffff);
-  color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
 }
-
+:root {
+  --bg: #f0f9ff;
+  --text: #111;
+  --card: #fff;
+}
+.dark {
+  --bg: #121212;
+  --text: #f0f0f0;
+  --card: #1e1e1e;
+}
 .container {
-  max-width: 600px;
-  width: 100%;
+  max-width: 400px;
+  margin: 40px auto;
   padding: 20px;
-  margin: 30px auto;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
-h1, h2 {
+h1 {
   text-align: center;
-  color: #004d80;
 }
-
-.form-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
 .input-group {
-  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  background: #eef;
+  padding: 5px;
+  border-radius: 8px;
 }
-
-.input-group label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
 .input-group input {
-  width: 100%;
+  flex: 1;
+  border: none;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 16px;
+  font-size: 1em;
+  background: transparent;
 }
-
+.input-group span {
+  margin: 0 8px;
+}
+.clear {
+  cursor: pointer;
+}
 button {
   width: 100%;
-  background-color: #007bff;
-  color: white;
   padding: 12px;
-  font-size: 16px;
+  margin-top: 10px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  color: white;
+  font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
-
-button:hover {
-  background-color: #0056b3;
+button.reset {
+  background: linear-gradient(to right, #f7971e, #ffd200);
+  color: black;
 }
-
-.results {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  margin-bottom: 20px;
-  display: none;
-}
-
-.results p {
-  font-size: 18px;
-  margin: 10px 0;
-}
-
-.chart-container {
-  margin-top: 30px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-
-canvas {
-  max-width: 100%;
-}
-
-footer {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 14px;
-  color: #888;
-}
-
-.fade-in {
-  animation: fadeInUp 0.6s ease-in-out forwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    display: block;
-  }
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-.input-wrapper input {
-  width: 100%;
-  padding-right: 35px;
-}
-
-.clear-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: #999;
-  cursor: pointer;
-  user-select: none;
-}
-
-.button-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+.result {
   margin-top: 20px;
+  background: #e0f7fa;
+  padding: 10px;
+  border-radius: 8px;
 }
-
-.reset-btn {
-  background-color: #f1f1f1;
-  color: #333;
-  border: 1px solid #ccc;
-}
-
-.reset-btn:hover {
-  background-color: #e0e0e0;
-}
-
-/* Header and Logo */
-.app-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.logo {
-  max-height: 60px;
-}
-
-.theme-toggle {
+.toggle-theme {
   position: absolute;
-  right: 0;
-  padding: 5px 10px;
-  font-size: 20px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-}
-
-/* Dark theme */
-body.dark {
-  background-color: #121212;
-  color: #ffffff;
-}
-
-body.dark .form-card,
-body.dark .results,
-body.dark .chart-container {
-  background-color: #1e1e1e;
-  color: #fff;
-  box-shadow: 0 0 10px rgba(255,255,255,0.1);
-}
-
-body.dark input,
-body.dark button {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-body.dark .reset-btn {
-  background-color: #2c2c2c;
-  border: 1px solid #444;
-}
-
-body.dark .reset-btn:hover {
-  background-color: #3a3a3a;
-}
-
-.theme-toggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 999;
-  background-color: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: inherit;
-}
-
-
-#themeToggle {
-  position: fixed;
-  top: 12px;
-  right: 16px;
-  z-index: 999;
-  background: transparent;
-  border: none;
-  font-size: 24px;
+  right: 20px;
+  top: 20px;
   cursor: pointer;
 }

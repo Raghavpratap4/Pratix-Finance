@@ -1,195 +1,55 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EMI Calculator - Pratix Finance</title>
-  <link rel="icon" href="logo.png" />
+  <title>Advanced EMI Calculator</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg-light: #f2f2f2;
-      --bg-dark: #1f1f1f;
-      --text-light: #000;
-      --text-dark: #fff;
-      --card-light: #ffffff;
-      --card-dark: #2a2a2a;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-light);
-      color: var(--text-light);
-      margin: 0;
-      padding: 20px;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.dark-mode {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    .container {
-      max-width: 500px;
-      background: var(--card-light);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      margin: auto;
-      text-align: center;
-      transition: background 0.3s;
-    }
-
-    body.dark-mode .container {
-      background: var(--card-dark);
-    }
-
-    h2 {
-      margin-bottom: 10px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fff;
-    }
-
-    body.dark-mode input {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      margin: 5px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .calculate {
-      background-color: #007bff;
-      color: white;
-    }
-
-    .reset {
-      background-color: #f44336;
-      color: white;
-    }
-
-    .mode-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #eee;
-      border: none;
-      border-radius: 50px;
-      padding: 10px;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .result {
-      margin-top: 20px;
-      font-size: 1rem;
-      text-align: left;
-    }
-
-    canvas {
-      margin-top: 20px;
-      max-width: 100%;
-    }
-
-    img.logo {
-      width: 80px;
-      display: block;
-      margin: 0 auto 15px;
-    }
-  </style>
 </head>
 <body>
-  <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+  <img src="logo.png" alt="Pratix Finance Logo" style="width: 80px; margin: 10px auto; display: block;" />
   <div class="container">
-    <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
-    <h2>📊 EMI Calculator</h2>
-    <input type="number" id="loan" placeholder="💰 Enter Loan Amount (₹)">
-    <input type="number" id="rate" placeholder="📉 Enter Interest Rate (%)">
-    <input type="number" id="years" placeholder="📅 Enter Loan Tenure (Years)">
-    <div>
-      <button class="reset" onclick="resetFields()">🔄 Reset</button>
-      <button class="calculate" onclick="calculateEMI()">✅ Calculate EMI</button>
+    <div class="toggle-theme" onclick="toggleTheme()">🌟</div>
+    <h1>💸 Advanced EMI Calculator</h1>
+
+    <div class="input-group">
+      <span>💰</span>
+      <input type="number" id="loanAmount" placeholder="Loan Amount" />
+      <span class="clear" onclick="clearInput('loanAmount')">✖️</span>
     </div>
-    <div class="result" id="output"></div>
-    <canvas id="emiChart"></canvas>
+    <div class="input-group">
+      <span>📈</span>
+      <input type="number" id="interestRate" placeholder="Interest Rate (%)" />
+      <span class="clear" onclick="clearInput('interestRate')">✖️</span>
+    </div>
+    <div class="input-group">
+      <span>⏱️</span>
+      <input type="number" id="loanTenure" placeholder="Loan Tenure" />
+      <span class="clear" onclick="clearInput('loanTenure')">✖️</span>
+    </div>
+    <div>
+      <label>Tenure Type:</label>
+      <select id="tenureType">
+        <option value="months">Months</option>
+        <option value="years">Years</option>
+      </select>
+    </div>
+
+    <button onclick="calculateEMI()">Calculate EMI</button>
+    <button onclick="resetFields()" class="reset">🔁 Re-enter Data</button>
+
+    <div class="result">
+      <h3>📊 EMI Result</h3>
+      <p id="monthlyEMI">Monthly EMI: ₹0</p>
+      <p id="totalInterest">Total Interest: ₹0</p>
+      <p id="totalPayment">Total Payment: ₹0</p>
+    </div>
+
+    <canvas id="emiChart" height="150"></canvas>
+<canvas id="barChart" height="150" style="margin-top:20px;"></canvas>
   </div>
 
-  <script>
-    function calculateEMI() {
-      const loan = parseFloat(document.getElementById('loan').value);
-      const rate = parseFloat(document.getElementById('rate').value);
-      const years = parseFloat(document.getElementById('years').value);
-
-      if (isNaN(loan) || isNaN(rate) || isNaN(years) || loan <= 0 || rate <= 0 || years <= 0) {
-        alert("❗ Please enter valid inputs.");
-        return;
-      }
-
-      const monthlyRate = rate / (12 * 100);
-      const months = years * 12;
-      const emi = loan * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
-      const totalPayment = emi * months;
-      const totalInterest = totalPayment - loan;
-
-      document.getElementById('output').innerHTML = `
-        <strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}<br>
-        <strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}<br>
-        <strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}
-      `;
-
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      if (window.emiChart) window.emiChart.destroy();
-      window.emiChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Principal', 'Interest'],
-          datasets: [{
-            data: [loan, totalInterest],
-            backgroundColor: ['#4CAF50', '#FF9800'],
-            hoverOffset: 6
-          }]
-        },
-        options: {
-          plugins: {
-            legend: {
-              display: true,
-              position: 'bottom'
-            }
-          }
-        }
-      });
-    }
-
-    function resetFields() {
-      document.getElementById('loan').value = '';
-      document.getElementById('rate').value = '';
-      document.getElementById('years').value = '';
-      document.getElementById('output').innerHTML = '';
-      if (window.emiChart) window.emiChart.destroy();
-    }
-
-    function toggleMode() {
-      const body = document.body;
-      const btn = document.querySelector('.mode-toggle');
-      body.classList.toggle('dark-mode');
-      btn.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
