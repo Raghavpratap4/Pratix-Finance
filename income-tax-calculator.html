@@ -9,223 +9,245 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #f0f9ff, #cbebff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #e0f7ff, #ffffff);
       margin: 0;
       padding: 20px;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    h1 {
-      margin-bottom: 10px;
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 20px;
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1, h2 {
+      color: #0077b6;
+      margin-bottom: 20px;
     }
     select, input, button {
-      padding: 10px;
-      margin: 5px;
+      padding: 12px;
+      margin: 8px 0;
+      width: 100%;
+      border: 1px solid #ccc;
       border-radius: 10px;
-      border: none;
       font-size: 1em;
+      transition: all 0.3s ease;
     }
-    #results {
+    button {
+      background: #00b4d8;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0077b6;
+    }
+    #results, #preview-area {
       margin-top: 20px;
-      font-size: 1.2em;
     }
     canvas {
-      margin-top: 20px;
       max-width: 100%;
-    }
-    #preview-area {
-      display: none;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
       margin-top: 20px;
     }
-    #preview-area h3 {
-      margin-top: 0;
+    .footer {
+      margin-top: 40px;
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: left;
+      max-width: 600px;
+    }
+    @media screen and (max-width: 600px) {
+      .container, .footer {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
+<div class="container">
   <h1>🧮 Income Tax Calculator</h1>
-  <div>
-    <label for="language">🌐 Language:</label>
-    <select id="language" onchange="changeLanguage()">
-      <option value="en">English</option>
-      <option value="hi">हिन्दी</option>
-      <option value="bn">বাংলা</option>
-      <option value="fr">Français</option>
-      <option value="ru">Русский</option>
-      <option value="es">Español</option>
-      <option value="ja">日本語</option>
-      <option value="ko">한국어</option>
-    </select>
-  </div>
-
-  <div>
-    <label id="label-income" for="income">💰 Annual Gross Income (₹):</label><br>
-    <input type="number" id="income" placeholder="Enter gross income" /><br>
-
-    <label id="label-deductions" for="deductions">📉 Total Deductions (₹):</label><br>
-    <input type="number" id="deductions" placeholder="Enter deductions" /><br>
-
-    <label id="label-age" for="age">🎂 Age Category:</label><br>
-    <select id="age">
-      <option value="below60">Below 60</option>
-      <option value="60to80">60 to 80</option>
-      <option value="above80">Above 80</option>
-    </select><br>
-
-    <label id="label-regime" for="regime">📋 Select Tax Regime:</label><br>
-    <select id="regime">
-      <option value="old">Old Regime</option>
-      <option value="new">New Regime</option>
-    </select><br>
-
-    <button id="btn-calculate" onclick="calculateTax()">Calculate</button>
-    <button id="btn-reset" onclick="resetForm()">Reset</button>
-    <button id="btn-preview" onclick="togglePreview()">Preview</button>
-  </div>
-
+  <label>🌐 Language:</label>
+  <select id="language" onchange="changeLanguage()">
+    <option value="en">English</option>
+    <option value="hi">हिन्दी</option>
+    <option value="bn">বাংলা</option>
+    <option value="fr">Français</option>
+    <option value="ru">Русский</option>
+    <option value="es">Español</option>
+    <option value="ja">日本語</option>
+    <option value="ko">한국어</option>
+  </select>
+  <input type="number" id="income" placeholder="💰 Annual Gross Income (₹)" oninput="formatCurrency(this)" />
+  <input type="number" id="deductions" placeholder="📉 Total Deductions (₹)" oninput="formatCurrency(this)" />
+  <select id="age">
+    <option value="below60">🎂 Below 60</option>
+    <option value="60to80">🎂 60 to 80</option>
+    <option value="above80">🎂 Above 80</option>
+  </select>
+  <select id="regime">
+    <option value="old">📋 Old Regime</option>
+    <option value="new">📋 New Regime</option>
+  </select>
+  <button onclick="calculateTax()">Calculate</button>
+  <button onclick="resetForm()">Reset</button>
+  <button onclick="togglePreview()">Preview</button>
   <div id="results"></div>
-  <canvas id="pieChart" width="300" height="300" style="display:none;"></canvas>
-  <canvas id="barChart" width="300" height="300" style="display:none;"></canvas>
-
-  <div id="preview-area">
-    <h3 id="preview-title">📄 Income Tax Summary</h3>
-    <div id="preview-results"></div>
-    <canvas id="previewPieChart" width="300" height="300"></canvas>
-    <canvas id="previewBarChart" width="300" height="300"></canvas><br>
-    <button onclick="downloadImage()">📸 Download Image</button>
-    <button onclick="downloadPDF()">📄 Download PDF</button>
-    <button onclick="sharePreview()">🔗 Share</button>
-  </div>
-
-  <div style="margin-top: 40px; text-align: left; padding: 20px; background: #f9f9f9; border-radius: 15px; max-width: 900px; margin-left: auto; margin-right: auto;">
-    <h2>📘 About This Income Tax Calculator</h2>
-    <p>This Income Tax Calculator helps individuals in India estimate their income tax liability for the current financial year. Users can calculate taxes under both the <strong>Old</strong> and <strong>New Tax Regimes</strong>, taking into account their age category and applicable deductions.</p>
-    <ul>
-      <li><strong>Gross Income:</strong> Enter your total annual income before taxes and deductions.</li>
-      <li><strong>Deductions:</strong> Available only under the Old Regime. Include deductions like Section 80C, 80D, and HRA.</li>
-      <li><strong>Age Category:</strong> Tax slabs vary based on age — special exemption for senior citizens.</li>
-      <li><strong>Tax Regime:</strong> Choose between Old and New regime to compare tax savings and liability.</li>
-    </ul>
-    <p>The calculator uses the latest income tax slabs defined by the Government of India for FY 2024–25. Results are estimated for guidance only and may differ from actual tax liability.</p>
-    <p>📩 For queries or feedback, email us at <a href="mailto:pratixfinance@gmail.com">pratixfinance@gmail.com</a></p>
-  </div>
-
+  <canvas id="pieChart" style="display:none;"></canvas>
+  <canvas id="barChart" style="display:none;"></canvas>
+</div>
+<div id="preview-area" class="container" style="display:none;">
+  <h2>📄 Income Tax Summary</h2>
+  <div id="preview-results"></div>
+  <canvas id="previewPieChart"></canvas>
+  <canvas id="previewBarChart"></canvas>
+  <button onclick="downloadImage()">📸 Download Image</button>
+  <button onclick="downloadPDF()">📄 Download PDF</button>
+  <button onclick="sharePreview()">🔗 Share</button>
+</div>
+<div class="footer">
+  <h2>📘 About This Income Tax Calculator</h2>
+  <p>This Income Tax Calculator helps individuals in India estimate their income tax liability for the current financial year. Users can calculate taxes under both the <strong>Old</strong> and <strong>New Tax Regimes</strong>, taking into account their age category and applicable deductions.</p>
+  <ul>
+    <li><strong>Gross Income:</strong> Enter your total annual income before taxes and deductions.</li>
+    <li><strong>Deductions:</strong> Available only under the Old Regime. Include deductions like Section 80C, 80D, and HRA.</li>
+    <li><strong>Age Category:</strong> Tax slabs vary based on age — special exemption for senior citizens.</li>
+    <li><strong>Tax Regime:</strong> Choose between Old and New regime to compare tax savings and liability.</li>
+  </ul>
+  <p>The calculator uses the latest income tax slabs defined by the Government of India for FY 2024–25. Results are estimated for guidance only and may differ from actual tax liability.</p>
+  <p>📩 For queries or feedback, email us at <a href="mailto:pratixfinance@gmail.com">pratixfinance@gmail.com</a></p>
+</div>
 <script>
-const translations = {
-  en: { result: "Estimated Tax" },
-  hi: { result: "अनुमानित कर" },
-  bn: { result: "আনুমানিক কর" },
-  fr: { result: "Impôt estimé" },
-  ru: { result: "Оценочный налог" },
-  es: { result: "Impuesto estimado" },
-  ja: { result: "推定税額" },
-  ko: { result: "예상 세금" }
-};
-
-function changeLanguage() {
-  const lang = document.getElementById("language").value;
-  const t = translations[lang] || translations.en;
-  document.getElementById("btn-calculate").textContent = lang === "en" ? "Calculate" : t.result;
+function formatCurrency(input) {
+  input.value = input.value.replace(/\D/g, '');
 }
-
 function calculateTax() {
-  const income = parseFloat(document.getElementById("income").value) || 0;
-  const deductions = parseFloat(document.getElementById("deductions").value) || 0;
-  const age = document.getElementById("age").value;
-  const regime = document.getElementById("regime").value;
-  let taxable = Math.max(0, income - (regime === "old" ? deductions : 0));
+  const income = parseFloat(document.getElementById('income').value);
+  const deductions = parseFloat(document.getElementById('deductions').value) || 0;
+  const age = document.getElementById('age').value;
+  const regime = document.getElementById('regime').value;
+  let taxableIncome = income;
+  if (regime === 'old') taxableIncome -= deductions;
+  if (taxableIncome < 0) taxableIncome = 0;
   let tax = 0;
-
-  if (regime === "new") {
-    const slabs = [0, 300000, 600000, 900000, 1200000, 1500000];
-    const rates = [0, 0.05, 0.1, 0.15, 0.2, 0.3];
-    for (let i = slabs.length - 1; i >= 0; i--) {
-      if (taxable > slabs[i]) {
-        tax += (taxable - slabs[i]) * rates[i];
-        taxable = slabs[i];
-      }
-    }
+  const slabs = {
+    old: {
+      below60: [250000, 500000, 1000000],
+      60to80: [300000, 500000, 1000000],
+      above80: [500000, 1000000]
+    },
+    new: [300000, 600000, 900000, 1200000, 1500000]
+  };
+  if (regime === 'old') {
+    const slab = slabs.old[age];
+    if (taxableIncome <= slab[0]) tax = 0;
+    else if (taxableIncome <= slab[1]) tax = (taxableIncome - slab[0]) * 0.05;
+    else if (taxableIncome <= slab[2]) tax = (slab[1] - slab[0]) * 0.05 + (taxableIncome - slab[1]) * 0.2;
+    else tax = (slab[1] - slab[0]) * 0.05 + (slab[2] - slab[1]) * 0.2 + (taxableIncome - slab[2]) * 0.3;
   } else {
-    let exemption = 250000;
-    if (age === "60to80") exemption = 300000;
-    if (age === "above80") exemption = 500000;
-    const slabs = [0, exemption, 500000, 1000000];
-    const rates = [0, 0, 0.05, 0.2, 0.3];
-    for (let i = slabs.length - 1; i >= 0; i--) {
-      if (taxable > slabs[i]) {
-        tax += (taxable - slabs[i]) * rates[i + 1];
-        taxable = slabs[i];
-      }
+    const slab = slabs.new;
+    const rates = [0, 0.05, 0.1, 0.15, 0.2, 0.3];
+    for (let i = 0; i < slab.length; i++) {
+      const lower = slab[i];
+      const upper = slab[i + 1] || Infinity;
+      if (taxableIncome > lower) tax += (Math.min(taxableIncome, upper) - lower) * rates[i];
     }
   }
-
-  const lang = document.getElementById("language").value;
-  document.getElementById("results").innerHTML = `<h3>${translations[lang].result}</h3><h2>₹${tax.toFixed(2)}</h2>`;
-  drawCharts(tax, income);
+  document.getElementById('results').innerHTML = `
+    <h3>Taxable Income: ₹${taxableIncome.toLocaleString()}</h3>
+    <h3>Estimated Tax: ₹${tax.toFixed(2).toLocaleString()}</h3>
+  `;
+  drawChart(taxableIncome, tax, 'pieChart');
+  drawChart(taxableIncome, tax, 'barChart');
+  document.getElementById('pieChart').style.display = 'block';
+  document.getElementById('barChart').style.display = 'block';
 }
-
-function drawCharts(tax, income) {
-  const ctx1 = document.getElementById("pieChart").getContext("2d");
-  const ctx2 = document.getElementById("barChart").getContext("2d");
-  const ctx3 = document.getElementById("previewPieChart").getContext("2d");
-  const ctx4 = document.getElementById("previewBarChart").getContext("2d");
-
-  ["pieChart", "barChart"].forEach(id => document.getElementById(id).style.display = "block");
-
-  const data = {
-    labels: ["Tax", "Remaining Income"],
-    datasets: [{
-      data: [tax, income - tax],
-      backgroundColor: ["#ff6384", "#36a2eb"]
-    }]
-  };
-
-  new Chart(ctx1, { type: "pie", data });
-  new Chart(ctx2, { type: "bar", data });
-  new Chart(ctx3, { type: "pie", data });
-  new Chart(ctx4, { type: "bar", data });
+function drawChart(income, tax, canvasId) {
+  const ctx = document.getElementById(canvasId);
+  const chartType = canvasId.includes('Pie') ? 'pie' : 'bar';
+  new Chart(ctx, {
+    type: chartType,
+    data: {
+      labels: ['Tax', 'Remaining Income'],
+      datasets: [{
+        data: [tax, income - tax],
+        backgroundColor: ['#ff6384', '#36a2eb']
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
+  });
 }
-
-function togglePreview() {
-  document.getElementById("preview-area").style.display = "block";
-  document.getElementById("preview-results").innerHTML = document.getElementById("results").innerHTML;
-}
-
 function resetForm() {
-  document.getElementById("income").value = "";
-  document.getElementById("deductions").value = "";
-  document.getElementById("results").innerHTML = "";
-  document.getElementById("pieChart").style.display = "none";
-  document.getElementById("barChart").style.display = "none";
-  document.getElementById("preview-area").style.display = "none";
+  document.getElementById('income').value = '';
+  document.getElementById('deductions').value = '';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('pieChart').style.display = 'none';
+  document.getElementById('barChart').style.display = 'none';
 }
-
+function togglePreview() {
+  const preview = document.getElementById('preview-area');
+  preview.style.display = preview.style.display === 'none' ? 'block' : 'none';
+  const resultHTML = document.getElementById('results').innerHTML;
+  document.getElementById('preview-results').innerHTML = resultHTML;
+  drawChart(
+    parseFloat(document.getElementById('income').value),
+    parseFloat(document.getElementById('results').textContent.replace(/\D/g, '')),
+    'previewPieChart'
+  );
+  drawChart(
+    parseFloat(document.getElementById('income').value),
+    parseFloat(document.getElementById('results').textContent.replace(/\D/g, '')),
+    'previewBarChart'
+  );
+}
 function downloadImage() {
-  html2canvas(document.getElementById("preview-area")).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "tax-summary.png";
+  html2canvas(document.getElementById('preview-area')).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'income-tax-summary.png';
     link.href = canvas.toDataURL();
     link.click();
   });
 }
-
 function downloadPDF() {
-  html2canvas(document.getElementById("preview-area")).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
+  html2canvas(document.getElementById('preview-area')).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
     const pdf = new jspdf.jsPDF();
     const imgProps = pdf.getImageProperties(imgData);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("tax-summary.pdf");
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('income-tax-summary.pdf');
   });
 }
-
 function sharePreview() {
-  alert("Sharing feature coming soon!");
+  if (navigator.share) {
+    navigator.share({
+      title: 'Income Tax Summary',
+      text: 'Here is my income tax summary.',
+      url: window.location.href
+    });
+  } else {
+    alert('Share not supported on this browser.');
+  }
+}
+function changeLanguage() {
+  const lang = document.getElementById('language').value;
+  // Placeholder for multilingual support
 }
 </script>
 </body>

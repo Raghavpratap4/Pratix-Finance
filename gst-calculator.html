@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GST Calculator - Pratix Finance</title>
+  <title>GST Calculator</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
@@ -19,9 +19,7 @@
       background: #1976d2;
       color: white;
       padding: 1rem;
-    }
-    header img {
-      max-height: 60px;
+      font-size: 1.5rem;
     }
     .container {
       max-width: 700px;
@@ -59,7 +57,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      justify-content: center;
     }
     #resultSection {
       margin-top: 2rem;
@@ -81,7 +78,6 @@
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
-      position: relative;
     }
     .download-btns {
       display: flex;
@@ -90,14 +86,6 @@
       margin-top: 1rem;
       flex-wrap: wrap;
     }
-    .download-btns button {
-      background: #4caf50;
-    }
-    .share-btn {
-      background: #f57c00;
-      color: white;
-      border: none;
-    }
     footer {
       margin-top: 2rem;
       background: #f5f5f5;
@@ -105,46 +93,38 @@
       text-align: left;
       font-size: 0.95rem;
     }
-    footer a {
-      color: #1976d2;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    .language-selector {
-      text-align: left;
+    #languageSelector {
       margin-bottom: 1rem;
+    }
+    a {
+      color: #1976d2;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 <header>
-  <img src="logo.png" alt="Logo" />
-  <h1>💰 GST Calculator</h1>
+  <img src="logo.png" alt="Logo" style="max-width: 150px; display:block; margin:auto;"/>
+  <h1 id="title">💰 GST CALCULATOR</h1>
 </header>
 
 <div class="container">
-  <!-- Language Selector -->
-  <div class="language-selector">
-    <label for="languageSelect">🌐 Language:</label>
-    <select id="languageSelect" onchange="changeLanguage()">
-      <option value="en">English</option>
-      <option value="hi">हिंदी</option>
-      <option value="bn">বাংলা</option>
-      <option value="fr">Français</option>
-      <option value="ru">Русский</option>
-      <option value="es">Español</option>
-      <option value="ja">日本語</option>
-      <option value="ko">한국어</option>
-    </select>
-  </div>
+  <label for="languageSelector" id="langLabel">🌐 Choose Language:</label>
+  <select id="languageSelector">
+    <option value="en">English</option>
+    <option value="hi">हिन्दी</option>
+    <option value="bn">বাংলা</option>
+    <option value="fr">Français</option>
+    <option value="ru">Русский</option>
+    <option value="es">Español</option>
+    <option value="ja">日本語</option>
+    <option value="ko">한국어</option>
+  </select>
 
-  <!-- Input Fields Begin -->
-  <label for="amount" class="i18n" data-key="enterAmount">Enter Amount (₹):</label>
+  <label for="amount" id="amountLabel">Enter Amount (₹):</label>
   <input type="number" id="amount" placeholder="0" />
 
-  <label for="rate" class="i18n" data-key="selectRate">Select GST Rate (%):</label>
+  <label for="rate" id="rateLabel">Select GST Rate (%):</label>
   <select id="rate">
     <option value="0">0%</option>
     <option value="5">5%</option>
@@ -153,353 +133,213 @@
     <option value="28">28%</option>
   </select>
 
-  <label for="taxType" class="i18n" data-key="taxType">GST Type:</label>
-  <select id="taxType">
-    <option value="exclusive">Exclusive</option>
+  <label for="type" id="typeLabel">GST Type:</label>
+  <select id="type">
+    <option value="exclusive" selected>Exclusive</option>
     <option value="inclusive">Inclusive</option>
   </select>
 
-  <label for="taxMode" class="i18n" data-key="taxMode">GST Mode:</label>
-  <select id="taxMode">
+  <label for="mode" id="modeLabel">GST Mode:</label>
+  <select id="mode">
     <option value="sgstcgst" selected>SGST + CGST</option>
     <option value="igst">IGST</option>
   </select>
-  <!-- Buttons -->
+
   <div class="btn-group">
-    <button onclick="resetFields()" class="i18n" data-key="reset">Reset</button>
-    <button onclick="calculateGST()" class="i18n" data-key="calculate">Calculate</button>
-    <button onclick="showPreview()" class="i18n" data-key="preview">Preview</button>
+    <button id="resetBtn">🔁 Reset</button>
+    <button id="calculateBtn">📊 Calculate</button>
+    <button id="previewBtn">👁️ Preview</button>
   </div>
-
-  <!-- Results -->
-  <div id="resultSection"></div>
-</div>
-
-<!-- Preview Mode -->
-<div id="previewMode">
-  <h2>📊 GST Preview</h2>
-  <div id="previewContent"></div>
-  <canvas id="gstChart" height="200"></canvas>
-  <div class="download-btns">
-    <button onclick="downloadImage()">Download Image</button>
-    <button onclick="downloadPDF()">Download PDF</button>
-    <button onclick="sharePreview()" class="share-btn">Share</button>
-  </div>
-</div>
-
-<footer>
-  <p><strong>📌 GST Calculator by Pratix Finance</strong><br>
-  This tool calculates GST (Goods and Services Tax) based on inclusive or exclusive rates. It supports IGST and CGST+SGST split and generates visual insights for better understanding.<br><br>
-  Contact us at: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a>
-  </p>
-</footer>
-
 <script>
-  const translations = {
-    en: {
-      enterAmount: "Enter Amount (₹):",
-      selectRate: "Select GST Rate (%):",
-      taxType: "GST Type:",
-      taxMode: "GST Mode:",
-      reset: "Reset",
-      calculate: "Calculate",
-      preview: "Preview",
-      sgst: "SGST",
-      cgst: "CGST",
-      igst: "IGST",
-      result: "Result",
-      totalAmount: "Total Amount",
-      taxAmount: "Tax Amount",
-      baseAmount: "Base Amount"
-    },
-    hi: {
-      enterAmount: "राशि दर्ज करें (₹):",
-      selectRate: "जीएसटी दर चुनें (%):",
-      taxType: "जीएसटी प्रकार:",
-      taxMode: "जीएसटी मोड:",
-      reset: "रीसेट",
-      calculate: "गणना करें",
-      preview: "पूर्वावलोकन",
-      sgst: "एसजीएसटी",
-      cgst: "सीजीएसटी",
-      igst: "आईजीएसटी",
-      result: "परिणाम",
-      totalAmount: "कुल राशि",
-      taxAmount: "कर राशि",
-      baseAmount: "बेस राशि"
-    },
-    bn: {
-      enterAmount: "পরিমাণ লিখুন (₹):",
-      selectRate: "জিএসটি হার নির্বাচন করুন (%):",
-      taxType: "জিএসটি প্রকার:",
-      taxMode: "জিএসটি মোড:",
-      reset: "রিসেট",
-      calculate: "গণনা করুন",
-      preview: "প্রিভিউ",
-      sgst: "এসজিএসটি",
-      cgst: "সিজিএসটি",
-      igst: "আইজিএসটি",
-      result: "ফলাফল",
-      totalAmount: "মোট পরিমাণ",
-      taxAmount: "কর পরিমাণ",
-      baseAmount: "মূল পরিমাণ"
-    },
-    fr: {
-      enterAmount: "Entrez le montant (₹):",
-      selectRate: "Sélectionnez le taux de TVA (%):",
-      taxType: "Type de TVA:",
-      taxMode: "Mode de TVA:",
-      reset: "Réinitialiser",
-      calculate: "Calculer",
-      preview: "Aperçu",
-      sgst: "SGST",
-      cgst: "CGST",
-      igst: "IGST",
-      result: "Résultat",
-      totalAmount: "Montant total",
-      taxAmount: "Montant de la taxe",
-      baseAmount: "Montant de base"
-    },
-    ru: {
-      enterAmount: "Введите сумму (₹):",
-      selectRate: "Выберите ставку НДС (%):",
-      taxType: "Тип НДС:",
-      taxMode: "Режим НДС:",
-      reset: "Сбросить",
-      calculate: "Рассчитать",
-      preview: "Предпросмотр",
-      sgst: "СГСТ",
-      cgst: "ЦГСТ",
-      igst: "ИГСТ",
-      result: "Результат",
-      totalAmount: "Общая сумма",
-      taxAmount: "Сумма налога",
-      baseAmount: "Базовая сумма"
-    },
-    es: {
-      enterAmount: "Ingrese la cantidad (₹):",
-      selectRate: "Seleccione la tasa de GST (%):",
-      taxType: "Tipo de GST:",
-      taxMode: "Modo de GST:",
-      reset: "Restablecer",
-      calculate: "Calcular",
-      preview: "Vista previa",
-      sgst: "SGST",
-      cgst: "CGST",
-      igst: "IGST",
-      result: "Resultado",
-      totalAmount: "Monto total",
-      taxAmount: "Monto del impuesto",
-      baseAmount: "Monto base"
-    },
-    ja: {
-      enterAmount: "金額を入力してください (₹):",
-      selectRate: "GST率を選択 (%):",
-      taxType: "GSTタイプ:",
-      taxMode: "GSTモード:",
-      reset: "リセット",
-      calculate: "計算",
-      preview: "プレビュー",
-      sgst: "SGST",
-      cgst: "CGST",
-      igst: "IGST",
-      result: "結果",
-      totalAmount: "合計金額",
-      taxAmount: "税額",
-      baseAmount: "基本金額"
-    },
-    ko: {
-      enterAmount: "금액 입력 (₹):",
-      selectRate: "GST 세율 선택 (%):",
-      taxType: "GST 유형:",
-      taxMode: "GST 모드:",
-      reset: "재설정",
-      calculate: "계산",
-      preview: "미리보기",
-      sgst: "SGST",
-      cgst: "CGST",
-      igst: "IGST",
-      result: "결과",
-      totalAmount: "총 금액",
-      taxAmount: "세금 금액",
-      baseAmount: "기본 금액"
-    }
-  };
-
-  function changeLanguage() {
-    const lang = document.getElementById("languageSelect").value;
-    document.querySelectorAll(".i18n").forEach(el => {
-      const key = el.dataset.key;
-      if (translations[lang] && translations[lang][key]) {
-        el.textContent = translations[lang][key];
-      }
-    });
+const translations = {
+  en: {
+    title: "💰 GST CALCULATOR",
+    langLabel: "🌐 Choose Language:",
+    amountLabel: "Enter Amount (₹):",
+    rateLabel: "Select GST Rate (%):",
+    typeLabel: "GST Type:",
+    modeLabel: "GST Mode:",
+    reset: "🔁 Reset",
+    calculate: "📊 Calculate",
+    preview: "👁️ Preview",
+    inclusive: "Inclusive",
+    exclusive: "Exclusive",
+    sgstcgst: "SGST + CGST",
+    igst: "IGST",
+    totalGST: "Total GST",
+    cgst: "CGST",
+    sgst: "SGST",
+    igstLabel: "IGST",
+    totalAmount: "Total Amount",
+    originalAmount: "Original Amount"
+  },
+  hi: {
+    title: "💰 जीएसटी कैलकुलेटर",
+    langLabel: "🌐 भाषा चुनें:",
+    amountLabel: "राशि दर्ज करें (₹):",
+    rateLabel: "जीएसटी दर चुनें (%):",
+    typeLabel: "जीएसटी प्रकार:",
+    modeLabel: "जीएसटी मोड:",
+    reset: "🔁 रीसेट",
+    calculate: "📊 कैलकुलेट करें",
+    preview: "👁️ पूर्वावलोकन",
+    inclusive: "समावेशी",
+    exclusive: "बहिष्कृत",
+    sgstcgst: "एसजीएसटी + सीजीएसटी",
+    igst: "आईजीएसटी",
+    totalGST: "कुल जीएसटी",
+    cgst: "सीजीएसटी",
+    sgst: "एसजीएसटी",
+    igstLabel: "आईजीएसटी",
+    totalAmount: "कुल राशि",
+    originalAmount: "मूल राशि"
+  },
+  bn: {
+    title: "💰 জিএসটি ক্যালকুলেটর",
+    langLabel: "🌐 ভাষা নির্বাচন করুন:",
+    amountLabel: "পরিমাণ লিখুন (₹):",
+    rateLabel: "জিএসটি হার নির্বাচন করুন (%):",
+    typeLabel: "জিএসটি ধরণ:",
+    modeLabel: "জিএসটি মোড:",
+    reset: "🔁 রিসেট",
+    calculate: "📊 হিসাব করুন",
+    preview: "👁️ প্রিভিউ",
+    inclusive: "ইনক্লুসিভ",
+    exclusive: "এক্সক্লুসিভ",
+    sgstcgst: "এসজিএসটি + সিজিএসটি",
+    igst: "আইজিএসটি",
+    totalGST: "মোট জিএসটি",
+    cgst: "সিজিএসটি",
+    sgst: "এসজিএসটি",
+    igstLabel: "আইজিএসটি",
+    totalAmount: "মোট পরিমাণ",
+    originalAmount: "মূল পরিমাণ"
+  },
+  fr: {
+    title: "💰 CALCULATEUR DE TVA (GST)",
+    langLabel: "🌐 Choisir la langue:",
+    amountLabel: "Entrer le montant (€):",
+    rateLabel: "Taux de TVA (%):",
+    typeLabel: "Type de TVA:",
+    modeLabel: "Mode TVA:",
+    reset: "🔁 Réinitialiser",
+    calculate: "📊 Calculer",
+    preview: "👁️ Aperçu",
+    inclusive: "Inclus",
+    exclusive: "Exclus",
+    sgstcgst: "SGST + CGST",
+    igst: "IGST",
+    totalGST: "TVA Totale",
+    cgst: "CGST",
+    sgst: "SGST",
+    igstLabel: "IGST",
+    totalAmount: "Montant Total",
+    originalAmount: "Montant Original"
+  },
+  ru: {
+    title: "💰 КАЛЬКУЛЯТОР НДС",
+    langLabel: "🌐 Выберите язык:",
+    amountLabel: "Введите сумму (₽):",
+    rateLabel: "Выберите ставку НДС (%):",
+    typeLabel: "Тип НДС:",
+    modeLabel: "Режим НДС:",
+    reset: "🔁 Сбросить",
+    calculate: "📊 Рассчитать",
+    preview: "👁️ Предпросмотр",
+    inclusive: "Включённый",
+    exclusive: "Исключённый",
+    sgstcgst: "SGST + CGST",
+    igst: "IGST",
+    totalGST: "Общий НДС",
+    cgst: "CGST",
+    sgst: "SGST",
+    igstLabel: "IGST",
+    totalAmount: "Общая сумма",
+    originalAmount: "Исходная сумма"
+  },
+  es: {
+    title: "💰 CALCULADORA DE IVA",
+    langLabel: "🌐 Seleccionar idioma:",
+    amountLabel: "Ingrese monto (€):",
+    rateLabel: "Seleccione tasa de IVA (%):",
+    typeLabel: "Tipo de IVA:",
+    modeLabel: "Modo IVA:",
+    reset: "🔁 Reiniciar",
+    calculate: "📊 Calcular",
+    preview: "👁️ Vista previa",
+    inclusive: "Incluido",
+    exclusive: "Excluido",
+    sgstcgst: "SGST + CGST",
+    igst: "IGST",
+    totalGST: "IVA Total",
+    cgst: "CGST",
+    sgst: "SGST",
+    igstLabel: "IGST",
+    totalAmount: "Monto Total",
+    originalAmount: "Monto Original"
+  },
+  ja: {
+    title: "💰 GST計算機",
+    langLabel: "🌐 言語を選択:",
+    amountLabel: "金額を入力 (¥):",
+    rateLabel: "GST率を選択 (%):",
+    typeLabel: "GSTタイプ:",
+    modeLabel: "GSTモード:",
+    reset: "🔁 リセット",
+    calculate: "📊 計算",
+    preview: "👁️ プレビュー",
+    inclusive: "税込",
+    exclusive: "税抜",
+    sgstcgst: "SGST + CGST",
+    igst: "IGST",
+    totalGST: "総GST",
+    cgst: "CGST",
+    sgst: "SGST",
+    igstLabel: "IGST",
+    totalAmount: "合計金額",
+    originalAmount: "元の金額"
+  },
+  ko: {
+    title: "💰 GST 계산기",
+    langLabel: "🌐 언어 선택:",
+    amountLabel: "금액 입력 (₩):",
+    rateLabel: "GST 비율 선택 (%):",
+    typeLabel: "GST 유형:",
+    modeLabel: "GST 모드:",
+    reset: "🔁 초기화",
+    calculate: "📊 계산",
+    preview: "👁️ 미리보기",
+    inclusive: "포함",
+    exclusive: "제외",
+    sgstcgst: "SGST + CGST",
+    igst: "IGST",
+    totalGST: "총 GST",
+    cgst: "CGST",
+    sgst: "SGST",
+    igstLabel: "IGST",
+    totalAmount: "총 금액",
+    originalAmount: "원래 금액"
   }
+};
 
-  let chart;
-
-  function calculateGST() {
-    const amount = parseFloat(document.getElementById("amount").value);
-    const rate = parseFloat(document.getElementById("rate").value);
-    const taxType = document.getElementById("taxType").value;
-    const taxMode = document.getElementById("taxMode").value;
-
-    if (!amount || amount <= 0) return alert("Please enter a valid amount");
-
-    let baseAmount, gstAmount, total;
-    if (taxType === "inclusive") {
-      baseAmount = amount / (1 + rate / 100);
-      gstAmount = amount - baseAmount;
-      total = amount;
-    } else {
-      baseAmount = amount;
-      gstAmount = (amount * rate) / 100;
-      total = amount + gstAmount;
-    }
-
-    let sgst = 0, cgst = 0, igst = 0;
-    if (taxMode === "igst") {
-      igst = gstAmount;
-    } else {
-      sgst = gstAmount / 2;
-      cgst = gstAmount / 2;
-    }
-
-    document.getElementById("resultSection").innerHTML = `
-      <h3>🧾 ${translations.en.result}</h3>
-      <p><strong>${translations.en.baseAmount}:</strong> ₹${baseAmount.toFixed(2)}</p>
-      <p><strong>${taxMode === "igst" ? translations.en.igst : translations.en.cgst + " & " + translations.en.sgst}:</strong> ₹${gstAmount.toFixed(2)}</p>
-      <p><strong>${translations.en.totalAmount}:</strong> ₹${total.toFixed(2)}</p>
-    `;
-
-    // Save for preview
-    document.getElementById("previewContent").innerHTML = `
-      <p><strong>Amount:</strong> ₹${amount.toFixed(2)}</p>
-      <p><strong>Rate:</strong> ${rate}%</p>
-      <p><strong>Type:</strong> ${taxType}</p>
-      <p><strong>Mode:</strong> ${taxMode}</p>
-      <p><strong>GST:</strong> ₹${gstAmount.toFixed(2)}</p>
-      <p><strong>Total:</strong> ₹${total.toFixed(2)}</p>
-    `;
-
-    renderChart({ sgst, cgst, igst });
-  }
-
-  function resetFields() {
-    document.getElementById("amount").value = "";
-    document.getElementById("rate").value = "18";
-    document.getElementById("taxType").value = "exclusive";
-    document.getElementById("taxMode").value = "sgstcgst";
-    document.getElementById("resultSection").innerHTML = "";
-    document.getElementById("previewMode").style.display = "none";
-  }
-
-  function showPreview() {
-    document.getElementById("previewMode").style.display = "block";
-  }
-
-  function renderChart(data) {
-    const ctx = document.getElementById("gstChart").getContext("2d");
-    if (chart) chart.destroy();
-    chart = new Chart(ctx, {
-      type: "pie",
-      data: {
-        labels: ["SGST", "CGST", "IGST"],
-        datasets: [{
-          data: [data.sgst, data.cgst, data.igst],
-          backgroundColor: ["#4caf50", "#ff9800", "#2196f3"]
-        }]
-      },
-      options: {
-        responsive: true
-      }
-    });
-  }
+document.getElementById("languageSelector").addEventListener("change", changeLanguage);
+function changeLanguage() {
+  const lang = document.getElementById("languageSelector").value;
+  const t = translations[lang];
+  document.getElementById("title").textContent = t.title;
+  document.getElementById("langLabel").textContent = t.langLabel;
+  document.getElementById("amountLabel").textContent = t.amountLabel;
+  document.getElementById("rateLabel").textContent = t.rateLabel;
+  document.getElementById("typeLabel").textContent = t.typeLabel;
+  document.getElementById("modeLabel").textContent = t.modeLabel;
+  document.getElementById("resetBtn").textContent = t.reset;
+  document.getElementById("calculateBtn").textContent = t.calculate;
+  document.getElementById("previewBtn").textContent = t.preview;
+  document.querySelectorAll("#type option")[0].textContent = t.exclusive;
+  document.querySelectorAll("#type option")[1].textContent = t.inclusive;
+  document.querySelectorAll("#mode option")[0].textContent = t.sgstcgst;
+  document.querySelectorAll("#mode option")[1].textContent = t.igst;
+}
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-  function downloadImage() {
-    const preview = document.getElementById("previewMode");
-    document.querySelectorAll('.download-btns button').forEach(btn => btn.style.display = 'none');
-
-    html2canvas(preview).then(canvas => {
-      const link = document.createElement("a");
-      link.download = "GST_Preview.png";
-      link.href = canvas.toDataURL();
-      link.click();
-
-      // Restore buttons
-      document.querySelectorAll('.download-btns button').forEach(btn => btn.style.display = 'inline-block');
-    });
-  }
-
-  async function downloadPDF() {
-    const preview = document.getElementById("previewMode");
-    document.querySelectorAll('.download-btns button').forEach(btn => btn.style.display = 'none');
-
-    const canvas = await html2canvas(preview, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("GST_Preview.pdf");
-
-    // Restore buttons
-    document.querySelectorAll('.download-btns button').forEach(btn => btn.style.display = 'inline-block');
-  }
-
-  function sharePreview() {
-    const preview = document.getElementById("previewMode");
-
-    html2canvas(preview).then(canvas => {
-      canvas.toBlob(blob => {
-        const file = new File([blob], "gst_preview.png", { type: "image/png" });
-        if (navigator.share) {
-          navigator.share({
-            title: "GST Calculation Result",
-            text: "Check out my GST breakdown from Pratix Finance!",
-            files: [file]
-          }).catch(err => console.log("Share failed:", err));
-        } else {
-          alert("Sharing is not supported on this browser.");
-        }
-      });
-    });
-  }
-</script>
-
-<style>
-  #previewMode {
-    display: none;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 20px;
-    text-align: left;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  }
-  #previewMode h2 {
-    margin-top: 0;
-    color: #333;
-  }
-  .download-btns button {
-    margin: 10px 8px 0 0;
-    padding: 10px 16px;
-    background: #333;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .download-btns button:hover {
-    background: #000;
-  }
-</style>
 </body>
 </html>
