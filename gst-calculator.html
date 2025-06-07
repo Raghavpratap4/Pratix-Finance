@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GST Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
@@ -46,6 +47,10 @@
       <h2>🧾 Result:</h2>
       <p><strong>GST Amount:</strong> ₹<span id="gstAmount">0.00</span></p>
       <p><strong>Total Amount (Incl. GST):</strong> ₹<span id="totalAmount">0.00</span></p>
+
+      <div class="chart-container">
+        <canvas id="gstChart" height="200"></canvas>
+      </div>
     </section>
 
     <!-- Footer Info -->
@@ -84,6 +89,26 @@
 
       document.getElementById("gstAmount").innerText = gstAmount.toFixed(2);
       document.getElementById("totalAmount").innerText = total.toFixed(2);
+
+      // Chart
+      const ctx = document.getElementById("gstChart").getContext("2d");
+      if (window.gstChartInstance) window.gstChartInstance.destroy();
+      window.gstChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Base Amount', 'GST Amount'],
+          datasets: [{
+            data: [amount, gstAmount],
+            backgroundColor: ['#4CAF50', '#FFC107']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom' }
+          }
+        }
+      });
     }
   </script>
   <script src="translations.js"></script>
