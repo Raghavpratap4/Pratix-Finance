@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Income Tax Calculator – Pratix Finance</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #e3f2fd, #fff);
+      color: #333;
+    }
+    header {
+      background: linear-gradient(90deg, #2196f3, #21cbf3);
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #ffffffdd;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .btn {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      margin: 0.5rem 0.2rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      background: #2196f3;
+      color: white;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #1769aa;
+    }
+    #results h3, #results h2 {
+      margin: 0.5rem 0;
+    }
+    canvas {
+      max-width: 100%;
+      margin-top: 1rem;
+    }
+    #preview-area {
+      display: none;
+      margin-top: 2rem;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: #f9f9f9;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #e3f2fd;
+    }
+    @media(max-width: 600px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🧾 Income Tax Calculator</h1>
+</header>
+
+<div class="container">
+  <label for="language">🌐 Select Language:</label>
+  <select id="language" onchange="changeLanguage()">
+    <option value="en">English</option>
+    <option value="hi">हिन्दी</option>
+    <option value="bn">বাংলা</option>
+    <option value="fr">Français</option>
+    <option value="ru">Русский</option>
+    <option value="es">Español</option>
+    <option value="ja">日本語</option>
+    <option value="ko">한국어</option>
+  </select>
+
+  <label id="label-income" for="income">💰 Annual Gross Income (₹):</label>
+  <input type="number" id="income" placeholder="Enter your income">
+
+  <label id="label-deductions" for="deductions">📉 Total Deductions (₹):</label>
+  <input type="number" id="deductions" placeholder="Enter deductions (under 80C, etc.)">
+
+  <label id="label-age" for="age">🎂 Age Category:</label>
+  <select id="age">
+    <option value="below60">Below 60</option>
+    <option value="60to80">60 to 80</option>
+    <option value="above80">Above 80</option>
+  </select>
+
+  <label id="label-regime" for="regime">📋 Select Tax Regime:</label>
+  <select id="regime">
+    <option value="old">Old Regime</option>
+    <option value="new">New Regime</option>
+  </select>
+
+  <div style="text-align:center;">
+    <button class="btn" id="btn-calculate" onclick="calculateTax()">Calculate</button>
+    <button class="btn" id="btn-reset" onclick="resetForm()">Reset</button>
+    <button class="btn" id="btn-preview" onclick="togglePreview()">Preview</button>
+  </div>
+
+  <div id="results"></div>
+  <canvas id="pieChart"></canvas>
+  <canvas id="barChart"></canvas>
+
+  <div id="preview-area">
+    <h3 id="preview-title">📄 Income Tax Summary</h3>
+    <div id="preview-results"></div>
+    <canvas id="previewPieChart"></canvas>
+    <canvas id="previewBarChart"></canvas>
+    <div style="margin-top:1rem;">
+      <button class="btn" onclick="downloadImage()">Download Image</button>
+      <button class="btn" onclick="downloadPDF()">Download PDF</button>
+      <button class="btn" onclick="sharePreview()">Share</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  📧 Contact: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a><br/>
+  © 2025 Pratix Finance | Built by Raghav Pratap<br/>
+  This tool estimates your Indian income tax. Please consult a professional for accurate filing.
+</footer>
+<script>
+const translations = {
+  en: {
+    income: "💰 Annual Gross Income (₹):",
+    deductions: "📉 Total Deductions (₹):",
+    age: "🎂 Age Category:",
+    regime: "📋 Select Tax Regime:",
+    calculate: "Calculate",
+    reset: "Reset",
+    preview: "Preview",
+    result: "🧾 Estimated Tax Payable:",
+    old: "Old Regime",
+    new: "New Regime",
+    summary: "📄 Income Tax Summary"
+  },
+  hi: {
+    income: "💰 वार्षिक सकल आय (₹):",
+    deductions: "📉 कुल कटौती (₹):",
+    age: "🎂 आयु वर्ग:",
+    regime: "📋 कर प्रणाली चुनें:",
+    calculate: "गणना करें",
+    reset: "रीसेट करें",
+    preview: "पूर्वावलोकन",
+    result: "🧾 अनुमानित कर देय:",
+    old: "पुरानी प्रणाली",
+    new: "नई प्रणाली",
+    summary: "📄 आयकर सारांश"
+  },
+  bn: {
+    income: "💰 বার্ষিক মোট আয় (₹):",
+    deductions: "📉 মোট ছাড় (₹):",
+    age: "🎂 বয়স বিভাগ:",
+    regime: "📋 কর ব্যবস্থা নির্বাচন করুন:",
+    calculate: "গণনা করুন",
+    reset: "রিসেট করুন",
+    preview: "প্রাকদর্শন",
+    result: "🧾 আনুমানিক কর:",
+    old: "পুরানো ব্যবস্থা",
+    new: "নতুন ব্যবস্থা",
+    summary: "📄 আয়কর সারাংশ"
+  },
+  fr: {
+    income: "💰 Revenu brut annuel (₹):",
+    deductions: "📉 Déductions totales (₹):",
+    age: "🎂 Tranche d'âge:",
+    regime: "📋 Régime fiscal:",
+    calculate: "Calculer",
+    reset: "Réinitialiser",
+    preview: "Aperçu",
+    result: "🧾 Impôt estimé:",
+    old: "Ancien régime",
+    new: "Nouveau régime",
+    summary: "📄 Résumé de l'impôt"
+  },
+  ru: {
+    income: "💰 Годовой доход (₹):",
+    deductions: "📉 Общие вычеты (₹):",
+    age: "🎂 Возрастная категория:",
+    regime: "📋 Налоговый режим:",
+    calculate: "Рассчитать",
+    reset: "Сбросить",
+    preview: "Предпросмотр",
+    result: "🧾 Оценка налога:",
+    old: "Старый режим",
+    new: "Новый режим",
+    summary: "📄 Сводка по налогу"
+  },
+  es: {
+    income: "💰 Ingreso bruto anual (₹):",
+    deductions: "📉 Deducciones totales (₹):",
+    age: "🎂 Categoría de edad:",
+    regime: "📋 Seleccionar régimen fiscal:",
+    calculate: "Calcular",
+    reset: "Restablecer",
+    preview: "Vista previa",
+    result: "🧾 Impuesto estimado:",
+    old: "Régimen antiguo",
+    new: "Nuevo régimen",
+    summary: "📄 Resumen del impuesto"
+  },
+  ja: {
+    income: "💰 年間総所得 (₹):",
+    deductions: "📉 総控除額 (₹):",
+    age: "🎂 年齢カテゴリ:",
+    regime: "📋 税制を選択:",
+    calculate: "計算",
+    reset: "リセット",
+    preview: "プレビュー",
+    result: "🧾 推定納税額:",
+    old: "旧制度",
+    new: "新制度",
+    summary: "📄 所得税の概要"
+  },
+  ko: {
+    income: "💰 연간 총소득 (₹):",
+    deductions: "📉 총 공제액 (₹):",
+    age: "🎂 연령대:",
+    regime: "📋 세금 제도 선택:",
+    calculate: "계산하기",
+    reset: "초기화",
+    preview: "미리보기",
+    result: "🧾 예상 세금:",
+    old: "구 제도",
+    new: "신 제도",
+    summary: "📄 소득세 요약"
+  }
+};
+
+function changeLanguage() {
+  const lang = document.getElementById("language").value;
+  const t = translations[lang];
+  document.getElementById("label-income").innerText = t.income;
+  document.getElementById("label-deductions").innerText = t.deductions;
+  document.getElementById("label-age").innerText = t.age;
+  document.getElementById("label-regime").innerText = t.regime;
+  document.getElementById("btn-calculate").innerText = t.calculate;
+  document.getElementById("btn-reset").innerText = t.reset;
+  document.getElementById("btn-preview").innerText = t.preview;
+  document.getElementById("preview-title").innerText = t.summary;
+}
+
+function calculateTax() {
+  const income = parseFloat(document.getElementById("income").value) || 0;
+  const deductions = parseFloat(document.getElementById("deductions").value) || 0;
+  const age = document.getElementById("age").value;
+  const regime = document.getElementById("regime").value;
+  const taxable = Math.max(0, income - (regime === "old" ? deductions : 0));
+  let tax = 0;
+
+  if (regime === "new") {
+    const slabs = [0, 300000, 600000, 900000, 1200000, 1500000];
+    const rates = [0, 0.05, 0.1, 0.15, 0.2, 0.3];
+    for (let i = slabs.length - 1; i >= 0; i--) {
+      if (taxable > slabs[i]) {
+        tax += (taxable - slabs[i]) * rates[i];
+        taxable = slabs[i];
+      }
+    }
+  } else {
+    let exemption = 250000;
+    if (age === "60to80") exemption = 300000;
+    if (age === "above80") exemption = 500000;
+    const slabs = [0, exemption, 500000, 1000000];
+    const rates = [0, 0, 0.05, 0.2, 0.3];
+    for (let i = slabs.length - 1; i >= 0; i--) {
+      if (taxable > slabs[i]) {
+        tax += (taxable - slabs[i]) * rates[i + 1];
+        taxable = slabs[i];
+      }
+    }
+  }
+
+  document.getElementById("results").innerHTML = `
+    <h3>${translations[document.getElementById("language").value].result}</h3>
+    <h2>₹${tax.toFixed(2)}</h2>`;
+  drawCharts(tax, income);
+}
+
+function resetForm() {
+  document.getElementById("income").value = "";
+  document.getElementById("deductions").value = "";
+  document.getElementById("results").innerHTML = "";
+  document.getElementById("pieChart").style.display = "none";
+  document.getElementById("barChart").style.display = "none";
+  document.getElementById("preview-area").style.display = "none";
+}
+
+function togglePreview() {
+  document.getElementById("preview-results").innerHTML =
+    document.getElementById("results").innerHTML;
+  drawChartsPreview();
+  document.getElementById("preview-area").style.display = "block";
+}
+
+function drawCharts(tax, income) {
+  const pieCtx = document.getElementById("pieChart").getContext("2d");
+  const barCtx = document.getElementById("barChart").getContext("2d");
+  const remaining = income - tax;
+  new Chart(pieCtx, {
+    type: "pie",
+    data: {
+      labels: ["Tax", "Remaining"],
+      datasets: [{ data: [tax, remaining], backgroundColor: ["#f44336", "#4caf50"] }]
+    }
+  });
+  new Chart(barCtx, {
+    type: "bar",
+    data: {
+      labels: ["Tax", "Remaining"],
+      datasets: [{
+        label: "₹ Amount",
+        data: [tax, remaining],
+        backgroundColor: ["#f44336", "#4caf50"]
+      }]
+    }
+  });
+  document.getElementById("pieChart").style.display = "block";
+  document.getElementById("barChart").style.display = "block";
+}
+
+function drawChartsPreview() {
+  const pie = document.getElementById("pieChart").toDataURL("image/png");
+  const bar = document.getElementById("barChart").toDataURL("image/png");
+  document.getElementById("previewPieChart").getContext("2d").drawImage(
+    document.createElement("img"), 0, 0
+  ).src = pie;
+  document.getElementById("previewBarChart").getContext("2d").drawImage(
+    document.createElement("img"), 0, 0
+  ).src = bar;
+}
+
+function downloadImage() {
+  html2canvas(document.getElementById("preview-area")).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "income_tax_result.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+function downloadPDF() {
+  html2canvas(document.getElementById("preview-area")).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF();
+    pdf.addImage(imgData, "PNG", 10, 10, 180, 0);
+    pdf.save("income_tax_result.pdf");
+  });
+}
+
+function sharePreview() {
+  alert("Use browser's share options or take a screenshot to share.");
+}
+</script>
+</body>
+</html>
