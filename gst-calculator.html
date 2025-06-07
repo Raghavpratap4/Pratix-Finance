@@ -99,6 +99,7 @@
 <div class="container" id="mainContainer">
   <label for="amount">Enter Amount (₹):</label>
   <input type="number" id="amount" placeholder="0" />
+
   <label for="rate">Select GST Rate (%):</label>
   <select id="rate">
     <option value="5">5%</option>
@@ -106,6 +107,13 @@
     <option value="18" selected>18%</option>
     <option value="28">28%</option>
   </select>
+
+  <label for="gstType">GST Type:</label>
+  <select id="gstType">
+    <option value="cgst_sgst" selected>CGST + SGST</option>
+    <option value="igst">IGST</option>
+  </select>
+
   <div class="btn-group">
     <button id="resetBtn">🔁 Reset</button>
     <button id="calculateBtn">📊 Calculate</button>
@@ -126,6 +134,7 @@
   <div class="download-btns">
     <button onclick="downloadImage()">📸 Image</button>
     <button onclick="downloadPDF()">📄 PDF</button>
+    <button onclick="navigator.share ? navigator.share({ title: 'GST Result', text: 'See my GST Calculation.', url: window.location.href }) : alert('Sharing not supported')">🔗 Share</button>
   </div>
 </div>
 <script>
@@ -133,13 +142,19 @@
   document.getElementById("calculateBtn").onclick = () => {
     const amount = parseFloat(document.getElementById("amount").value);
     const rate = parseFloat(document.getElementById("rate").value);
+    const gstType = document.getElementById("gstType").value;
     if (isNaN(amount)) return alert("Please enter a valid amount!");
     const gstAmount = (amount * rate) / 100;
-    const cgst = gstAmount / 2;
-    const sgst = gstAmount / 2;
+    let cgst = 0, sgst = 0;
+    if (gstType === "cgst_sgst") {
+      cgst = gstAmount / 2;
+      sgst = gstAmount / 2;
+    } else {
+      cgst = gstAmount;
+    }
     const total = amount + gstAmount;
-    document.getElementById("cgst").textContent = `CGST: ₹${cgst.toFixed(2)}`;
-    document.getElementById("sgst").textContent = `SGST: ₹${sgst.toFixed(2)}`;
+    document.getElementById("cgst").textContent = gstType === 'cgst_sgst' ? `CGST: ₹${cgst.toFixed(2)}` : `IGST: ₹${cgst.toFixed(2)}`;
+    document.getElementById("sgst").textContent = gstType === 'cgst_sgst' ? `SGST: ₹${sgst.toFixed(2)}` : '';
     document.getElementById("totalGst").textContent = `Total GST: ₹${gstAmount.toFixed(2)}`;
     document.getElementById("finalAmount").textContent = `Final Amount: ₹${total.toFixed(2)}`;
     const ctx1 = document.getElementById("gstPieChart").getContext("2d");
@@ -159,11 +174,11 @@
     barChart = new Chart(ctx2, {
       type: 'bar',
       data: {
-        labels: ['CGST', 'SGST', 'Final Amount'],
+        labels: gstType === 'cgst_sgst' ? ['CGST', 'SGST', 'Final Amount'] : ['IGST', 'Final Amount'],
         datasets: [{
           label: 'Amount in ₹',
-          data: [cgst, sgst, total],
-          backgroundColor: ['#ff7043', '#ab47bc', '#29b6f6']
+          data: gstType === 'cgst_sgst' ? [cgst, sgst, total] : [cgst, total],
+          backgroundColor: gstType === 'cgst_sgst' ? ['#ff7043', '#ab47bc', '#29b6f6'] : ['#ff7043', '#29b6f6']
         }]
       }
     });
@@ -171,6 +186,7 @@
   document.getElementById("resetBtn").onclick = () => {
     document.getElementById("amount").value = "";
     document.getElementById("rate").value = "18";
+    document.getElementById("gstType").value = "cgst_sgst";
     document.getElementById("cgst").textContent = "";
     document.getElementById("sgst").textContent = "";
     document.getElementById("totalGst").textContent = "";
@@ -183,26 +199,28 @@
     const logo = document.querySelector(".header").innerHTML;
     const amount = document.getElementById("amount").value;
     const rate = document.getElementById("rate").value;
+    const gstType = document.getElementById("gstType").value;
     content.innerHTML = `
       <div class="header">${logo}</div>
       <h2>🧾 Input Details</h2>
       <p><strong>Amount:</strong> ₹${amount}</p>
       <p><strong>GST Rate:</strong> ${rate}%</p>
+      <p><strong>GST Type:</strong> ${gstType === 'cgst_sgst' ? 'CGST + SGST' : 'IGST'}</p>
       <h2>📊 Result</h2>
       <p>${document.getElementById("cgst").textContent}</p>
       <p>${document.getElementById("sgst").textContent}</p>
       <p>${document.getElementById("totalGst").textContent}</p>
       <p>${document.getElementById("finalAmount").textContent}</p>
     `;
-    document.getElementById("previewMode").style.display = "block";
-    const pieClone = document.getElementById("gstPieChart").cloneNode(true);
-    const barClone = document.getElementById("gstBarChart").cloneNode(true);
+    const pieClone = document.getElementById("gstPieChart").cloneNode();
+    const barClone = document.getElementById("gstBarChart").cloneNode();
     content.appendChild(pieClone);
     content.appendChild(barClone);
     const ctx1 = pieClone.getContext("2d");
     const ctx2 = barClone.getContext("2d");
-    new Chart(ctx1, { type: 'pie', data: pieChart.data, options: pieChart.options });
-    new Chart(ctx2, { type: 'bar', data: barChart.data, options: barChart.options });
+    new Chart(ctx1, { type: 'pie', data: pieChart.data });
+    new Chart(ctx2, { type: 'bar', data: barChart.data });
+    document.getElementById("previewMode").style.display = "block";
   };
   window.downloadImage = () => {
     html2canvas(document.getElementById("previewMode")).then(canvas => {
