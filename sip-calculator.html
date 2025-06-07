@@ -23,6 +23,19 @@
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+<!-- Language Toggle -->
+<div class="language-toggle">
+  <label for="language">🌐</label>
+  <select id="language" onchange="changeLanguage()">
+    <option value="en">English</option>
+    <option value="hi">हिंदी</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="ru">Русский</option>
+    <option value="ja">日本語</option>
+    <option value="bn">বাংলা</option>
+  </select>
+</div>
 
 <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
 <h1 style="text-align:center;">💹 SIP Calculator</h1>
@@ -76,6 +89,61 @@
 
   </div>
 </div>
+<div id="downloadShareButtons" style="text-align:center; margin-top: 20px;">
+  <button onclick="downloadAsImage()">📸 Download as Image</button>
+  <button onclick="downloadAsPDF()">📄 Download as PDF</button>
+  <button onclick="sharePreview()">🔗 Share</button>
+</div>
+<!-- Required libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  // Download preview as image
+  function downloadAsImage() {
+    const preview = document.getElementById("preview"); // your preview panel ID
+    html2canvas(preview).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'SIP_Calculation.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+
+  // Download preview as PDF
+  async function downloadAsPDF() {
+    const { jsPDF } = window.jspdf;
+    const preview = document.getElementById("preview");
+    const canvas = await html2canvas(preview);
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+    pdf.save('SIP_Calculation.pdf');
+  }
+
+  // Share Preview using Web Share API (only on mobile or supported browsers)
+  function sharePreview() {
+    const preview = document.getElementById("preview");
+    html2canvas(preview).then(canvas => {
+      canvas.toBlob(blob => {
+        const file = new File([blob], "sip_result.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: "SIP Calculation - Pratix Finance",
+            text: "Here is my SIP calculation result from Pratix Finance.",
+            files: [file]
+          });
+        } else {
+          alert("Sharing not supported on this device.");
+        }
+      });
+    });
+  }
+</script>
 
 <script src="sip.js"></script>
 <!-- Footer Ad (Horizontal) -->
@@ -98,6 +166,102 @@
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
+<!-- SIP Information Footer -->
+<div class="sip-info-footer">
+  <h2>🧾 What is SIP (Systematic Investment Plan)?</h2>
+  <p>
+    A Systematic Investment Plan (SIP) allows you to invest a fixed amount regularly in mutual funds. It’s a smart and disciplined way to invest and helps in building wealth over the long term.
+  </p>
+
+  <hr>
+
+  <h2>📈 Benefits of SIP:</h2>
+  <ul>
+    <li>💸 Start with small amounts</li>
+    <li>📆 Develop a regular investment habit</li>
+    <li>📉 Helps balance market ups and downs (Rupee Cost Averaging)</li>
+    <li>⏳ Benefit from compounding in the long run</li>
+    <li>🧘‍♂️ Peace of mind through automated investments</li>
+  </ul>
+
+  <hr>
+
+  <h2>📊 Why Use a SIP Calculator?</h2>
+  <p>
+    A SIP calculator helps you estimate how much wealth you can build through regular monthly investments. It is useful for planning major financial goals like education, retirement, buying a home, etc.
+  </p>
+
+  <hr>
+
+  <h2>🔒 Disclaimer:</h2>
+  <p>
+    This SIP calculator is for estimation purposes only. Actual returns may vary based on mutual fund performance. Please consult a financial advisor before making any investment decisions.
+  </p>
+</div>
+<script>
+  const translations = {
+    en: {
+      title: "SIP Calculator",
+      invested: "Total Invested",
+      return: "Estimated Returns",
+      total: "Total Value",
+      description: "This SIP calculator is for estimation purposes only.",
+    },
+    hi: {
+      title: "एसआईपी कैलकुलेटर",
+      invested: "कुल निवेश",
+      return: "अनुमानित रिटर्न",
+      total: "कुल मूल्य",
+      description: "यह SIP कैलकुलेटर केवल अनुमान के लिए है।",
+    },
+    fr: {
+      title: "Calculateur SIP",
+      invested: "Montant investi",
+      return: "Rendements estimés",
+      total: "Valeur totale",
+      description: "Ce calculateur SIP est à titre indicatif uniquement.",
+    },
+    de: {
+      title: "SIP-Rechner",
+      invested: "Insgesamt investiert",
+      return: "Geschätzte Rendite",
+      total: "Gesamtwert",
+      description: "Dieser SIP-Rechner dient nur zu Schätzungszwecken.",
+    },
+    ru: {
+      title: "Калькулятор SIP",
+      invested: "Общие инвестиции",
+      return: "Оценочная прибыль",
+      total: "Общая стоимость",
+      description: "Этот калькулятор предназначен только для оценок.",
+    },
+    ja: {
+      title: "SIP計算機",
+      invested: "総投資額",
+      return: "推定リターン",
+      total: "合計金額",
+      description: "このSIP計算機は見積もり専用です。",
+    },
+    bn: {
+      title: "SIP ক্যালকুলেটর",
+      invested: "মোট বিনিয়োগ",
+      return: "আনুমানিক রিটার্ন",
+      total: "মোট মূল্য",
+      description: "এই SIP ক্যালকুলেটরটি অনুমানের উদ্দেশ্যে।",
+    },
+  };
+
+  function changeLanguage() {
+    const lang = document.getElementById("language").value;
+    const t = translations[lang];
+
+    document.getElementById("sipTitle").innerText = t.title;
+    document.getElementById("labelInvested").innerText = t.invested;
+    document.getElementById("labelReturn").innerText = t.return;
+    document.getElementById("labelTotal").innerText = t.total;
+    document.getElementById("disclaimer").innerText = t.description;
+  }
+</script>
 
 <div style="text-align:center; font-size:14px; color:#666; margin-top:20px;">
   Made with ❤️ by <strong>Raghav Pratap</strong> · <strong>Pratix Finance © 2025</strong>

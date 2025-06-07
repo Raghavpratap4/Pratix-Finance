@@ -31,3 +31,106 @@ input {
 .button:hover {
   background-color: #0056b3;
 }
+/* Base style for entire app screen */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+  overflow-x: hidden;
+}
+
+/* Responsive container */
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Preview panel responsiveness */
+#preview {
+  background-color: white;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+/* Input/Output responsiveness */
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(to right, #4caf50, #81c784);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(to right, #388e3c, #66bb6a);
+}
+
+/* Mobile first adjustments */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+.sip-info-footer {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.sip-info-footer h2 {
+  font-size: 18px;
+  margin-top: 20px;
+  color: #2e7d32;
+}
+
+.sip-info-footer ul {
+  padding-left: 20px;
+}
+
+.sip-info-footer ul li {
+  margin-bottom: 8px;
+}
+.language-toggle {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.language-toggle select {
+  margin-left: 5px;
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 8px;
+}
