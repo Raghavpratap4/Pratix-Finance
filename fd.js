@@ -85,4 +85,4 @@ const barConfig = {
       }
     }
   }
-}
+  };
