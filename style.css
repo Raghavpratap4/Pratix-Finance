@@ -344,3 +344,124 @@ canvas {
   height: auto !important;
   margin-bottom: 20px;
 }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #fdfbfb, #ebedee);
+}
+
+.logo {
+  max-width: 80px;
+  margin: 10px auto;
+  display: block;
+}
+
+header, footer {
+  text-align: center;
+  padding: 10px;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.input-section, .output-section {
+  margin-bottom: 20px;
+}
+
+.input-section label,
+.input-section input,
+.input-section select {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.input-section input,
+.input-section select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-group button,
+.preview-actions button {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.button-group button:hover,
+.preview-actions button:hover {
+  background: #388e3c;
+}
+
+.output-section p {
+  font-weight: bold;
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.chart-section {
+  margin-top: 20px;
+}
+
+canvas {
+  width: 100% !important;
+  height: 250px !important;
+  margin-bottom: 20px;
+}
+
+.description {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 10px 20px;
+  background: #f9f9f9;
+  border-left: 5px solid #4caf50;
+  border-radius: 8px;
+}
+
+.description h2 {
+  margin-top: 0;
+}
+
+footer a {
+  text-decoration: none;
+  color: #333;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .button-group button,
+  .preview-actions button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  canvas {
+    height: 200px !important;
+  }
+}
