@@ -6,167 +6,105 @@
   <title>Income Tax Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #ede7f6, #ffffff);
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    .container {
-      max-width: 480px;
-      margin: auto;
-      padding: 2rem;
-    }
-    img.logo {
-      display: block;
-      margin: 0 auto 1rem;
-      height: 60px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-    }
-    .input-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    button {
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
-      background-color: #7e57c2;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    button:hover {
-      background-color: #5e35b1;
-    }
-    .results {
-      background-color: #ede7f6;
-      padding: 1rem;
-      border-radius: 10px;
-      margin-top: 1rem;
-    }
-    .results p {
-      margin: 0.5rem 0;
-    }
-    canvas {
-      margin-top: 2rem;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.875rem;
-      margin-top: 2rem;
-      padding: 1rem;
-      color: #777;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
-    <img src="./assets/logo.png" alt="Pratix Logo" class="logo" />
-    <h1>💼 Income Tax Calculator</h1>
-    <div class="input-group">
-      <label for="income">Annual Income (₹)</label>
-      <input type="number" id="income" placeholder="Enter total income" />
-    </div>
-    <div class="input-group">
-      <label for="age">Select Age Group</label>
-      <select id="age">
-        <option value="normal">Below 60</option>
-        <option value="senior">60 - 80</option>
-        <option value="super_senior">Above 80</option>
+
+    <!-- 🌐 Language Toggle -->
+    <div class="language-toggle">
+      <label for="language">🌐</label>
+      <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="bn">বাংলা</option>
       </select>
     </div>
-    <button onclick="calculateTax()">Calculate Tax</button>
 
-    <div class="results" id="resultBox" style="display:none">
-      <p>💸 <strong>Tax Payable:</strong> ₹<span id="taxDisplay"></span></p>
-      <p>💰 <strong>Taxable Income:</strong> ₹<span id="taxableIncome"></span></p>
-      <p>🧾 <strong>Exempted Income:</strong> ₹<span id="exemptedIncome"></span></p>
+    <!-- 🧾 Header -->
+    <div class="header">
+      <img src="logo.png" alt="Pratix Logo" class="logo">
+      <h1 id="taxTitle">Income Tax Calculator</h1>
     </div>
 
-    <canvas id="taxChart" width="100%" height="100" style="display:none"></canvas>
+    <!-- 💼 Input Section -->
+    <div class="input-section">
+      <label for="income">Annual Income (₹):</label>
+      <input type="number" id="income" placeholder="e.g., 750000" />
 
-    <footer>© Pratix Finance | Built by Raghav Pratap</footer>
+      <label for="age">Select Age Group:</label>
+      <select id="age">
+        <option value="normal">Below 60 years</option>
+        <option value="senior">60 to 80 years</option>
+        <option value="super">Above 80 years</option>
+      </select>
+<label>Choose Tax Regime:</label>
+<div class="regime-options">
+  <label><input type="radio" name="regime" value="old" checked /> Old Regime</label>
+  <label><input type="radio" name="regime" value="new" /> New Regime</label>
+</div>
+
+      <button onclick="calculateTax()">Calculate Tax</button>
+    </div>
+
+    <!-- 📊 Result Section -->
+    <div id="tax-result" class="result-section">
+      <h2>Results:</h2>
+      <p><strong>Taxable Income:</strong> ₹<span id="taxableIncome">0.00</span></p>
+      <p><strong>Total Tax Payable:</strong> ₹<span id="taxAmount">0.00</span></p>
+    </div>
+
+    <!-- 📉 Chart -->
+    <div class="chart-section">
+      <canvas id="taxChart" width="300" height="300"></canvas>
+    </div>
+
+    <!-- 🔒 Disclaimer -->
+    <p id="taxDisclaimer" class="disclaimer">
+      This calculator is for estimation only. Tax rates based on old regime for FY 2024-25.
+    </p>
   </div>
 
-  <script>
-    function calculateTax() {
-      const income = parseFloat(document.getElementById('income').value);
-      const ageGroup = document.getElementById('age').value;
+  <script src="incometax.js"></script>
+  <footer class="income-tax-footer">
+  <div class="footer-section">
+    <h2>🧾 What is Income Tax?</h2>
+    <p>
+      Income tax is a direct tax imposed on an individual's or entity’s income. It helps the government fund essential services such as healthcare, education, defense, and infrastructure.
+    </p>
+  </div>
 
-      if (!income) return;
+  <div class="footer-section">
+    <h2>📈 Benefits of Using Income Tax Calculator</h2>
+    <ul>
+      <li>🔢 Easily estimate your tax liability</li>
+      <li>📊 Plan deductions and savings effectively</li>
+      <li>🧮 Compare Old and New tax regimes</li>
+      <li>💡 Make informed financial decisions</li>
+      <li>🧘‍♂️ Reduce stress with proactive planning</li>
+    </ul>
+  </div>
 
-      let tax = 0;
-      let slab1 = 250000, slab2 = 500000, slab3 = 1000000;
+  <div class="footer-section">
+    <h2>⚖️ Old vs New Tax Regime</h2>
+    <p><strong>Old Regime:</strong> Higher tax rates but allows deductions like 80C, HRA, LTA, etc.</p>
+    <p><strong>New Regime:</strong> Lower tax rates, but without exemptions/deductions. Simple and suitable for those with fewer investments.</p>
+  </div>
 
-      if (ageGroup === 'senior') {
-        slab1 = 300000;
-      } else if (ageGroup === 'super_senior') {
-        slab1 = 500000;
-      }
+  <div class="footer-section">
+    <h2>🔐 Disclaimer</h2>
+    <p>
+      This calculator is for informational purposes only and does not constitute professional financial advice. Tax rules change periodically. Always consult a certified tax professional for personalized guidance.
+    </p>
+  </div>
 
-      if (income <= slab1) {
-        tax = 0;
-      } else if (income <= slab2) {
-        tax = (income - slab1) * 0.05;
-      } else if (income <= slab3) {
-        tax = (slab2 - slab1) * 0.05 + (income - slab2) * 0.2;
-      } else {
-        tax = (slab2 - slab1) * 0.05 + (slab3 - slab2) * 0.2 + (income - slab3) * 0.3;
-      }
+  <div class="footer-brand">
+    <p>© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
+  </div>
+</footer>
 
-      const exempt = Math.min(slab1, income);
-      const taxable = income - exempt;
-
-      document.getElementById('taxDisplay').innerText = tax.toFixed(2);
-      document.getElementById('taxableIncome').innerText = taxable.toFixed(2);
-      document.getElementById('exemptedIncome').innerText = exempt.toFixed(2);
-      document.getElementById('resultBox').style.display = "block";
-
-      const ctx = document.getElementById('taxChart').getContext('2d');
-      document.getElementById('taxChart').style.display = "block";
-
-      if (window.taxChart) window.taxChart.destroy();
-
-      window.taxChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Exempted Income', 'Taxable Income'],
-          datasets: [{
-            label: 'Income Breakdown',
-            data: [exempt, taxable],
-            backgroundColor: ['#b39ddb', '#5e35b1'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }
-      });
-    }
-  </script>
 </body>
 </html>

@@ -1,97 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190"
-     crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GST Calculator - Pratix Finance</title>
-  <link rel="icon" href="logo.png" />
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
-    .container { max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .logo { display: block; margin: 0 auto 20px; width: 100px; }
-    h2 { text-align: center; }
-    input, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
-    canvas { max-width: 100%; margin-top: 20px; }
-    #previewModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
-    #previewContent { background: #fff; margin: 10% auto; padding: 20px; border-radius: 10px; max-width: 500px; }
-    .back-btn { text-decoration: none; font-size: 24px; display: inline-block; margin-bottom: 10px; }
-  </style>
+
 </head>
 <body>
-  <!-- Header Ad (Horizontal) -->
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-client="ca-pub-3291480910940190"
-     data-ad-slot="1234567890"
-     data-ad-format="horizontal"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-  <a href="index.html" class="back-btn">⬅</a>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h2>GST Calculator</h2>
-    <input type="number" id="amount" placeholder="Enter Amount" />
-    <input type="number" id="gstRate" placeholder="Enter GST Rate (%)" />
-    <button onclick="calculateGST()">Calculate</button>
-    <button onclick="resetCalculator()">Reset</button>
-    <button onclick="showPreview()">📊 Preview</button>
 
-    <div id="results">
-      <p><strong>GST Amount:</strong> ₹<span id="gstAmount">0</span></p>
-      <p><strong>Total Amount:</strong> ₹<span id="totalAmount">0</span></p>
+    <!-- 🌐 Language Toggle -->
+    <div class="language-toggle">
+      <label for="language">🌐</label>
+      <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="bn">বাংলা</option>
+      </select>
     </div>
 
-    <canvas id="gstPieChart"></canvas>
-  </div>
-
-  <!-- Preview Modal -->
-  <div id="previewModal">
-    <div id="previewContent">
-      <h3>Preview</h3>
-      <p>GST Amount: ₹<span id="previewGstAmount">0</span></p>
-      <p>Total Amount: ₹<span id="previewTotalAmount">0</span></p>
-      <canvas id="previewPieChart"></canvas>
-      <div style="margin-top: 10px;">
-        <button onclick="downloadPreviewAsImage()">🖼️ Image</button>
-        <button onclick="downloadPreviewAsPDF()">📄 PDF</button>
-        <button onclick="sharePreview()">🔗 Share</button>
-        <button onclick="closePreview()">Close</button>
-      </div>
+    <!-- 🧾 Logo + Title -->
+    <div class="header">
+      <img src="logo.png" alt="Pratix Logo" class="logo">
+      <h1 id="gstTitle">GST Calculator</h1>
     </div>
+
+    <!-- 💼 Input Section -->
+    <div class="input-section">
+      <label for="amount">Enter Amount (₹):</label>
+      <input type="number" id="amount" placeholder="Enter amount here" />
+
+      <label for="rate">GST Rate (%):</label>
+      <select id="rate">
+        <option value="5">5%</option>
+        <option value="12">12%</option>
+        <option value="18" selected>18%</option>
+        <option value="28">28%</option>
+      </select>
+
+      <button onclick="calculateGST()">Calculate GST</button>
+    </div>
+
+    <!-- 📊 Result Section -->
+    <div id="preview" class="result-section">
+      <h2>Results:</h2>
+      <p><strong>CGST:</strong> ₹<span id="cgst">0.00</span></p>
+      <p><strong>SGST:</strong> ₹<span id="sgst">0.00</span></p>
+      <p><strong>Total GST:</strong> ₹<span id="totalGst">0.00</span></p>
+      <p><strong>Final Amount:</strong> ₹<span id="finalAmount">0.00</span></p>
+    </div>
+
+    <p id="gstDisclaimer" class="disclaimer">
+      This GST calculator provides an estimate for informational purposes only.
+    </p>
   </div>
+<!-- Charts -->
+<div class="chart-section">
+  <canvas id="gstPieChart" width="300" height="300"></canvas>
+  <canvas id="gstBarChart" width="300" height="300"></canvas>
+</div>
 
   <script src="gst.js"></script>
-  <!-- Footer Ad (Horizontal) -->
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-client="ca-pub-3291480910940190"
-     data-ad-slot="0987654321"
-     data-ad-format="horizontal"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-  <!-- AdSense Footer -->
-<div class="adsense-footer" style="text-align:center; margin-top: 10px;">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-3291480910940190"
-       data-ad-slot="9876543210"
-       data-ad-format="horizontal"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+  <footer class="info-footer">
+  <hr />
+  <h3>🧾 What is GST?</h3>
+  <p>
+    GST (Goods and Services Tax) is a comprehensive, multi-stage, destination-based tax that is levied on every value addition. It has replaced many indirect taxes in India like VAT, service tax, and excise duty.
+  </p>
 
-<div style="text-align:center; font-size:14px; color:#666; margin-top:20px;">
-  Made with ❤️ by <strong>Raghav Pratap</strong> · <strong>Pratix Finance © 2025</strong>
-</div>
+  <h3>📈 Benefits of GST</h3>
+  <ul>
+    <li>✅ Unified tax system across the country</li>
+    <li>📦 Eliminates cascading tax effect</li>
+    <li>📊 Higher efficiency in logistics</li>
+    <li>🧾 Transparent and simple tax structure</li>
+    <li>🛒 Reduced overall tax burden on consumers</li>
+  </ul>
+
+  <h3>📊 Why Use a GST Calculator?</h3>
+  <p>
+    A GST calculator helps you determine the GST amount payable or receivable on a given product/service. It's useful for businesses, freelancers, shopkeepers, and customers to understand accurate pricing.
+  </p>
+
+  <h3>🔒 Disclaimer:</h3>
+  <p>
+    This GST calculator is for general informational purposes only. Please consult a tax expert or chartered accountant for accurate tax filings.
+  </p>
+</footer>
+
 </body>
 </html>

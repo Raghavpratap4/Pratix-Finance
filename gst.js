@@ -1,94 +1,111 @@
-let pieChart, previewChart;
+let pieChart, barChart;
 
 function calculateGST() {
-  const amount = parseFloat(document.getElementById("amount").value) || 0;
-  const rate = parseFloat(document.getElementById("gstRate").value) || 0;
-  const gst = (amount * rate) / 100;
-  const total = amount + gst;
+  const amount = parseFloat(document.getElementById("amount").value);
+  const rate = parseFloat(document.getElementById("rate").value);
 
-  document.getElementById("gstAmount").textContent = gst.toFixed(2);
-  document.getElementById("totalAmount").textContent = total.toFixed(2);
-
-  renderPieChart(gst, amount);
-}
-
-function renderPieChart(gst, base) {
-  const ctx = document.getElementById("gstPieChart").getContext("2d");
-  if (pieChart) pieChart.destroy();
-  pieChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Base Amount', 'GST'],
-      datasets: [{ data: [base, gst], backgroundColor: ['#36A2EB', '#FF6384'] }]
-    }
-  });
-}
-
-function resetCalculator() {
-  document.getElementById("amount").value = "";
-  document.getElementById("gstRate").value = "";
-  document.getElementById("gstAmount").textContent = "0";
-  document.getElementById("totalAmount").textContent = "0";
-  if (pieChart) pieChart.destroy();
-}
-
-function showPreview() {
-  const gst = document.getElementById("gstAmount").textContent;
-  const total = document.getElementById("totalAmount").textContent;
-
-  document.getElementById("previewGstAmount").textContent = gst;
-  document.getElementById("previewTotalAmount").textContent = total;
-
-  const base = parseFloat(document.getElementById("amount").value);
-  const gstVal = parseFloat(gst);
-
-  const ctx = document.getElementById("previewPieChart").getContext("2d");
-  if (previewChart) previewChart.destroy();
-  previewChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Base Amount', 'GST'],
-      datasets: [{ data: [base, gstVal], backgroundColor: ['#36A2EB', '#FF6384'] }]
-    }
-  });
-
-  document.getElementById("previewModal").style.display = "block";
-}
-
-function closePreview() {
-  document.getElementById("previewModal").style.display = "none";
-}
-
-function downloadPreviewAsImage() {
-  html2canvas(document.getElementById("previewContent")).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "gst-preview.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  });
-}
-
-function downloadPreviewAsPDF() {
-  html2canvas(document.getElementById("previewContent")).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = 210;
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("gst-preview.pdf");
-  });
-}
-
-function sharePreview() {
-  const shareData = {
-    title: "GST Calculator - Pratix Finance",
-    text: "Check out this GST calculation result!",
-    url: window.location.href
-  };
-  if (navigator.share) {
-    navigator.share(shareData).catch(console.error);
-  } else {
-    alert("Sharing not supported on this device.");
+  if (isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
   }
+
+  const gstAmount = (amount * rate) / 100;
+  const cgst = gstAmount / 2;
+  const sgst = gstAmount / 2;
+  const finalAmount = amount + gstAmount;
+
+  // Update results
+  document.getElementById("cgst").innerText = cgst.toFixed(2);
+  document.getElementById("sgst").innerText = sgst.toFixed(2);
+  document.getElementById("totalGst").innerText = gstAmount.toFixed(2);
+  document.getElementById("finalAmount").innerText = finalAmount.toFixed(2);
+
+  // Chart Data
+  const pieData = {
+    labels: ['Original Amount', 'CGST', 'SGST'],
+    datasets: [{
+      label: 'GST Split',
+      data: [amount, cgst, sgst],
+      backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726'],
+      borderWidth: 1
+    }]
+  };
+
+  const barData = {
+    labels: ['Original', 'CGST', 'SGST', 'Final'],
+    datasets: [{
+      label: 'Amount (₹)',
+      data: [amount, cgst, sgst, finalAmount],
+      backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc']
+    }]
+  };
+
+  const pieConfig = {
+    type: 'pie',
+    data: pieData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'GST Distribution'
+        }
+      }
+    }
+  };
+
+  const barConfig = {
+    type: 'bar',
+    data: barData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'GST Breakdown'
+        }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  };
+
+  // Destroy old charts if exist
+  if (pieChart) pieChart.destroy();
+  if (barChart) barChart.destroy();
+
+  pieChart = new Chart(document.getElementById('gstPieChart'), pieConfig);
+  barChart = new Chart(document.getElementById('gstBarChart'), barConfig);
+}
+
+
+// Optional language translations (to be extended)
+function changeLanguage() {
+  const lang = document.getElementById("language").value;
+  const titles = {
+    en: "GST Calculator",
+    hi: "जीएसटी कैलकुलेटर",
+    fr: "Calculateur de GST",
+    de: "GST-Rechner",
+    ru: "Калькулятор НДС",
+    ja: "GST計算機",
+    bn: "GST ক্যালকুলেটর"
+  };
+  const disclaimers = {
+    en: "This GST calculator provides an estimate for informational purposes only.",
+    hi: "यह GST कैलकुलेटर केवल जानकारी के लिए एक अनुमान प्रदान करता है।",
+    fr: "Ce calculateur de GST fournit une estimation à titre informatif.",
+    de: "Dieser GST-Rechner dient nur zu Informationszwecken.",
+    ru: "Этот калькулятор НДС предназначен только для информационных целей.",
+    ja: "このGST計算機は参考用です。",
+    bn: "এই GST ক্যালকুলেটর শুধুমাত্র তথ্যের জন্য একটি অনুমান প্রদান করে।"
+  };
+
+  document.getElementById("gstTitle").innerText = titles[lang] || titles["en"];
+  document.getElementById("gstDisclaimer").innerText = disclaimers[lang] || disclaimers["en"];
 }
