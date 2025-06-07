@@ -84,28 +84,52 @@
     </style>
 </head>
 <body>
-  <div class="language-toggle">
-  🌐
-  <select id="language-select" onchange="changeLanguage()">
-    <option value="en">English</option>
-    <option value="hi">हिन्दी</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="ru">Русский</option>
-    <option value="ja">日本語</option>
-    <option value="bn">বাংলা</option>
-  </select>
-</div>
+  
 
 <img alt="Pratix Logo" class="logo" src="logo.png"/>
 <h1><span>Pratix</span> Finance</h1>
-<p class="tagline">Finance Tools for Everyone</p>
+<p class="tagline" id="tagline">Finance Tools for Everyone</p>
+<div class="button-container" style="margin: 10px auto; display: flex; justify-content: center;">
+  <div style="
+    background-color: #4CAF50;
+    border-radius: 30px;
+    padding: 12px 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+  ">
+    <select id="language-select" onchange="changeLanguage()" style="
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      padding: 5px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    ">
+      <option value="en">🌐 English</option>
+      <option value="hi">🌐 हिन्दी</option>
+      <option value="bn">🌐 বাংলা</option>
+      <option value="fr">🌐 Français</option>
+      <option value="ru">🌐 Русский</option>
+      <option value="es">🌐 Español</option>
+      <option value="ja">🌐 日本語</option>
+      <option value="ko">🌐 한국어</option>
+    </select>
+  </div>
+</div>
+
 <div class="button-container">
-<a class="calc-button" href="emi-calculator.html">🏠 EMI Calculator</a>
-<a class="calc-button" href="income-tax-calculator.html">💰 Income Tax Calculator</a>
-<a class="calc-button" href="gst-calculator.html">🧾 GST Calculator</a>
-<a class="calc-button" href="sip-calculator.html">📈 SIP Calculator</a>
-<a class="calc-button" href="fd-calculator.html">🏦 FD Calculator</a>
+<a class="calc-button" href="emi-calculator.html">🏠 <span id="emi-btn">EMI Calculator</span></a>
+<a class="calc-button" href="income-tax-calculator.html">💰 <span id="income-btn">Income Tax Calculator</span></a>
+<a class="calc-button" href="gst-calculator.html">🧾 <span id="gst-btn">GST Calculator</span></a>
+<a class="calc-button" href="sip-calculator.html">📈 <span id="sip-btn">SIP Calculator</span></a>
+<a class="calc-button" href="fd-calculator.html">🏦 <span id="fd-btn">FD Calculator</span></a>
 
 
 <script>
@@ -154,5 +178,85 @@
       }
     </script>
     
+
+<script>
+const translations = {
+  en: {
+    tagline: "Finance Tools for Everyone",
+    emi: "🏠 EMI Calculator",
+    income: "💰 Income Tax Calculator",
+    gst: "🧾 GST Calculator",
+    sip: "📈 SIP Calculator",
+    fd: "🏦 Fixed Deposit Calculator"
+  },
+  hi: {
+    tagline: "हर किसी के लिए वित्तीय उपकरण",
+    emi: "🏠 ईएमआई कैलकुलेटर",
+    income: "💰 आयकर कैलकुलेटर",
+    gst: "🧾 जीएसटी कैलकुलेटर",
+    sip: "📈 एसआईपी कैलकुलेटर",
+    fd: "🏦 फिक्स्ड डिपॉज़िट कैलकुलेटर"
+  },
+  bn: {
+    tagline: "সবার জন্য আর্থিক সরঞ্জাম",
+    emi: "🏠 ইএমআই ক্যালকুলেটর",
+    income: "💰 আয়কর ক্যালকুলেটর",
+    gst: "🧾 জিএসটি ক্যালকুলেটর",
+    sip: "📈 এসআইপি ক্যালকুলেটর",
+    fd: "🏦 ফিক্সড ডিপোজিট ক্যালকুলেটর"
+  },
+  fr: {
+    tagline: "Outils financiers pour tous",
+    emi: "🏠 Calculateur de prêt",
+    income: "💰 Calculateur d'impôt",
+    gst: "🧾 Calculateur de TVA",
+    sip: "📈 Calculateur SIP",
+    fd: "🏦 Calculateur de dépôt à terme"
+  },
+  ru: {
+    tagline: "Финансовые инструменты для всех",
+    emi: "🏠 Калькулятор EMI",
+    income: "💰 Налоговый калькулятор",
+    gst: "🧾 Калькулятор НДС",
+    sip: "📈 Калькулятор SIP",
+    fd: "🏦 Калькулятор депозита"
+  },
+  es: {
+    tagline: "Herramientas financieras para todos",
+    emi: "🏠 Calculadora EMI",
+    income: "💰 Calculadora de impuestos",
+    gst: "🧾 Calculadora de IVA",
+    sip: "📈 Calculadora SIP",
+    fd: "🏦 Calculadora de depósito fijo"
+  },
+  ja: {
+    tagline: "すべての人のための金融ツール",
+    emi: "🏠 EMI計算機",
+    income: "💰 所得税計算機",
+    gst: "🧾 消費税計算機",
+    sip: "📈 SIP計算機",
+    fd: "🏦 定期預金計算機"
+  },
+  ko: {
+    tagline: "모두를 위한 금융 도구",
+    emi: "🏠 EMI 계산기",
+    income: "💰 소득세 계산기",
+    gst: "🧾 GST 계산기",
+    sip: "📈 SIP 계산기",
+    fd: "🏦 정기예금 계산기"
+  }
+};
+
+function changeLanguage() {
+  const lang = document.getElementById('language-select').value;
+  document.getElementById('tagline').textContent = translations[lang].tagline;
+  document.getElementById('emi-btn').textContent = translations[lang].emi;
+  document.getElementById('income-btn').textContent = translations[lang].income;
+  document.getElementById('gst-btn').textContent = translations[lang].gst;
+  document.getElementById('sip-btn').textContent = translations[lang].sip;
+  document.getElementById('fd-btn').textContent = translations[lang].fd;
+}
+</script>
+
 </body>
 </html>
