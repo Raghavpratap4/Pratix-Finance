@@ -1,102 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Income Tax Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #f4f4f4, #e8f0fe);
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #f7f8fc, #d6e0f5);
-      color: #333;
-    }
-    header {
-      text-align: center;
-      padding: 1rem;
-    }
-    header img {
-      height: 60px;
-    }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 0.2rem;
+      padding: 20px;
     }
     .container {
       max-width: 600px;
       margin: auto;
       background: white;
-      padding: 1.5rem;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    select, input {
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label, select, input, button {
+      display: block;
       width: 100%;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      font-size: 1rem;
+      margin: 10px 0;
     }
     button {
-      width: 32%;
-      padding: 0.8rem;
-      margin: 0.5rem 1% 0.5rem 0;
-      border: none;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
+      padding: 10px;
+      background-color: #007bff;
       color: white;
-      background: #4a63f2;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
-    button:last-child {
-      margin-right: 0;
+    button:hover {
+      background-color: #0056b3;
     }
-    .results {
-      margin-top: 1rem;
-      background: #f1f5ff;
-      padding: 1rem;
-      border-radius: 12px;
+    .result {
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
     }
-    .preview-mode {
-      display: none;
-      padding: 1rem;
-      background: #fffaf0;
-      margin-top: 1.5rem;
-      border-radius: 12px;
+    #languageSelector {
+      margin-bottom: 15px;
+    }
+    footer {
       text-align: center;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      padding: 1rem;
+      font-size: 0.9em;
       color: #555;
-    }
-    canvas {
-      max-width: 100%;
-      margin: 1rem 0;
-    }
-    @media(max-width: 600px) {
-      button {
-        width: 100%;
-        margin: 0.5rem 0;
-      }
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Pratix Finance Logo" />
-    <h1 data-translate="title">Income Tax Calculator</h1>
-  </header>
-
   <div class="container">
-    <label for="language"><b data-translate="selectLanguage">Select Language</b></label>
-    <select id="language" onchange="changeLanguage()">
+    <select id="languageSelector">
       <option value="en">English</option>
       <option value="hi">हिन्दी</option>
       <option value="bn">বাংলা</option>
@@ -107,334 +72,74 @@
       <option value="ko">한국어</option>
     </select>
 
-    <label data-translate="financialYear">Select Financial Year:</label>
-    <select id="financialYear">
-      <option value="2024">2024-25</option>
-      <option value="2023">2023-24</option>
-    </select>
+    <h1 data-translate="title">Income Tax Calculator</h1>
+    <label for="income" data-translate="enterIncome">Enter Annual Income (₹)</label>
+    <input type="number" id="income" placeholder="500000">
 
-    <label data-translate="ageGroup">Select Age Group:</label>
-    <select id="ageGroup">
-      <option value="below60" data-translate="below60">Below 60 Years</option>
-      <option value="senior" data-translate="senior">Senior Citizen (60-79)</option>
-      <option value="superSenior" data-translate="superSenior">Super Senior (80+)</option>
-    </select>
+    <button onclick="calculateTax()" data-translate="calculate">Calculate</button>
+    <button onclick="resetForm()" data-translate="reset">Reset</button>
+    <button onclick="showPreview()" data-translate="preview">Preview</button>
 
-    <label data-translate="taxRegime">Choose Tax Regime:</label>
-    <select id="taxRegime">
-      <option value="new" data-translate="newRegime">New Regime</option>
-      <option value="old" data-translate="oldRegime">Old Regime</option>
-    </select>
+    <div id="resultSection" class="result" style="display:none;"></div>
 
-    <label data-translate="enterIncome">Enter Your Annual Income (INR):</label>
-    <input type="number" id="income" placeholder="Ex: 750000" />
-
-    <div style="display: flex; gap: 10px;">
-      <button onclick="calculateTax()" data-translate="calculate">Calculate</button>
-      <button onclick="resetForm()" data-translate="reset">Reset</button>
-      <button onclick="showPreview()" data-translate="preview">Preview</button>
-    </div>
-
-    <div class="results" id="resultSection"></div>
-
-    <div class="preview-mode" id="previewSection">
-      <h2 data-translate="previewTitle">Income Tax Summary</h2>
-      <div id="previewData"></div>
-      <canvas id="taxPieChart"></canvas>
-      <canvas id="taxBarChart"></canvas>
-      <div style="margin-top: 10px;">
-        <button onclick="downloadImage()" data-translate="downloadImage">Download Image</button>
-        <button onclick="downloadPDF()" data-translate="downloadPDF">Download PDF</button>
-        <button onclick="shareResult()" data-translate="share">Share</button>
+    <div id="previewSection" style="display:none; padding: 20px; background:#fff; border-radius:12px; box-shadow:0 0 10px rgba(0,0,0,0.2); margin-top: 20px;">
+      <div id="previewArea">
+        <img src="logo.png" alt="Pratix Finance Logo" style="width:100px;">
+        <h2 data-translate="previewTitle">Income Tax Summary</h2>
+        <div id="previewData"></div>
+        <canvas id="pieChart" style="max-width:300px;"></canvas>
+        <canvas id="barChart" style="max-width:300px;"></canvas>
+        <div style="margin-top:10px;">
+          <button onclick="downloadImage()" data-translate="downloadImage">Download Image</button>
+          <button onclick="downloadPDF()" data-translate="downloadPDF">Download PDF</button>
+          <button onclick="shareResult()" data-translate="share">Share</button>
+        </div>
       </div>
     </div>
+
+    <footer>
+      <p data-translate="footer">This Income Tax Calculator helps you estimate tax under India’s current slabs. For official info, consult a tax professional. Contact: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
+    </footer>
   </div>
 
-  <div class="footer">
-    <p data-translate="footerText">
-      This Income Tax Calculator helps you estimate your tax liability as per latest Indian tax slabs.  
-      For more queries, contact:  
-      <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a>
-    </p>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // JS will be added in Part 2
+    const translations = {
+      en: {
+        title: "Income Tax Calculator",
+        enterIncome: "Enter Annual Income (₹)",
+        calculate: "Calculate",
+        reset: "Reset",
+        preview: "Preview",
+        previewTitle: "Income Tax Summary",
+        downloadImage: "Download Image",
+        downloadPDF: "Download PDF",
+        share: "Share",
+        yourTax: "Your Income Tax is:",
+        income: "Annual Income:",
+        tax: "Tax Payable:",
+        afterTax: "Remaining Income:",
+        footer: "This Income Tax Calculator helps you estimate tax under India’s current slabs. For official info, consult a tax professional. Contact: pratixfinance4@gmail.com"
+      },
+      hi: {title:"इनकम टैक्स कैलकुलेटर",enterIncome:"वार्षिक आय दर्ज करें (₹)",calculate:"गणना करें",reset:"रीसेट करें",preview:"पूर्वावलोकन",previewTitle:"आयकर सारांश",downloadImage:"छवि डाउनलोड करें",downloadPDF:"पीडीएफ डाउनलोड करें",share:"साझा करें",yourTax:"आपका आयकर है:",income:"वार्षिक आय:",tax:"देय कर:",afterTax:"शेष आय:",footer:"यह इनकम टैक्स कैलकुलेटर भारत के वर्तमान स्लैब के तहत टैक्स का अनुमान लगाने में मदद करता है। आधिकारिक जानकारी के लिए एक टैक्स प्रोफेशनल से परामर्श करें। संपर्क: pratixfinance4@gmail.com"},
+      bn: {title:"আয়কর ক্যালকুলেটর",enterIncome:"বার্ষিক আয় লিখুন (₹)",calculate:"গণনা করুন",reset:"রিসেট করুন",preview:"পূর্বরূপ",previewTitle:"আয়কর সংক্ষিপ্তসার",downloadImage:"ছবি ডাউনলোড করুন",downloadPDF:"পিডিএফ ডাউনলোড করুন",share:"শেয়ার করুন",yourTax:"আপনার আয়কর:",income:"বার্ষিক আয়:",tax:"করযোগ্য:",afterTax:"অবশিষ্ট আয়:",footer:"এই আয়কর ক্যালকুলেটর আপনাকে ভারতের বর্তমান স্ল্যাব অনুসারে ট্যাক্স অনুমান করতে সাহায্য করে। আনুষ্ঠানিক তথ্যের জন্য, একজন ট্যাক্স পেশাদারের সাথে পরামর্শ করুন। যোগাযোগ: pratixfinance4@gmail.com"},
+      fr: {title:"Calculateur d'impôt sur le revenu",enterIncome:"Entrez le revenu annuel (₹)",calculate:"Calculer",reset:"Réinitialiser",preview:"Aperçu",previewTitle:"Résumé de l'impôt",downloadImage:"Télécharger l'image",downloadPDF:"Télécharger le PDF",share:"Partager",yourTax:"Votre impôt sur le revenu est:",income:"Revenu annuel:",tax:"Impôt dû:",afterTax:"Revenu restant:",footer:"Ce calculateur d'impôt vous aide à estimer l'impôt selon les tranches actuelles de l'Inde. Pour des informations officielles, consultez un professionnel. Contact: pratixfinance4@gmail.com"},
+      ru: {title:"Калькулятор подоходного налога",enterIncome:"Введите годовой доход (₹)",calculate:"Рассчитать",reset:"Сброс",preview:"Предпросмотр",previewTitle:"Сводка по налогам",downloadImage:"Скачать изображение",downloadPDF:"Скачать PDF",share:"Поделиться",yourTax:"Ваш подоходный налог:",income:"Годовой доход:",tax:"Подлежащий оплате налог:",afterTax:"Оставшийся доход:",footer:"Этот калькулятор налога помогает оценить налог по действующим ставкам в Индии. Для официальной информации проконсультируйтесь со специалистом. Контакт: pratixfinance4@gmail.com"},
+      es: {title:"Calculadora de Impuesto sobre la Renta",enterIncome:"Ingrese ingreso anual (₹)",calculate:"Calcular",reset:"Restablecer",preview:"Vista previa",previewTitle:"Resumen de Impuestos",downloadImage:"Descargar Imagen",downloadPDF:"Descargar PDF",share:"Compartir",yourTax:"Su impuesto sobre la renta es:",income:"Ingreso anual:",tax:"Impuesto a pagar:",afterTax:"Ingreso restante:",footer:"Esta calculadora le ayuda a estimar impuestos bajo los tramos actuales de India. Para información oficial, consulte a un profesional. Contacto: pratixfinance4@gmail.com"},
+      ja: {title:"所得税計算機",enterIncome:"年間所得を入力 (₹)",calculate:"計算",reset:"リセット",preview:"プレビュー",previewTitle:"税金の概要",downloadImage:"画像をダウンロード",downloadPDF:"PDFをダウンロード",share:"共有",yourTax:"あなたの所得税は:",income:"年間所得:",tax:"支払う税金:",afterTax:"残りの所得:",footer:"この計算機は、インドの現行税率に基づいて税金を見積もるのに役立ちます。公式情報は税理士にご相談ください。連絡先: pratixfinance4@gmail.com"},
+      ko: {title:"소득세 계산기",enterIncome:"연간 소득 입력 (₹)",calculate:"계산",reset:"초기화",preview:"미리보기",previewTitle:"소득세 요약",downloadImage:"이미지 다운로드",downloadPDF:"PDF 다운로드",share:"공유",yourTax:"당신의 소득세는:",income:"연간 소득:",tax:"납부 세금:",afterTax:"남은 소득:",footer:"이 소득세 계산기는 인도의 현재 세율에 따라 세금을 추정하는 데 도움이 됩니다. 공식 정보는 세무 전문가에게 문의하세요. 연락처: pratixfinance4@gmail.com"}
+    };
+
+    document.getElementById('languageSelector').addEventListener('change', changeLanguage);
+
+    function changeLanguage() {
+      const lang = document.getElementById("languageSelector").value;
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+    }
   </script>
-  <script>
-const translations = {
-  en: {
-    title: "Income Tax Calculator",
-    selectLanguage: "Select Language",
-    financialYear: "Select Financial Year:",
-    ageGroup: "Select Age Group:",
-    below60: "Below 60 Years",
-    senior: "Senior Citizen (60-79)",
-    superSenior: "Super Senior (80+)",
-    taxRegime: "Choose Tax Regime:",
-    newRegime: "New Regime",
-    oldRegime: "Old Regime",
-    enterIncome: "Enter Your Annual Income (INR):",
-    calculate: "Calculate",
-    reset: "Reset",
-    preview: "Preview",
-    previewTitle: "Income Tax Summary",
-    downloadImage: "Download Image",
-    downloadPDF: "Download PDF",
-    share: "Share",
-    footerText: "This Income Tax Calculator helps you estimate your tax liability as per latest Indian tax slabs. For more queries, contact:"
-  },
-  hi: {
-    title: "इनकम टैक्स कैलकुलेटर",
-    selectLanguage: "भाषा चुनें",
-    financialYear: "वित्तीय वर्ष चुनें:",
-    ageGroup: "आयु वर्ग चुनें:",
-    below60: "60 वर्ष से कम",
-    senior: "वरिष्ठ नागरिक (60-79)",
-    superSenior: "अति वरिष्ठ (80+)",
-    taxRegime: "कर प्रणाली चुनें:",
-    newRegime: "नई प्रणाली",
-    oldRegime: "पुरानी प्रणाली",
-    enterIncome: "अपनी वार्षिक आय दर्ज करें (INR):",
-    calculate: "गणना करें",
-    reset: "रीसेट",
-    preview: "पूर्वावलोकन",
-    previewTitle: "इनकम टैक्स सारांश",
-    downloadImage: "छवि डाउनलोड करें",
-    downloadPDF: "पीडीएफ डाउनलोड करें",
-    share: "साझा करें",
-    footerText: "यह इनकम टैक्स कैलकुलेटर आपकी कर देनदारी का अनुमान लगाने में मदद करता है। अधिक जानकारी के लिए संपर्क करें:"
-  },
-  bn: {
-    title: "আয়কর ক্যালকুলেটর",
-    selectLanguage: "ভাষা নির্বাচন করুন",
-    financialYear: "আর্থিক বছর নির্বাচন করুন:",
-    ageGroup: "বয়সের গ্রুপ নির্বাচন করুন:",
-    below60: "৬০ বছরের নিচে",
-    senior: "সিনিয়র নাগরিক (৬০-৭৯)",
-    superSenior: "সুপার সিনিয়র (৮০+)",
-    taxRegime: "কর পদ্ধতি নির্বাচন করুন:",
-    newRegime: "নতুন পদ্ধতি",
-    oldRegime: "পুরাতন পদ্ধতি",
-    enterIncome: "আপনার বার্ষিক আয় লিখুন (INR):",
-    calculate: "গণনা করুন",
-    reset: "রিসেট",
-    preview: "পূর্বরূপ",
-    previewTitle: "আয়কর সারাংশ",
-    downloadImage: "ছবি ডাউনলোড করুন",
-    downloadPDF: "পিডিএফ ডাউনলোড করুন",
-    share: "শেয়ার করুন",
-    footerText: "এই আয়কর ক্যালকুলেটর আপনাকে সর্বশেষ কর স্ল্যাব অনুযায়ী কর হিসাব করতে সাহায্য করে। আরও তথ্যের জন্য যোগাযোগ করুন:"
-  },
-  fr: {
-    title: "Calculateur d'impôt sur le revenu",
-    selectLanguage: "Choisir la langue",
-    financialYear: "Sélectionnez l'année fiscale :",
-    ageGroup: "Sélectionnez le groupe d'âge :",
-    below60: "Moins de 60 ans",
-    senior: "Citoyen senior (60-79)",
-    superSenior: "Super senior (80+)",
-    taxRegime: "Choisissez le régime fiscal :",
-    newRegime: "Nouveau régime",
-    oldRegime: "Ancien régime",
-    enterIncome: "Entrez votre revenu annuel (INR) :",
-    calculate: "Calculer",
-    reset: "Réinitialiser",
-    preview: "Aperçu",
-    previewTitle: "Résumé de l'impôt sur le revenu",
-    downloadImage: "Télécharger l'image",
-    downloadPDF: "Télécharger le PDF",
-    share: "Partager",
-    footerText: "Ce calculateur vous aide à estimer votre impôt selon les barèmes fiscaux indiens. Contactez-nous pour toute question :"
-  },
-  ru: {
-    title: "Калькулятор подоходного налога",
-    selectLanguage: "Выберите язык",
-    financialYear: "Выберите финансовый год:",
-    ageGroup: "Выберите возрастную группу:",
-    below60: "До 60 лет",
-    senior: "Пожилой гражданин (60-79)",
-    superSenior: "Супер пожилой (80+)",
-    taxRegime: "Выберите налоговый режим:",
-    newRegime: "Новый режим",
-    oldRegime: "Старый режим",
-    enterIncome: "Введите ваш годовой доход (INR):",
-    calculate: "Рассчитать",
-    reset: "Сбросить",
-    preview: "Предпросмотр",
-    previewTitle: "Сводка по подоходному налогу",
-    downloadImage: "Скачать изображение",
-    downloadPDF: "Скачать PDF",
-    share: "Поделиться",
-    footerText: "Этот калькулятор помогает рассчитать подоходный налог согласно последним налоговым ставкам Индии. Свяжитесь с нами:"
-  },
-  es: {
-    title: "Calculadora de Impuesto sobre la Renta",
-    selectLanguage: "Seleccionar idioma",
-    financialYear: "Seleccionar año fiscal:",
-    ageGroup: "Seleccionar grupo de edad:",
-    below60: "Menos de 60 años",
-    senior: "Ciudadano senior (60-79)",
-    superSenior: "Súper senior (80+)",
-    taxRegime: "Seleccionar régimen fiscal:",
-    newRegime: "Nuevo régimen",
-    oldRegime: "Régimen antiguo",
-    enterIncome: "Ingrese su ingreso anual (INR):",
-    calculate: "Calcular",
-    reset: "Restablecer",
-    preview: "Vista previa",
-    previewTitle: "Resumen del impuesto sobre la renta",
-    downloadImage: "Descargar imagen",
-    downloadPDF: "Descargar PDF",
-    share: "Compartir",
-    footerText: "Esta calculadora le ayuda a estimar su impuesto según las tablas fiscales de la India. Para más información, contacte con:"
-  },
-  ja: {
-    title: "所得税計算機",
-    selectLanguage: "言語を選択",
-    financialYear: "会計年度を選択：",
-    ageGroup: "年齢グループを選択：",
-    below60: "60歳未満",
-    senior: "高齢者 (60〜79歳)",
-    superSenior: "超高齢者 (80歳以上)",
-    taxRegime: "課税制度を選択：",
-    newRegime: "新制度",
-    oldRegime: "旧制度",
-    enterIncome: "年間所得を入力してください (INR)：",
-    calculate: "計算する",
-    reset: "リセット",
-    preview: "プレビュー",
-    previewTitle: "所得税の概要",
-    downloadImage: "画像をダウンロード",
-    downloadPDF: "PDFをダウンロード",
-    share: "共有する",
-    footerText: "この所得税計算機は、最新のインドの税率に基づいて税金を見積もるのに役立ちます。詳細はお問い合わせください："
-  },
-  ko: {
-    title: "소득세 계산기",
-    selectLanguage: "언어 선택",
-    financialYear: "회계 연도 선택:",
-    ageGroup: "연령대 선택:",
-    below60: "60세 미만",
-    senior: "시니어 시민 (60-79)",
-    superSenior: "슈퍼 시니어 (80+)",
-    taxRegime: "세금 제도 선택:",
-    newRegime: "신규 제도",
-    oldRegime: "구 제도",
-    enterIncome: "연간 소득 입력 (INR):",
-    calculate: "계산",
-    reset: "초기화",
-    preview: "미리보기",
-    previewTitle: "소득세 요약",
-    downloadImage: "이미지 다운로드",
-    downloadPDF: "PDF 다운로드",
-    share: "공유",
-    footerText: "이 소득세 계산기는 최신 인도 세금 기준에 따라 세금을 추정하는 데 도움이 됩니다. 문의사항은:"
-  }
-};
-
-function changeLanguage() {
-  const lang = document.getElementById("language").value;
-  const elements = document.querySelectorAll("[data-translate]");
-  elements.forEach(el => {
-    const key = el.getAttribute("data-translate");
-    if (translations[lang] && translations[lang][key]) {
-      el.innerText = translations[lang][key];
-    }
-  });
-  const options = document.querySelectorAll("option[data-translate]");
-  options.forEach(option => {
-    const key = option.getAttribute("data-translate");
-    const langCode = document.getElementById("language").value;
-    if (translations[langCode][key]) {
-      option.textContent = translations[langCode][key];
-    }
-  });
-}
-
-function calculateTax() {
-  const income = parseFloat(document.getElementById("income").value);
-  const ageGroup = document.getElementById("ageGroup").value;
-  const regime = document.getElementById("taxRegime").value;
-  const fy = document.getElementById("financialYear").value;
-
-  if (isNaN(income) || income < 0) {
-    alert("Please enter a valid income.");
-    return;
-  }
-
-  let tax = 0;
-  let slabs = [];
-
-  if (regime === "new") {
-    slabs = [
-      [0, 300000, 0],
-      [300001, 600000, 0.05],
-      [600001, 900000, 0.10],
-      [900001, 1200000, 0.15],
-      [1200001, 1500000, 0.20],
-      [1500001, Infinity, 0.30]
-    ];
-  } else {
-    if (ageGroup === "below60") {
-      slabs = [
-        [0, 250000, 0],
-        [250001, 500000, 0.05],
-        [500001, 1000000, 0.20],
-        [1000001, Infinity, 0.30]
-      ];
-    } else if (ageGroup === "senior") {
-      slabs = [
-        [0, 300000, 0],
-        [300001, 500000, 0.05],
-        [500001, 1000000, 0.20],
-        [1000001, Infinity, 0.30]
-      ];
-    } else {
-      slabs = [
-        [0, 500000, 0],
-        [500001, 1000000, 0.20],
-        [1000001, Infinity, 0.30]
-      ];
-    }
-  }
-
-  let total = 0, remaining = income;
-
-  slabs.forEach(([min, max, rate]) => {
-    if (income > min) {
-      const taxable = Math.min(remaining, max - min);
-      total += taxable * rate;
-      remaining -= taxable;
-    }
-  });
-
-  const cess = total * 0.04;
-  const totalTax = Math.round(total + cess);
-
-  document.getElementById("resultSection").innerHTML = `
-    <h3>Estimated Tax Payable: ₹${totalTax.toLocaleString()}</h3>
-    <p>Financial Year: ${fy}</p>
-    <p>Tax Regime: ${regime === "new" ? "New Regime" : "Old Regime"}</p>
-    <p>Age Group: ${ageGroup}</p>
-    <p>Cess (4%): ₹${Math.round(cess).toLocaleString()}</p>
-  `;
-
-  document.getElementById("previewData").innerHTML = `
-    <h3>Income: ₹${income.toLocaleString()}</h3>
-    <h4>Tax Payable: ₹${totalTax.toLocaleString()}</h4>
-    <p>FY: ${fy}, Regime: ${regime}, Age Group: ${ageGroup}</p>
-    <p>Cess (4%): ₹${Math.round(cess).toLocaleString()}</p>
-  `;
-}
-
-function resetForm() {
-  document.getElementById("income").value = "";
-  document.getElementById("resultSection").innerHTML = "";
-  document.getElementById("previewSection").style.display = "none";
-}
-</script>
-
 </body>
 </html>
