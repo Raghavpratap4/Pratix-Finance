@@ -3,167 +3,277 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GST Calculator | Pratix Finance</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>GST Calculator - Pratix Finance</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #ffffff);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      background: #1976d2;
+      color: white;
+      padding: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #1565c0;
+    }
+
+    #resultSection {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #f1f8e9;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .language {
+      margin-bottom: 1rem;
+      text-align: right;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
-  <select id="languageSelect">
-  <option value="bn">🇧🇩 Bengali</option>
-  <option value="en" selected>🌐 English</option>
-  <option value="fr">🇫🇷 French</option>
-  <option value="hi">🇮🇳 Hindi</option>
-  <option value="ja">🇯🇵 Japanese</option>
-  <option value="ko">🇰🇷 Korean</option>
-  <option value="ru">🇷🇺 Russian</option>
-  <option value="es">🇪🇸 Spanish</option>
-</select>
 
-  <div class="container">
-    <header>
-      <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
-      <h1>GST Calculator</h1>
-    </header>
+<header data-i18n="title">GST Calculator</header>
 
-    <div class="calculator">
-      <div class="input-section">
-        <label for="amount">Enter Amount (₹):</label>
-        <input type="number" id="amount" placeholder="e.g. 1000" />
-
-        <label for="gstRate">Select GST Rate (%):</label>
-        <select id="gstRate">
-          <option value="5">5%</option>
-          <option value="12">12%</option>
-          <option value="18" selected>18%</option>
-          <option value="28">28%</option>
-          <option value="custom">Custom</option>
-        </select>
-
-        <input type="number" id="customRate" placeholder="Custom GST (%)" style="display:none;" />
-        
-        <div class="btn-group">
-          <button id="resetBtn">🔁 Reset</button>
-          <button id="calculateBtn">📊 Calculate</button>
-          <button id="previewBtn">👁️ Preview</button>
-        </div>
-      </div>
-
-      <div class="output-section" id="resultSection" style="display: none;">
-        <h2>GST Calculation Result</h2>
-        <p>CGST: ₹<span id="cgst">0.00</span></p>
-        <p>SGST: ₹<span id="sgst">0.00</span></p>
-        <p>Total GST: ₹<span id="totalGst">0.00</span></p>
-        <p>Final Amount: ₹<span id="finalAmount">0.00</span></p>
-      </div>
-
-      <canvas id="gstChart" style="display:none; max-width: 100%; margin-top: 20px;"></canvas>
-    </div>
-
-    <footer>
-      <p>© 2025 Pratix Finance | Contact: <a href="mailto:pratixfinance@gmail.com">pratixfinance@gmail.com</a></p>
-    </footer>
+<div class="container">
+  <div class="language">
+    <select id="languageSelect">
+      <option value="bn">🇧🇩 Bengali</option>
+      <option value="en" selected>🌐 English</option>
+      <option value="fr">🇫🇷 French</option>
+      <option value="hi">🇮🇳 Hindi</option>
+      <option value="ja">🇯🇵 Japanese</option>
+      <option value="ko">🇰🇷 Korean</option>
+      <option value="ru">🇷🇺 Russian</option>
+      <option value="es">🇪🇸 Spanish</option>
+    </select>
   </div>
-</body>
-</html>
-<!-- Add this just before </body> in your HTML file -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <label data-i18n="enterAmount" for="amount">Enter Amount (₹):</label>
+  <input type="number" id="amount" placeholder="0" />
+
+  <label data-i18n="selectRate" for="rate">Select GST Rate (%):</label>
+  <select id="rate">
+    <option value="5">5%</option>
+    <option value="12">12%</option>
+    <option value="18" selected>18%</option>
+    <option value="28">28%</option>
+  </select>
+
+  <div class="btn-group">
+    <button id="resetBtn" data-i18n="resetBtn">🔁 Reset</button>
+    <button id="calculateBtn" data-i18n="calculateBtn">📊 Calculate</button>
+    <button id="previewBtn" data-i18n="previewBtn">👁️ Preview</button>
+  </div>
+
+  <div id="resultSection">
+    <h3 data-i18n="resultTitle">GST Calculation Result</h3>
+    <p id="cgst"></p>
+    <p id="sgst"></p>
+    <p id="totalGst"></p>
+    <p id="finalAmount"></p>
+  </div>
+</div>
+
 <script>
+  const translations = {
+    bn: {
+      title: "জিএসটি ক্যালকুলেটর",
+      enterAmount: "পরিমাণ লিখুন (₹):",
+      selectRate: "জিএসটি হার নির্বাচন করুন (%):",
+      resetBtn: "🔁 রিসেট",
+      calculateBtn: "📊 হিসাব করুন",
+      previewBtn: "👁️ প্রিভিউ",
+      resultTitle: "জিএসটি হিসাবের ফলাফল",
+      cgstLabel: "সিজিএসটি: ₹",
+      sgstLabel: "এসজিএসটি: ₹",
+      totalGstLabel: "মোট জিএসটি: ₹",
+      finalAmountLabel: "চূড়ান্ত পরিমাণ: ₹"
+    },
+    en: {
+      title: "GST Calculator",
+      enterAmount: "Enter Amount (₹):",
+      selectRate: "Select GST Rate (%):",
+      resetBtn: "🔁 Reset",
+      calculateBtn: "📊 Calculate",
+      previewBtn: "👁️ Preview",
+      resultTitle: "GST Calculation Result",
+      cgstLabel: "CGST: ₹",
+      sgstLabel: "SGST: ₹",
+      totalGstLabel: "Total GST: ₹",
+      finalAmountLabel: "Final Amount: ₹"
+    },
+    fr: {
+      title: "Calculateur de TVA",
+      enterAmount: "Entrez le montant (₹):",
+      selectRate: "Sélectionnez le taux de TVA (%):",
+      resetBtn: "🔁 Réinitialiser",
+      calculateBtn: "📊 Calculer",
+      previewBtn: "👁️ Aperçu",
+      resultTitle: "Résultat du calcul de la TVA",
+      cgstLabel: "CGST: ₹",
+      sgstLabel: "SGST: ₹",
+      totalGstLabel: "TVA totale: ₹",
+      finalAmountLabel: "Montant final: ₹"
+    },
+    hi: {
+      title: "जीएसटी कैलकुलेटर",
+      enterAmount: "राशि दर्ज करें (₹):",
+      selectRate: "जीएसटी दर चुनें (%):",
+      resetBtn: "🔁 रीसेट",
+      calculateBtn: "📊 कैलकुलेट",
+      previewBtn: "👁️ पूर्वावलोकन",
+      resultTitle: "जीएसटी कैलकुलेशन परिणाम",
+      cgstLabel: "सीजीएसटी: ₹",
+      sgstLabel: "एसजीएसटी: ₹",
+      totalGstLabel: "कुल जीएसटी: ₹",
+      finalAmountLabel: "अंतिम राशि: ₹"
+    },
+    ja: {
+      title: "GST計算機",
+      enterAmount: "金額を入力してください (₹):",
+      selectRate: "GST率を選択 (%)：",
+      resetBtn: "🔁 リセット",
+      calculateBtn: "📊 計算する",
+      previewBtn: "👁️ プレビュー",
+      resultTitle: "GST計算結果",
+      cgstLabel: "CGST: ₹",
+      sgstLabel: "SGST: ₹",
+      totalGstLabel: "合計GST: ₹",
+      finalAmountLabel: "最終金額: ₹"
+    },
+    ko: {
+      title: "GST 계산기",
+      enterAmount: "금액 입력 (₹):",
+      selectRate: "GST 비율 선택 (%):",
+      resetBtn: "🔁 초기화",
+      calculateBtn: "📊 계산",
+      previewBtn: "👁️ 미리보기",
+      resultTitle: "GST 계산 결과",
+      cgstLabel: "CGST: ₹",
+      sgstLabel: "SGST: ₹",
+      totalGstLabel: "총 GST: ₹",
+      finalAmountLabel: "최종 금액: ₹"
+    },
+    ru: {
+      title: "Калькулятор НДС",
+      enterAmount: "Введите сумму (₹):",
+      selectRate: "Выберите ставку НДС (%):",
+      resetBtn: "🔁 Сброс",
+      calculateBtn: "📊 Рассчитать",
+      previewBtn: "👁️ Предпросмотр",
+      resultTitle: "Результат расчета НДС",
+      cgstLabel: "CGST: ₹",
+      sgstLabel: "SGST: ₹",
+      totalGstLabel: "Общий НДС: ₹",
+      finalAmountLabel: "Итоговая сумма: ₹"
+    },
+    es: {
+      title: "Calculadora de IVA",
+      enterAmount: "Ingrese el monto (₹):",
+      selectRate: "Seleccione la tasa de IVA (%):",
+      resetBtn: "🔁 Reiniciar",
+      calculateBtn: "📊 Calcular",
+      previewBtn: "👁️ Vista previa",
+      resultTitle: "Resultado del cálculo de IVA",
+      cgstLabel: "CGST: ₹",
+      sgstLabel: "SGST: ₹",
+      totalGstLabel: "IVA total: ₹",
+      finalAmountLabel: "Monto final: ₹"
+    }
+  };
+
+  const languageSelect = document.getElementById('languageSelect');
   const amountInput = document.getElementById('amount');
-  const gstRateSelect = document.getElementById('gstRate');
-  const customRateInput = document.getElementById('customRate');
-  const calculateBtn = document.getElementById('calculateBtn');
-  const resetBtn = document.getElementById('resetBtn');
-  const previewBtn = document.getElementById('previewBtn');
-
+  const rateSelect = document.getElementById('rate');
+  const cgstOutput = document.getElementById('cgst');
+  const sgstOutput = document.getElementById('sgst');
+  const totalGstOutput = document.getElementById('totalGst');
+  const finalAmountOutput = document.getElementById('finalAmount');
   const resultSection = document.getElementById('resultSection');
-  const cgstEl = document.getElementById('cgst');
-  const sgstEl = document.getElementById('sgst');
-  const totalGstEl = document.getElementById('totalGst');
-  const finalAmountEl = document.getElementById('finalAmount');
-  const chartCanvas = document.getElementById('gstChart');
 
-  let chart;
-
-  gstRateSelect.addEventListener('change', () => {
-    if (gstRateSelect.value === 'custom') {
-      customRateInput.style.display = 'block';
-    } else {
-      customRateInput.style.display = 'none';
-    }
-  });
-
-  calculateBtn.addEventListener('click', () => {
-    const amount = parseFloat(amountInput.value);
-    let gstRate =
-      gstRateSelect.value === 'custom'
-        ? parseFloat(customRateInput.value)
-        : parseFloat(gstRateSelect.value);
-
-    if (isNaN(amount) || isNaN(gstRate)) {
-      alert('Please enter valid amount and GST rate.');
-      return;
-    }
-
-    const totalGST = (amount * gstRate) / 100;
-    const cgst = totalGST / 2;
-    const sgst = totalGST / 2;
-    const finalAmount = amount + totalGST;
-
-    cgstEl.textContent = cgst.toFixed(2);
-    sgstEl.textContent = sgst.toFixed(2);
-    totalGstEl.textContent = totalGST.toFixed(2);
-    finalAmountEl.textContent = finalAmount.toFixed(2);
-    resultSection.style.display = 'block';
-
-    renderChart(amount, totalGST);
-  });
-
-  resetBtn.addEventListener('click', () => {
+  document.getElementById('resetBtn').addEventListener('click', () => {
     amountInput.value = '';
-    gstRateSelect.value = '18';
-    customRateInput.value = '';
-    customRateInput.style.display = 'none';
-    resultSection.style.display = 'none';
-    chartCanvas.style.display = 'none';
-
-    if (chart) chart.destroy();
+    cgstOutput.textContent = '';
+    sgstOutput.textContent = '';
+    totalGstOutput.textContent = '';
+    finalAmountOutput.textContent = '';
   });
 
-  previewBtn.addEventListener('click', () => {
-    window.scrollTo({
-      top: resultSection.offsetTop - 20,
-      behavior: 'smooth'
-    });
+  document.getElementById('calculateBtn').addEventListener('click', () => {
+    const amount = parseFloat(amountInput.value);
+    const rate = parseFloat(rateSelect.value);
+    const gst = amount * rate / 100;
+    const cgst = gst / 2;
+    const sgst = gst / 2;
+    const total = amount + gst;
+
+    const lang = languageSelect.value;
+    cgstOutput.textContent = `${translations[lang].cgstLabel} ${cgst.toFixed(2)}`;
+    sgstOutput.textContent = `${translations[lang].sgstLabel} ${sgst.toFixed(2)}`;
+    totalGstOutput.textContent = `${translations[lang].totalGstLabel} ${gst.toFixed(2)}`;
+    finalAmountOutput.textContent = `${translations[lang].finalAmountLabel} ${total.toFixed(2)}`;
   });
 
-  function renderChart(amount, gst) {
-    chartCanvas.style.display = 'block';
-
-    if (chart) chart.destroy(); // Destroy existing chart before re-rendering
-
-    chart = new Chart(chartCanvas, {
-      type: 'doughnut',
-      data: {
-        labels: ['Original Amount', 'Total GST'],
-        datasets: [{
-          data: [amount, gst],
-          backgroundColor: ['#007bff', '#00c49f'],
-          borderColor: ['#004aad', '#007a6f'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          },
-          tooltip: {
-            callbacks: {
-              label: context => `₹ ${context.parsed.toFixed(2)}`
-            }
-          }
-        }
+  languageSelect.addEventListener('change', changeLanguage);
+  function changeLanguage() {
+    const lang = languageSelect.value;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang][key]) {
+        el.textContent = translations[lang][key];
       }
     });
   }
+
+  changeLanguage(); // Set default on load
 </script>
+
+</body>
+</html>
