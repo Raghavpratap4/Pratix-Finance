@@ -3,389 +3,435 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SIP Calculator - Pratix Finance</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>SIP Calculator – Pratix Finance</title>
   <style>
     body {
       margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(to bottom right, #f1f9ff, #dbeeff);
-      color: #333;
-      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+      color: #111;
     }
     .container {
-      max-width: 500px;
+      max-width: 600px;
       margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     .logo {
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #0077cc;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    label, select, input {
+      width: 120px;
       display: block;
-      width: 100%;
-      margin: 10px 0;
+      margin: 0 auto 10px;
     }
-    input, select {
-      padding: 10px;
-      border-radius: 8px;
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .lang-select {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    select {
+      padding: 8px;
+      border-radius: 10px;
+      font-size: 1rem;
       border: 1px solid #ccc;
     }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
     button {
-      margin: 10px 5px;
-      padding: 10px 20px;
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
       border: none;
       border-radius: 10px;
-      background: #0077cc;
-      color: white;
-      font-weight: bold;
       cursor: pointer;
+      transition: background 0.2s;
     }
     button:hover {
-      background: #005fa3;
+      opacity: 0.9;
     }
-    .results {
-      margin-top: 20px;
+    .reset-btn { background: #f87171; color: white; }
+    .calc-btn { background: #34d399; color: white; }
+    .preview-btn { background: #60a5fa; color: white; }
+
+    #result, #previewSection {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 10px;
+    }
+    #charts {
+      margin-top: 1rem;
+    }
+    footer {
       text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
     }
-    canvas {
-      max-width: 100%;
-      margin: 10px auto;
+    a {
+      color: #3b82f6;
+      text-decoration: none;
     }
-    #previewSection {
-      display: none;
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 15px;
-      margin-top: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .hide {
+      display: none !important;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">📈 Pratix Finance</div>
-    <h2 id="sip-title">SIP Calculator</h2>
+  <div class="container" id="mainContent">
+    <img src="https://pratixfinance.in/logo.png" alt="Logo" class="logo" />
+    <h1 id="sipTitle">SIP Calculator</h1>
 
-    <label for="language">🌐 Select Language:</label>
-    <select id="language" onchange="changeLanguage()">
-      <option value="en">English</option>
-      <option value="hi">Hindi</option>
-      <option value="bn">Bengali</option>
-      <option value="fr">French</option>
-      <option value="ru">Russian</option>
-      <option value="es">Spanish</option>
-      <option value="ja">Japanese</option>
-      <option value="ko">Korean</option>
-    </select>
-
-    <label id="labelMonthly">Monthly Investment (₹)</label>
-    <input type="number" id="monthlyInvestment" />
-
-    <label id="labelInterest">Expected Annual Return (%)</label>
-    <input type="number" id="interestRate" />
-
-    <label id="labelYears">Investment Duration (Years)</label>
-    <input type="number" id="investmentPeriod" />
-
-    <div style="text-align:center;">
-      <button onclick="resetFields()">🔄 Reset</button>
-      <button onclick="calculateSIP()">📊 Calculate</button>
-      <button onclick="showPreview()">👁️ Preview</button>
+    <!-- Language Selector -->
+    <div class="lang-select">
+      <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="bn">বাংলা</option>
+        <option value="fr">Français</option>
+        <option value="ru">Русский</option>
+        <option value="es">Español</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+      </select>
     </div>
 
-    <div class="results" id="result"></div>
+    <!-- Input Fields -->
+    <label id="labelMonthly">Monthly Investment (₹):</label>
+    <input type="number" id="monthlyInvestment" placeholder="e.g., 2000" />
 
-    <div id="charts">
-      <canvas id="sipPieChart"></canvas>
-      <canvas id="sipBarChart"></canvas>
+    <label id="labelRate">Expected Annual Return (%):</label>
+    <input type="number" id="annualReturn" placeholder="e.g., 12" />
+
+    <label id="labelYears">Investment Duration (Years):</label>
+    <input type="number" id="investmentPeriod" placeholder="e.g., 10" />
+
+    <!-- Buttons -->
+    <div class="btn-group">
+      <button class="reset-btn" onclick="resetForm()" id="btnReset">Reset</button>
+      <button class="calc-btn" onclick="calculateSIP()" id="btnCalculate">Calculate</button>
+      <button class="preview-btn" onclick="generatePreview()" id="btnPreview">Preview</button>
     </div>
 
-    <div id="previewSection"></div>
-
-    <div id="downloadButtons" style="display:none; text-align:center;">
-      <button onclick="downloadImage()">📷 Download Image</button>
-      <button onclick="downloadPDF()">📄 Download PDF</button>
-      <button onclick="shareResult()">📤 Share</button>
-    </div>
-
-    <div style="margin-top: 40px; font-size: 14px; color: #444; text-align:center;">
-      <p id="description">
-        This SIP (Systematic Investment Plan) calculator helps estimate returns on monthly investments based on expected annual return and investment duration. It's useful for financial planning and wealth accumulation strategies.
-      </p>
-      <p>
-        Contact: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a>
-      </p>
+    <!-- Result Display -->
+    <div id="result" class="hide">
+      <h3 id="resultTitle">Result</h3>
+      <p id="investedAmount"></p>
+      <p id="totalReturn"></p>
+      <p id="maturityValue"></p>
+      <div id="charts">
+        <canvas id="sipPieChart"></canvas>
+        <canvas id="sipBarChart" style="margin-top:20px;"></canvas>
+      </div>
     </div>
   </div>
 
-  <!-- External Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Preview Section (only visible in print/download) -->
+  <div id="previewSection" class="hide">
+    <img src="https://pratixfinance.in/logo.png" alt="Logo" class="logo" />
+    <h1>SIP Calculator</h1>
+    <div id="previewInput"></div>
+    <div id="previewOutput"></div>
+    <div id="previewCharts">
+      <canvas id="previewPieChart"></canvas>
+      <canvas id="previewBarChart" style="margin-top:20px;"></canvas>
+    </div>
+    <div class="btn-group" style="margin-top:20px;">
+      <button onclick="downloadImage()" class="preview-btn" id="btnImage">Download Image</button>
+      <button onclick="downloadPDF()" class="preview-btn" id="btnPDF">Download PDF</button>
+      <button onclick="shareResult()" class="preview-btn" id="btnShare">Share</button>
+    </div>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let pieChart, barChart, previewPieChart, previewBarChart;
 
-  <script>
-    const translations = {
-      en: {
-        monthlyInvestment: "Monthly Investment (₹)",
-        interestRate: "Expected Annual Return (%)",
-        investmentPeriod: "Investment Duration (Years)",
-        invested: "Total Invested",
-        returns: "Estimated Returns",
-        maturity: "Maturity Amount",
-        pieTitle: "Investment Distribution",
-        barTitle: "Investment vs Returns",
-        description: "This SIP (Systematic Investment Plan) calculator helps estimate returns on monthly investments based on expected annual return and investment duration. It's useful for financial planning and wealth accumulation strategies."
-      },
-      hi: {
-        monthlyInvestment: "मासिक निवेश (₹)",
-        interestRate: "अपेक्षित वार्षिक रिटर्न (%)",
-        investmentPeriod: "निवेश अवधि (वर्षों में)",
-        invested: "कुल निवेश",
-        returns: "अनुमानित रिटर्न",
-        maturity: "परिपक्वता राशि",
-        pieTitle: "निवेश वितरण",
-        barTitle: "निवेश बनाम रिटर्न",
-        description: "यह SIP कैलकुलेटर आपके मासिक निवेश पर अनुमानित रिटर्न दिखाता है। यह वित्तीय योजना और धन संचय में मदद करता है।"
-      },
-      bn: {
-        monthlyInvestment: "মাসিক বিনিয়োগ (₹)",
-        interestRate: "প্রত্যাশিত বার্ষিক রিটার্ন (%)",
-        investmentPeriod: "বিনিয়োগের সময়কাল (বছর)",
-        invested: "মোট বিনিয়োগ",
-        returns: "আনুমানিক রিটার্ন",
-        maturity: "পরিপক্কতা পরিমাণ",
-        pieTitle: "বিনিয়োগ বন্টন",
-        barTitle: "বিনিয়োগ বনাম রিটার্ন",
-        description: "এই SIP ক্যালকুলেটরটি প্রত্যাশিত বার্ষিক রিটার্ন এবং সময়কাল অনুযায়ী আপনার বিনিয়োগের রিটার্ন অনুমান করতে সাহায্য করে।"
-      },
-      fr: {
-        monthlyInvestment: "Investissement Mensuel (₹)",
-        interestRate: "Rendement Annuel Attendu (%)",
-        investmentPeriod: "Durée de l'Investissement (années)",
-        invested: "Total Investi",
-        returns: "Rendements Estimés",
-        maturity: "Montant à l'Échéance",
-        pieTitle: "Répartition de l'Investissement",
-        barTitle: "Investissement vs Rendements",
-        description: "Ce calculateur SIP aide à estimer les rendements sur les investissements mensuels selon le taux de rendement annuel attendu et la durée d’investissement."
-      },
-      ru: {
-        monthlyInvestment: "Ежемесячные инвестиции (₹)",
-        interestRate: "Ожидаемая годовая доходность (%)",
-        investmentPeriod: "Срок инвестиций (в годах)",
-        invested: "Общие инвестиции",
-        returns: "Ожидаемая прибыль",
-        maturity: "Сумма к выплате",
-        pieTitle: "Распределение инвестиций",
-        barTitle: "Инвестиции против Дохода",
-        description: "Этот калькулятор SIP помогает оценить доходность от ежемесячных инвестиций по ожидаемой годовой ставке и сроку инвестирования."
-      },
-      es: {
-        monthlyInvestment: "Inversión Mensual (₹)",
-        interestRate: "Rendimiento Anual Esperado (%)",
-        investmentPeriod: "Duración de la Inversión (años)",
-        invested: "Total Invertido",
-        returns: "Rendimientos Estimados",
-        maturity: "Cantidad al Vencimiento",
-        pieTitle: "Distribución de la Inversión",
-        barTitle: "Inversión vs Rendimientos",
-        description: "Esta calculadora SIP ayuda a estimar los rendimientos de las inversiones mensuales según el rendimiento anual esperado y la duración de la inversión."
-      },
-      ja: {
-        monthlyInvestment: "毎月の投資額 (₹)",
-        interestRate: "年間予想収益率 (%)",
-        investmentPeriod: "投資期間 (年)",
-        invested: "総投資額",
-        returns: "予想収益",
-        maturity: "満期金額",
-        pieTitle: "投資配分",
-        barTitle: "投資 vs 収益",
-        description: "このSIP計算機は、毎月の投資と予想される年間利回りに基づいて将来の収益を見積もるのに役立ちます。"
-      },
-      ko: {
-        monthlyInvestment: "월별 투자 금액 (₹)",
-        interestRate: "예상 연간 수익률 (%)",
-        investmentPeriod: "투자 기간 (년)",
-        invested: "총 투자금",
-        returns: "예상 수익",
-        maturity: "만기 금액",
-        pieTitle: "투자 분포",
-        barTitle: "투자 대비 수익",
-        description: "이 SIP 계산기는 월별 투자 및 예상 연간 수익률을 기반으로 수익을 추정하는 데 도움이 됩니다."
-      }
+  function calculateSIP() {
+    const monthly = parseFloat(document.getElementById("monthlyInvestment").value);
+    const rate = parseFloat(document.getElementById("annualReturn").value) / 100 / 12;
+    const years = parseFloat(document.getElementById("investmentPeriod").value);
+    const months = years * 12;
+
+    if (isNaN(monthly) || isNaN(rate) || isNaN(years)) return;
+
+    const investedAmount = monthly * months;
+    const maturityValue = monthly * ((Math.pow(1 + rate, months) - 1) * (1 + rate)) / rate;
+    const totalReturn = maturityValue - investedAmount;
+
+    document.getElementById("result").classList.remove("hide");
+    document.getElementById("investedAmount").textContent = currentLangData.invested + ": ₹" + investedAmount.toFixed(2);
+    document.getElementById("totalReturn").textContent = currentLangData.returns + ": ₹" + totalReturn.toFixed(2);
+    document.getElementById("maturityValue").textContent = currentLangData.maturity + ": ₹" + maturityValue.toFixed(2);
+
+    drawCharts(investedAmount, totalReturn, maturityValue, false);
+  }
+
+  function resetForm() {
+    document.getElementById("monthlyInvestment").value = "";
+    document.getElementById("annualReturn").value = "";
+    document.getElementById("investmentPeriod").value = "";
+    document.getElementById("result").classList.add("hide");
+    if (pieChart) pieChart.destroy();
+    if (barChart) barChart.destroy();
+  }
+
+  function drawCharts(invested, returns, maturity, previewMode) {
+    const pieCtx = previewMode ? document.getElementById("previewPieChart") : document.getElementById("sipPieChart");
+    const barCtx = previewMode ? document.getElementById("previewBarChart") : document.getElementById("sipBarChart");
+
+    const pieData = {
+      labels: [currentLangData.invested, currentLangData.returns],
+      datasets: [{
+        data: [invested, returns],
+        backgroundColor: ['#34d399', '#60a5fa']
+      }]
     };
 
-    let lang = "en";
-    function changeLanguage() {
-      lang = document.getElementById("language").value;
-      const t = translations[lang];
-      document.getElementById("labelMonthly").innerText = t.monthlyInvestment;
-      document.getElementById("labelInterest").innerText = t.interestRate;
-      document.getElementById("labelYears").innerText = t.investmentPeriod;
-      document.getElementById("sip-title").innerText = "SIP Calculator";
-      document.getElementById("description").innerText = t.description;
-    }
+    const barData = {
+      labels: [currentLangData.invested, currentLangData.returns, currentLangData.maturity],
+      datasets: [{
+        label: currentLangData.chartLabel,
+        data: [invested, returns, maturity],
+        backgroundColor: ['#34d399', '#60a5fa', '#fbbf24']
+      }]
+    };
 
-    let pieChart, barChart;
-    function calculateSIP() {
-      const t = translations[lang];
-      const monthly = parseFloat(document.getElementById("monthlyInvestment").value);
-      const rate = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
-      const years = parseInt(document.getElementById("investmentPeriod").value);
-      const months = years * 12;
+    const pieOptions = { responsive: true, plugins: { legend: { position: 'bottom' } } };
+    const barOptions = { responsive: true, scales: { y: { beginAtZero: true } } };
 
-      const maturity = monthly * (((Math.pow(1 + rate, months) - 1) / rate) * (1 + rate));
-      const invested = monthly * months;
-      const returns = maturity - invested;
-
-      document.getElementById("result").innerHTML = `
-        <h3>${t.maturity}: ₹${maturity.toFixed(2)}</h3>
-        <p>${t.invested}: ₹${invested.toFixed(2)}</p>
-        <p>${t.returns}: ₹${returns.toFixed(2)}</p>
-      `;
-
+    if (previewMode) {
+      if (previewPieChart) previewPieChart.destroy();
+      if (previewBarChart) previewBarChart.destroy();
+      previewPieChart = new Chart(pieCtx, { type: 'pie', data: pieData, options: pieOptions });
+      previewBarChart = new Chart(barCtx, { type: 'bar', data: barData, options: barOptions });
+    } else {
       if (pieChart) pieChart.destroy();
       if (barChart) barChart.destroy();
-
-      const pieCtx = document.getElementById("sipPieChart").getContext("2d");
-      const barCtx = document.getElementById("sipBarChart").getContext("2d");
-
-      pieChart = new Chart(pieCtx, {
-        type: "pie",
-        data: {
-          labels: [t.invested, t.returns],
-          datasets: [{
-            data: [invested, returns],
-            backgroundColor: ["#4caf50", "#ff9800"]
-          }]
-        },
-        options: { responsive: true, plugins: { title: { display: true, text: t.pieTitle } } }
-      });
-
-      barChart = new Chart(barCtx, {
-        type: "bar",
-        data: {
-          labels: [t.invested, t.returns],
-          datasets: [{
-            label: t.barTitle,
-            data: [invested, returns],
-            backgroundColor: ["#4caf50", "#ff9800"]
-          }]
-        },
-        options: { responsive: true, plugins: { legend: { display: false }, title: { display: true, text: t.barTitle } } }
-      });
+      pieChart = new Chart(pieCtx, { type: 'pie', data: pieData, options: pieOptions });
+      barChart = new Chart(barCtx, { type: 'bar', data: barData, options: barOptions });
     }
+  }
 
-    function resetFields() {
-      document.getElementById("monthlyInvestment").value = "";
-      document.getElementById("interestRate").value = "";
-      document.getElementById("investmentPeriod").value = "";
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("sipPieChart").getContext("2d").clearRect(0, 0, 400, 400);
-      document.getElementById("sipBarChart").getContext("2d").clearRect(0, 0, 400, 400);
-      if (pieChart) pieChart.destroy();
-      if (barChart) barChart.destroy();
-      document.getElementById("previewSection").style.display = "none";
-      document.getElementById("downloadButtons").style.display = "none";
+  function generatePreview() {
+    const monthly = document.getElementById("monthlyInvestment").value;
+    const rate = document.getElementById("annualReturn").value;
+    const years = document.getElementById("investmentPeriod").value;
+
+    if (!monthly || !rate || !years) return;
+
+    const monthlyVal = parseFloat(monthly);
+    const rateVal = parseFloat(rate) / 100 / 12;
+    const months = parseFloat(years) * 12;
+
+    const investedAmount = monthlyVal * months;
+    const maturityValue = monthlyVal * ((Math.pow(1 + rateVal, months) - 1) * (1 + rateVal)) / rateVal;
+    const totalReturn = maturityValue - investedAmount;
+
+    document.getElementById("previewSection").classList.remove("hide");
+    document.getElementById("mainContent").classList.add("hide");
+
+    // Set preview content
+    document.getElementById("previewInput").innerHTML = `
+      <p>${currentLangData.monthly}: ₹${monthly}</p>
+      <p>${currentLangData.rate}: ${rate}%</p>
+      <p>${currentLangData.years}: ${years}</p>
+    `;
+    document.getElementById("previewOutput").innerHTML = `
+      <p>${currentLangData.invested}: ₹${investedAmount.toFixed(2)}</p>
+      <p>${currentLangData.returns}: ₹${totalReturn.toFixed(2)}</p>
+      <p>${currentLangData.maturity}: ₹${maturityValue.toFixed(2)}</p>
+    `;
+
+    drawCharts(investedAmount, totalReturn, maturityValue, true);
+  }
+
+  let currentLangData = {};
+
+  const translations = {
+    en: {
+      sip: "SIP Calculator",
+      monthly: "Monthly Investment",
+      rate: "Expected Annual Return (%)",
+      years: "Investment Duration (Years)",
+      invested: "Invested Amount",
+      returns: "Total Returns",
+      maturity: "Maturity Value",
+      chartLabel: "SIP Projection"
+    },
+    hi: {
+      sip: "एसआईपी कैलकुलेटर",
+      monthly: "मासिक निवेश",
+      rate: "अपेक्षित वार्षिक रिटर्न (%)",
+      years: "निवेश अवधि (वर्षों में)",
+      invested: "निवेश राशि",
+      returns: "कुल लाभ",
+      maturity: "परिपक्व राशि",
+      chartLabel: "एसआईपी प्रक्षेपण"
+    },
+    bn: {
+      sip: "এসআইপি ক্যালকুলেটর",
+      monthly: "মাসিক বিনিয়োগ",
+      rate: "প্রত্যাশিত বার্ষিক রিটার্ন (%)",
+      years: "বিনিয়োগ সময়কাল (বছর)",
+      invested: "বিনিয়োগকৃত অর্থ",
+      returns: "মোট রিটার্ন",
+      maturity: "পরিপক্কতার মূল্য",
+      chartLabel: "এসআইপি প্রকল্প"
+    },
+    fr: {
+      sip: "Calculateur SIP",
+      monthly: "Investissement mensuel",
+      rate: "Rendement annuel attendu (%)",
+      years: "Durée d'investissement (années)",
+      invested: "Montant investi",
+      returns: "Retour total",
+      maturity: "Valeur à l'échéance",
+      chartLabel: "Projection SIP"
+    },
+    ru: {
+      sip: "Калькулятор SIP",
+      monthly: "Ежемесячные инвестиции",
+      rate: "Ожидаемая годовая доходность (%)",
+      years: "Срок инвестирования (лет)",
+      invested: "Инвестированная сумма",
+      returns: "Общая прибыль",
+      maturity: "Сумма к получению",
+      chartLabel: "Прогноз SIP"
+    },
+    es: {
+      sip: "Calculadora SIP",
+      monthly: "Inversión mensual",
+      rate: "Retorno anual esperado (%)",
+      years: "Duración de inversión (años)",
+      invested: "Monto invertido",
+      returns: "Retornos totales",
+      maturity: "Valor de madurez",
+      chartLabel: "Proyección SIP"
+    },
+    ja: {
+      sip: "SIP計算機",
+      monthly: "毎月の投資額",
+      rate: "期待される年間リターン (%)",
+      years: "投資期間（年）",
+      invested: "投資額",
+      returns: "総リターン",
+      maturity: "満期金額",
+      chartLabel: "SIP予測"
+    },
+    ko: {
+      sip: "SIP 계산기",
+      monthly: "월별 투자",
+      rate: "예상 연 수익률 (%)",
+      years: "투자 기간 (년)",
+      invested: "투자 금액",
+      returns: "총 수익",
+      maturity: "만기 금액",
+      chartLabel: "SIP 예측"
     }
+  };
 
-    function showPreview() {
-      calculateSIP();
-      const t = translations[lang];
+  function changeLanguage() {
+    const lang = document.getElementById("language").value;
+    currentLangData = translations[lang];
 
-      const preview = document.getElementById("previewSection");
-      preview.innerHTML = `
-        <div class="logo">📈 Pratix Finance</div>
-        <h2>${document.getElementById("sip-title").innerText}</h2>
-        <p><strong>${t.monthlyInvestment}</strong>: ₹${document.getElementById("monthlyInvestment").value}</p>
-        <p><strong>${t.interestRate}</strong>: ${document.getElementById("interestRate").value}%</p>
-        <p><strong>${t.investmentPeriod}</strong>: ${document.getElementById("investmentPeriod").value} Years</p>
-        ${document.getElementById("result").innerHTML}
-        <canvas id="previewPieChart"></canvas>
-        <canvas id="previewBarChart"></canvas>
-      `;
+    document.getElementById("sipTitle").textContent = currentLangData.sip;
+    document.getElementById("labelMonthly").textContent = currentLangData.monthly + " (₹):";
+    document.getElementById("labelRate").textContent = currentLangData.rate;
+    document.getElementById("labelYears").textContent = currentLangData.years;
+    document.getElementById("btnReset").textContent = "Reset";
+    document.getElementById("btnCalculate").textContent = "Calculate";
+    document.getElementById("btnPreview").textContent = "Preview";
+    document.getElementById("resultTitle").textContent = "Result";
+  }
 
-      const monthly = parseFloat(document.getElementById("monthlyInvestment").value);
-      const rate = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
-      const years = parseInt(document.getElementById("investmentPeriod").value);
-      const months = years * 12;
-      const maturity = monthly * (((Math.pow(1 + rate, months) - 1) / rate) * (1 + rate));
-      const invested = monthly * months;
-      const returns = maturity - invested;
+  window.onload = () => {
+    changeLanguage(); // Set default language
+  };
+</script>
+<!-- Add html2canvas and jsPDF -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-      new Chart(document.getElementById("previewPieChart"), {
-        type: "pie",
-        data: {
-          labels: [t.invested, t.returns],
-          datasets: [{
-            data: [invested, returns],
-            backgroundColor: ["#4caf50", "#ff9800"]
-          }]
-        }
-      });
+<script>
+  function downloadImage() {
+    const preview = document.getElementById("previewSection");
+    const buttons = preview.querySelectorAll(".btn-group button");
+    buttons.forEach(btn => btn.style.display = "none");
 
-      new Chart(document.getElementById("previewBarChart"), {
-        type: "bar",
-        data: {
-          labels: [t.invested, t.returns],
-          datasets: [{
-            label: t.barTitle,
-            data: [invested, returns],
-            backgroundColor: ["#4caf50", "#ff9800"]
-          }]
-        }
-      });
+    html2canvas(preview).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'sip-calculator-result.png';
+      link.href = canvas.toDataURL();
+      link.click();
+      buttons.forEach(btn => btn.style.display = "inline-block");
+    });
+  }
 
-      preview.style.display = "block";
-      document.getElementById("downloadButtons").style.display = "block";
+  function downloadPDF() {
+    const preview = document.getElementById("previewSection");
+    const buttons = preview.querySelectorAll(".btn-group button");
+    buttons.forEach(btn => btn.style.display = "none");
+
+    html2canvas(preview).then(canvas => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+      const width = pdf.internal.pageSize.getWidth();
+      const height = canvas.height * width / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+      pdf.save("sip-calculator-result.pdf");
+      buttons.forEach(btn => btn.style.display = "inline-block");
+    });
+  }
+
+  function shareResult() {
+    const text = `${currentLangData.sip} - Check your SIP result on Pratix Finance!`;
+    const url = window.location.href;
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'SIP Calculator Result',
+        text: text,
+        url: url
+      }).catch(console.error);
+    } else {
+      alert("Sharing not supported on this browser. You can copy the link:\n" + url);
     }
+  }
+</script>
 
-    function downloadImage() {
-      html2canvas(document.getElementById("previewSection")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "sip_result.png";
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
+<!-- Description and Footer -->
+<div class="container" style="margin-top: 2rem;">
+  <h2>SIP Calculator – About</h2>
+  <p style="text-align: justify;">
+    A SIP (Systematic Investment Plan) Calculator helps you estimate the future value of your investments made through monthly SIPs. By inputting your monthly investment amount, expected annual return rate, and duration, this tool calculates your total invested amount, potential earnings, and maturity value. It helps investors make informed decisions about mutual fund investments over time.
+  </p>
+</div>
 
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      const section = document.getElementById("previewSection");
-
-      await html2canvas(section).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        const width = pdf.internal.pageSize.getWidth();
-        const height = (canvas.height * width) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, width, height);
-        pdf.save("sip_result.pdf");
-      });
-    }
-
-    function shareResult() {
-      const text = "Check out my SIP calculation from Pratix Finance!";
-      if (navigator.share) {
-        navigator.share({
-          title: "SIP Result",
-          text: text,
-          url: window.location.href
-        });
-      } else {
-        alert("Sharing is not supported in this browser.");
-      }
-    }
-  </script>
+<footer>
+  Made with ❤️ by <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a><br/>
+  © 2025 Pratix Finance. All rights reserved.
+</footer>
 </body>
 </html>
