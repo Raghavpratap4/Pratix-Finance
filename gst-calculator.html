@@ -53,3 +53,106 @@
   </div>
 </body>
 </html>
+<!-- Add this just before </body> in your HTML file -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const amountInput = document.getElementById('amount');
+  const gstRateSelect = document.getElementById('gstRate');
+  const customRateInput = document.getElementById('customRate');
+  const calculateBtn = document.getElementById('calculateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const previewBtn = document.getElementById('previewBtn');
+
+  const resultSection = document.getElementById('resultSection');
+  const cgstEl = document.getElementById('cgst');
+  const sgstEl = document.getElementById('sgst');
+  const totalGstEl = document.getElementById('totalGst');
+  const finalAmountEl = document.getElementById('finalAmount');
+  const chartCanvas = document.getElementById('gstChart');
+
+  let chart;
+
+  gstRateSelect.addEventListener('change', () => {
+    if (gstRateSelect.value === 'custom') {
+      customRateInput.style.display = 'block';
+    } else {
+      customRateInput.style.display = 'none';
+    }
+  });
+
+  calculateBtn.addEventListener('click', () => {
+    const amount = parseFloat(amountInput.value);
+    let gstRate =
+      gstRateSelect.value === 'custom'
+        ? parseFloat(customRateInput.value)
+        : parseFloat(gstRateSelect.value);
+
+    if (isNaN(amount) || isNaN(gstRate)) {
+      alert('Please enter valid amount and GST rate.');
+      return;
+    }
+
+    const totalGST = (amount * gstRate) / 100;
+    const cgst = totalGST / 2;
+    const sgst = totalGST / 2;
+    const finalAmount = amount + totalGST;
+
+    cgstEl.textContent = cgst.toFixed(2);
+    sgstEl.textContent = sgst.toFixed(2);
+    totalGstEl.textContent = totalGST.toFixed(2);
+    finalAmountEl.textContent = finalAmount.toFixed(2);
+    resultSection.style.display = 'block';
+
+    renderChart(amount, totalGST);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    amountInput.value = '';
+    gstRateSelect.value = '18';
+    customRateInput.value = '';
+    customRateInput.style.display = 'none';
+    resultSection.style.display = 'none';
+    chartCanvas.style.display = 'none';
+
+    if (chart) chart.destroy();
+  });
+
+  previewBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: resultSection.offsetTop - 20,
+      behavior: 'smooth'
+    });
+  });
+
+  function renderChart(amount, gst) {
+    chartCanvas.style.display = 'block';
+
+    if (chart) chart.destroy(); // Destroy existing chart before re-rendering
+
+    chart = new Chart(chartCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: ['Original Amount', 'Total GST'],
+        datasets: [{
+          data: [amount, gst],
+          backgroundColor: ['#007bff', '#00c49f'],
+          borderColor: ['#004aad', '#007a6f'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          tooltip: {
+            callbacks: {
+              label: context => `₹ ${context.parsed.toFixed(2)}`
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
