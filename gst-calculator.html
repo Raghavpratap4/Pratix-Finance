@@ -2,244 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GST Calculator - Pratix Finance</title>
-  <link rel="icon" href="favicon.png" type="image/png">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f3f9ff, #e1e8ed);
-    }
-    .container {
-      max-width: 500px;
-      background: white;
-      margin: 30px auto;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
-    }
-    header, footer {
-      text-align: center;
-    }
-    .logo {
-      width: 60px;
-    }
-    h1 {
-      margin-top: 8px;
-      font-size: 22px;
-      color: #333;
-    }
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      padding: 12px;
-      margin: 5px 0;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .result, .chart-container {
-      margin-top: 16px;
-    }
-    .result p {
-      font-weight: bold;
-    }
-    canvas {
-      max-width: 100%;
-      height: 240px !important;
-    }
-    .preview-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    .preview-buttons button {
-      flex: 1;
-    }
-    .description {
-      margin-top: 30px;
-      padding: 12px;
-      background: #f0f5f9;
-      border-left: 5px solid #007bff;
-      border-radius: 10px;
-    }
-    @media (max-width: 500px) {
-      .container {
-        margin: 16px;
-        padding: 16px;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GST Calculator | Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <img src="logo.png" class="logo" alt="Pratix Finance Logo">
-    <h1>GST Calculator</h1>
-  </header>
+  <div class="container">
+    <header>
+      <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
+      <h1>GST Calculator</h1>
+    </header>
 
-  <main class="container" id="capture">
-    <select id="language" onchange="changeLanguage()">
-      <option value="en">English</option>
-      <option value="hi">Hindi</option>
-      <option value="bn">Bengali</option>
-    </select>
+    <div class="calculator">
+      <div class="input-section">
+        <label for="amount">Enter Amount (₹):</label>
+        <input type="number" id="amount" placeholder="e.g. 1000" />
 
-    <select id="gstType">
-      <option value="inclusive">GST Inclusive</option>
-      <option value="exclusive">GST Exclusive</option>
-    </select>
+        <label for="gstRate">Select GST Rate (%):</label>
+        <select id="gstRate">
+          <option value="5">5%</option>
+          <option value="12">12%</option>
+          <option value="18" selected>18%</option>
+          <option value="28">28%</option>
+          <option value="custom">Custom</option>
+        </select>
 
-    <input type="number" id="amount" placeholder="Enter Amount">
-    <input type="number" id="rate" placeholder="Enter GST Rate %">
+        <input type="number" id="customRate" placeholder="Custom GST (%)" style="display:none;" />
+        
+        <div class="btn-group">
+          <button id="resetBtn">🔁 Reset</button>
+          <button id="calculateBtn">📊 Calculate</button>
+          <button id="previewBtn">👁️ Preview</button>
+        </div>
+      </div>
 
-    <div class="preview-buttons">
-      <button onclick="resetForm()">Reset</button>
-      <button onclick="calculateGST()">Calculate</button>
-      <button onclick="togglePreview()">Preview</button>
+      <div class="output-section" id="resultSection" style="display: none;">
+        <h2>GST Calculation Result</h2>
+        <p>CGST: ₹<span id="cgst">0.00</span></p>
+        <p>SGST: ₹<span id="sgst">0.00</span></p>
+        <p>Total GST: ₹<span id="totalGst">0.00</span></p>
+        <p>Final Amount: ₹<span id="finalAmount">0.00</span></p>
+      </div>
+
+      <canvas id="gstChart" style="display:none; max-width: 100%; margin-top: 20px;"></canvas>
     </div>
 
-    <div class="result" id="result"></div>
-    <div class="chart-container">
-      <canvas id="pieChart"></canvas>
-      <canvas id="barChart"></canvas>
-    </div>
-
-    <div class="preview-buttons" id="previewActions" style="display:none;">
-      <button onclick="downloadAsImage()">📸 Image</button>
-      <button onclick="downloadAsPDF()">📄 PDF</button>
-      <button onclick="sharePreview()">🔗 Share</button>
-    </div>
-  </main>
-
-  <section class="description">
-    <h2>About GST Calculator</h2>
-    <ul>
-      <li>Calculate both GST-inclusive and GST-exclusive values.</li>
-      <li>Supports multiple languages and preview modes.</li>
-      <li>Use download/share buttons to save results as PDF/Image.</li>
-    </ul>
-  </section>
-
-  <footer>
-    <p>Contact: <a href="mailto:pratixfinance@gmail.com">pratixfinance@gmail.com</a></p>
-  </footer>
-
-  <script>
-    function resetForm() {
-      document.getElementById('amount').value = '';
-      document.getElementById('rate').value = '';
-      document.getElementById('result').innerHTML = '';
-    }
-
-    function calculateGST() {
-      const amount = parseFloat(document.getElementById('amount').value);
-      const rate = parseFloat(document.getElementById('rate').value);
-      const type = document.getElementById('gstType').value;
-      if (isNaN(amount) || isNaN(rate)) return;
-      let gst, net;
-      if (type === 'inclusive') {
-        gst = amount - (amount * (100 / (100 + rate)));
-        net = amount - gst;
-      } else {
-        gst = amount * (rate / 100);
-        net = amount + gst;
-      }
-      document.getElementById('result').innerHTML = `
-        <p>GST: ₹${gst.toFixed(2)}</p>
-        <p>Total: ₹${net.toFixed(2)}</p>`;
-
-      updateCharts(gst, net);
-    }
-
-    let pieChart, barChart;
-    function updateCharts(gst, net) {
-      const pieCtx = document.getElementById('pieChart').getContext('2d');
-      const barCtx = document.getElementById('barChart').getContext('2d');
-      if (pieChart) pieChart.destroy();
-      if (barChart) barChart.destroy();
-
-      pieChart = new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-          labels: ['GST', 'Net'],
-          datasets: [{
-            data: [gst, net],
-            backgroundColor: ['#007bff', '#28a745']
-          }]
-        }
-      });
-
-      barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: ['GST', 'Net'],
-          datasets: [{
-            label: '₹ Value',
-            data: [gst, net],
-            backgroundColor: ['#007bff', '#28a745']
-          }]
-        }
-      });
-    }
-
-    function togglePreview() {
-      const actions = document.getElementById('previewActions');
-      actions.style.display = actions.style.display === 'none' ? 'flex' : 'none';
-    }
-
-    function downloadAsImage() {
-      html2canvas(document.getElementById('capture')).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'gst_result.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-
-    function downloadAsPDF() {
-      const element = document.getElementById('capture');
-      html2pdf().from(element).save('gst_result.pdf');
-    }
-
-    function sharePreview() {
-      if (navigator.share) {
-        navigator.share({
-          title: 'GST Result - Pratix Finance',
-          text: 'Check out my GST calculation result from Pratix Finance.',
-          url: window.location.href
-        });
-      } else {
-        alert('Share not supported on this device.');
-      }
-    }
-
-    function changeLanguage() {
-      const lang = document.getElementById('language').value;
-      const placeholders = {
-        en: ['Enter Amount', 'Enter GST Rate %'],
-        hi: ['राशि दर्ज करें', 'GST दर % दर्ज करें'],
-        bn: ['পরিমাণ লিখুন', 'GST রেট % লিখুন']
-      };
-      document.getElementById('amount').placeholder = placeholders[lang][0];
-      document.getElementById('rate').placeholder = placeholders[lang][1];
-    }
-  </script>
+    <footer>
+      <p>© 2025 Pratix Finance | Contact: <a href="mailto:pratixfinance@gmail.com">pratixfinance@gmail.com</a></p>
+    </footer>
+  </div>
 </body>
 </html>
