@@ -82,17 +82,12 @@
     <canvas id="sipPreviewLineChart" width="300" height="300" style="margin-top:20px;"></canvas>
     <button onclick="closePreview()" style="margin-top:10px;">❌ Close</button>
     <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-  <button onclick="downloadPreviewAsImage()">🖼️ Download Image</button>
-  <button onclick="downloadPreviewAsPDF()">📄 Download PDF</button>
+        <button onclick="downloadAsImage()">📸 Download as Image</button>
+  <button onclick="downloadAsPDF()">📄 Download as PDF</button>
   <button onclick="sharePreview()">🔗 Share</button>
 </div>
 
   </div>
-</div>
-<div id="downloadShareButtons" style="text-align:center; margin-top: 20px;">
-  <button onclick="downloadAsImage()">📸 Download as Image</button>
-  <button onclick="downloadAsPDF()">📄 Download as PDF</button>
-  <button onclick="sharePreview()">🔗 Share</button>
 </div>
 <!-- Required libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
