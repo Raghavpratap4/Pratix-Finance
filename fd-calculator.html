@@ -2,97 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FD Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
+  <div class="container">
 
+    <!-- 🌐 Language Selector -->
     <div class="language-toggle">
-  🌐
-  <select id="language-select" onchange="changeLanguage()">
-    <option value="en">English</option>
-    <option value="hi">हिन्दी</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="ru">Русский</option>
-    <option value="ja">日本語</option>
-    <option value="bn">বাংলা</option>
-  </select>
-</div>
- <!-- 🧾 Logo + Title -->
+      🌐
+      <select id="language-select" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="bn">বাংলা</option>
+      </select>
+    </div>
+
+    <!-- 🧾 Logo + Title -->
     <div class="header">
       <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
       <h1 id="fixeddeposittitle">💰 Fixed Deposit Calculator</h1>
     </div>
 
-  <section class="calculator">
-    <div class="input-group">
-      <label>Principal Amount (₹):</label>
-      <input type="number" id="principal" placeholder="Enter amount" />
-    </div>
-    <div class="input-group">
-      <label>Annual Interest Rate (%):</label>
-      <input type="number" id="rate" placeholder="E.g. 6.5" />
-    </div>
-    <div class="input-group">
-      <label>Time Period (years):</label>
-      <input type="number" id="time" placeholder="E.g. 5" />
-    </div>
-    <div class="input-group">
-      <label>Compound Frequency:</label>
-      <select id="frequency">
-        <option value="1">Annually</option>
-        <option value="2">Semi-Annually</option>
-        <option value="4">Quarterly</option>
-        <option value="12">Monthly</option>
-      </select>
-    </div>
-    <button onclick="calculateFD()">Calculate 📊</button>
-  </section>
+    <section class="calculator">
+      <div class="input-group">
+        <label id="label-principal">Principal Amount (₹):</label>
+        <input type="number" id="principal" placeholder="Enter amount" />
+      </div>
+      <div class="input-group">
+        <label id="label-rate">Annual Interest Rate (%):</label>
+        <input type="number" id="rate" placeholder="E.g. 6.5" />
+      </div>
+      <div class="input-group">
+        <label id="label-time">Time Period (years):</label>
+        <input type="number" id="time" placeholder="E.g. 5" />
+      </div>
+      <div class="input-group">
+        <label id="label-frequency">Compound Frequency:</label>
+        <select id="frequency">
+          <option value="1">Annually</option>
+          <option value="2">Semi-Annually</option>
+          <option value="4">Quarterly</option>
+          <option value="12">Monthly</option>
+        </select>
+      </div>
+      <button id="calculate-btn" onclick="calculateFD()">Calculate 📊</button>
+    </section>
 
-  <section class="output">
-  <h2>🧾 Result:</h2>
-  <p><strong>Maturity Amount:</strong> ₹<span id="maturity">0.00</span></p>
-  <p><strong>Interest Earned:</strong> ₹<span id="interest">0.00</span></p>
+    <section class="output">
+      <h2 id="result-heading">🗞️ Result:</h2>
+      <p><strong id="label-maturity">Maturity Amount:</strong> ₹<span id="maturity">0.00</span></p>
+      <p><strong id="label-interest">Interest Earned:</strong> ₹<span id="interest">0.00</span></p>
 
-  <div class="chart-container">
-    <canvas id="fdPieChart" height="200"></canvas>
-    <canvas id="fdBarChart" height="200"></canvas>
+      <div class="chart-container">
+        <canvas id="fdPieChart" height="200"></canvas>
+        <canvas id="fdBarChart" height="200"></canvas>
+      </div>
+    </section>
+
+    <footer class="fd-footer">
+      <h2 id="footer-intro">📘 What is a Fixed Deposit (FD)?</h2>
+      <p>A <strong>Fixed Deposit (FD)</strong> is a secure investment option offered by banks and financial institutions. You deposit a lump sum amount for a fixed period, and in return, you earn a guaranteed interest rate.</p>
+
+      <h3>🌟 Key Features of FD:</h3>
+      <ul>
+        <li>🔐 <strong>Safe & Risk-Free:</strong> FD offers guaranteed returns and capital protection.</li>
+        <li>🗖️ <strong>Flexible Tenure:</strong> Choose durations from a few months to several years.</li>
+        <li>💰 <strong>Compound Interest:</strong> Earn more when interest is compounded quarterly or monthly.</li>
+        <li>🏦 <strong>Available at Banks & NBFCs:</strong> Offered by almost all major financial institutions.</li>
+        <li>📤 <strong>Premature Withdrawal:</strong> Allowed with a small penalty in most cases.</li>
+      </ul>
+
+      <h3 id="footer-why">🧾 Why Use an FD Calculator?</h3>
+      <p>An FD calculator helps you estimate your maturity amount and total interest earned. It’s useful for planning savings, budgeting, and comparing interest rates across banks.</p>
+
+      <h3 id="footer-disclaimer">⚠️ Disclaimer:</h3>
+      <p>The results provided by this calculator are for informational purposes only. Actual interest rates and maturity values may vary. Please consult your bank or financial advisor before making investment decisions.</p>
+
+      <p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
+    </footer>
   </div>
-</section>
-
-
-  <footer class="fd-footer">
-   <h2>📘 What is a Fixed Deposit (FD)?</h2>
-<p>
-  A <strong>Fixed Deposit (FD)</strong> is a secure investment option offered by banks and financial institutions. You deposit a lump sum amount for a fixed period, and in return, you earn a guaranteed interest rate.
-</p>
-
-<h3>🎯 Key Features of FD:</h3>
-<ul>
-  <li>🔐 <strong>Safe & Risk-Free:</strong> FD offers guaranteed returns and capital protection.</li>
-  <li>📆 <strong>Flexible Tenure:</strong> Choose durations from a few months to several years.</li>
-  <li>💰 <strong>Compound Interest:</strong> Earn more when interest is compounded quarterly or monthly.</li>
-  <li>🏦 <strong>Available at Banks & NBFCs:</strong> Offered by almost all major financial institutions.</li>
-  <li>📤 <strong>Premature Withdrawal:</strong> Allowed with a small penalty in most cases.</li>
-</ul>
-
-<h3>🧮 Why Use an FD Calculator?</h3>
-<p>
-  An FD calculator helps you estimate your maturity amount and total interest earned. It’s useful for planning savings, budgeting, and comparing interest rates across banks.
-</p>
-
-<h3>⚠️ Disclaimer:</h3>
-<p>
-  The results provided by this calculator are for informational purposes only. Actual interest rates and maturity values may vary. Please consult your bank or financial advisor before making investment decisions.
-</p>
-
-<p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
-
 
   <script src="fd.js"></script>
+  <script src="translations.js"></script>
+  <script>
+    function changeLanguage() {
+      const lang = document.getElementById("language-select").value;
+      const t = translations[lang];
+      if (!t) return;
+
+      document.getElementById("fixeddeposittitle").innerText = t.title;
+      document.getElementById("label-principal").innerText = t.principal;
+      document.getElementById("label-rate").innerText = t.rate;
+      document.getElementById("label-time").innerText = t.time;
+      document.getElementById("label-frequency").innerText = t.frequency;
+      document.getElementById("calculate-btn").innerText = t.calculate;
+      document.getElementById("result-heading").innerText = t.result;
+      document.getElementById("label-maturity").innerText = t.maturity;
+      document.getElementById("label-interest").innerText = t.interest;
+      document.getElementById("footer-intro").innerText = t.footerIntro;
+      document.getElementById("footer-why").innerText = t.footerWhyUse;
+      document.getElementById("footer-disclaimer").innerText = t.footerDisclaimer;
+    }
+  </script>
 </body>
 </html>

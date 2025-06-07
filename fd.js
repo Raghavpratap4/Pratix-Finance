@@ -86,3 +86,20 @@ const barConfig = {
     }
   }
   };
+const translations = {
+  en: {
+    title: "💰 Fixed Deposit Calculator",
+    principal: "Principal Amount (₹):",
+    rate: "Annual Interest Rate (%):",
+    time: "Time Period (years):",
+    frequency: "Compound Frequency:",
+    calculate: "Calculate 📊",
+    result: "🧾 Result:",
+    maturity: "Maturity Amount:",
+    interest: "Interest Earned:",
+    footerIntro: "📘 What is a Fixed Deposit (FD)?",
+    footerWhyUse: "🧮 Why Use an FD Calculator?",
+    footerDisclaimer: "⚠️ Disclaimer:",
+  },
+  // add other languages...
+};
