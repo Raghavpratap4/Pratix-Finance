@@ -1,149 +1,83 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FD Calculator | Pratix Finance</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FD Calculator - Pratix Finance</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<!-- AdSense Header -->
-<div class="adsense-header" style="text-align:center; margin: 5px 0;">
-  <ins class="adsbygoogle"
-       style="display:inline-block;width:100%;height:90px"
-       data-ad-client="ca-pub-3291480910940190"
-       data-ad-slot="1234567890"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+  <header>
+    <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
+    <h1>💰 Fixed Deposit Calculator</h1>
+  </header>
 
-
-<!-- AdSense Header -->
-<div class="adsense-header" style="text-align:center; margin-bottom: 10px;">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-3291480910940190"
-       data-ad-slot="1234567890"
-       data-ad-format="horizontal"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
-    <div class="container">
-        <div class="calculator-box">
-            <img src="logo.png" alt="Pratix Finance Logo" style="width: 120px; margin: 10px auto; display: block;" />
-            <h2>🏦 FD Calculator</h2>
-            <label>💵 Principal Amount (₹)</label>
-            <input type="number" id="principal" placeholder="Enter amount" />
-
-            <label>📈 Interest Rate (%)</label>
-            <input type="number" id="rate" placeholder="Enter interest rate" />
-
-            <label>📅 Time Period (Years)</label>
-            <input type="number" id="time" placeholder="Enter number of years" />
-
-            <button onclick="calculateFD()">Calculate</button>
-
-            <div id="results" style="margin-top: 10px;"></div>
-
-            <p style="text-align:center;"><a href="index.html">← Back to Homepage</a></p>
-            <p style="text-align:center; font-size: 12px; color: #888;">© 2025 Pratix Finance | Designed by Raghav Pratap</p>
-        </div>
-
-        <!-- Ads -->
-        <div style="margin: 20px auto; text-align: center;">
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-3291480910940190"
-                data-ad-slot="1234567890"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-        </div>
-
-        <!-- Charts -->
-        <div class="chart-box">
-            <h3>📊 FD Maturity Breakdown</h3>
-            <canvas id="fdPieChart"></canvas>
-            <canvas id="fdLineChart" style="margin-top: 40px;"></canvas>
-        </div>
+  <section class="calculator">
+    <div class="input-group">
+      <label>Principal Amount (₹):</label>
+      <input type="number" id="principal" placeholder="Enter amount" />
     </div>
+    <div class="input-group">
+      <label>Annual Interest Rate (%):</label>
+      <input type="number" id="rate" placeholder="E.g. 6.5" />
+    </div>
+    <div class="input-group">
+      <label>Time Period (years):</label>
+      <input type="number" id="time" placeholder="E.g. 5" />
+    </div>
+    <div class="input-group">
+      <label>Compound Frequency:</label>
+      <select id="frequency">
+        <option value="1">Annually</option>
+        <option value="2">Semi-Annually</option>
+        <option value="4">Quarterly</option>
+        <option value="12">Monthly</option>
+      </select>
+    </div>
+    <button onclick="calculateFD()">Calculate 📊</button>
+  </section>
 
-    <script>
-        let pieChart, lineChart;
+  <section class="output">
+  <h2>🧾 Result:</h2>
+  <p><strong>Maturity Amount:</strong> ₹<span id="maturity">0.00</span></p>
+  <p><strong>Interest Earned:</strong> ₹<span id="interest">0.00</span></p>
 
-        function calculateFD() {
-            const P = parseFloat(document.getElementById("principal").value);
-            const R = parseFloat(document.getElementById("rate").value);
-            const T = parseFloat(document.getElementById("time").value);
-
-            const A = P * Math.pow((1 + R / 100), T);
-            const interest = A - P;
-
-            document.getElementById("results").innerHTML =
-                `<strong>Total Maturity Amount:</strong> ₹${A.toFixed(2)}<br><strong>Interest Earned:</strong> ₹${interest.toFixed(2)}`;
-
-            // Pie Chart
-            const pieCtx = document.getElementById('fdPieChart').getContext('2d');
-            if (pieChart) pieChart.destroy();
-            pieChart = new Chart(pieCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['Principal', 'Interest'],
-                    datasets: [{
-                        data: [P, interest],
-                        backgroundColor: ['#4CAF50', '#FFC107']
-                    }]
-                }
-            });
-
-            // Line Chart (Yearly Growth)
-            const yearlyAmounts = [];
-            for (let year = 1; year <= T; year++) {
-                yearlyAmounts.push(P * Math.pow((1 + R / 100), year));
-            }
-            const lineCtx = document.getElementById('fdLineChart').getContext('2d');
-            if (lineChart) lineChart.destroy();
-            lineChart = new Chart(lineCtx, {
-                type: 'line',
-                data: {
-                    labels: [...Array(T).keys()].map(i => `Year ${i + 1}`),
-                    datasets: [{
-                        label: 'FD Growth Over Time',
-                        data: yearlyAmounts,
-                        fill: false,
-                        borderColor: '#3f51b5',
-                        tension: 0.2
-                    }]
-                }
-            });
-        }
-    </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-
-<!-- AdSense Footer -->
-<div class="adsense-footer" style="text-align:center; margin-top: 10px;">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-3291480910940190"
-       data-ad-slot="9876543210"
-       data-ad-format="horizontal"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+  <div class="chart-container">
+    <canvas id="fdPieChart" height="200"></canvas>
+    <canvas id="fdBarChart" height="200"></canvas>
+  </div>
+</section>
 
 
-<!-- AdSense Footer -->
-<div class="adsense-footer" style="text-align:center; margin: 10px 0;">
-  <ins class="adsbygoogle"
-       style="display:inline-block;width:100%;height:90px"
-       data-ad-client="ca-pub-3291480910940190"
-       data-ad-slot="9876543210"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+  <footer class="fd-footer">
+   <h2>📘 What is a Fixed Deposit (FD)?</h2>
+<p>
+  A <strong>Fixed Deposit (FD)</strong> is a secure investment option offered by banks and financial institutions. You deposit a lump sum amount for a fixed period, and in return, you earn a guaranteed interest rate.
+</p>
 
+<h3>🎯 Key Features of FD:</h3>
+<ul>
+  <li>🔐 <strong>Safe & Risk-Free:</strong> FD offers guaranteed returns and capital protection.</li>
+  <li>📆 <strong>Flexible Tenure:</strong> Choose durations from a few months to several years.</li>
+  <li>💰 <strong>Compound Interest:</strong> Earn more when interest is compounded quarterly or monthly.</li>
+  <li>🏦 <strong>Available at Banks & NBFCs:</strong> Offered by almost all major financial institutions.</li>
+  <li>📤 <strong>Premature Withdrawal:</strong> Allowed with a small penalty in most cases.</li>
+</ul>
+
+<h3>🧮 Why Use an FD Calculator?</h3>
+<p>
+  An FD calculator helps you estimate your maturity amount and total interest earned. It’s useful for planning savings, budgeting, and comparing interest rates across banks.
+</p>
+
+<h3>⚠️ Disclaimer:</h3>
+<p>
+  The results provided by this calculator are for informational purposes only. Actual interest rates and maturity values may vary. Please consult your bank or financial advisor before making investment decisions.
+</p>
+
+<p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
+
+
+  <script src="fd.js"></script>
 </body>
 </html>

@@ -214,3 +214,111 @@ canvas {
   font-size: 0.9rem;
   color: #555;
 }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: #f7f9fb;
+  color: #222;
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(to right, #42a5f5, #478ed1);
+  color: white;
+  border-bottom: 4px solid #2196f3;
+}
+
+.logo {
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.calculator {
+  max-width: 500px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2196f3;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #1976d2;
+}
+
+.output {
+  max-width: 500px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.output h2 {
+  margin-bottom: 10px;
+}
+
+.output p {
+  font-size: 1rem;
+  margin: 8px 0;
+}
+
+.fd-footer {
+  background: linear-gradient(to right, #f1f8e9, #e0f2f1);
+  padding: 25px;
+  border-top: 3px solid #4caf50;
+  margin-top: 40px;
+  border-radius: 20px 20px 0 0;
+}
+
+.fd-footer h2, .fd-footer h3 {
+  color: #2e7d32;
+}
+
+.fd-footer ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.fd-footer li {
+  margin-bottom: 6px;
+}
+
+.footer-brand {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 600;
+  color: #555;
+}
