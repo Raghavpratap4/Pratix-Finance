@@ -1,753 +1,287 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190"
-     crossorigin="anonymous"></script>
-
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>EMI Calculator - Pratix Finance</title>
-<link href="style.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js">
-   
-    function formatCurrency(amount) {
-      return new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
-        maximumFractionDigits: 0
-      }).format(amount);
-    }
-
-    function calculateEMI() {
-      const loan = parseFloat(document.getElementById('loanAmount').value);
-      const rate = parseFloat(document.getElementById('interestRate').value) / 12 / 100;
-      const tenure = parseFloat(document.getElementById('loanTenure').value) * 12;
-
-      if (isNaN(loan) || isNaN(rate) || isNaN(tenure)) {
-        document.getElementById('emiResult').innerText = 'Please enter all values!';
-        return;
-      }
-
-      const emi = (loan * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-      const formattedEMI = formatCurrency(emi.toFixed(0));
-      const totalInterest = emi * tenure - loan;
-      const totalPayment = loan + totalInterest;
-
-      const resultDiv = document.getElementById('emiResult');
-      
-      resultDiv.innerText = 'Your EMI: ' + formattedEMI;
-
-      document.getElementById('breakdown').innerHTML = `
-        <p>💰 Loan Amount: ${formatCurrency(loan)}</p>
-        <p>📈 Total Interest: ${formatCurrency(totalInterest)}</p>
-        <p>💵 Total Payment: ${formatCurrency(totalPayment)}</p>
-      `;
-    
-      resultDiv.classList.remove('animate');
-      void resultDiv.offsetWidth; // restart animation
-      resultDiv.classList.add('animate');
-
-      const interest = emi * tenure - loan;
-      if (window.chart) window.chart.destroy();
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      
-      window.chart = new Chart(ctx, {
-    
-        type: 'doughnut',
-        data: {
-          labels: ['Principal', 'Interest'],
-          datasets: [{
-            data: [loan, interest],
-            backgroundColor: ['#4CAF50', '#FF9800']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      
-      });
-
-      // Bar Chart showing EMI, Interest, and Total
-      const barCtx = document.getElementById('barChart').getContext('2d');
-      if (window.barChart) window.barChart.destroy();
-      window.barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Loan Amount', 'Interest', 'Total Payment'],
-          datasets: [{
-            label: '₹ Value',
-            data: [loan, totalInterest, totalPayment],
-            backgroundColor: ['#4CAF50', '#FF9800', '#3F51B5']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return '₹' + value.toLocaleString();
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-    </script>
-<style>
-    :root {
-      --bg: #f0f4f9;
-      --text: #111;
-      --card: #ffffffcc;
-      --input: #fff;
-    }
-    body.dark {
-      --bg: #1e1e2f;
-      --text: #fff;
-      --card: #2c2c3eaa;
-      --input: #333;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMI Calculator - Pratix Finance</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      transition: all 0.3s ease;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+      color: #333;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+    header img {
+      height: 60px;
     }
     .container {
-      max-width: 540px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: var(--card);
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      backdrop-filter: blur(12px);
-    }
-    .title {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: bold;
-      background: linear-gradient(90deg, #4CAF50, #2196F3);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 1rem;
-      animation: shimmer 3s infinite linear;
-    }
-    @keyframes shimmer {
-      0% { background-position: 0% }
-      100% { background-position: 200% }
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .input-group {
-      margin-bottom: 1rem;
+      margin: 15px 0;
     }
     .input-group label {
       display: block;
-      margin-bottom: 0.5rem;
       font-weight: bold;
+      margin-bottom: 5px;
     }
-    .input-group input {
+    .input-group input, .input-group select {
       width: 100%;
-      padding: 0.75rem;
-      border-radius: 12px;
-      border: none;
-      font-size: 1rem;
-      background: var(--input);
-      box-shadow: inset 0 0 4px rgba(0,0,0,0.1);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
     .buttons {
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-top: 1rem;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
     }
     .buttons button {
       flex: 1;
-      padding: 0.75rem;
-      font-size: 1rem;
+      padding: 10px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      background: #2196F3;
-      color: white;
-      transition: background 0.3s ease;
     }
-    .buttons button:hover {
-      background: #1976D2;
-    }
-    .buttons button.reset {
-      background: #f44336;
-    }
-    .buttons button.reset:hover {
-      background: #c62828;
-    }
-    .result {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background: var(--input);
-      color: var(--text);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    canvas {
-      margin-top: 1rem;
-    }
-    .footer {
-      text-align: center;
-      font-size: 0.9rem;
-      margin-top: 2rem;
-      color: #888;
-    }
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #111;
-      color: #fff;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
+    .buttons .reset { background: #ffcdd2; }
+    .buttons .calculate { background: #aed581; }
+    .buttons .preview { background: #81d4fa; }
+    .preview-area { display: none; padding: 20px; border-radius: 12px; background: #f5f5f5; margin-top: 20px; }
+    .results, .charts, .description, .footer { margin-top: 30px; }
+    canvas { width: 100% !important; height: auto !important; }
+    .footer { text-align: center; font-size: 14px; color: #666; }
+    .footer a { color: #0077cc; text-decoration: none; }
+    .download-share {
       display: flex;
-      align-items: center;
       justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .download-share button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #cfd8dc;
+      border: none;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      z-index: 1000;
     }
-    .theme-toggle:hover {
-      background: #333;
+    #languageSelector {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      font-size: 16px;
     }
-  
-    .result.animate {
-      animation: pulse 0.6s ease;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); background: var(--input); }
-      50% { transform: scale(1.05); background: #b2fab4; }
-      100% { transform: scale(1); background: var(--input); }
-    }
-    
-    .result-breakdown p {
-      margin: 0.25rem 0;
-      font-weight: 500;
-    }
-    </style>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-
-<style>
-  body.light-mode {
-    background: #f4f4f4;
-    color: #111;
-  }
-  body.dark-mode {
-    background: #121212;
-    color: #f4f4f4;
-  }
-  .result-box, .input-group input, .buttons button, #breakdown {
-    transition: all 0.3s ease;
-  }
-  body.dark-mode .input-group input {
-    background: #2a2a2a;
-    color: #f4f4f4;
-    border: 1px solid #555;
-  }
-  body.dark-mode .result-box {
-    background: #1e1e1e;
-    color: #f4f4f4;
-  }
-  body.dark-mode .buttons button {
-    border: none;
-  }
-  .theme-toggle {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    padding: 8px 12px;
-    background: #222;
-    color: #fff;
-    font-size: 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    z-index: 1000;
-  }
-</style>
-
+  </style>
 </head>
 <body>
+  <header>
+    <img src="logo.png" alt="Pratix Finance Logo">
+    <h1 id="title">EMI Calculator</h1>
+  </header>
+  <div class="container" id="mainContainer">
+    <select id="languageSelector" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="bn">বাংলা</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="es">Español</option>
+      <option value="ja">日本語</option>
+      <option value="ko">한국어</option>
+    </select>
 
-
-<!-- Header Ad (Horizontal) -->
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-client="ca-pub-3291480910940190"
-     data-ad-slot="1234567890"
-     data-ad-format="horizontal"
-     data-full-width-responsive="true"></ins>
+    <div class="input-group">
+      <label for="loanAmount" id="labelLoanAmount">Loan Amount</label>
+      <input type="number" id="loanAmount" placeholder="Enter loan amount" />
+    </div>
+    <div class="input-group">
+      <label for="interestRate" id="labelInterestRate">Interest Rate (% per annum)</label>
+      <input type="number" id="interestRate" placeholder="Enter interest rate" step="0.01" />
+    </div>
+    <div class="input-group">
+      <label for="loanTenure" id="labelLoanTenure">Loan Tenure</label>
+      <input type="number" id="loanTenure" placeholder="Enter tenure" />
+      <select id="tenureType">
+        <option value="years">Years</option>
+        <option value="months">Months</option>
+      </select>
+    </div>
+    <div class="buttons">
+      <button class="reset" onclick="resetForm()" id="btnReset">Reset</button>
+      <button class="calculate" onclick="calculateEMI()" id="btnCalculate">Calculate</button>
+      <button class="preview" onclick="showPreview()" id="btnPreview">Preview</button>
+    </div>
+    <div class="results" id="results"></div>
+    <div class="charts">
+      <canvas id="pieChart"></canvas>
+      <canvas id="barChart"></canvas>
+    </div>
+    <div class="preview-area" id="previewArea"></div>
+    <div class="download-share" id="downloadShare" style="display:none">
+      <button onclick="downloadImage()">Download Image</button>
+      <button onclick="downloadPDF()">Download PDF</button>
+      <button onclick="shareResult()">Share</button>
+    </div>
+    <div class="description" id="descriptionText">
+      <p>This EMI Calculator helps you determine your monthly loan repayment based on the loan amount, interest rate, and tenure. It supports reducing balance EMI calculations and provides a breakdown of total interest and principal.</p>
+    </div>
+    <div class="footer">
+      <p>Contact us: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
+    </div>
+  </div>
 <script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+const translations = {
+  en: {title: "EMI Calculator", loanAmount: "Loan Amount", interestRate: "Interest Rate (% per annum)", loanTenure: "Loan Tenure", reset: "Reset", calculate: "Calculate", preview: "Preview", description: "This EMI Calculator helps you determine your monthly loan repayment."},
+  hi: {title: "ईएमआई कैलकुलेटर", loanAmount: "ऋण राशि", interestRate: "ब्याज दर (% प्रति वर्ष)", loanTenure: "ऋण अवधि", reset: "रीसेट", calculate: "गणना करें", preview: "पूर्वावलोकन", description: "यह ईएमआई कैलकुलेटर आपकी मासिक किस्त की गणना करता है।"},
+  bn: {title: "ইএমআই ক্যালকুলেটর", loanAmount: "ঋণের পরিমাণ", interestRate: "সুদের হার (% প্রতি বছর)", loanTenure: "ঋণের মেয়াদ", reset: "রিসেট", calculate: "হিসাব করুন", preview: "প্রিভিউ", description: "এই ইএমআই ক্যালকুলেটর আপনাকে মাসিক কিস্তি নির্ধারণে সহায়তা করে।"},
+  fr: {title: "Calculateur EMI", loanAmount: "Montant du prêt", interestRate: "Taux d'intérêt (% par an)", loanTenure: "Durée du prêt", reset: "Réinitialiser", calculate: "Calculer", preview: "Aperçu", description: "Ce calculateur EMI vous aide à déterminer vos remboursements mensuels."},
+  ru: {title: "Калькулятор EMI", loanAmount: "Сумма кредита", interestRate: "Процентная ставка (% в год)", loanTenure: "Срок кредита", reset: "Сброс", calculate: "Рассчитать", preview: "Предпросмотр", description: "Этот калькулятор EMI поможет рассчитать ежемесячный платеж."},
+  es: {title: "Calculadora EMI", loanAmount: "Monto del préstamo", interestRate: "Tasa de interés (% anual)", loanTenure: "Plazo del préstamo", reset: "Reiniciar", calculate: "Calcular", preview: "Vista previa", description: "Esta calculadora EMI ayuda a determinar su pago mensual."},
+  ja: {title: "EMI計算機", loanAmount: "ローン金額", interestRate: "金利（年率％）", loanTenure: "ローン期間", reset: "リセット", calculate: "計算", preview: "プレビュー", description: "このEMI計算機は月々の返済額を計算します。"},
+  ko: {title: "EMI 계산기", loanAmount: "대출 금액", interestRate: "이자율 (% 연간)", loanTenure: "대출 기간", reset: "재설정", calculate: "계산", preview: "미리보기", description: "이 EMI 계산기는 월별 상환금을 계산하는 데 도움이 됩니다."}
+};
 
+function changeLanguage() {
+  const lang = document.getElementById("languageSelector").value;
+  const t = translations[lang];
+  document.getElementById("title").innerText = t.title;
+  document.getElementById("labelLoanAmount").innerText = t.loanAmount;
+  document.getElementById("labelInterestRate").innerText = t.interestRate;
+  document.getElementById("labelLoanTenure").innerText = t.loanTenure;
+  document.getElementById("btnReset").innerText = t.reset;
+  document.getElementById("btnCalculate").innerText = t.calculate;
+  document.getElementById("btnPreview").innerText = t.preview;
+  document.getElementById("descriptionText").innerHTML = `<p>${t.description}</p>`;
+}
 
-<div class="container">
-<div class="title">💸 EMI Calculator</div>
-<div class="input-group">
-<label for="loanAmount">💰 Loan Amount (₹)</label>
-<input id="loanAmount" placeholder="e.g. 500000" type="number"/>
-</div>
-<div class="input-group">
-<label for="interestRate">📈 Interest Rate (%)</label>
-<input id="interestRate" placeholder="e.g. 7.5" step="0.01" type="number"/>
-</div>
-<div class="input-group">
-<label for="loanTenure">📅 Loan Tenure (Years)</label>
-<input id="loanTenure" placeholder="e.g. 10" type="number"/>
-</div>
-<div class="buttons" style="flex-direction: row-reverse;">
-<button onclick="calculateEMI()">🧮 Calculate</button>
-<button onclick="resetEMI()">🔄 Reset</button>
-</div>
-<div class="result animate" id="emiResult">Your EMI: ₹ 0</div>
-<div class="result-breakdown" id="breakdown" style="margin-top: 1rem; font-size: 1rem;">
-<p>💰 Loan Amount: ₹ 0</p>
-<p>📈 Total Interest: ₹ 0</p>
-<p>💵 Total Payment: ₹ 0</p>
-</div>
-<canvas height="200" id="emiChart"></canvas>
+function resetForm() {
+  document.getElementById("loanAmount").value = '';
+  document.getElementById("interestRate").value = '';
+  document.getElementById("loanTenure").value = '';
+  document.getElementById("results").innerHTML = '';
+  document.getElementById("pieChart").style.display = 'none';
+  document.getElementById("barChart").style.display = 'none';
+  document.getElementById("previewArea").style.display = 'none';
+  document.getElementById("downloadShare").style.display = 'none';
+}
 
-<canvas id="barChart" style="max-width: 500px; margin: 30px auto; display: block;"></canvas>
+function calculateEMI() {
+  const principal = parseFloat(document.getElementById("loanAmount").value);
+  const annualRate = parseFloat(document.getElementById("interestRate").value);
+  let tenure = parseInt(document.getElementById("loanTenure").value);
+  const type = document.getElementById("tenureType").value;
+  if (type === "years") tenure *= 12;
+  const monthlyRate = annualRate / 12 / 100;
+  const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, tenure) / (Math.pow(1 + monthlyRate, tenure) - 1);
+  const totalPayment = emi * tenure;
+  const totalInterest = totalPayment - principal;
+  document.getElementById("results").innerHTML = `
+    <p><strong>Monthly EMI:</strong> ₹${emi.toFixed(2)}</p>
+    <p><strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}</p>
+    <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>`;
 
-<canvas height="200" id="barChart" style="margin-top: 2rem;"></canvas>
-</div>
-<div class="footer">© 2025 Pratix Finance | pratixfinance@gmail.com</div>
-<script src="emi-calculator-enhanced.js">
-    function formatCurrency(amount) {
-      return new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
-        maximumFractionDigits: 0
-      }).format(amount);
-    }
+  renderCharts(principal, totalInterest);
+}
 
-    function calculateEMI() {
-      const loan = parseFloat(document.getElementById('loanAmount').value);
-      const rate = parseFloat(document.getElementById('interestRate').value) / 12 / 100;
-      const tenure = parseFloat(document.getElementById('loanTenure').value) * 12;
-
-      if (isNaN(loan) || isNaN(rate) || isNaN(tenure)) {
-        document.getElementById('emiResult').innerText = 'Please enter all values!';
-        return;
-      }
-
-      const emi = (loan * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-      const formattedEMI = formatCurrency(emi.toFixed(0));
-      const totalInterest = emi * tenure - loan;
-      const totalPayment = loan + totalInterest;
-
-      const resultDiv = document.getElementById('emiResult');
-      
-      resultDiv.innerText = 'Your EMI: ' + formattedEMI;
-
-      document.getElementById('breakdown').innerHTML = `
-        <p>💰 Loan Amount: ${formatCurrency(loan)}</p>
-        <p>📈 Total Interest: ${formatCurrency(totalInterest)}</p>
-        <p>💵 Total Payment: ${formatCurrency(totalPayment)}</p>
-      `;
-    
-      resultDiv.classList.remove('animate');
-      void resultDiv.offsetWidth; // restart animation
-      resultDiv.classList.add('animate');
-
-      const interest = emi * tenure - loan;
-      if (window.chart) window.chart.destroy();
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      
-      window.chart = new Chart(ctx, {
-    
-        type: 'doughnut',
-        data: {
-          labels: ['Principal', 'Interest'],
-          datasets: [{
-            data: [loan, interest],
-            backgroundColor: ['#4CAF50', '#FF9800']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      
-      });
-
-      // Bar Chart showing EMI, Interest, and Total
-      const barCtx = document.getElementById('barChart').getContext('2d');
-      if (window.barChart) window.barChart.destroy();
-      window.barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Loan Amount', 'Interest', 'Total Payment'],
-          datasets: [{
-            label: '₹ Value',
-            data: [loan, totalInterest, totalPayment],
-            backgroundColor: ['#4CAF50', '#FF9800', '#3F51B5']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return '₹' + value.toLocaleString();
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-    </script>
-<script>
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-    }
-    function resetForm() {
-      document.getElementById('loanAmount').value = '';
-      document.getElementById('interestRate').value = '';
-      document.getElementById('loanTenure').value = '';
-      document.getElementById('emiResult').innerText = 'Your EMI: ₹ 0';
-      const chartCanvas = document.getElementById('emiChart').getContext('2d');
-      if (window.chart) window.chart.destroy();
-    }
-  
-    function formatCurrency(amount) {
-      return new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
-        maximumFractionDigits: 0
-      }).format(amount);
-    }
-
-    function calculateEMI() {
-      const loan = parseFloat(document.getElementById('loanAmount').value);
-      const rate = parseFloat(document.getElementById('interestRate').value) / 12 / 100;
-      const tenure = parseFloat(document.getElementById('loanTenure').value) * 12;
-
-      if (isNaN(loan) || isNaN(rate) || isNaN(tenure)) {
-        document.getElementById('emiResult').innerText = 'Please enter all values!';
-        return;
-      }
-
-      const emi = (loan * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-      const formattedEMI = formatCurrency(emi.toFixed(0));
-      const totalInterest = emi * tenure - loan;
-      const totalPayment = loan + totalInterest;
-
-      const resultDiv = document.getElementById('emiResult');
-      
-      resultDiv.innerText = 'Your EMI: ' + formattedEMI;
-
-      document.getElementById('breakdown').innerHTML = `
-        <p>💰 Loan Amount: ${formatCurrency(loan)}</p>
-        <p>📈 Total Interest: ${formatCurrency(totalInterest)}</p>
-        <p>💵 Total Payment: ${formatCurrency(totalPayment)}</p>
-      `;
-    
-      resultDiv.classList.remove('animate');
-      void resultDiv.offsetWidth; // restart animation
-      resultDiv.classList.add('animate');
-
-      const interest = emi * tenure - loan;
-      if (window.chart) window.chart.destroy();
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      
-      window.chart = new Chart(ctx, {
-    
-        type: 'doughnut',
-        data: {
-          labels: ['Principal', 'Interest'],
-          datasets: [{
-            data: [loan, interest],
-            backgroundColor: ['#4CAF50', '#FF9800']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      
-      });
-
-      // Bar Chart showing EMI, Interest, and Total
-      const barCtx = document.getElementById('barChart').getContext('2d');
-      if (window.barChart) window.barChart.destroy();
-      window.barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Loan Amount', 'Interest', 'Total Payment'],
-          datasets: [{
-            label: '₹ Value',
-            data: [loan, totalInterest, totalPayment],
-            backgroundColor: ['#4CAF50', '#FF9800', '#3F51B5']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return '₹' + value.toLocaleString();
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-    </script>
-<!-- AdSense Footer -->
-<div class="adsense-footer" style="text-align:center; margin-top: 10px;">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-3291480910940190"
-       data-ad-slot="9876543210"
-       data-ad-format="horizontal"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
-<div style="text-align:center; font-size:14px; color:#666; margin-top:20px;">
-  Made with ❤️ by <strong>Raghav Pratap</strong> · <strong>Pratix Finance © 2025</strong>
-</div>
-
-
-
-<script>
-  const barCtx = document.getElementById('barChart').getContext('2d');
-  const barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Principal Amount', 'Total Interest', 'Total Payment'],
-      datasets: [{
-        label: 'Loan Breakdown',
-        data: [principalAmount, totalInterest, totalPayment],
-        backgroundColor: [
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(75, 192, 192, 0.6)'
-        ],
-        borderColor: [
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 99, 132, 1)',
-          'rgba(75, 192, 192, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        title: { display: true, text: 'EMI Breakdown Bar Chart' }
-      },
-      scales: {
-        y: { beginAtZero: true }
-      }
-    }
+function renderCharts(principal, interest) {
+  const pieCtx = document.getElementById("pieChart").getContext("2d");
+  const barCtx = document.getElementById("barChart").getContext("2d");
+  if (window.pieChart) window.pieChart.destroy();
+  if (window.barChart) window.barChart.destroy();
+  window.pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: { labels: ['Principal', 'Interest'], datasets: [{ data: [principal, interest], backgroundColor: ['#4db6ac', '#ffab91'] }] }
   });
-</script>
+  window.barChart = new Chart(barCtx, {
+    type: 'bar',
+    data: { labels: ['Principal', 'Interest'], datasets: [{ data: [principal, interest], backgroundColor: ['#4db6ac', '#ffab91'] }] }
+  });
+}
 
+function showPreview() {
+  const lang = document.getElementById("languageSelector").value;
+  const title = translations[lang].title;
+  const loan = document.getElementById("loanAmount").value;
+  const rate = document.getElementById("interestRate").value;
+  const tenure = document.getElementById("loanTenure").value + ' ' + document.getElementById("tenureType").value;
+  const resultHTML = document.getElementById("results").innerHTML;
+  document.getElementById("previewArea").innerHTML = `
+    <img src='logo.png' style='height:60px'><h2>${title}</h2>
+    <p><strong>Loan:</strong> ₹${loan}</p>
+    <p><strong>Rate:</strong> ${rate}%</p>
+    <p><strong>Tenure:</strong> ${tenure}</p>
+    ${resultHTML}
+    <canvas id="pieChartPreview"></canvas>
+    <canvas id="barChartPreview"></canvas>`;
+  document.getElementById("previewArea").style.display = 'block';
+  document.getElementById("downloadShare").style.display = 'flex';
+  renderPreviewCharts();
+}
 
-<script>
-  function drawCharts(principalAmount, totalInterest, totalPayment) {
-    // Pie Chart
-    const ctx = document.getElementById('emiChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Principal Amount', 'Total Interest'],
-        datasets: [{
-          data: [principalAmount, totalInterest],
-          backgroundColor: ['#4CAF50', '#FF5722']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          },
-          title: {
-            display: true,
-            text: 'EMI Breakdown Pie Chart'
-          }
-        }
-      }
-    });
+function renderPreviewCharts() {
+  const principal = parseFloat(document.getElementById("loanAmount").value);
+  const annualRate = parseFloat(document.getElementById("interestRate").value);
+  let tenure = parseInt(document.getElementById("loanTenure").value);
+  const type = document.getElementById("tenureType").value;
+  if (type === "years") tenure *= 12;
+  const monthlyRate = annualRate / 12 / 100;
+  const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, tenure) / (Math.pow(1 + monthlyRate, tenure) - 1);
+  const totalPayment = emi * tenure;
+  const interest = totalPayment - principal;
+  const pieCtx = document.getElementById("pieChartPreview").getContext("2d");
+  const barCtx = document.getElementById("barChartPreview").getContext("2d");
+  new Chart(pieCtx, {
+    type: 'pie', data: { labels: ['Principal', 'Interest'], datasets: [{ data: [principal, interest], backgroundColor: ['#4db6ac', '#ffab91'] }] }
+  });
+  new Chart(barCtx, {
+    type: 'bar', data: { labels: ['Principal', 'Interest'], datasets: [{ data: [principal, interest], backgroundColor: ['#4db6ac', '#ffab91'] }] }
+  });
+}
 
-    // Bar Chart
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Principal Amount', 'Total Interest', 'Total Payment'],
-        datasets: [{
-          label: 'Loan Breakdown',
-          data: [principalAmount, totalInterest, totalPayment],
-          backgroundColor: [
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(75, 192, 192, 0.6)'
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(75, 192, 192, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          title: { display: true, text: 'EMI Breakdown Bar Chart' }
-        },
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
+function downloadImage() {
+  html2canvas(document.getElementById("previewArea")).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "emi-preview.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  html2canvas(document.getElementById("previewArea")).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF();
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("emi-preview.pdf");
+  });
+}
+
+function shareResult() {
+  if (navigator.share) {
+    navigator.share({ title: 'EMI Calculator - Pratix Finance', url: window.location.href });
+  } else {
+    alert("Sharing not supported on this browser.");
   }
+}
 </script>
-
-
-<script>
-  function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amount);
-  }
-
-  function calculateEMI() {
-    const loan = parseFloat(document.getElementById("loanAmount").value);
-    const rate = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
-    const tenure = parseFloat(document.getElementById("loanTenure").value) * 12;
-
-    if (isNaN(loan) || isNaN(rate) || isNaN(tenure) || loan <= 0 || rate <= 0 || tenure <= 0) {
-      document.getElementById("emiResult").innerText = "Your EMI: ₹ 0";
-      return;
-    }
-
-    const emi = (loan * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-    const totalPayment = emi * tenure;
-    const totalInterest = totalPayment - loan;
-
-    document.getElementById("emiResult").innerText = "Your EMI: " + formatCurrency(emi);
-
-    document.getElementById("breakdown").innerHTML = `
-      <p>💰 Loan Amount: ${formatCurrency(loan)}</p>
-      <p>📈 Total Interest: ${formatCurrency(totalInterest)}</p>
-      <p>💵 Total Payment: ${formatCurrency(totalPayment)}</p>
-    `;
-
-
-    // PIE Chart
-    const ctx1 = document.getElementById("emiChart").getContext("2d");
-    if (window.chart1) window.chart1.destroy();
-    window.chart1 = new Chart(ctx1, {
-      type: "pie",
-      data: {
-        labels: ["Principal", "Interest"],
-        datasets: [{
-          data: [loan, totalInterest],
-          backgroundColor: ["#4CAF50", "#FF9800"]
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: "bottom" },
-          title: { display: true, text: "Loan vs Interest (Pie Chart)" }
-        }
-      }
-    });
-
-    // BAR Chart
-    const ctx2 = document.getElementById("barChart").getContext("2d");
-    if (window.chart2) window.chart2.destroy();
-    window.chart2 = new Chart(ctx2, {
-      type: "bar",
-      data: {
-        labels: ["Loan Amount", "Interest", "Total Payment"],
-        datasets: [{
-          label: "₹ Amount",
-          data: [loan, totalInterest, totalPayment],
-          backgroundColor: ["#4CAF50", "#FF9800", "#3F51B5"]
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          title: { display: true, text: "Loan Breakdown (Bar Chart)" }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function(value) {
-                return "₹" + value.toLocaleString();
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-</script>
-
-
-
-
-
-
-<script>
-  function resetEMI() {
-    location.reload(); // Fully reload the page to clear all data
-  }
-</script>
-
 </body>
 </html>

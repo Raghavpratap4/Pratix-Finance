@@ -2,116 +2,341 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FD Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 { text-align: center; font-size: 1.8rem; margin-bottom: 10px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 0 10px #ccc; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-group { text-align: center; margin-top: 15px; }
+    .calculate { background-color: #4caf50; color: white; }
+    .reset { background-color: #f44336; color: white; }
+    .preview { background-color: #2196f3; color: white; }
+    #result, #charts { display: none; text-align: center; margin-top: 20px; }
+    canvas { margin: 10px auto; max-width: 100%; }
+    footer { text-align: center; margin-top: 40px; font-size: 0.9rem; }
+    footer a { color: #2196f3; text-decoration: none; }
+    .preview-mode body *:not(#previewArea):not(#previewArea *):not(script) { display: none !important; }
+    #previewArea { background: white; padding: 20px; }
+    .logo { width: 80px; display: block; margin: auto; }
+    #previewArea h1 { text-align: center; font-size: 1.5rem; }
+    .download-share-btns { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  </style>
 </head>
 <body>
   <div class="container">
+    <img src="logo.png" class="logo" alt="Pratix Finance Logo">
+    <h1 data-lang="title">FD Calculator</h1>
 
-    <!-- 🌐 Language Selector -->
-    <div class="language-toggle">
-      🌐
-      <select id="language-select" onchange="changeLanguage()">
+    <div class="input-group">
+      <label for="language">🌐 Language</label>
+      <select id="language" onchange="changeLanguage()">
         <option value="en">English</option>
         <option value="hi">हिन्दी</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="ru">Русский</option>
-        <option value="ja">日本語</option>
         <option value="bn">বাংলা</option>
+        <option value="fr">Français</option>
+        <option value="ru">Русский</option>
+        <option value="es">Español</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
       </select>
     </div>
 
-    <!-- 🧾 Logo + Title -->
-    <div class="header">
-      <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
-      <h1 id="fixeddeposittitle">💰 Fixed Deposit Calculator</h1>
+    <div class="input-group">
+      <label for="principal" data-lang="principal">Enter Principal Amount</label>
+      <input type="number" id="principal" placeholder="e.g. 100000" />
+    </div>
+    <div class="input-group">
+      <label for="rate" data-lang="rate">Annual Interest Rate (%)</label>
+      <input type="number" id="rate" placeholder="e.g. 7.5" step="0.01"/>
+    </div>
+    <div class="input-group">
+      <label for="tenure" data-lang="tenure">Tenure (in Years)</label>
+      <input type="number" id="tenure" placeholder="e.g. 5" />
+    </div>
+    <div class="input-group">
+      <label for="frequency" data-lang="frequency">Compounding Frequency</label>
+      <select id="frequency">
+        <option value="1">Yearly</option>
+        <option value="2">Half-Yearly</option>
+        <option value="4">Quarterly</option>
+        <option value="12">Monthly</option>
+      </select>
     </div>
 
-    <section class="calculator">
-      <div class="input-group">
-        <label id="label-principal">Principal Amount (₹):</label>
-        <input type="number" id="principal" placeholder="Enter amount" />
-      </div>
-      <div class="input-group">
-        <label id="label-rate">Annual Interest Rate (%):</label>
-        <input type="number" id="rate" placeholder="E.g. 6.5" />
-      </div>
-      <div class="input-group">
-        <label id="label-time">Time Period (years):</label>
-        <input type="number" id="time" placeholder="E.g. 5" />
-      </div>
-      <div class="input-group">
-        <label id="label-frequency">Compound Frequency:</label>
-        <select id="frequency">
-          <option value="1">Annually</option>
-          <option value="2">Semi-Annually</option>
-          <option value="4">Quarterly</option>
-          <option value="12">Monthly</option>
-        </select>
-      </div>
-      <button id="calculate-btn" onclick="calculateFD()">Calculate 📊</button>
-    </section>
+    <div class="btn-group">
+      <button class="reset" onclick="resetForm()" data-lang="reset">🔄 Reset</button>
+      <button class="calculate" onclick="calculateFD()" data-lang="calculate">📊 Calculate</button>
+      <button class="preview" onclick="showPreview()" data-lang="preview">👁️ Preview</button>
+    </div>
 
-    <section class="output">
-      <h2 id="result-heading">🗞️ Result:</h2>
-      <p><strong id="label-maturity">Maturity Amount:</strong> ₹<span id="maturity">0.00</span></p>
-      <p><strong id="label-interest">Interest Earned:</strong> ₹<span id="interest">0.00</span></p>
+    <div id="result">
+      <h3 data-lang="result">Result</h3>
+      <div id="output"></div>
+    </div>
 
-      <div class="chart-container">
-        <canvas id="fdPieChart" height="200"></canvas>
-        <canvas id="fdBarChart" height="200"></canvas>
-      </div>
-    </section>
-
-    <footer class="fd-footer">
-      <h2 id="footer-intro">📘 What is a Fixed Deposit (FD)?</h2>
-      <p>A <strong>Fixed Deposit (FD)</strong> is a secure investment option offered by banks and financial institutions. You deposit a lump sum amount for a fixed period, and in return, you earn a guaranteed interest rate.</p>
-
-      <h3>🌟 Key Features of FD:</h3>
-      <ul>
-        <li>🔐 <strong>Safe & Risk-Free:</strong> FD offers guaranteed returns and capital protection.</li>
-        <li>🗖️ <strong>Flexible Tenure:</strong> Choose durations from a few months to several years.</li>
-        <li>💰 <strong>Compound Interest:</strong> Earn more when interest is compounded quarterly or monthly.</li>
-        <li>🏦 <strong>Available at Banks & NBFCs:</strong> Offered by almost all major financial institutions.</li>
-        <li>📤 <strong>Premature Withdrawal:</strong> Allowed with a small penalty in most cases.</li>
-      </ul>
-
-      <h3 id="footer-why">🧾 Why Use an FD Calculator?</h3>
-      <p>An FD calculator helps you estimate your maturity amount and total interest earned. It’s useful for planning savings, budgeting, and comparing interest rates across banks.</p>
-
-      <h3 id="footer-disclaimer">⚠️ Disclaimer:</h3>
-      <p>The results provided by this calculator are for informational purposes only. Actual interest rates and maturity values may vary. Please consult your bank or financial advisor before making investment decisions.</p>
-
-      <p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
-    </footer>
+    <div id="charts">
+      <canvas id="pieChart"></canvas>
+      <canvas id="barChart"></canvas>
+    </div>
   </div>
 
-  <script src="fd.js"></script>
-  <script src="translations.js"></script>
-  <script>
-    function changeLanguage() {
-      const lang = document.getElementById("language-select").value;
-      const t = translations[lang];
-      if (!t) return;
+  <div id="previewArea" style="display:none;">
+    <img src="logo.png" class="logo" />
+    <h1 data-lang="title">FD Calculator</h1>
+    <div id="previewInputs"></div>
+    <div id="previewResults"></div>
+    <canvas id="previewPie" width="300" height="300"></canvas>
+    <canvas id="previewBar" width="300" height="300"></canvas>
+    <div class="download-share-btns">
+      <button onclick="downloadImage()">📷 Image</button>
+      <button onclick="downloadPDF()">📄 PDF</button>
+      <button onclick="navigator.share && navigator.share({title: 'FD Result', text: 'Check my FD Calculation from Pratix Finance'})">🔗 Share</button>
+    </div>
+  </div>
 
-      document.getElementById("fixeddeposittitle").innerText = t.title;
-      document.getElementById("label-principal").innerText = t.principal;
-      document.getElementById("label-rate").innerText = t.rate;
-      document.getElementById("label-time").innerText = t.time;
-      document.getElementById("label-frequency").innerText = t.frequency;
-      document.getElementById("calculate-btn").innerText = t.calculate;
-      document.getElementById("result-heading").innerText = t.result;
-      document.getElementById("label-maturity").innerText = t.maturity;
-      document.getElementById("label-interest").innerText = t.interest;
-      document.getElementById("footer-intro").innerText = t.footerIntro;
-      document.getElementById("footer-why").innerText = t.footerWhyUse;
-      document.getElementById("footer-disclaimer").innerText = t.footerDisclaimer;
+  <footer>
+    <p data-lang="footer-desc">Use our FD Calculator to estimate interest and maturity on your fixed deposit investments.</p>
+    <p>📩 <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
+  </footer>
+
+ <script>
+  const translations = {
+    en: {
+      title: "FD Calculator",
+      principal: "Enter Principal Amount",
+      rate: "Annual Interest Rate (%)",
+      tenure: "Tenure (in Years)",
+      frequency: "Compounding Frequency",
+      reset: "🔄 Reset",
+      calculate: "📊 Calculate",
+      preview: "👁️ Preview",
+      result: "Result",
+      footer_desc: "Use our FD Calculator to estimate interest and maturity on your fixed deposit investments."
+    },
+    hi: {
+      title: "एफ़डी कैलकुलेटर",
+      principal: "प्रारंभिक राशि दर्ज करें",
+      rate: "वार्षिक ब्याज दर (%)",
+      tenure: "अवधि (वर्षों में)",
+      frequency: "चक्रवृद्धि आवृत्ति",
+      reset: "🔄 रीसेट",
+      calculate: "📊 कैलकुलेट करें",
+      preview: "👁️ पूर्वावलोकन",
+      result: "परिणाम",
+      footer_desc: "ब्याज और परिपक्वता की गणना के लिए हमारे FD कैलकुलेटर का उपयोग करें।"
+    },
+    bn: {
+      title: "এফডি ক্যালকুলেটর",
+      principal: "মূল পরিমাণ লিখুন",
+      rate: "বার্ষিক সুদের হার (%)",
+      tenure: "মেয়াদ (বছর)",
+      frequency: "চক্রবৃদ্ধি ফ্রিকোয়েন্সি",
+      reset: "🔄 রিসেট",
+      calculate: "📊 হিসাব করুন",
+      preview: "👁️ প্রিভিউ",
+      result: "ফলাফল",
+      footer_desc: "সুদের এবং ম্যাচুরিটি গণনার জন্য আমাদের FD ক্যালকুলেটর ব্যবহার করুন।"
+    },
+    fr: {
+      title: "Calculateur de FD",
+      principal: "Montant du principal",
+      rate: "Taux d'intérêt annuel (%)",
+      tenure: "Durée (en années)",
+      frequency: "Fréquence de capitalisation",
+      reset: "🔄 Réinitialiser",
+      calculate: "📊 Calculer",
+      preview: "👁️ Aperçu",
+      result: "Résultat",
+      footer_desc: "Utilisez notre calculateur FD pour estimer les intérêts et l'échéance de vos dépôts à terme."
+    },
+    ru: {
+      title: "Калькулятор Вклада",
+      principal: "Введите основную сумму",
+      rate: "Годовая процентная ставка (%)",
+      tenure: "Срок (в годах)",
+      frequency: "Частота начисления процентов",
+      reset: "🔄 Сброс",
+      calculate: "📊 Рассчитать",
+      preview: "👁️ Предпросмотр",
+      result: "Результат",
+      footer_desc: "Используйте наш калькулятор для расчета процентов и срока по вкладу."
+    },
+    es: {
+      title: "Calculadora de FD",
+      principal: "Ingrese el monto principal",
+      rate: "Tasa de interés anual (%)",
+      tenure: "Plazo (en años)",
+      frequency: "Frecuencia de capitalización",
+      reset: "🔄 Reiniciar",
+      calculate: "📊 Calcular",
+      preview: "👁️ Vista previa",
+      result: "Resultado",
+      footer_desc: "Use nuestra calculadora FD para estimar el interés y la madurez de sus depósitos."
+    },
+    ja: {
+      title: "定期預金計算機",
+      principal: "元本を入力してください",
+      rate: "年間利率 (%)",
+      tenure: "期間（年単位）",
+      frequency: "複利頻度",
+      reset: "🔄 リセット",
+      calculate: "📊 計算する",
+      preview: "👁️ プレビュー",
+      result: "結果",
+      footer_desc: "利息と満期を計算するためにFD計算機を使用してください。"
+    },
+    ko: {
+      title: "FD 계산기",
+      principal: "원금을 입력하세요",
+      rate: "연 이자율 (%)",
+      tenure: "기간 (년)",
+      frequency: "복리 빈도",
+      reset: "🔄 초기화",
+      calculate: "📊 계산",
+      preview: "👁️ 미리보기",
+      result: "결과",
+      footer_desc: "이자와 만기를 계산하려면 FD 계산기를 사용하세요."
     }
-  </script>
-  <script src="translations.js"></script>
+  };
 
+  function changeLanguage() {
+    const lang = document.getElementById("language").value;
+    const trans = translations[lang];
+    document.querySelectorAll("[data-lang]").forEach(el => {
+      const key = el.getAttribute("data-lang");
+      if (trans[key]) {
+        el.innerText = trans[key];
+      }
+    });
+  }
+
+  window.onload = () => {
+    changeLanguage();
+  };
+
+    function calculateFD() {
+      const p = parseFloat(document.getElementById("principal").value);
+      const r = parseFloat(document.getElementById("rate").value);
+      const t = parseFloat(document.getElementById("tenure").value);
+      const n = parseInt(document.getElementById("frequency").value);
+      if (isNaN(p) || isNaN(r) || isNaN(t)) return alert("Enter all valid inputs");
+      const a = p * Math.pow((1 + r / (n * 100)), n * t);
+      const i = a - p;
+      document.getElementById("result").style.display = "block";
+      document.getElementById("output").innerHTML = `
+        <p><strong>Principal:</strong> ₹${p.toFixed(2)}</p>
+        <p><strong>Interest:</strong> ₹${i.toFixed(2)}</p>
+        <p><strong>Maturity:</strong> ₹${a.toFixed(2)}</p>
+      `;
+      showCharts(p, i, r, t, n);
+    }
+
+    function resetForm() {
+      ["principal","rate","tenure"].forEach(id=>document.getElementById(id).value="");
+      document.getElementById("frequency").value="1";
+      document.getElementById("result").style.display="none";
+      document.getElementById("charts").style.display="none";
+    }
+
+    function showCharts(p, i, r, t, n) {
+      document.getElementById("charts").style.display = "block";
+      const pie = document.getElementById("pieChart").getContext("2d");
+      new Chart(pie, {
+        type: "pie",
+        data: { labels: ["Principal", "Interest"], datasets: [{ data: [p, i], backgroundColor: ["#4caf50", "#ff9800"] }] },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+      });
+      const values = [];
+      for (let year = 1; year <= t; year++) {
+        values.push((p * Math.pow((1 + r / (n * 100)), n * year)).toFixed(2));
+      }
+      const bar = document.getElementById("barChart").getContext("2d");
+      new Chart(bar, {
+        type: "bar",
+        data: { labels: Array.from({length:t},(_,i)=>`Year ${i+1}`), datasets: [{ label: "FD Value", data: values, backgroundColor: "#2196f3" }] },
+        options: { responsive: true }
+      });
+    }
+
+    async function showPreview() {
+      const lang = document.getElementById("language").value;
+      const p = parseFloat(document.getElementById("principal").value);
+      const r = parseFloat(document.getElementById("rate").value);
+      const t = parseFloat(document.getElementById("tenure").value);
+      const n = parseInt(document.getElementById("frequency").value);
+      const a = p * Math.pow((1 + r / (n * 100)), n * t);
+      const i = a - p;
+      document.getElementById("previewInputs").innerHTML = `
+        <p><strong>${translations[lang].principal}:</strong> ₹${p}</p>
+        <p><strong>${translations[lang].rate}:</strong> ${r}%</p>
+        <p><strong>${translations[lang].tenure}:</strong> ${t} Yrs</p>
+      `;
+      document.getElementById("previewResults").innerHTML = `
+        <p><strong>${translations[lang].result}:</strong></p>
+        <p>💰 Interest: ₹${i.toFixed(2)}</p>
+        <p>🏁 Maturity: ₹${a.toFixed(2)}</p>
+      `;
+      new Chart(document.getElementById("previewPie").getContext("2d"), {
+        type: 'pie',
+        data: { labels: ['Principal', 'Interest'], datasets: [{ data: [p, i], backgroundColor: ['#4caf50', '#f57c00'] }] },
+        options: { responsive: false }
+      });
+      const growth = [];
+      for (let year = 1; year <= t; year++) {
+        growth.push((p * Math.pow(1 + r / (n * 100), n * year)).toFixed(2));
+      }
+      new Chart(document.getElementById("previewBar").getContext("2d"), {
+        type: 'bar',
+        data: { labels: Array.from({length:t},(_,i)=>`Year ${i+1}`), datasets: [{ label: 'Growth', data: growth, backgroundColor: '#2196f3' }] },
+        options: { responsive: false }
+      });
+      document.getElementById("previewArea").style.display = "block";
+      document.body.classList.add("preview-mode");
+      window.scrollTo(0, 0);
+    }
+
+    async function downloadImage() {
+      const canvas = await html2canvas(document.getElementById("previewArea"));
+      const link = document.createElement("a");
+      link.download = "FD_Result.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    async function downloadPDF() {
+      const canvas = await html2canvas(document.getElementById("previewArea"));
+      const imgData = canvas.toDataURL("image/png");
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save("FD_Result.pdf");
+    }
+
+    window.onload = changeLanguage;
+  </script>
 </body>
 </html>
