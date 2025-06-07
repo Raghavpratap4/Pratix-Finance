@@ -2,139 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GST Calculator - Pratix Finance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GST Calculator | Pratix Finance</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <!-- 🌐 Language Selector -->
-    <div class="language-toggle">
-      🌐
-      <select id="language-select" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="hi">हिन्दी</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="ru">Русский</option>
-        <option value="ja">日本語</option>
-        <option value="bn">বাংলা</option>
+  <header>
+    <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
+    <h1 id="gst-title">🧾 GST Calculator</h1>
+    <select id="language-select" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="bn">বাংলা</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="ru">Русский</option>
+      <option value="ja">日本語</option>
+    </select>
+  </header>
+
+  <main id="calculator-section">
+    <div class="input-section">
+      <label id="label-amount">Amount (₹):</label>
+      <input type="number" id="amount" placeholder="Enter amount" />
+
+      <label id="label-rate">GST Rate (%):</label>
+      <input type="number" id="rate" placeholder="Enter GST rate" />
+
+      <select id="mode">
+        <option value="exclusive">GST Exclusive</option>
+        <option value="inclusive">GST Inclusive</option>
       </select>
+
+      <div class="button-group">
+        <button onclick="resetForm()" id="reset-btn">🔁 Reset</button>
+        <button onclick="calculateGST()" id="calculate-btn">📊 Calculate</button>
+        <button onclick="showPreview()" id="preview-btn">👁️ Preview</button>
+      </div>
     </div>
 
-    <!-- 🧾 Logo + Title -->
-    <div class="header">
-      <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
-      <h1 id="gstTitle">🧾 GST Calculator</h1>
+    <div class="output-section">
+      <p id="output-gst">GST Amount: ₹0</p>
+      <p id="output-total">Total Amount: ₹0</p>
     </div>
 
-    <!-- Input Section -->
-    <section class="calculator">
-      <div class="input-group">
-        <label id="label-amount">Enter Amount (₹):</label>
-        <input type="number" id="amount" placeholder="Enter amount" />
-      </div>
-      <div class="input-group">
-        <label id="label-rate">GST Rate (%):</label>
-        <input type="number" id="rate" placeholder="E.g. 18" />
-      </div>
-      <button onclick="calculateGST()" id="calculateBtn">Calculate GST</button>
-    </section>
+    <div class="chart-section">
+      <canvas id="gstPieChart"></canvas>
+      <canvas id="gstBarChart"></canvas>
+    </div>
 
-    <!-- Output Section -->
-    <section class="output">
-      <h2>🧾 Result:</h2>
-      <p><strong>GST Amount:</strong> ₹<span id="gstAmount">0.00</span></p>
-      <p><strong>Total Amount (Incl. GST):</strong> ₹<span id="totalAmount">0.00</span></p>
-<div class="chart-container">
-  <canvas id="gstChart" height="200"></canvas>
-</div>
+    <div class="preview-actions" style="display:none;" id="preview-actions">
+      <button onclick="downloadAsImage()">📸 Download Image</button>
+      <button onclick="downloadAsPDF()">📄 Download PDF</button>
+      <button onclick="shareResult()">📤 Share</button>
+    </div>
+  </main>
 
-    </section>
+  <section class="description">
+    <h2>📘 About GST Calculator</h2>
+    <p>The GST (Goods and Services Tax) Calculator helps you compute the GST amount and the total payable amount either inclusive or exclusive of tax.</p>
+    <ul>
+      <li><strong>GST Exclusive:</strong> Calculates tax on top of the base price.</li>
+      <li><strong>GST Inclusive:</strong> Extracts tax from the total amount.</li>
+      <li>Useful for businesses, freelancers, and product pricing.</li>
+    </ul>
+  </section>
 
-    <!-- Footer Info -->
-    <footer class="footer">
-      <h2 id="gstInfoHeading">📘 What is GST?</h2>
-      <p id="gstInfoPara">GST (Goods and Services Tax) is a comprehensive indirect tax levied on the manufacture, sale, and consumption of goods and services throughout India.</p>
+  <footer>
+    <p>&copy; 2025 Pratix Finance | Contact: <a href="mailto:pratixfinance@gmail.com">pratixfinance@gmail.com</a></p>
+    <nav>
+      <a href="about.html">About</a> |
+      <a href="blog.html">Blog</a> |
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </footer>
 
-      <h3 id="gstBenefitsHeading">💡 Why Use a GST Calculator?</h3>
-      <ul>
-        <li id="li1">📈 Easily calculate GST on invoices and purchases</li>
-        <li id="li2">✅ Helps businesses in tax planning and filing</li>
-        <li id="li3">📊 Saves time with accurate results</li>
-      </ul>
+  <script src="gst.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-      <h3>⚠️ Disclaimer:</h3>
-      <p id="disclaimerText">
-        The calculator provides approximate results. Please consult a tax advisor for exact calculations.
-      </p>
-
-      <p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
-    </footer>
-  </div>
-<script>
-  function calculateGST() {
-    const amount = parseFloat(document.getElementById("amount").value);
-    const rate = parseFloat(document.getElementById("rate").value);
-
-    if (isNaN(amount) || isNaN(rate)) {
-      alert("Please enter valid inputs.");
-      return;
-    }
-
-    const gstAmount = (amount * rate) / 100;
-    const total = amount + gstAmount;
-
-    document.getElementById("gstAmount").innerText = gstAmount.toFixed(2);
-    document.getElementById("totalAmount").innerText = total.toFixed(2);
-
-    // PIE Chart
-    const pieCtx = document.getElementById("gstPieChart").getContext("2d");
-    if (window.gstPieInstance) window.gstPieInstance.destroy();
-    window.gstPieInstance = new Chart(pieCtx, {
-      type: 'pie',
-      data: {
-        labels: ['Base Amount', 'GST Amount'],
-        datasets: [{
-          data: [amount, gstAmount],
-          backgroundColor: ['#4CAF50', '#FFC107']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'bottom' }
-        }
-      }
-    });
-
-    // BAR Chart
-    const barCtx = document.getElementById("gstBarChart").getContext("2d");
-    if (window.gstBarInstance) window.gstBarInstance.destroy();
-    window.gstBarInstance = new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Base Amount', 'GST Amount'],
-        datasets: [{
-          label: '₹ Amount',
-          data: [amount, gstAmount],
-          backgroundColor: ['#4CAF50', '#FFC107']
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true }
-        },
-        plugins: {
-          legend: { display: false }
-        }
-      }
-    });
-  }
-</script>
-
-  <script src="translations.js"></script>
 </body>
 </html>
