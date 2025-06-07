@@ -4,105 +4,440 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Income Tax Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #e0f7fa, #fff);
+      color: #333;
+    }
+    header {
+      background: #00796b;
+      padding: 1rem;
+      color: white;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .calculate-btn { background: #388e3c; color: white; }
+    .reset-btn { background: #f57c00; color: white; }
+    .preview-btn { background: #1976d2; color: white; }
+    #language-selector {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    #preview-area {
+      display: none;
+      padding: 1rem;
+      border: 2px dashed #ccc;
+      margin-top: 2rem;
+      background: #f5f5f5;
+      border-radius: 12px;
+    }
+    #charts canvas {
+      max-width: 100%;
+    }
+    @media (max-width: 600px) {
+      .btn-group {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-<div class="language-toggle">
-  🌐
-  <select id="language-select" onchange="changeLanguage()">
-    <option value="en">English</option>
-    <option value="hi">हिन्दी</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="ru">Русский</option>
-    <option value="ja">日本語</option>
-    <option value="bn">বাংলা</option>
-  </select>
-</div>
+  <header>
+    <h2 id="app-title">📊 Pratix Finance - Income Tax Calculator</h2>
+  </header>
 
-    <!-- 🧾 Header -->
-    <div class="header">
-    <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
-      <h1 id="taxTitle">Income Tax Calculator</h1>
+  <div id="language-selector">
+    <label for="language">🌐 Language / भाषा:</label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="hi">हिंदी</option>
+      <option value="bn">বাংলা</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="es">Español</option>
+      <option value="ja">日本語</option>
+      <option value="ko">한국어</option>
+    </select>
+  </div>
+
+  <div class="container" id="main-content">
+    <h1 id="main-heading">Income Tax Calculator</h1>
+
+    <label for="income" id="label-income">Annual Gross Income (₹):</label>
+    <input type="number" id="income" placeholder="Enter your income" />
+
+    <label for="age" id="label-age">Age Category:</label>
+    <select id="age">
+      <option value="below60">Below 60</option>
+      <option value="60to80">60 to 80</option>
+      <option value="above80">Above 80</option>
+    </select>
+
+    <label for="deductions" id="label-deductions">Total Deductions (₹):</label>
+    <input type="number" id="deductions" placeholder="Enter deductions (80C, 80D, etc.)" />
+
+    <label for="regime" id="label-regime">Select Tax Regime:</label>
+    <select id="regime">
+      <option value="old">Old Regime</option>
+      <option value="new">New Regime</option>
+    </select>
+
+    <div class="btn-group">
+      <button class="calculate-btn" id="btn-calculate" onclick="calculateTax()">Calculate</button>
+      <button class="reset-btn" id="btn-reset" onclick="resetForm()">Reset</button>
+      <button class="preview-btn" id="btn-preview" onclick="togglePreview()">Preview</button>
     </div>
 
-    <!-- 💼 Input Section -->
-    <div class="input-section">
-      <label for="income">Annual Income (₹):</label>
-      <input type="number" id="income" placeholder="e.g., 750000" />
-
-      <label for="age">Select Age Group:</label>
-      <select id="age">
-        <option value="normal">Below 60 years</option>
-        <option value="senior">60 to 80 years</option>
-        <option value="super">Above 80 years</option>
-      </select>
-<label>Choose Tax Regime:</label>
-<div class="regime-options">
-  <label><input type="radio" name="regime" value="old" checked /> Old Regime</label>
-  <label><input type="radio" name="regime" value="new" /> New Regime</label>
-</div>
-
-      <button onclick="calculateTax()">Calculate Tax</button>
+    <div id="results"></div>
+    <div id="charts">
+      <canvas id="pieChart"></canvas>
+      <canvas id="barChart"></canvas>
     </div>
-
-    <!-- 📊 Result Section -->
-    <div id="tax-result" class="result-section">
-      <h2>Results:</h2>
-      <p><strong>Taxable Income:</strong> ₹<span id="taxableIncome">0.00</span></p>
-      <p><strong>Total Tax Payable:</strong> ₹<span id="taxAmount">0.00</span></p>
+    <div id="preview-area">
+      <h2 id="preview-title">📄 Income Tax Summary</h2>
+      <div id="preview-results"></div>
+      <div id="preview-charts">
+        <canvas id="previewPieChart"></canvas>
+        <canvas id="previewBarChart"></canvas>
+      </div>
+      <div class="btn-group" style="margin-top: 1rem;">
+        <button onclick="downloadImage()">📷 Download Image</button>
+        <button onclick="downloadPDF()">📄 Download PDF</button>
+        <button onclick="sharePreview()">🔗 Share</button>
+      </div>
     </div>
-
-    <!-- 📉 Chart -->
-    <div class="chart-section">
-      <canvas id="taxChart" width="300" height="300"></canvas>
-    </div>
-
-    <!-- 🔒 Disclaimer -->
-    <p id="taxDisclaimer" class="disclaimer">
-      This calculator is for estimation only. Tax rates based on old regime for FY 2024-25.
-    </p>
   </div>
 
-  <script src="incometax.js"></script>
-  <footer class="income-tax-footer">
-  <div class="footer-section">
-    <h2>🧾 What is Income Tax?</h2>
-    <p>
-      Income tax is a direct tax imposed on an individual's or entity’s income. It helps the government fund essential services such as healthcare, education, defense, and infrastructure.
-    </p>
-  </div>
+  <script>
+    const translations = {
+      en: {
+        "Income Tax Calculator": "Income Tax Calculator",
+        "Annual Gross Income (₹):": "Annual Gross Income (₹):",
+        "Age Category:": "Age Category:",
+        "Total Deductions (₹):": "Total Deductions (₹):",
+        "Select Tax Regime:": "Select Tax Regime:",
+        "Below 60": "Below 60",
+        "60 to 80": "60 to 80",
+        "Above 80": "Above 80",
+        "Old Regime": "Old Regime",
+        "New Regime": "New Regime",
+        "Calculate": "Calculate",
+        "Reset": "Reset",
+        "Preview": "Preview",
+        "📄 Income Tax Summary": "📄 Income Tax Summary"
+      },
+      hi: {
+        "Income Tax Calculator": "आयकर कैलकुलेटर",
+        "Annual Gross Income (₹):": "वार्षिक सकल आय (₹):",
+        "Age Category:": "आयु वर्ग:",
+        "Total Deductions (₹):": "कुल कटौतियाँ (₹):",
+        "Select Tax Regime:": "कर प्रणाली चुनें:",
+        "Below 60": "60 से कम",
+        "60 to 80": "60 से 80",
+        "Above 80": "80 से अधिक",
+        "Old Regime": "पुरानी प्रणाली",
+        "New Regime": "नई प्रणाली",
+        "Calculate": "गणना करें",
+        "Reset": "रीसेट",
+        "Preview": "पूर्वावलोकन",
+        "📄 Income Tax Summary": "📄 आयकर सारांश"
+      },
+      bn: {
+        "Income Tax Calculator": "আয়কর ক্যালকুলেটর",
+        "Annual Gross Income (₹):": "বার্ষিক মোট আয় (₹):",
+        "Age Category:": "বয়সের শ্রেণী:",
+        "Total Deductions (₹):": "মোট ছাড় (₹):",
+        "Select Tax Regime:": "কর ব্যবস্থা নির্বাচন করুন:",
+        "Below 60": "৬০ এর নিচে",
+        "60 to 80": "৬০ থেকে ৮০",
+        "Above 80": "৮০ এর উপরে",
+        "Old Regime": "পুরাতন ব্যবস্থা",
+        "New Regime": "নতুন ব্যবস্থা",
+        "Calculate": "হিসেব করুন",
+        "Reset": "রিসেট",
+        "Preview": "প্রিভিউ",
+        "📄 Income Tax Summary": "📄 আয়কর সারাংশ"
+      },
+      fr: {
+        "Income Tax Calculator": "Calculateur d'impôt sur le revenu",
+        "Annual Gross Income (₹):": "Revenu brut annuel (₹):",
+        "Age Category:": "Catégorie d'âge:",
+        "Total Deductions (₹):": "Déductions totales (₹):",
+        "Select Tax Regime:": "Sélectionner le régime fiscal:",
+        "Below 60": "Moins de 60 ans",
+        "60 to 80": "60 à 80 ans",
+        "Above 80": "Plus de 80 ans",
+        "Old Regime": "Ancien régime",
+        "New Regime": "Nouveau régime",
+        "Calculate": "Calculer",
+        "Reset": "Réinitialiser",
+        "Preview": "Aperçu",
+        "📄 Income Tax Summary": "📄 Résumé de l’impôt sur le revenu"
+      },
+      ru: {
+        "Income Tax Calculator": "Калькулятор подоходного налога",
+        "Annual Gross Income (₹):": "Годовой валовой доход (₹):",
+        "Age Category:": "Возрастная категория:",
+        "Total Deductions (₹):": "Общие вычеты (₹):",
+        "Select Tax Regime:": "Выберите налоговый режим:",
+        "Below 60": "До 60",
+        "60 to 80": "60–80",
+        "Above 80": "Старше 80",
+        "Old Regime": "Старый режим",
+        "New Regime": "Новый режим",
+        "Calculate": "Рассчитать",
+        "Reset": "Сбросить",
+        "Preview": "Предпросмотр",
+        "📄 Income Tax Summary": "📄 Сводка по налогу"
+      },
+      es: {
+        "Income Tax Calculator": "Calculadora de Impuesto sobre la Renta",
+        "Annual Gross Income (₹):": "Ingresos brutos anuales (₹):",
+        "Age Category:": "Categoría de edad:",
+        "Total Deductions (₹):": "Deducciones totales (₹):",
+        "Select Tax Regime:": "Seleccionar régimen fiscal:",
+        "Below 60": "Menos de 60",
+        "60 to 80": "60 a 80",
+        "Above 80": "Más de 80",
+        "Old Regime": "Régimen antiguo",
+        "New Regime": "Régimen nuevo",
+        "Calculate": "Calcular",
+        "Reset": "Restablecer",
+        "Preview": "Vista previa",
+        "📄 Income Tax Summary": "📄 Resumen de Impuestos"
+      },
+      ja: {
+        "Income Tax Calculator": "所得税計算機",
+        "Annual Gross Income (₹):": "年間総所得 (₹):",
+        "Age Category:": "年齢カテゴリ:",
+        "Total Deductions (₹):": "控除合計 (₹):",
+        "Select Tax Regime:": "課税制度を選択:",
+        "Below 60": "60歳未満",
+        "60 to 80": "60〜80歳",
+        "Above 80": "80歳以上",
+        "Old Regime": "旧制度",
+        "New Regime": "新制度",
+        "Calculate": "計算",
+        "Reset": "リセット",
+        "Preview": "プレビュー",
+        "📄 Income Tax Summary": "📄 所得税の概要"
+      },
+      ko: {
+        "Income Tax Calculator": "소득세 계산기",
+        "Annual Gross Income (₹):": "연간 총소득 (₹):",
+        "Age Category:": "연령대:",
+        "Total Deductions (₹):": "총 공제액 (₹):",
+        "Select Tax Regime:": "세금 제도 선택:",
+        "Below 60": "60세 미만",
+        "60 to 80": "60~80세",
+        "Above 80": "80세 이상",
+        "Old Regime": "구제도",
+        "New Regime": "신제도",
+        "Calculate": "계산",
+        "Reset": "초기화",
+        "Preview": "미리보기",
+        "📄 Income Tax Summary": "📄 소득세 요약"
+      }
+    };
+  </script>
+  <script>
+    function changeLanguage() {
+      const lang = document.getElementById("language").value;
+      const dict = translations[lang];
 
-  <div class="footer-section">
-    <h2>📈 Benefits of Using Income Tax Calculator</h2>
-    <ul>
-      <li>🔢 Easily estimate your tax liability</li>
-      <li>📊 Plan deductions and savings effectively</li>
-      <li>🧮 Compare Old and New tax regimes</li>
-      <li>💡 Make informed financial decisions</li>
-      <li>🧘‍♂️ Reduce stress with proactive planning</li>
-    </ul>
-  </div>
+      document.getElementById("main-heading").innerText = dict["Income Tax Calculator"];
+      document.getElementById("label-income").innerText = dict["Annual Gross Income (₹):"];
+      document.getElementById("label-age").innerText = dict["Age Category:"];
+      document.getElementById("label-deductions").innerText = dict["Total Deductions (₹):"];
+      document.getElementById("label-regime").innerText = dict["Select Tax Regime:"];
+      document.getElementById("btn-calculate").innerText = dict["Calculate"];
+      document.getElementById("btn-reset").innerText = dict["Reset"];
+      document.getElementById("btn-preview").innerText = dict["Preview"];
+      document.getElementById("preview-title").innerText = dict["📄 Income Tax Summary"];
+    }
 
-  <div class="footer-section">
-    <h2>⚖️ Old vs New Tax Regime</h2>
-    <p><strong>Old Regime:</strong> Higher tax rates but allows deductions like 80C, HRA, LTA, etc.</p>
-    <p><strong>New Regime:</strong> Lower tax rates, but without exemptions/deductions. Simple and suitable for those with fewer investments.</p>
-  </div>
+    function calculateTax() {
+      const income = parseFloat(document.getElementById("income").value) || 0;
+      const age = document.getElementById("age").value;
+      const deductions = parseFloat(document.getElementById("deductions").value) || 0;
+      const regime = document.getElementById("regime").value;
 
-  <div class="footer-section">
-    <h2>🔐 Disclaimer</h2>
-    <p>
-      This calculator is for informational purposes only and does not constitute professional financial advice. Tax rules change periodically. Always consult a certified tax professional for personalized guidance.
-    </p>
-  </div>
+      let taxable = income;
+      if (regime === "old") taxable -= deductions;
 
-  <div class="footer-brand">
-    <p>© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
-  </div>
-</footer>
+      let tax = 0;
 
+      if (regime === "old") {
+        if (age === "below60") {
+          if (taxable <= 250000) tax = 0;
+          else if (taxable <= 500000) tax = (taxable - 250000) * 0.05;
+          else if (taxable <= 1000000) tax = 12500 + (taxable - 500000) * 0.2;
+          else tax = 112500 + (taxable - 1000000) * 0.3;
+        } else if (age === "60to80") {
+          if (taxable <= 300000) tax = 0;
+          else if (taxable <= 500000) tax = (taxable - 300000) * 0.05;
+          else if (taxable <= 1000000) tax = 10000 + (taxable - 500000) * 0.2;
+          else tax = 110000 + (taxable - 1000000) * 0.3;
+        } else {
+          if (taxable <= 500000) tax = 0;
+          else if (taxable <= 1000000) tax = (taxable - 500000) * 0.2;
+          else tax = 100000 + (taxable - 1000000) * 0.3;
+        }
+      } else {
+        if (taxable <= 250000) tax = 0;
+        else if (taxable <= 500000) tax = (taxable - 250000) * 0.05;
+        else if (taxable <= 750000) tax = 12500 + (taxable - 500000) * 0.1;
+        else if (taxable <= 1000000) tax = 37500 + (taxable - 750000) * 0.15;
+        else if (taxable <= 1250000) tax = 75000 + (taxable - 1000000) * 0.2;
+        else if (taxable <= 1500000) tax = 125000 + (taxable - 1250000) * 0.25;
+        else tax = 187500 + (taxable - 1500000) * 0.3;
+      }
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = `
+        <h3>Taxable Income: ₹${taxable.toLocaleString()}</h3>
+        <h2>Estimated Tax: ₹${tax.toLocaleString()}</h2>
+      `;
+
+      drawCharts(taxable, tax);
+    }
+
+    function drawCharts(taxable, tax) {
+      const pieCtx = document.getElementById('pieChart').getContext('2d');
+      const barCtx = document.getElementById('barChart').getContext('2d');
+      const piePrevCtx = document.getElementById('previewPieChart').getContext('2d');
+      const barPrevCtx = document.getElementById('previewBarChart').getContext('2d');
+
+      [pieCtx, piePrevCtx].forEach(ctx => new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Tax', 'Remaining Income'],
+          datasets: [{
+            data: [tax, taxable - tax],
+            backgroundColor: ['#e53935', '#43a047']
+          }]
+        }
+      }));
+
+      [barCtx, barPrevCtx].forEach(ctx => new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Tax', 'Net Income'],
+          datasets: [{
+            label: '₹ Amount',
+            data: [tax, taxable - tax],
+            backgroundColor: ['#fb8c00', '#1976d2']
+          }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+      }));
+    }
+
+    function resetForm() {
+      document.getElementById("income").value = '';
+      document.getElementById("deductions").value = '';
+      document.getElementById("results").innerHTML = '';
+      document.getElementById("pieChart").remove();
+      document.getElementById("barChart").remove();
+      document.getElementById("charts").innerHTML = `
+        <canvas id="pieChart"></canvas>
+        <canvas id="barChart"></canvas>
+      `;
+    }
+
+    function togglePreview() {
+      const income = document.getElementById("income").value;
+      const deductions = document.getElementById("deductions").value;
+      const age = document.getElementById("age").value;
+      const regime = document.getElementById("regime").value;
+
+      const preview = document.getElementById("preview-area");
+      const results = document.getElementById("results").innerHTML;
+
+      document.getElementById("preview-results").innerHTML = `
+        <p><strong>Income:</strong> ₹${income}</p>
+        <p><strong>Deductions:</strong> ₹${deductions}</p>
+        <p><strong>Age:</strong> ${age}</p>
+        <p><strong>Regime:</strong> ${regime}</p>
+        ${results}
+      `;
+
+      preview.style.display = 'block';
+    }
+
+    function downloadImage() {
+      html2canvas(document.getElementById("preview-area")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "income-tax-summary.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      html2canvas(document.getElementById("preview-area")).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("income-tax-summary.pdf");
+      });
+    }
+
+    function sharePreview() {
+      const text = document.getElementById("preview-results").innerText;
+      if (navigator.share) {
+        navigator.share({ title: "Income Tax Summary", text });
+      } else {
+        navigator.clipboard.writeText(text);
+        alert("Summary copied to clipboard!");
+      }
+    }
+  </script>
+
+  <footer style="text-align:center; margin-top:2rem; padding:1rem; background:#f1f1f1; font-size:0.9rem;">
+    <p>📧 Contact: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
+    <p>© 2025 Pratix Finance. Built by Raghav Pratap.</p>
+    <p>This calculator helps estimate Indian income tax liability based on your details. For exact info, consult a professional.</p>
+  </footer>
 </body>
 </html>
