@@ -1,111 +1,62 @@
-let pieChart, barChart;
-
 function calculateGST() {
-  const amount = parseFloat(document.getElementById("amount").value);
-  const rate = parseFloat(document.getElementById("rate").value);
+  const amount = parseFloat(document.getElementById("amount").value) || 0;
+  const rate = parseFloat(document.getElementById("rate").value) || 0;
 
-  if (isNaN(amount) || amount <= 0) {
-    alert("Please enter a valid amount.");
-    return;
-  }
+  const gst = (amount * rate) / 100;
+  const total = amount + gst;
 
-  const gstAmount = (amount * rate) / 100;
-  const cgst = gstAmount / 2;
-  const sgst = gstAmount / 2;
-  const finalAmount = amount + gstAmount;
+  document.getElementById("gstAmount").textContent = gst.toFixed(2);
+  document.getElementById("totalAmount").textContent = total.toFixed(2);
 
-  // Update results
-  document.getElementById("cgst").innerText = cgst.toFixed(2);
-  document.getElementById("sgst").innerText = sgst.toFixed(2);
-  document.getElementById("totalGst").innerText = gstAmount.toFixed(2);
-  document.getElementById("finalAmount").innerText = finalAmount.toFixed(2);
+  drawCharts(amount, gst);
+}
 
-  // Chart Data
-  const pieData = {
-    labels: ['Original Amount', 'CGST', 'SGST'],
-    datasets: [{
-      label: 'GST Split',
-      data: [amount, cgst, sgst],
-      backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726'],
-      borderWidth: 1
-    }]
-  };
+function drawCharts(amount, gst) {
+  const ctxPie = document.getElementById("gstPieChart").getContext("2d");
+  const ctxBar = document.getElementById("gstBarChart").getContext("2d");
 
-  const barData = {
-    labels: ['Original', 'CGST', 'SGST', 'Final'],
-    datasets: [{
-      label: 'Amount (₹)',
-      data: [amount, cgst, sgst, finalAmount],
-      backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc']
-    }]
-  };
+  if (window.pieChart) window.pieChart.destroy();
+  if (window.barChart) window.barChart.destroy();
 
-  const pieConfig = {
+  window.pieChart = new Chart(ctxPie, {
     type: 'pie',
-    data: pieData,
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'GST Distribution'
-        }
-      }
+    data: {
+      labels: ['Amount', 'GST'],
+      datasets: [{
+        data: [amount, gst],
+        backgroundColor: ['#4CAF50', '#FF9800'],
+      }]
     }
-  };
+  });
 
-  const barConfig = {
+  window.barChart = new Chart(ctxBar, {
     type: 'bar',
-    data: barData,
+    data: {
+      labels: ['Amount', 'GST'],
+      datasets: [{
+        label: 'Breakdown',
+        data: [amount, gst],
+        backgroundColor: ['#4CAF50', '#FF9800'],
+      }]
+    },
     options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: 'GST Breakdown'
-        }
-      },
       scales: {
         y: { beginAtZero: true }
       }
     }
-  };
-
-  // Destroy old charts if exist
-  if (pieChart) pieChart.destroy();
-  if (barChart) barChart.destroy();
-
-  pieChart = new Chart(document.getElementById('gstPieChart'), pieConfig);
-  barChart = new Chart(document.getElementById('gstBarChart'), barConfig);
+  });
 }
 
-
-// Optional language translations (to be extended)
+// Language Switching Logic
 function changeLanguage() {
-  const lang = document.getElementById("language").value;
-  const titles = {
-    en: "GST Calculator",
-    hi: "जीएसटी कैलकुलेटर",
-    fr: "Calculateur de GST",
-    de: "GST-Rechner",
-    ru: "Калькулятор НДС",
-    ja: "GST計算機",
-    bn: "GST ক্যালকুলেটর"
-  };
-  const disclaimers = {
-    en: "This GST calculator provides an estimate for informational purposes only.",
-    hi: "यह GST कैलकुलेटर केवल जानकारी के लिए एक अनुमान प्रदान करता है।",
-    fr: "Ce calculateur de GST fournit une estimation à titre informatif.",
-    de: "Dieser GST-Rechner dient nur zu Informationszwecken.",
-    ru: "Этот калькулятор НДС предназначен только для информационных целей.",
-    ja: "このGST計算機は参考用です。",
-    bn: "এই GST ক্যালকুলেটর শুধুমাত্র তথ্যের জন্য একটি অনুমান প্রদান করে।"
-  };
+  const lang = document.getElementById("language-select").value;
+  const t = translations[lang];
 
-  document.getElementById("gstTitle").innerText = titles[lang] || titles["en"];
-  document.getElementById("gstDisclaimer").innerText = disclaimers[lang] || disclaimers["en"];
+  document.getElementById("gstTitle").textContent = t.title;
+  document.getElementById("label-amount").textContent = t.amount;
+  document.getElementById("label-rate").textContent = t.rate;
+  document.getElementById("calculateBtn").textContent = t.calculate;
+  document.getElementById("gstInfoHeading").textContent = t.gstInfo;
+  document.getElementById("gstInfoPara").textContent = t.gstDesc;
+  document.getElementById("gstBenefitsHeading").textContent = t.gstWhy;
 }

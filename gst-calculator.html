@@ -6,24 +6,23 @@
   <title>GST Calculator - Pratix Finance</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 <body>
   <div class="container">
 
+    <!-- 🌐 Language Toggle -->
     <div class="language-toggle">
-  🌐
-  <select id="language-select" onchange="changeLanguage()">
-    <option value="en">English</option>
-    <option value="hi">हिन्दी</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="ru">Русский</option>
-    <option value="ja">日本語</option>
-    <option value="bn">বাংলা</option>
-  </select>
-</div>
-
+      🌐
+      <select id="language-select" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="bn">বাংলা</option>
+      </select>
+    </div>
 
     <!-- 🧾 Logo + Title -->
     <div class="header">
@@ -33,10 +32,10 @@
 
     <!-- 💼 Input Section -->
     <div class="input-section">
-      <label for="amount">Enter Amount (₹):</label>
+      <label id="label-amount" for="amount">Enter Amount (₹):</label>
       <input type="number" id="amount" placeholder="Enter amount here" />
 
-      <label for="rate">GST Rate (%):</label>
+      <label id="label-rate" for="rate">GST Rate (%):</label>
       <select id="rate">
         <option value="5">5%</option>
         <option value="12">12%</option>
@@ -44,55 +43,42 @@
         <option value="28">28%</option>
       </select>
 
-      <button onclick="calculateGST()">Calculate GST</button>
+      <button onclick="calculateGST()" id="calculateBtn">Calculate GST</button>
     </div>
 
     <!-- 📊 Result Section -->
-    <div id="preview" class="result-section">
-      <h2>Results:</h2>
-      <p><strong>CGST:</strong> ₹<span id="cgst">0.00</span></p>
-      <p><strong>SGST:</strong> ₹<span id="sgst">0.00</span></p>
-      <p><strong>Total GST:</strong> ₹<span id="totalGst">0.00</span></p>
-      <p><strong>Final Amount:</strong> ₹<span id="finalAmount">0.00</span></p>
+    <div id="resultSection">
+      <p><strong>Total GST:</strong> ₹<span id="gstAmount">0.00</span></p>
+      <p><strong>Total Amount Including GST:</strong> ₹<span id="totalAmount">0.00</span></p>
+
+      <div class="chart-container">
+        <canvas id="gstPieChart" height="200"></canvas>
+        <canvas id="gstBarChart" height="200"></canvas>
+      </div>
     </div>
 
-    <p id="gstDisclaimer" class="disclaimer">
-      This GST calculator provides an estimate for informational purposes only.
-    </p>
+    <!-- 📘 Footer Information -->
+    <footer class="gst-footer">
+      <h2 id="gstInfoHeading">📘 What is GST?</h2>
+      <p id="gstInfoPara">GST (Goods and Services Tax) is a comprehensive indirect tax levied on the manufacture, sale, and consumption of goods and services throughout India. It replaced many indirect taxes previously levied by the central and state governments.</p>
+
+      <h3 id="gstBenefitsHeading">💡 Why Use a GST Calculator?</h3>
+      <ul>
+        <li>📈 Easily calculate GST on invoices and purchases</li>
+        <li>✅ Helps businesses in tax planning and filing</li>
+        <li>📊 Saves time with accurate results</li>
+      </ul>
+
+      <h3>⚠️ Disclaimer:</h3>
+      <p>The calculator provides approximate results. Please consult a tax advisor for exact calculations.</p>
+
+      <p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
+    </footer>
+
   </div>
-<!-- Charts -->
-<div class="chart-section">
-  <canvas id="gstPieChart" width="300" height="300"></canvas>
-  <canvas id="gstBarChart" width="300" height="300"></canvas>
-</div>
 
+  <!-- Scripts -->
   <script src="gst.js"></script>
-  <footer class="info-footer">
-  <hr />
-  <h3>🧾 What is GST?</h3>
-  <p>
-    GST (Goods and Services Tax) is a comprehensive, multi-stage, destination-based tax that is levied on every value addition. It has replaced many indirect taxes in India like VAT, service tax, and excise duty.
-  </p>
-
-  <h3>📈 Benefits of GST</h3>
-  <ul>
-    <li>✅ Unified tax system across the country</li>
-    <li>📦 Eliminates cascading tax effect</li>
-    <li>📊 Higher efficiency in logistics</li>
-    <li>🧾 Transparent and simple tax structure</li>
-    <li>🛒 Reduced overall tax burden on consumers</li>
-  </ul>
-
-  <h3>📊 Why Use a GST Calculator?</h3>
-  <p>
-    A GST calculator helps you determine the GST amount payable or receivable on a given product/service. It's useful for businesses, freelancers, shopkeepers, and customers to understand accurate pricing.
-  </p>
-
-  <h3>🔒 Disclaimer:</h3>
-  <p>
-    This GST calculator is for general informational purposes only. Please consult a tax expert or chartered accountant for accurate tax filings.
-  </p>
-</footer>
-
+  <script src="translations.js"></script>
 </body>
 </html>
