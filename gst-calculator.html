@@ -7,6 +7,17 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <select id="languageSelect">
+  <option value="bn">🇧🇩 Bengali</option>
+  <option value="en" selected>🌐 English</option>
+  <option value="fr">🇫🇷 French</option>
+  <option value="hi">🇮🇳 Hindi</option>
+  <option value="ja">🇯🇵 Japanese</option>
+  <option value="ko">🇰🇷 Korean</option>
+  <option value="ru">🇷🇺 Russian</option>
+  <option value="es">🇪🇸 Spanish</option>
+</select>
+
   <div class="container">
     <header>
       <img src="logo.png" alt="Pratix Finance Logo" class="logo" />
@@ -156,3 +167,109 @@
     });
   }
 </script>
+const translations = {
+  bn: {
+    title: "জিএসটি ক্যালকুলেটর",
+    enterAmount: "পরিমাণ লিখুন (₹):",
+    selectRate: "জিএসটি হার নির্বাচন করুন (%):",
+    resetBtn: "🔁 রিসেট",
+    calculateBtn: "📊 হিসাব করুন",
+    previewBtn: "👁️ প্রিভিউ",
+    resultTitle: "জিএসটি হিসাবের ফলাফল",
+    cgstLabel: "সিজিএসটি: ₹",
+    sgstLabel: "এসজিএসটি: ₹",
+    totalGstLabel: "মোট জিএসটি: ₹",
+    finalAmountLabel: "চূড়ান্ত পরিমাণ: ₹"
+  },
+  en: {
+    title: "GST Calculator",
+    enterAmount: "Enter Amount (₹):",
+    selectRate: "Select GST Rate (%):",
+    resetBtn: "🔁 Reset",
+    calculateBtn: "📊 Calculate",
+    previewBtn: "👁️ Preview",
+    resultTitle: "GST Calculation Result",
+    cgstLabel: "CGST: ₹",
+    sgstLabel: "SGST: ₹",
+    totalGstLabel: "Total GST: ₹",
+    finalAmountLabel: "Final Amount: ₹"
+  },
+  fr: {
+    title: "Calculateur de TVA",
+    enterAmount: "Entrez le montant (₹):",
+    selectRate: "Sélectionnez le taux de TVA (%):",
+    resetBtn: "🔁 Réinitialiser",
+    calculateBtn: "📊 Calculer",
+    previewBtn: "👁️ Aperçu",
+    resultTitle: "Résultat du calcul de la TVA",
+    cgstLabel: "CGST: ₹",
+    sgstLabel: "SGST: ₹",
+    totalGstLabel: "TVA totale: ₹",
+    finalAmountLabel: "Montant final: ₹"
+  },
+  hi: {
+    title: "जीएसटी कैलकुलेटर",
+    enterAmount: "राशि दर्ज करें (₹):",
+    selectRate: "जीएसटी दर चुनें (%):",
+    resetBtn: "🔁 रीसेट",
+    calculateBtn: "📊 कैलकुलेट",
+    previewBtn: "👁️ पूर्वावलोकन",
+    resultTitle: "जीएसटी कैलकुलेशन परिणाम",
+    cgstLabel: "सीजीएसटी: ₹",
+    sgstLabel: "एसजीएसटी: ₹",
+    totalGstLabel: "कुल जीएसटी: ₹",
+    finalAmountLabel: "अंतिम राशि: ₹"
+  },
+  ja: {
+    title: "GST計算機",
+    enterAmount: "金額を入力してください (₹):",
+    selectRate: "GST率を選択 (%)：",
+    resetBtn: "🔁 リセット",
+    calculateBtn: "📊 計算する",
+    previewBtn: "👁️ プレビュー",
+    resultTitle: "GST計算結果",
+    cgstLabel: "CGST: ₹",
+    sgstLabel: "SGST: ₹",
+    totalGstLabel: "合計GST: ₹",
+    finalAmountLabel: "最終金額: ₹"
+  },
+  ko: {
+    title: "GST 계산기",
+    enterAmount: "금액 입력 (₹):",
+    selectRate: "GST 비율 선택 (%):",
+    resetBtn: "🔁 초기화",
+    calculateBtn: "📊 계산",
+    previewBtn: "👁️ 미리보기",
+    resultTitle: "GST 계산 결과",
+    cgstLabel: "CGST: ₹",
+    sgstLabel: "SGST: ₹",
+    totalGstLabel: "총 GST: ₹",
+    finalAmountLabel: "최종 금액: ₹"
+  },
+  ru: {
+    title: "Калькулятор НДС",
+    enterAmount: "Введите сумму (₹):",
+    selectRate: "Выберите ставку НДС (%):",
+    resetBtn: "🔁 Сброс",
+    calculateBtn: "📊 Рассчитать",
+    previewBtn: "👁️ Предпросмотр",
+    resultTitle: "Результат расчета НДС",
+    cgstLabel: "CGST: ₹",
+    sgstLabel: "SGST: ₹",
+    totalGstLabel: "Общий НДС: ₹",
+    finalAmountLabel: "Итоговая сумма: ₹"
+  },
+  es: {
+    title: "Calculadora de IVA",
+    enterAmount: "Ingrese el monto (₹):",
+    selectRate: "Seleccione la tasa de IVA (%):",
+    resetBtn: "🔁 Reiniciar",
+    calculateBtn: "📊 Calcular",
+    previewBtn: "👁️ Vista previa",
+    resultTitle: "Resultado del cálculo de IVA",
+    cgstLabel: "CGST: ₹",
+    sgstLabel: "SGST: ₹",
+    totalGstLabel: "IVA total: ₹",
+    finalAmountLabel: "Monto final: ₹"
+  }
+};
