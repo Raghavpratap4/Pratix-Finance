@@ -47,7 +47,6 @@ function drawCharts(amount, gst) {
   });
 }
 
-// Language Switching Logic
 function changeLanguage() {
   const lang = document.getElementById("language-select").value;
   const t = translations[lang];
@@ -56,7 +55,14 @@ function changeLanguage() {
   document.getElementById("label-amount").textContent = t.amount;
   document.getElementById("label-rate").textContent = t.rate;
   document.getElementById("calculateBtn").textContent = t.calculate;
+
   document.getElementById("gstInfoHeading").textContent = t.gstInfo;
   document.getElementById("gstInfoPara").textContent = t.gstDesc;
   document.getElementById("gstBenefitsHeading").textContent = t.gstWhy;
+  document.getElementById("disclaimerText").textContent = t.disclaimer;
+
+  // List items
+  document.getElementById("li1").textContent = t.li1;
+  document.getElementById("li2").textContent = t.li2;
+  document.getElementById("li3").textContent = t.li3;
 }

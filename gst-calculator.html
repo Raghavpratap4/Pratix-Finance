@@ -2,15 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GST Calculator - Pratix Finance</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
-
-    <!-- 🌐 Language Toggle -->
     <div class="language-toggle">
       🌐
       <select id="language-select" onchange="changeLanguage()">
@@ -24,60 +22,56 @@
       </select>
     </div>
 
-    <!-- 🧾 Logo + Title -->
     <div class="header">
       <img src="logo.png" alt="Logo" style="display:block; margin:10px auto; max-width:150px;"/>
-      <h1 id="gstTitle">GST Calculator</h1>
+      <h1 id="gstTitle">🧾 GST Calculator</h1>
     </div>
 
-    <!-- 💼 Input Section -->
-    <div class="input-section">
-      <label id="label-amount" for="amount">Enter Amount (₹):</label>
-      <input type="number" id="amount" placeholder="Enter amount here" />
+    <section class="calculator">
+      <div class="input-group">
+        <label id="label-amount">Enter Amount (₹):</label>
+        <input type="number" id="amount" placeholder="Enter Amount" />
+      </div>
+      <div class="input-group">
+        <label id="label-rate">GST Rate (%):</label>
+        <input type="number" id="rate" placeholder="Enter GST Rate" />
+      </div>
+      <button id="calculateBtn" onclick="calculateGST()">Calculate GST</button>
+    </section>
 
-      <label id="label-rate" for="rate">GST Rate (%):</label>
-      <select id="rate">
-        <option value="5">5%</option>
-        <option value="12">12%</option>
-        <option value="18" selected>18%</option>
-        <option value="28">28%</option>
-      </select>
-
-      <button onclick="calculateGST()" id="calculateBtn">Calculate GST</button>
-    </div>
-
-    <!-- 📊 Result Section -->
-    <div id="resultSection">
-      <p><strong>Total GST:</strong> ₹<span id="gstAmount">0.00</span></p>
-      <p><strong>Total Amount Including GST:</strong> ₹<span id="totalAmount">0.00</span></p>
+    <section class="output">
+      <h2>🧾 Result:</h2>
+      <p><strong>GST Amount:</strong> ₹<span id="gstAmount">0.00</span></p>
+      <p><strong>Total Amount (incl. GST):</strong> ₹<span id="totalAmount">0.00</span></p>
 
       <div class="chart-container">
         <canvas id="gstPieChart" height="200"></canvas>
         <canvas id="gstBarChart" height="200"></canvas>
       </div>
-    </div>
+    </section>
 
-    <!-- 📘 Footer Information -->
     <footer class="gst-footer">
       <h2 id="gstInfoHeading">📘 What is GST?</h2>
-      <p id="gstInfoPara">GST (Goods and Services Tax) is a comprehensive indirect tax levied on the manufacture, sale, and consumption of goods and services throughout India. It replaced many indirect taxes previously levied by the central and state governments.</p>
+      <p id="gstInfoPara">
+        GST (Goods and Services Tax) is a comprehensive indirect tax levied on the manufacture, sale, and consumption of goods and services throughout India.
+      </p>
 
       <h3 id="gstBenefitsHeading">💡 Why Use a GST Calculator?</h3>
       <ul>
-        <li>📈 Easily calculate GST on invoices and purchases</li>
-        <li>✅ Helps businesses in tax planning and filing</li>
-        <li>📊 Saves time with accurate results</li>
+        <li id="li1">📈 Easily calculate GST on invoices and purchases</li>
+        <li id="li2">✅ Helps businesses in tax planning and filing</li>
+        <li id="li3">📊 Saves time with accurate results</li>
       </ul>
 
       <h3>⚠️ Disclaimer:</h3>
-      <p>The calculator provides approximate results. Please consult a tax advisor for exact calculations.</p>
+      <p id="disclaimerText">
+        The calculator provides approximate results. Please consult a tax advisor for exact calculations.
+      </p>
 
       <p class="footer-brand">© 2025 Pratix Finance | Built with ❤️ by Raghav Pratap</p>
     </footer>
-
   </div>
 
-  <!-- Scripts -->
   <script src="gst.js"></script>
   <script src="translations.js"></script>
 </body>
