@@ -1,437 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SIP Calculator – Pratix Finance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pratix SIP Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #f3f4f6, #e5e7eb);
-      color: #111;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 1.5rem;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    .logo {
-      width: 120px;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-    .lang-select {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    select {
-      padding: 8px;
-      border-radius: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      font-weight: 600;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 1rem;
-    }
-    .btn-group {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1.5rem;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    button {
-      flex: 1;
-      padding: 10px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      opacity: 0.9;
-    }
-    .reset-btn { background: #f87171; color: white; }
-    .calc-btn { background: #34d399; color: white; }
-    .preview-btn { background: #60a5fa; color: white; }
-
-    #result, #previewSection {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: #f9fafb;
-      border-radius: 10px;
-    }
-    #charts {
-      margin-top: 1rem;
-    }
-    footer {
-      text-align: center;
-      margin-top: 2rem;
-      font-size: 0.85rem;
-    }
-    a {
-      color: #3b82f6;
-      text-decoration: none;
-    }
-    .hide {
-      display: none !important;
+      background: linear-gradient(to right, #f0fdfa, #e0f2fe);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
   </style>
 </head>
-<body>
-  <div class="container" id="mainContent">
-    <img src="https://pratixfinance.in/logo.png" alt="Logo" class="logo" />
-    <h1 id="sipTitle">SIP Calculator</h1>
 
-    <!-- Language Selector -->
-    <div class="lang-select">
-      <select id="language" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="hi">हिन्दी</option>
-        <option value="bn">বাংলা</option>
-        <option value="fr">Français</option>
-        <option value="ru">Русский</option>
-        <option value="es">Español</option>
-        <option value="ja">日本語</option>
-        <option value="ko">한국어</option>
-      </select>
+<body class="min-h-screen flex flex-col items-center justify-center text-gray-800">
+  <!-- Header -->
+  <header class="flex items-center justify-between bg-white shadow-lg px-6 py-4 w-full max-w-5xl rounded-xl mt-4">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" alt="Pratix Logo" class="w-10 h-10 rounded-full" />
+      <h1 class="text-2xl font-extrabold text-blue-600">Pratix SIP Calculator</h1>
     </div>
-
-    <!-- Input Fields -->
-    <label id="labelMonthly">Monthly Investment (₹):</label>
-    <input type="number" id="monthlyInvestment" placeholder="e.g., 2000" />
-
-    <label id="labelRate">Expected Annual Return (%):</label>
-    <input type="number" id="annualReturn" placeholder="e.g., 12" />
-
-    <label id="labelYears">Investment Duration (Years):</label>
-    <input type="number" id="investmentPeriod" placeholder="e.g., 10" />
-
-    <!-- Buttons -->
-    <div class="btn-group">
-      <button class="reset-btn" onclick="resetForm()" id="btnReset">Reset</button>
-      <button class="calc-btn" onclick="calculateSIP()" id="btnCalculate">Calculate</button>
-      <button class="preview-btn" onclick="generatePreview()" id="btnPreview">Preview</button>
-    </div>
-
-    <!-- Result Display -->
-    <div id="result" class="hide">
-      <h3 id="resultTitle">Result</h3>
-      <p id="investedAmount"></p>
-      <p id="totalReturn"></p>
-      <p id="maturityValue"></p>
-      <div id="charts">
-        <canvas id="sipPieChart"></canvas>
-        <canvas id="sipBarChart" style="margin-top:20px;"></canvas>
+    <div class="relative">
+      <button id="menuButton" class="text-2xl text-gray-600 hover:text-blue-600">⋮</button>
+      <div id="menu" class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-xl hidden z-20">
+        <button onclick="downloadPDF()" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Download PDF</button>
+        <button onclick="shareResults()" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Share Result</button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Preview Section (only visible in print/download) -->
-  <div id="previewSection" class="hide">
-    <img src="https://pratixfinance.in/logo.png" alt="Logo" class="logo" />
-    <h1>SIP Calculator</h1>
-    <div id="previewInput"></div>
-    <div id="previewOutput"></div>
-    <div id="previewCharts">
-      <canvas id="previewPieChart"></canvas>
-      <canvas id="previewBarChart" style="margin-top:20px;"></canvas>
+  <!-- Main Content -->
+  <main class="flex-grow w-full flex justify-center items-center py-10 px-4">
+    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-2xl p-8 md:p-12 grid md:grid-cols-2 gap-10">
+      <!-- Inputs -->
+      <div>
+        <h2 class="text-2xl font-bold text-blue-700 mb-6">Enter Investment Details</h2>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium">Monthly SIP Amount (₹)</label>
+            <input id="sipAmount" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Investment Duration (Years)</label>
+            <input id="duration" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Expected Annual Return (%)</label>
+            <input id="returnRate" type="number" step="0.1" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input id="stepUpToggle" type="checkbox" class="accent-blue-500" />
+            <label class="text-sm">Enable Step-Up SIP</label>
+          </div>
+          <div id="stepUpRateBox" class="hidden">
+            <label class="block text-sm font-medium">Step-Up Rate (% yearly)</label>
+            <input id="stepUpRate" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input id="inflationToggle" type="checkbox" class="accent-blue-500" />
+            <label class="text-sm">Adjust for Inflation</label>
+          </div>
+          <div id="inflationBox" class="hidden">
+            <label class="block text-sm font-medium">Inflation Rate (%)</label>
+            <input id="inflationRate" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input id="goalToggle" type="checkbox" class="accent-blue-500" />
+            <label class="text-sm">Goal-based SIP</label>
+          </div>
+          <div id="goalBox" class="hidden">
+            <label class="block text-sm font-medium">Target Amount (₹)</label>
+            <input id="goalAmount" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+
+          <div class="flex gap-4 mt-4">
+            <button onclick="calculateSIP()" class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-2 rounded-2xl shadow hover:opacity-90">Calculate</button>
+            <button onclick="resetForm()" class="bg-gradient-to-r from-gray-500 to-gray-400 text-white px-6 py-2 rounded-2xl shadow hover:opacity-90">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsBox" class="hidden">
+        <h2 class="text-2xl font-bold text-blue-700 mb-6">SIP Summary</h2>
+        <div class="space-y-3 text-base">
+          <p id="invested" class="font-medium"></p>
+          <p id="maturity" class="font-medium"></p>
+          <p id="returns" class="font-medium"></p>
+          <p id="inflationAdj" class="text-gray-600"></p>
+          <p id="requiredSIP" class="text-green-700 font-bold"></p>
+        </div>
+
+        <div class="mt-8">
+          <canvas id="barChart" class="mb-8"></canvas>
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
     </div>
-    <div class="btn-group" style="margin-top:20px;">
-      <button onclick="downloadImage()" class="preview-btn" id="btnImage">Download Image</button>
-      <button onclick="downloadPDF()" class="preview-btn" id="btnPDF">Download PDF</button>
-      <button onclick="shareResult()" class="preview-btn" id="btnShare">Share</button>
-    </div>
-  </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  let pieChart, barChart, previewPieChart, previewBarChart;
+  </main>
 
-  function calculateSIP() {
-    const monthly = parseFloat(document.getElementById("monthlyInvestment").value);
-    const rate = parseFloat(document.getElementById("annualReturn").value) / 100 / 12;
-    const years = parseFloat(document.getElementById("investmentPeriod").value);
-    const months = years * 12;
-
-    if (isNaN(monthly) || isNaN(rate) || isNaN(years)) return;
-
-    const investedAmount = monthly * months;
-    const maturityValue = monthly * ((Math.pow(1 + rate, months) - 1) * (1 + rate)) / rate;
-    const totalReturn = maturityValue - investedAmount;
-
-    document.getElementById("result").classList.remove("hide");
-    document.getElementById("investedAmount").textContent = currentLangData.invested + ": ₹" + investedAmount.toFixed(2);
-    document.getElementById("totalReturn").textContent = currentLangData.returns + ": ₹" + totalReturn.toFixed(2);
-    document.getElementById("maturityValue").textContent = currentLangData.maturity + ": ₹" + maturityValue.toFixed(2);
-
-    drawCharts(investedAmount, totalReturn, maturityValue, false);
-  }
-
-  function resetForm() {
-    document.getElementById("monthlyInvestment").value = "";
-    document.getElementById("annualReturn").value = "";
-    document.getElementById("investmentPeriod").value = "";
-    document.getElementById("result").classList.add("hide");
-    if (pieChart) pieChart.destroy();
-    if (barChart) barChart.destroy();
-  }
-
-  function drawCharts(invested, returns, maturity, previewMode) {
-    const pieCtx = previewMode ? document.getElementById("previewPieChart") : document.getElementById("sipPieChart");
-    const barCtx = previewMode ? document.getElementById("previewBarChart") : document.getElementById("sipBarChart");
-
-    const pieData = {
-      labels: [currentLangData.invested, currentLangData.returns],
-      datasets: [{
-        data: [invested, returns],
-        backgroundColor: ['#34d399', '#60a5fa']
-      }]
-    };
-
-    const barData = {
-      labels: [currentLangData.invested, currentLangData.returns, currentLangData.maturity],
-      datasets: [{
-        label: currentLangData.chartLabel,
-        data: [invested, returns, maturity],
-        backgroundColor: ['#34d399', '#60a5fa', '#fbbf24']
-      }]
-    };
-
-    const pieOptions = { responsive: true, plugins: { legend: { position: 'bottom' } } };
-    const barOptions = { responsive: true, scales: { y: { beginAtZero: true } } };
-
-    if (previewMode) {
-      if (previewPieChart) previewPieChart.destroy();
-      if (previewBarChart) previewBarChart.destroy();
-      previewPieChart = new Chart(pieCtx, { type: 'pie', data: pieData, options: pieOptions });
-      previewBarChart = new Chart(barCtx, { type: 'bar', data: barData, options: barOptions });
-    } else {
-      if (pieChart) pieChart.destroy();
-      if (barChart) barChart.destroy();
-      pieChart = new Chart(pieCtx, { type: 'pie', data: pieData, options: pieOptions });
-      barChart = new Chart(barCtx, { type: 'bar', data: barData, options: barOptions });
-    }
-  }
-
-  function generatePreview() {
-    const monthly = document.getElementById("monthlyInvestment").value;
-    const rate = document.getElementById("annualReturn").value;
-    const years = document.getElementById("investmentPeriod").value;
-
-    if (!monthly || !rate || !years) return;
-
-    const monthlyVal = parseFloat(monthly);
-    const rateVal = parseFloat(rate) / 100 / 12;
-    const months = parseFloat(years) * 12;
-
-    const investedAmount = monthlyVal * months;
-    const maturityValue = monthlyVal * ((Math.pow(1 + rateVal, months) - 1) * (1 + rateVal)) / rateVal;
-    const totalReturn = maturityValue - investedAmount;
-
-    document.getElementById("previewSection").classList.remove("hide");
-    document.getElementById("mainContent").classList.add("hide");
-
-    // Set preview content
-    document.getElementById("previewInput").innerHTML = `
-      <p>${currentLangData.monthly}: ₹${monthly}</p>
-      <p>${currentLangData.rate}: ${rate}%</p>
-      <p>${currentLangData.years}: ${years}</p>
-    `;
-    document.getElementById("previewOutput").innerHTML = `
-      <p>${currentLangData.invested}: ₹${investedAmount.toFixed(2)}</p>
-      <p>${currentLangData.returns}: ₹${totalReturn.toFixed(2)}</p>
-      <p>${currentLangData.maturity}: ₹${maturityValue.toFixed(2)}</p>
-    `;
-
-    drawCharts(investedAmount, totalReturn, maturityValue, true);
-  }
-
-  let currentLangData = {};
-
-  const translations = {
-    en: {
-      sip: "SIP Calculator",
-      monthly: "Monthly Investment",
-      rate: "Expected Annual Return (%)",
-      years: "Investment Duration (Years)",
-      invested: "Invested Amount",
-      returns: "Total Returns",
-      maturity: "Maturity Value",
-      chartLabel: "SIP Projection"
-    },
-    hi: {
-      sip: "एसआईपी कैलकुलेटर",
-      monthly: "मासिक निवेश",
-      rate: "अपेक्षित वार्षिक रिटर्न (%)",
-      years: "निवेश अवधि (वर्षों में)",
-      invested: "निवेश राशि",
-      returns: "कुल लाभ",
-      maturity: "परिपक्व राशि",
-      chartLabel: "एसआईपी प्रक्षेपण"
-    },
-    bn: {
-      sip: "এসআইপি ক্যালকুলেটর",
-      monthly: "মাসিক বিনিয়োগ",
-      rate: "প্রত্যাশিত বার্ষিক রিটার্ন (%)",
-      years: "বিনিয়োগ সময়কাল (বছর)",
-      invested: "বিনিয়োগকৃত অর্থ",
-      returns: "মোট রিটার্ন",
-      maturity: "পরিপক্কতার মূল্য",
-      chartLabel: "এসআইপি প্রকল্প"
-    },
-    fr: {
-      sip: "Calculateur SIP",
-      monthly: "Investissement mensuel",
-      rate: "Rendement annuel attendu (%)",
-      years: "Durée d'investissement (années)",
-      invested: "Montant investi",
-      returns: "Retour total",
-      maturity: "Valeur à l'échéance",
-      chartLabel: "Projection SIP"
-    },
-    ru: {
-      sip: "Калькулятор SIP",
-      monthly: "Ежемесячные инвестиции",
-      rate: "Ожидаемая годовая доходность (%)",
-      years: "Срок инвестирования (лет)",
-      invested: "Инвестированная сумма",
-      returns: "Общая прибыль",
-      maturity: "Сумма к получению",
-      chartLabel: "Прогноз SIP"
-    },
-    es: {
-      sip: "Calculadora SIP",
-      monthly: "Inversión mensual",
-      rate: "Retorno anual esperado (%)",
-      years: "Duración de inversión (años)",
-      invested: "Monto invertido",
-      returns: "Retornos totales",
-      maturity: "Valor de madurez",
-      chartLabel: "Proyección SIP"
-    },
-    ja: {
-      sip: "SIP計算機",
-      monthly: "毎月の投資額",
-      rate: "期待される年間リターン (%)",
-      years: "投資期間（年）",
-      invested: "投資額",
-      returns: "総リターン",
-      maturity: "満期金額",
-      chartLabel: "SIP予測"
-    },
-    ko: {
-      sip: "SIP 계산기",
-      monthly: "월별 투자",
-      rate: "예상 연 수익률 (%)",
-      years: "투자 기간 (년)",
-      invested: "투자 금액",
-      returns: "총 수익",
-      maturity: "만기 금액",
-      chartLabel: "SIP 예측"
-    }
-  };
-
-  function changeLanguage() {
-    const lang = document.getElementById("language").value;
-    currentLangData = translations[lang];
-
-    document.getElementById("sipTitle").textContent = currentLangData.sip;
-    document.getElementById("labelMonthly").textContent = currentLangData.monthly + " (₹):";
-    document.getElementById("labelRate").textContent = currentLangData.rate;
-    document.getElementById("labelYears").textContent = currentLangData.years;
-    document.getElementById("btnReset").textContent = "Reset";
-    document.getElementById("btnCalculate").textContent = "Calculate";
-    document.getElementById("btnPreview").textContent = "Preview";
-    document.getElementById("resultTitle").textContent = "Result";
-  }
-
-  window.onload = () => {
-    changeLanguage(); // Set default language
-  };
-</script>
-<!-- Add html2canvas and jsPDF -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-  function downloadImage() {
-    const preview = document.getElementById("previewSection");
-    const buttons = preview.querySelectorAll(".btn-group button");
-    buttons.forEach(btn => btn.style.display = "none");
-
-    html2canvas(preview).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'sip-calculator-result.png';
-      link.href = canvas.toDataURL();
-      link.click();
-      buttons.forEach(btn => btn.style.display = "inline-block");
-    });
-  }
-
-  function downloadPDF() {
-    const preview = document.getElementById("previewSection");
-    const buttons = preview.querySelectorAll(".btn-group button");
-    buttons.forEach(btn => btn.style.display = "none");
-
-    html2canvas(preview).then(canvas => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-      const width = pdf.internal.pageSize.getWidth();
-      const height = canvas.height * width / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, width, height);
-      pdf.save("sip-calculator-result.pdf");
-      buttons.forEach(btn => btn.style.display = "inline-block");
-    });
-  }
-
-  function shareResult() {
-    const text = `${currentLangData.sip} - Check your SIP result on Pratix Finance!`;
-    const url = window.location.href;
-
-    if (navigator.share) {
-      navigator.share({
-        title: 'SIP Calculator Result',
-        text: text,
-        url: url
-      }).catch(console.error);
-    } else {
-      alert("Sharing not supported on this browser. You can copy the link:\n" + url);
-    }
-  }
-</script>
-
-<!-- Description and Footer -->
-<div class="container" style="margin-top: 2rem;">
-  <h2>SIP Calculator – About</h2>
-  <p style="text-align: justify;">
-    A SIP (Systematic Investment Plan) Calculator helps you estimate the future value of your investments made through monthly SIPs. By inputting your monthly investment amount, expected annual return rate, and duration, this tool calculates your total invested amount, potential earnings, and maturity value. It helps investors make informed decisions about mutual fund investments over time.
-  </p>
-</div>
-
-<footer>
-  Made with ❤️ by <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a><br/>
-  © 2025 Pratix Finance. All rights reserved.
-</footer>
+  <footer class="bg-white text-center py-4 text-sm text-gray-500 w-full">
+    © 2025 Pratix Finance. All rights reserved.
+  </footer>
 </body>
 </html>
