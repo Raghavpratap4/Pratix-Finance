@@ -1,113 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pratix SIP Calculator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+  <meta name="theme-color" content="#0f172a" />
+  <title>Advanced SIP Calculator - Pratix Finance</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <style>
-    body {
-      background: linear-gradient(to right, #f0fdfa, #e0f2fe);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .fade-in { animation: fadeIn 1s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
-
-<body class="min-h-screen flex flex-col items-center justify-center text-gray-800">
-  <!-- Header -->
-  <header class="flex items-center justify-between bg-white shadow-lg px-6 py-4 w-full max-w-5xl rounded-xl mt-4">
-    <div class="flex items-center gap-3">
-      <img src="logo.png" alt="Pratix Logo" class="w-10 h-10 rounded-full" />
-      <h1 class="text-2xl font-extrabold text-blue-600">Pratix SIP Calculator</h1>
-    </div>
-    <div class="relative">
-      <button id="menuButton" class="text-2xl text-gray-600 hover:text-blue-600">⋮</button>
-      <div id="menu" class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-xl hidden z-20">
-        <button onclick="downloadPDF()" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Download PDF</button>
-        <button onclick="shareResults()" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Share Result</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="flex-grow w-full flex justify-center items-center py-10 px-4">
-    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-2xl p-8 md:p-12 grid md:grid-cols-2 gap-10">
-      <!-- Inputs -->
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-900 dark:to-slate-800 text-gray-900 dark:text-white">
+  <div id="app" class="max-w-4xl mx-auto p-6 fade-in">
+    <header class="flex items-center justify-between mb-6">
+      <div class="text-xl font-bold">📈 Pratix SIP Calculator</div>
       <div>
-        <h2 class="text-2xl font-bold text-blue-700 mb-6">Enter Investment Details</h2>
-        <div class="space-y-5">
-          <div>
-            <label class="block text-sm font-medium">Monthly SIP Amount (₹)</label>
-            <input id="sipAmount" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium">Investment Duration (Years)</label>
-            <input id="duration" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium">Expected Annual Return (%)</label>
-            <input id="returnRate" type="number" step="0.1" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
+        <select id="language" class="rounded p-1">
+          <option>English</option>
+          <option>Hindi</option>
+          <option>Bengali</option>
+          <option>French</option>
+          <option>German</option>
+          <option>Spanish</option>
+          <option>Russian</option>
+          <option>Japanese</option>
+          <option>Korean</option>
+        </select>
+        <button onclick="toggleDarkMode()">🌓</button>
+      </div>
+    </header>
 
-          <div class="flex items-center gap-2">
-            <input id="stepUpToggle" type="checkbox" class="accent-blue-500" />
-            <label class="text-sm">Enable Step-Up SIP</label>
-          </div>
-          <div id="stepUpRateBox" class="hidden">
-            <label class="block text-sm font-medium">Step-Up Rate (% yearly)</label>
-            <input id="stepUpRate" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-
-          <div class="flex items-center gap-2">
-            <input id="inflationToggle" type="checkbox" class="accent-blue-500" />
-            <label class="text-sm">Adjust for Inflation</label>
-          </div>
-          <div id="inflationBox" class="hidden">
-            <label class="block text-sm font-medium">Inflation Rate (%)</label>
-            <input id="inflationRate" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-
-          <div class="flex items-center gap-2">
-            <input id="goalToggle" type="checkbox" class="accent-blue-500" />
-            <label class="text-sm">Goal-based SIP</label>
-          </div>
-          <div id="goalBox" class="hidden">
-            <label class="block text-sm font-medium">Target Amount (₹)</label>
-            <input id="goalAmount" type="number" class="w-full mt-1 border rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-
-          <div class="flex gap-4 mt-4">
-            <button onclick="calculateSIP()" class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-2 rounded-2xl shadow hover:opacity-90">Calculate</button>
-            <button onclick="resetForm()" class="bg-gradient-to-r from-gray-500 to-gray-400 text-white px-6 py-2 rounded-2xl shadow hover:opacity-90">Reset</button>
-          </div>
-        </div>
+    <main class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl">
+      <div class="grid gap-4 mb-6">
+        <input type="number" id="sipAmount" placeholder="Monthly SIP Amount" class="p-2 rounded border w-full">
+        <input type="number" id="duration" placeholder="Duration (Years)" class="p-2 rounded border w-full">
+        <input type="number" id="expectedReturn" placeholder="Expected Annual Return (%)" class="p-2 rounded border w-full">
+        <input type="number" id="stepUp" placeholder="Step-up (%) per year" class="p-2 rounded border w-full">
+        <input type="number" id="inflation" placeholder="Inflation Rate (%)" class="p-2 rounded border w-full">
+        <input type="number" id="goalAmount" placeholder="Target Goal Amount (optional)" class="p-2 rounded border w-full">
       </div>
 
-      <!-- Results -->
-      <div id="resultsBox" class="hidden">
-        <h2 class="text-2xl font-bold text-blue-700 mb-6">SIP Summary</h2>
-        <div class="space-y-3 text-base">
-          <p id="invested" class="font-medium"></p>
-          <p id="maturity" class="font-medium"></p>
-          <p id="returns" class="font-medium"></p>
-          <p id="inflationAdj" class="text-gray-600"></p>
-          <p id="requiredSIP" class="text-green-700 font-bold"></p>
-        </div>
+      <button onclick="calculateSIP()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Calculate</button>
 
-        <div class="mt-8">
-          <canvas id="barChart" class="mb-8"></canvas>
-          <canvas id="pieChart"></canvas>
+      <div id="results" class="mt-6 hidden">
+        <h2 class="text-lg font-semibold">📊 Results</h2>
+        <p id="resultText"></p>
+        <canvas id="barChart" class="mt-4"></canvas>
+        <canvas id="pieChart" class="mt-4"></canvas>
+        <div id="goalProgress" class="mt-4 text-green-500 font-medium"></div>
+
+        <div class="mt-4 flex gap-2">
+          <button onclick="downloadPDF()" class="bg-green-600 text-white px-4 py-1 rounded">📄 Download PDF</button>
+          <button onclick="emailResults()" class="bg-indigo-600 text-white px-4 py-1 rounded">📧 Email</button>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <footer class="bg-white text-center py-4 text-sm text-gray-500 w-full">
-    © 2025 Pratix Finance. All rights reserved.
-  </footer>
+    <footer class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+      © 2025 Pratix Finance — All rights reserved.
+    </footer>
+  </div>
+
+  <!-- Live Assistant Placeholder -->
+  <div class="fixed bottom-6 right-6">
+    <button class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-xl" onclick="toggleHelp()">❓</button>
+  </div>
+  <div id="helpBox" class="hidden fixed bottom-20 right-6 w-72 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
+    <h3 class="font-bold mb-2">Need Help?</h3>
+    <p>Enter your SIP amount, duration, and return rate. Optionally include step-up, inflation, or goal. Then hit 'Calculate'.</p>
+  </div>
+
+  <script>
+    emailjs.init("YOUR_EMAILJS_USER_ID");
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+    }
+
+    window.onload = () => {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+      }
+    };
+
+    function toggleHelp() {
+      const box = document.getElementById('helpBox');
+      box.classList.toggle('hidden');
+    }
+
+    function calculateSIP() {
+      const P = parseFloat(document.getElementById('sipAmount').value);
+      const n = parseInt(document.getElementById('duration').value);
+      const r = parseFloat(document.getElementById('expectedReturn').value) / 100 / 12;
+      const stepUp = parseFloat(document.getElementById('stepUp').value) || 0;
+      const inflation = parseFloat(document.getElementById('inflation').value) || 0;
+      const goal = parseFloat(document.getElementById('goalAmount').value) || 0;
+
+      let invested = 0, maturity = 0, monthly = P;
+      for (let year = 0; year < n; year++) {
+        for (let m = 0; m < 12; m++) {
+          invested += monthly;
+          maturity += monthly * Math.pow(1 + r, (n * 12) - (year * 12 + m));
+        }
+        monthly *= 1 + (stepUp / 100);
+      }
+
+      const realMaturity = maturity / Math.pow(1 + inflation / 100, n);
+      const returns = maturity - invested;
+      const resultText = `Invested: ₹${invested.toFixed(0)}, Maturity: ₹${maturity.toFixed(0)}, Returns: ₹${returns.toFixed(0)}, Real Value: ₹${realMaturity.toFixed(0)}`;
+      document.getElementById('results').classList.remove('hidden');
+      document.getElementById('resultText').innerText = resultText;
+
+      drawCharts(invested, returns);
+      if (goal > 0) {
+        const progress = Math.min((maturity / goal) * 100, 100);
+        document.getElementById('goalProgress').innerText = `🎯 Goal Achieved: ${progress.toFixed(2)}%`;
+      }
+
+      localStorage.setItem('lastSIP', JSON.stringify({ P, n, r: r*12*100, stepUp, inflation, goal }));
+    }
+
+    function drawCharts(invested, returns) {
+      new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Invested', 'Returns'],
+          datasets: [{
+            label: '₹ Amount',
+            data: [invested, returns],
+            backgroundColor: ['#3b82f6', '#10b981']
+          }]
+        }
+      });
+
+      new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+          labels: ['Invested', 'Returns'],
+          datasets: [{
+            data: [invested, returns],
+            backgroundColor: ['#3b82f6', '#10b981']
+          }]
+        }
+      });
+    }
+
+    function emailResults() {
+      const email = prompt("Enter your email to receive the result:");
+      if (!email) return;
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+        message: document.getElementById('resultText').innerText,
+        to_email: email
+      });
+    }
+
+    function downloadPDF() {
+      alert("📄 PDF download will be implemented soon.");
+    }
+  </script>
 </body>
 </html>
