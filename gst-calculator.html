@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://unpkg.com/i18next@21.6.3/dist/umd/i18next.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -108,37 +107,40 @@
       max-height: 400px;
       margin-top: 30px;
     }
+    .language-select {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Company Logo">
-    <h1 data-i18n="title">GST Calculator</h1>
+    <h1 data-key="title">GST Calculator</h1>
     <div class="menu-container">
       <div class="dots-menu" onclick="toggleMenu()">⋮</div>
       <div class="dropdown" id="menuDropdown">
-        <a onclick="downloadPDF()" data-i18n="download">Download PDF</a>
-        <a onclick="sharePDF()" data-i18n="share">Share PDF</a>
+        <a onclick="downloadPDF()" data-key="download">Download PDF</a>
+        <a onclick="sharePDF()" data-key="share">Share PDF</a>
       </div>
     </div>
   </header>
 
   <div class="container">
-    <div class="input-group">
-      <select id="languageSelector" onchange="changeLanguage(this.value)">
+    <div class="language-select">
+      <select id="languageSelector" onchange="changeLanguage()">
         <option value="en">English</option>
-        <option value="hi">Hindi</option>
-        <option value="bn">Bengali</option>
-        <option value="fr">French</option>
-        <option value="de">German</option>
-        <option value="es">Spanish</option>
-        <option value="ru">Russian</option>
-        <option value="ja">Japanese</option>
-        <option value="ko">Korean</option>
+        <option value="hi">हिन्दी</option>
+        <option value="bn">বাংলা</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
       </select>
     </div>
     <div class="input-group">
-      <input type="number" id="amount" placeholder="Enter amount" data-i18n-placeholder="enter_amount">
+      <input type="number" id="amount" placeholder="Enter amount" data-key="amountPlaceholder">
       <select id="gstRate">
         <option value="5">5%</option>
         <option value="12">12%</option>
@@ -147,8 +149,8 @@
       </select>
     </div>
     <div class="input-group">
-      <button onclick="calculateGST('add')" data-i18n="add_gst">Add GST</button>
-      <button onclick="calculateGST('remove')" data-i18n="remove_gst">Remove GST</button>
+      <button onclick="calculateGST('add')" data-key="addGST">Add GST</button>
+      <button onclick="calculateGST('remove')" data-key="removeGST">Remove GST</button>
     </div>
     <div class="result" id="resultDisplay"></div>
     <canvas id="barChart"></canvas>
@@ -156,94 +158,27 @@
   </div>
 
   <script>
-    let currentData = {};
-
     const translations = {
-      en: {
-        title: "GST Calculator",
-        download: "Download PDF",
-        share: "Share PDF",
-        enter_amount: "Enter amount",
-        add_gst: "Add GST",
-        remove_gst: "Remove GST"
-      },
-      hi: {
-        title: "जीएसटी कैलकुलेटर",
-        download: "पीडीएफ डाउनलोड करें",
-        share: "पीडीएफ साझा करें",
-        enter_amount: "राशि दर्ज करें",
-        add_gst: "जीएसटी जोड़ें",
-        remove_gst: "जीएसटी हटाएं"
-      },
-      bn: {
-        title: "জিএসটি ক্যালকুলেটর",
-        download: "পিডিএফ ডাউনলোড করুন",
-        share: "পিডিএফ ভাগ করুন",
-        enter_amount: "পরিমাণ লিখুন",
-        add_gst: "জিএসটি যোগ করুন",
-        remove_gst: "জিএসটি সরান"
-      },
-      fr: {
-        title: "Calculateur de TVA",
-        download: "Télécharger le PDF",
-        share: "Partager le PDF",
-        enter_amount: "Entrez le montant",
-        add_gst: "Ajouter la TVA",
-        remove_gst: "Retirer la TVA"
-      },
-      de: {
-        title: "MwSt-Rechner",
-        download: "PDF herunterladen",
-        share: "PDF teilen",
-        enter_amount: "Betrag eingeben",
-        add_gst: "MwSt hinzufügen",
-        remove_gst: "MwSt entfernen"
-      },
-      es: {
-        title: "Calculadora de IVA",
-        download: "Descargar PDF",
-        share: "Compartir PDF",
-        enter_amount: "Ingrese la cantidad",
-        add_gst: "Agregar IVA",
-        remove_gst: "Eliminar IVA"
-      },
-      ru: {
-        title: "Калькулятор НДС",
-        download: "Скачать PDF",
-        share: "Поделиться PDF",
-        enter_amount: "Введите сумму",
-        add_gst: "Добавить НДС",
-        remove_gst: "Удалить НДС"
-      },
-      ja: {
-        title: "消費税計算機",
-        download: "PDFをダウンロード",
-        share: "PDFを共有",
-        enter_amount: "金額を入力",
-        add_gst: "消費税を追加",
-        remove_gst: "消費税を削除"
-      },
-      ko: {
-        title: "부가세 계산기",
-        download: "PDF 다운로드",
-        share: "PDF 공유",
-        enter_amount: "금액 입력",
-        add_gst: "부가세 추가",
-        remove_gst: "부가세 제거"
-      }
+      en: { title: "GST Calculator", download: "Download PDF", share: "Share PDF", amountPlaceholder: "Enter amount", addGST: "Add GST", removeGST: "Remove GST" },
+      hi: { title: "जीएसटी कैलकुलेटर", download: "पीडीएफ डाउनलोड करें", share: "पीडीएफ साझा करें", amountPlaceholder: "राशि दर्ज करें", addGST: "जीएसटी जोड़ें", removeGST: "जीएसटी हटाएं" },
+      bn: { title: "জিএসটি ক্যালকুলেটর", download: "পিডিএফ ডাউনলোড", share: "পিডিএফ শেয়ার করুন", amountPlaceholder: "পরিমাণ লিখুন", addGST: "জিএসটি যোগ করুন", removeGST: "জিএসটি সরান" },
+      fr: { title: "Calculateur de TVA", download: "Télécharger le PDF", share: "Partager le PDF", amountPlaceholder: "Entrez le montant", addGST: "Ajouter la TVA", removeGST: "Retirer la TVA" },
+      de: { title: "Mehrwertsteuerrechner", download: "PDF herunterladen", share: "PDF teilen", amountPlaceholder: "Betrag eingeben", addGST: "MwSt hinzufügen", removeGST: "MwSt entfernen" },
+      es: { title: "Calculadora de IVA", download: "Descargar PDF", share: "Compartir PDF", amountPlaceholder: "Ingrese cantidad", addGST: "Agregar IVA", removeGST: "Quitar IVA" },
+      ru: { title: "Калькулятор НДС", download: "Скачать PDF", share: "Поделиться PDF", amountPlaceholder: "Введите сумму", addGST: "Добавить НДС", removeGST: "Удалить НДС" },
+      ja: { title: "消費税計算機", download: "PDFをダウンロード", share: "PDFを共有", amountPlaceholder: "金額を入力", addGST: "消費税を追加", removeGST: "消費税を除去" },
+      ko: { title: "부가세 계산기", download: "PDF 다운로드", share: "PDF 공유", amountPlaceholder: "금액 입력", addGST: "부가세 추가", removeGST: "부가세 제거" }
     };
 
-    function changeLanguage(lang) {
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.innerText = translations[lang][key];
-        }
-      });
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[lang] && translations[lang][key]) {
-          el.placeholder = translations[lang][key];
+    function changeLanguage() {
+      const lang = document.getElementById('languageSelector').value;
+      const trans = translations[lang];
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (el.tagName === 'INPUT') {
+          el.placeholder = trans[key];
+        } else {
+          el.innerText = trans[key];
         }
       });
     }
