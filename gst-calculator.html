@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/i18next@21.6.3/dist/umd/i18next.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -73,11 +74,10 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    .input-group, .button-group {
+    .input-group {
       display: flex;
       gap: 20px;
       margin-bottom: 20px;
-      flex-wrap: wrap;
     }
     input, select, button {
       padding: 12px;
@@ -108,29 +108,37 @@
       max-height: 400px;
       margin-top: 30px;
     }
-    .note {
-      font-size: 14px;
-      margin-top: 10px;
-      color: #6b7280;
-    }
   </style>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Company Logo">
-    <h1>GST Calculator</h1>
+    <h1 data-i18n="title">GST Calculator</h1>
     <div class="menu-container">
       <div class="dots-menu" onclick="toggleMenu()">⋮</div>
       <div class="dropdown" id="menuDropdown">
-        <a onclick="downloadPDF()">Download PDF</a>
-        <a onclick="sharePDF()">Share PDF</a>
+        <a onclick="downloadPDF()" data-i18n="download">Download PDF</a>
+        <a onclick="sharePDF()" data-i18n="share">Share PDF</a>
       </div>
     </div>
   </header>
 
   <div class="container">
     <div class="input-group">
-      <input type="number" id="amount" placeholder="Enter amount">
+      <select id="languageSelector" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="bn">Bengali</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="es">Spanish</option>
+        <option value="ru">Russian</option>
+        <option value="ja">Japanese</option>
+        <option value="ko">Korean</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <input type="number" id="amount" placeholder="Enter amount" data-i18n-placeholder="enter_amount">
       <select id="gstRate">
         <option value="5">5%</option>
         <option value="12">12%</option>
@@ -138,184 +146,106 @@
         <option value="28">28%</option>
       </select>
     </div>
-
     <div class="input-group">
-      <select id="gstType">
-        <option value="add">Add GST</option>
-        <option value="remove">Remove GST</option>
-      </select>
-      <select id="taxType">
-        <option value="intra">Intra-State (CGST + SGST)</option>
-        <option value="inter">Inter-State (IGST)</option>
-      </select>
+      <button onclick="calculateGST('add')" data-i18n="add_gst">Add GST</button>
+      <button onclick="calculateGST('remove')" data-i18n="remove_gst">Remove GST</button>
     </div>
-
-    <div class="button-group">
-      <button onclick="calculateGST()">Calculate</button>
-      <button onclick="resetFields()">Reset</button>
-    </div>
-
     <div class="result" id="resultDisplay"></div>
-    <p class="note">Note: In intra-state transactions, GST is split equally as CGST and SGST. For inter-state, IGST applies.</p>
-
     <canvas id="barChart"></canvas>
     <canvas id="pieChart"></canvas>
   </div>
 
   <script>
     let currentData = {};
-    function toggleMenu() {
-      const menu = document.getElementById('menuDropdown');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-    function resetFields() {
-      document.getElementById('amount').value = '';
-      document.getElementById('resultDisplay').innerHTML = '';
-      if (window.bar) window.bar.destroy();
-      if (window.pie) window.pie.destroy();
-    }
-    function calculateGST() {
-      const amount = parseFloat(document.getElementById('amount').value);
-      const rate = parseFloat(document.getElementById('gstRate').value);
-      const gstType = document.getElementById('gstType').value;
-      const taxType = document.getElementById('taxType').value;
-      if (isNaN(amount)) {
-        alert("Enter a valid amount.");
-        return;
+
+    const translations = {
+      en: {
+        title: "GST Calculator",
+        download: "Download PDF",
+        share: "Share PDF",
+        enter_amount: "Enter amount",
+        add_gst: "Add GST",
+        remove_gst: "Remove GST"
+      },
+      hi: {
+        title: "जीएसटी कैलकुलेटर",
+        download: "पीडीएफ डाउनलोड करें",
+        share: "पीडीएफ साझा करें",
+        enter_amount: "राशि दर्ज करें",
+        add_gst: "जीएसटी जोड़ें",
+        remove_gst: "जीएसटी हटाएं"
+      },
+      bn: {
+        title: "জিএসটি ক্যালকুলেটর",
+        download: "পিডিএফ ডাউনলোড করুন",
+        share: "পিডিএফ ভাগ করুন",
+        enter_amount: "পরিমাণ লিখুন",
+        add_gst: "জিএসটি যোগ করুন",
+        remove_gst: "জিএসটি সরান"
+      },
+      fr: {
+        title: "Calculateur de TVA",
+        download: "Télécharger le PDF",
+        share: "Partager le PDF",
+        enter_amount: "Entrez le montant",
+        add_gst: "Ajouter la TVA",
+        remove_gst: "Retirer la TVA"
+      },
+      de: {
+        title: "MwSt-Rechner",
+        download: "PDF herunterladen",
+        share: "PDF teilen",
+        enter_amount: "Betrag eingeben",
+        add_gst: "MwSt hinzufügen",
+        remove_gst: "MwSt entfernen"
+      },
+      es: {
+        title: "Calculadora de IVA",
+        download: "Descargar PDF",
+        share: "Compartir PDF",
+        enter_amount: "Ingrese la cantidad",
+        add_gst: "Agregar IVA",
+        remove_gst: "Eliminar IVA"
+      },
+      ru: {
+        title: "Калькулятор НДС",
+        download: "Скачать PDF",
+        share: "Поделиться PDF",
+        enter_amount: "Введите сумму",
+        add_gst: "Добавить НДС",
+        remove_gst: "Удалить НДС"
+      },
+      ja: {
+        title: "消費税計算機",
+        download: "PDFをダウンロード",
+        share: "PDFを共有",
+        enter_amount: "金額を入力",
+        add_gst: "消費税を追加",
+        remove_gst: "消費税を削除"
+      },
+      ko: {
+        title: "부가세 계산기",
+        download: "PDF 다운로드",
+        share: "PDF 공유",
+        enter_amount: "금액 입력",
+        add_gst: "부가세 추가",
+        remove_gst: "부가세 제거"
       }
-      let gstAmount, total;
-      if (gstType === 'add') {
-        gstAmount = (amount * rate) / 100;
-        total = amount + gstAmount;
-      } else {
-        gstAmount = (amount * rate) / (100 + rate);
-        total = amount - gstAmount;
-      }
-      let breakdown;
-      if (taxType === 'intra') {
-        breakdown = `<p>CGST: ₹${(gstAmount/2).toFixed(2)}, SGST: ₹${(gstAmount/2).toFixed(2)}</p>`;
-      } else {
-        breakdown = `<p>IGST: ₹${gstAmount.toFixed(2)}</p>`;
-      }
-      currentData = {
-        original: amount.toFixed(2),
-        rate: rate + "%",
-        type: gstType === 'add' ? "Add GST" : "Remove GST",
-        gst: gstAmount.toFixed(2),
-        total: total.toFixed(2),
-        breakdown: breakdown
-      };
-      document.getElementById('resultDisplay').innerHTML = `
-        <h3>${currentData.type} Result:</h3>
-        <p>Amount: ₹${currentData.original}</p>
-        <p>GST Rate: ${currentData.rate}</p>
-        <p>GST Amount: ₹${currentData.gst}</p>
-        ${currentData.breakdown}
-        <p>Total: ₹${currentData.total}</p>
-      `;
-      drawCharts(currentData);
-    }
-    function drawCharts(data) {
-      if (!data) return;
-      const barCtx = document.getElementById('barChart').getContext('2d');
-      const pieCtx = document.getElementById('pieChart').getContext('2d');
-      if (window.bar) window.bar.destroy();
-      if (window.pie) window.pie.destroy();
-      window.bar = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Amount', 'GST', 'Total'],
-          datasets: [{
-            label: 'Values',
-            data: [data.original, data.gst, data.total],
-            backgroundColor: ['#3b82f6', '#facc15', '#10b981']
-          }]
-        },
-        options: { responsive: true, plugins: { legend: { display: false } } }
+    };
+
+    function changeLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
       });
-      window.pie = new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-          labels: ['Amount', 'GST'],
-          datasets: [{
-            data: [data.original, data.gst],
-            backgroundColor: ['#3b82f6', '#facc15']
-          }]
-        },
-        options: { responsive: true }
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
       });
-    }
-    async function loadImage(src) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => resolve(null);
-        img.src = src;
-      });
-    }
-    async function downloadPDF() {
-      if (!currentData.original) {
-        alert("Please calculate GST first.");
-        return;
-      }
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      const logo = await loadImage('logo.png');
-      if (logo) pdf.addImage(logo, "PNG", 80, 10, 50, 30);
-      pdf.setFontSize(18);
-      pdf.text("GST Calculator", 105, 50, null, null, "center");
-      let y = 70;
-      pdf.setFontSize(12);
-      pdf.text(`Amount: ₹${currentData.original}`, 20, y += 10);
-      pdf.text(`GST Rate: ${currentData.rate}`, 20, y += 10);
-      pdf.text(`GST Type: ${currentData.type}`, 20, y += 10);
-      pdf.text(`GST Amount: ₹${currentData.gst}`, 20, y += 10);
-      pdf.text(`Total: ₹${currentData.total}`, 20, y += 10);
-      const bar = document.getElementById('barChart');
-      const pie = document.getElementById('pieChart');
-      const barImg = bar.toDataURL('image/png');
-      const pieImg = pie.toDataURL('image/png');
-      pdf.addPage();
-      pdf.text("Charts", 105, 20, null, null, "center");
-      pdf.addImage(barImg, "PNG", 15, 30, 180, 70);
-      pdf.addImage(pieImg, "PNG", 15, 110, 180, 70);
-      pdf.save("gst-calculator.pdf");
-    }
-    async function sharePDF() {
-      if (!currentData.original) {
-        alert("Please calculate GST first.");
-        return;
-      }
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      const logo = await loadImage('logo.png');
-      if (logo) pdf.addImage(logo, "PNG", 80, 10, 50, 30);
-      pdf.setFontSize(18);
-      pdf.text("GST Calculator", 105, 50, null, null, "center");
-      let y = 70;
-      pdf.setFontSize(12);
-      pdf.text(`Amount: ₹${currentData.original}`, 20, y += 10);
-      pdf.text(`GST Rate: ${currentData.rate}`, 20, y += 10);
-      pdf.text(`GST Type: ${currentData.type}`, 20, y += 10);
-      pdf.text(`GST Amount: ₹${currentData.gst}`, 20, y += 10);
-      pdf.text(`Total: ₹${currentData.total}`, 20, y += 10);
-      const barImg = document.getElementById('barChart').toDataURL();
-      const pieImg = document.getElementById('pieChart').toDataURL();
-      pdf.addPage();
-      pdf.text("Charts", 105, 20, null, null, "center");
-      pdf.addImage(barImg, "PNG", 15, 30, 180, 70);
-      pdf.addImage(pieImg, "PNG", 15, 110, 180, 70);
-      const blob = pdf.output("blob");
-      const file = new File([blob], "gst-calculator.pdf", { type: "application/pdf" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: "GST Report",
-          text: "Check this GST calculation",
-          files: [file]
-        });
-      } else {
-        alert("Sharing is not supported on this device or browser.");
-      }
     }
   </script>
 </body>
