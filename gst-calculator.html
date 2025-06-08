@@ -73,9 +73,8 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    .input-group {
+    .input-group, .button-group {
       display: flex;
-      flex-wrap: wrap;
       gap: 20px;
       margin-bottom: 20px;
     }
@@ -95,9 +94,6 @@
     }
     button:hover {
       background-color: #1e40af;
-    }
-    .input-group button {
-      flex: 1 1 48%;
     }
     .result {
       background: #f9fafb;
@@ -136,9 +132,10 @@
         <option value="28">28%</option>
       </select>
     </div>
-    <div class="input-group">
+    <div class="button-group">
       <button onclick="calculateGST('add')">Add GST</button>
       <button onclick="calculateGST('remove')">Remove GST</button>
+      <button onclick="resetForm()" style="background-color:#6b7280">Reset</button>
     </div>
     <div class="result" id="resultDisplay"></div>
     <canvas id="barChart"></canvas>
@@ -166,21 +163,32 @@
         gstAmount = (amount * rate) / (100 + rate);
         total = amount - gstAmount;
       }
+      const cgst = gstAmount / 2;
+      const sgst = gstAmount / 2;
       currentData = {
         original: amount.toFixed(2),
         rate: rate + "%",
         type: type === 'add' ? "Add GST" : "Remove GST",
         gst: gstAmount.toFixed(2),
+        cgst: cgst.toFixed(2),
+        sgst: sgst.toFixed(2),
         total: total.toFixed(2)
       };
       document.getElementById('resultDisplay').innerHTML = `
         <h3>${currentData.type} Result:</h3>
         <p>Amount: ₹${currentData.original}</p>
         <p>GST Rate: ${currentData.rate}</p>
-        <p>GST Amount: ₹${currentData.gst}</p>
+        <p>GST Amount: ₹${currentData.gst} (CGST: ₹${currentData.cgst}, SGST: ₹${currentData.sgst})</p>
         <p>Total: ₹${currentData.total}</p>
       `;
       drawCharts(currentData);
+    }
+    function resetForm() {
+      document.getElementById('amount').value = '';
+      document.getElementById('gstRate').value = '18';
+      document.getElementById('resultDisplay').innerHTML = '';
+      if (window.bar) window.bar.destroy();
+      if (window.pie) window.pie.destroy();
     }
     function drawCharts(data) {
       if (!data) return;
@@ -206,86 +214,14 @@
       window.pie = new Chart(pieCtx, {
         type: 'pie',
         data: {
-          labels: ['Amount', 'GST'],
+          labels: ['CGST', 'SGST'],
           datasets: [{
-            data: [data.original, data.gst],
-            backgroundColor: ['#3b82f6', '#facc15']
+            data: [data.cgst, data.sgst],
+            backgroundColor: ['#34d399', '#60a5fa']
           }]
         },
         options: { responsive: true }
       });
-    }
-    async function loadImage(src) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => resolve(null);
-        img.src = src;
-      });
-    }
-    async function downloadPDF() {
-      if (!currentData.original) {
-        alert("Please calculate GST first.");
-        return;
-      }
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      const logo = await loadImage('logo.png');
-      if (logo) pdf.addImage(logo, "PNG", 80, 10, 50, 30);
-      pdf.setFontSize(18);
-      pdf.text("GST Calculator", 105, 50, null, null, "center");
-      let y = 70;
-      pdf.setFontSize(12);
-      pdf.text(`Amount: ₹${currentData.original}`, 20, y += 10);
-      pdf.text(`GST Rate: ${currentData.rate}`, 20, y += 10);
-      pdf.text(`GST Type: ${currentData.type}`, 20, y += 10);
-      pdf.text(`GST Amount: ₹${currentData.gst}`, 20, y += 10);
-      pdf.text(`Total: ₹${currentData.total}`, 20, y += 10);
-      const bar = document.getElementById('barChart');
-      const pie = document.getElementById('pieChart');
-      const barImg = bar.toDataURL('image/png');
-      const pieImg = pie.toDataURL('image/png');
-      pdf.addPage();
-      pdf.text("Charts", 105, 20, null, null, "center");
-      pdf.addImage(barImg, "PNG", 15, 30, 180, 70);
-      pdf.addImage(pieImg, "PNG", 15, 110, 180, 70);
-      pdf.save("gst-calculator.pdf");
-    }
-    async function sharePDF() {
-      if (!currentData.original) {
-        alert("Please calculate GST first.");
-        return;
-      }
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      const logo = await loadImage('logo.png');
-      if (logo) pdf.addImage(logo, "PNG", 80, 10, 50, 30);
-      pdf.setFontSize(18);
-      pdf.text("GST Calculator", 105, 50, null, null, "center");
-      let y = 70;
-      pdf.setFontSize(12);
-      pdf.text(`Amount: ₹${currentData.original}`, 20, y += 10);
-      pdf.text(`GST Rate: ${currentData.rate}`, 20, y += 10);
-      pdf.text(`GST Type: ${currentData.type}`, 20, y += 10);
-      pdf.text(`GST Amount: ₹${currentData.gst}`, 20, y += 10);
-      pdf.text(`Total: ₹${currentData.total}`, 20, y += 10);
-      const barImg = document.getElementById('barChart').toDataURL();
-      const pieImg = document.getElementById('pieChart').toDataURL();
-      pdf.addPage();
-      pdf.text("Charts", 105, 20, null, null, "center");
-      pdf.addImage(barImg, "PNG", 15, 30, 180, 70);
-      pdf.addImage(pieImg, "PNG", 15, 110, 180, 70);
-      const blob = pdf.output("blob");
-      const file = new File([blob], "gst-calculator.pdf", { type: "application/pdf" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: "GST Report",
-          text: "Check this GST calculation",
-          files: [file]
-        });
-      } else {
-        alert("Sharing is not supported on this device or browser.");
-      }
     }
   </script>
 </body>
