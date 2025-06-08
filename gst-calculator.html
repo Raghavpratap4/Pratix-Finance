@@ -12,10 +12,19 @@
       padding: 1rem;
       color: #222;
     }
+    .header {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .header img {
+      max-width: 120px;
+      height: auto;
+    }
     .menu-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
+      margin-bottom: 10px;
     }
     .menu-button {
       font-size: 24px;
@@ -81,14 +90,16 @@
 <body>
 
 <div class="menu-bar">
-  <h1>GST Calculator</h1>
-  <div style="position: relative;">
-    <button class="menu-button" onclick="toggleMenu()">⋮</button>
-    <div id="menu">
-      <div onclick="downloadPDF()">Download PDF</div>
-      <div onclick="sharePDF()">Share PDF</div>
-    </div>
+  <button class="menu-button" onclick="toggleMenu()">⋮</button>
+  <div id="menu">
+    <div onclick="downloadPDF()">Download PDF</div>
+    <div onclick="sharePDF()">Share PDF</div>
   </div>
+</div>
+
+<div class="header">
+  <img src="logo.png" alt="Company Logo" />
+  <h1>GST Calculator</h1>
 </div>
 
 <div class="container">
