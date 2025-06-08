@@ -198,57 +198,64 @@
     });
   }
 
+  async function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null); // fallback: no logo
+      img.src = src;
+    });
+  }
+
   async function downloadPDF() {
     if (!currentData.original) {
-      alert("Calculate GST first.");
+      alert("Please calculate GST first.");
       return;
     }
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    const img = new Image();
-    img.src = 'logo.png';
 
-    await new Promise(res => img.onload = res);
-
-    pdf.addImage(img, "PNG", 80, 10, 50, 30);
+    const logo = await loadImage('logo.png');
+    if (logo) {
+      pdf.addImage(logo, "PNG", 80, 10, 50, 30);
+    }
     pdf.setFontSize(18);
     pdf.text("GST Calculator", 105, 50, null, null, "center");
 
-    pdf.setFontSize(12);
     let y = 70;
+    pdf.setFontSize(12);
     pdf.text(`Amount: ₹${currentData.original}`, 20, y += 10);
     pdf.text(`GST Rate: ${currentData.rate}`, 20, y += 10);
     pdf.text(`GST Type: ${currentData.type}`, 20, y += 10);
     pdf.text(`GST Amount: ₹${currentData.gst}`, 20, y += 10);
     pdf.text(`Total: ₹${currentData.total}`, 20, y += 10);
 
-    // Charts
-    const barDataURL = document.getElementById('barChart').toDataURL();
-    const pieDataURL = document.getElementById('pieChart').toDataURL();
+    const bar = document.getElementById('barChart');
+    const pie = document.getElementById('pieChart');
+    const barImg = bar.toDataURL('image/png');
+    const pieImg = pie.toDataURL('image/png');
 
     pdf.addPage();
     pdf.text("Charts", 105, 20, null, null, "center");
-    pdf.addImage(barDataURL, "PNG", 15, 30, 180, 70);
-    pdf.addImage(pieDataURL, "PNG", 15, 110, 180, 70);
+    pdf.addImage(barImg, "PNG", 15, 30, 180, 70);
+    pdf.addImage(pieImg, "PNG", 15, 110, 180, 70);
 
     pdf.save("gst-calculator.pdf");
   }
 
   async function sharePDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
     if (!currentData.original) {
-      alert("Calculate GST first.");
+      alert("Please calculate GST first.");
       return;
     }
 
-    const img = new Image();
-    img.src = 'logo.png';
-    await new Promise(res => img.onload = res);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
 
-    pdf.addImage(img, "PNG", 80, 10, 50, 30);
+    const logo = await loadImage('logo.png');
+    if (logo) pdf.addImage(logo, "PNG", 80, 10, 50, 30);
+    pdf.setFontSize(18);
     pdf.text("GST Calculator", 105, 50, null, null, "center");
 
     let y = 70;
@@ -259,20 +266,29 @@
     pdf.text(`GST Amount: ₹${currentData.gst}`, 20, y += 10);
     pdf.text(`Total: ₹${currentData.total}`, 20, y += 10);
 
-    const blob = pdf.output("blob");
+    const barImg = document.getElementById('barChart').toDataURL();
+    const pieImg = document.getElementById('pieChart').toDataURL();
 
-    if (navigator.share) {
-      const file = new File([blob], "gst-calculator.pdf", { type: "application/pdf" });
-      navigator.share({
+    pdf.addPage();
+    pdf.text("Charts", 105, 20, null, null, "center");
+    pdf.addImage(barImg, "PNG", 15, 30, 180, 70);
+    pdf.addImage(pieImg, "PNG", 15, 110, 180, 70);
+
+    const blob = pdf.output("blob");
+    const file = new File([blob], "gst-calculator.pdf", { type: "application/pdf" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
         title: "GST Report",
         text: "Check this GST calculation",
         files: [file]
       });
     } else {
-      alert("Web Share not supported on this device.");
+      alert("Sharing is not supported on this device or browser.");
     }
   }
 </script>
+
 
 </body>
 </html>
