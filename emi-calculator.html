@@ -212,173 +212,136 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    let chart;
-    let chartType = 'bar';
+ <script>
+  let chart;
+  const langMap = {
+    en: "English", hi: "हिन्दी", bn: "বাংলা", gu: "ગુજરાતી", te: "తెలుగు",
+    ta: "தமிழ்", mr: "मराठी", kn: "ಕನ್ನಡ", ml: "മലയാളം"
+  };
 
-    function calculateEMI() {
-      const P = +document.getElementById('loanAmount').value;
-      const R = +document.getElementById('interestRate').value / 1200;
-      const N = +document.getElementById('loanTerm').value * 12;
-      const prepay = +document.getElementById('extraPayment').value;
-      const freq = document.getElementById('prepayFreq').value;
-
-      if (!P || !R || !N) return;
-
-      let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-      let totalPayment = emi * N;
-      let totalInterest = totalPayment - P;
-
-      if (freq === 'once') {
-        totalPayment -= prepay;
-        totalInterest -= prepay;
-      }
-
-      document.getElementById('emi').innerText = emi.toFixed(0);
-      document.getElementById('interest').innerText = totalInterest.toFixed(0);
-      document.getElementById('payment').innerText = totalPayment.toFixed(0);
-
-      updateChart(P, totalInterest, prepay);
+  const translations = {
+    en: {
+      title: "Advanced EMI Calculator", loan: "Loan Amount", interest: "Interest Rate (%)",
+      term: "Loan Term (years)", prepayFreq: "Prepayment Frequency", extra: "Extra Payment (₹)",
+      start: "Start From Year", calculate: "Calculate", table: "Monthly Table",
+      compare: "Compare Loans", emi: "EMI", totalInterest: "Total Interest",
+      totalPayment: "Total Payment", send: "📩 Send Reminder", showBar: "Show Bar Chart",
+      showLine: "Show Line Chart", showPie: "Show Pie Chart", footer: "© 2025 Pratix Finance — All rights reserved",
+      install: "Install"
+    },
+    hi: {
+      title: "उन्नत ईएमआई कैलकुलेटर", loan: "ऋण राशि", interest: "ब्याज दर (%)",
+      term: "ऋण अवधि (वर्षों में)", prepayFreq: "प्रीपेमेंट आवृत्ति", extra: "अतिरिक्त भुगतान (₹)",
+      start: "कब से शुरू करें", calculate: "गणना करें", table: "मासिक तालिका",
+      compare: "ऋणों की तुलना करें", emi: "ईएमआई", totalInterest: "कुल ब्याज",
+      totalPayment: "कुल भुगतान", send: "📩 रिमाइंडर भेजें", showBar: "बार चार्ट दिखाएं",
+      showLine: "लाइन चार्ट दिखाएं", showPie: "पाई चार्ट दिखाएं", footer: "© 2025 Pratix Finance — सर्वाधिकार सुरक्षित",
+      install: "इंस्टॉल करें"
+    },
+    bn: {
+      title: "উন্নত EMI ক্যালকুলেটর", loan: "ঋণের পরিমাণ", interest: "সুদের হার (%)",
+      term: "ঋণের মেয়াদ (বছর)", prepayFreq: "প্রিপেমেন্ট ফ্রিকোয়েন্সি", extra: "অতিরিক্ত পরিশোধ (₹)",
+      start: "শুরু বছর", calculate: "গণনা করুন", table: "মাসিক সারণি",
+      compare: "ঋণের তুলনা", emi: "EMI", totalInterest: "মোট সুদ",
+      totalPayment: "মোট পরিশোধ", send: "📩 রিমাইন্ডার পাঠান", showBar: "বার চার্ট দেখান",
+      showLine: "লাইন চার্ট দেখান", showPie: "পাই চার্ট দেখান", footer: "© 2025 Pratix Finance — সর্বস্বত্ব সংরক্ষিত",
+      install: "ইনস্টল করুন"
+    },
+    gu: {
+      title: "એડવાન્સ્ડ EMI કેલ્ક્યુલેટર", loan: "લોન રકમ", interest: "વ્યાજ દર (%)",
+      term: "લોન સમયગાળો (વર્ષોમાં)", prepayFreq: "પ્રીપેમેન્ટ ફ્રિક્વન્સી", extra: "વધારાનો ચૂકવણી (₹)",
+      start: "શરૂઆત વર્ષથી", calculate: "ગણતરી કરો", table: "માસિક ટેબલ",
+      compare: "લોનની તુલના કરો", emi: "EMI", totalInterest: "કુલ વ્યાજ",
+      totalPayment: "કુલ ચુકવણી", send: "📩 રીમાઇન્ડર મોકલો", showBar: "બાર ચાર્ટ બતાવો",
+      showLine: "લાઇન ચાર્ટ બતાવો", showPie: "પાઈ ચાર્ટ બતાવો", footer: "© 2025 Pratix Finance — સર્વ હક્કો સુરક્ષિત",
+      install: "ઇન્સ્ટોલ કરો"
+    },
+    te: {
+      title: "అధునాతన EMI కాలిక్యులేటర్", loan: "ఋణ మొత్తం", interest: "వడ్డీ రేటు (%)",
+      term: "ఋణ కాలం (సంవత్సరాలు)", prepayFreq: "ప్రీపేమెంట్ ఫ్రీక్వెన్సీ", extra: "అదనపు చెల్లింపు (₹)",
+      start: "ప్రారంభ సంవత్సరము", calculate: "లెక్కించు", table: "నెలవారీ పట్టిక",
+      compare: "ఋణాల సరిపోలిక", emi: "EMI", totalInterest: "మొత్తం వడ్డీ",
+      totalPayment: "మొత్తం చెల్లింపు", send: "📩 రిమైండర్ పంపు", showBar: "బార్ చార్ట్ చూపించు",
+      showLine: "లైన్ చార్ట్ చూపించు", showPie: "పై చార్ట్ చూపించు", footer: "© 2025 Pratix Finance — హక్కులు అన్నీ రిజర్వ్ చేయబడ్డాయి",
+      install: "ఇన్‌స్టాల్ చేయండి"
+    },
+    ta: {
+      title: "மேம்பட்ட EMI கணிப்பான்", loan: "கடன் தொகை", interest: "வட்டி விகிதம் (%)",
+      term: "கடன் காலம் (ஆண்டுகள்)", prepayFreq: "முன்பணம் அதிர்வு", extra: "கூடுதல் தொகை (₹)",
+      start: "ஆரம்ப ஆண்டு", calculate: "கணக்கிடு", table: "மாத பட்டியல்",
+      compare: "கடன்களை ஒப்பிடு", emi: "EMI", totalInterest: "மொத்த வட்டி",
+      totalPayment: "மொத்த கட்டணம்", send: "📩 நினைவூட்டல் அனுப்பு", showBar: "பார் چار்ட் காட்டு",
+      showLine: "லைன் চার்ட் காட்டு", showPie: "பை چار்ட் காட்டு", footer: "© 2025 Pratix Finance — அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை",
+      install: "நிறுவவும்"
+    },
+    mr: {
+      title: "प्रगत EMI कॅल्क्युलेटर", loan: "कर्ज रक्कम", interest: "व्याज दर (%)",
+      term: "कर्ज कालावधी (वर्षे)", prepayFreq: "प्रीपेमेन्ट फ्रिक्वेन्सी", extra: "अतिरिक्त पेमेंट (₹)",
+      start: "सुरुवातीचे वर्ष", calculate: "गणना करा", table: "मासिक तक्ता",
+      compare: "कर्ज तुलना", emi: "EMI", totalInterest: "एकूण व्याज",
+      totalPayment: "एकूण पेमेंट", send: "📩 रिमाइंडर पाठवा", showBar: "बार चार्ट दाखवा",
+      showLine: "लाईन चार्ट दाखवा", showPie: "पाय चार्ट दाखवा", footer: "© 2025 Pratix Finance — सर्व हक्क राखीव",
+      install: "इंस्टॉल करा"
+    },
+    kn: {
+      title: "ಆಧುನಿಕ EMI ಕ್ಯಾಲ್ಕುಲೇಟರ್", loan: "ಕಡಿವಾಣ ಮೊತ್ತ", interest: "ಬಡ್ಡಿದರ (%)",
+      term: "ಕಡಿವಾಣ ಅವಧಿ (ವರ್ಷ)", prepayFreq: "ಪೂರ್ವಪಾವತಿ ಆವರ್ತಿ", extra: "ಹೆಚ್ಚುವರಿ ಪಾವತಿ (₹)",
+      start: "ಆರಂಭ ವರ್ಷ", calculate: "ಲೆಕ್ಕಹಾಕು", table: "ಮಾಸಿಕ ಪಟ್ಟಿಕೆ",
+      compare: "ಕಡಿವಾಣ ಹೋಲಿಕೆ", emi: "EMI", totalInterest: "ಒಟ್ಟು ಬಡ್ಡಿ",
+      totalPayment: "ಒಟ್ಟು ಪಾವತಿ", send: "📩 ನೆನೆಪಿನ ಸಂದೇಶ ಕಳುಹಿಸಿ", showBar: "ಬಾರ್ ಚಾರ್ಟ್ ತೋರಿಸಿ",
+      showLine: "ರೆಖಾ ಚಾರ್ಟ್ ತೋರಿಸಿ", showPie: "ಪೈ ಚಾರ್ಟ್ ತೋರಿಸಿ", footer: "© 2025 Pratix Finance — ಎಲ್ಲಾ ಹಕ್ಕುಗಳು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ",
+      install: "ಅನುಸ್ಥಾಪಿಸಿ"
+    },
+    ml: {
+      title: "ആധുനിക EMI കാൽക്കുലേറ്റർ", loan: "ലോൺ തുക", interest: "പലിശ നിരക്ക് (%)",
+      term: "ലോൺ കാലാവധി (വർഷങ്ങൾ)", prepayFreq: "പ്രീപേമന്റ് ആവൃത്തി", extra: "അധിക പേയ്മെന്റ് (₹)",
+      start: "ആരംഭ വർഷം", calculate: "ഗണിക്കുക", table: "മാസ പട്ടിക",
+      compare: "ലോൺ താരതമ്യം", emi: "EMI", totalInterest: "മൊത്തം പലിശ",
+      totalPayment: "മൊത്തം പണമടക്കം", send: "📩 ഓർമപ്പെടുത്തൽ അയയ്ക്കുക", showBar: "ബാർ ചാർട്ട് കാണിക്കുക",
+      showLine: "ലൈൻ ചാർട്ട് കാണിക്കുക", showPie: "പൈ ചാർട്ട് കാണിക്കുക", footer: "© 2025 Pratix Finance — എല്ലാ അവകാശങ്ങളും സംരക്ഷിച്ചിരിക്കുന്നു",
+      install: "ഇൻസ്റ്റാൾ ചെയ്യുക"
     }
+  };
 
-    function updateChart(principal, interest, prepay) {
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      if (chart) chart.destroy();
+  function updateLanguageUI(lang) {
+    const t = translations[lang] || translations["en"];
+    document.querySelector("h2").innerText = t.title;
+    document.querySelector("label[for=loanAmount]").innerText = t.loan;
+    document.querySelector("label[for=interestRate]").innerText = t.interest;
+    document.querySelector("label[for=loanTerm]").innerText = t.term;
+    document.querySelector("label[for=prepayFreq]").innerText = t.prepayFreq;
+    document.querySelector("label[for=extraPayment]").innerText = t.extra;
+    document.querySelector("label[for=startYear]").innerText = t.start;
+    document.querySelector("#calcBtn").innerText = t.calculate;
+    document.querySelector("#tableBtn").innerText = t.table;
+    document.querySelector("#compareBtn").innerText = t.compare;
+    document.querySelector("#emiLabel").innerText = `${t.emi}: ₹`;
+    document.querySelector("#interestLabel").innerText = `${t.totalInterest}: ₹`;
+    document.querySelector("#paymentLabel").innerText = `${t.totalPayment}: ₹`;
+    document.querySelector("#sendReminder").innerText = t.send;
+    document.querySelector("label[for=barToggle]").innerText = t.showBar;
+    document.querySelector("label[for=lineToggle]").innerText = t.showLine;
+    document.querySelector("label[for=pieToggle]").innerText = t.showPie;
+    document.querySelector("footer").innerText = t.footer;
+    document.querySelector("#installBtn").innerText = t.install;
+  }
 
-      const data = {
-        labels: ['Principal', 'Interest', 'Prepayment'],
-        datasets: [{
-          label: '₹ Amount',
-          data: [principal, interest, prepay],
-          backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
-          borderColor: '#fff',
-          borderWidth: 1
-        }]
-      };
+  function detectLang() {
+    const browserLang = navigator.language.slice(0, 2);
+    const supportedLang = translations[browserLang] ? browserLang : "en";
+    document.getElementById("langSelect").value = supportedLang;
+    updateLanguageUI(supportedLang);
+  }
 
-      const options = {
-        responsive: true,
-        plugins: {
-          legend: { display: chartType !== 'bar' },
-          tooltip: {
-            callbacks: {
-              label: function (item) {
-                return `₹${item.raw}`;
-              }
-            }
-          }
-        }
-      };
+  document.getElementById("langSelect").addEventListener("change", function () {
+    updateLanguageUI(this.value);
+  });
 
-      chart = new Chart(ctx, {
-        type: chartType,
-        data: data,
-        options: options
-      });
-    }
+  window.onload = () => {
+    detectLang();
+    calculateEMI();
+  };
+</script>
 
-    function setChartType(type) {
-      chartType = type;
-      calculateEMI();
-    }
-
-    function sendReminder() {
-      alert("Email reminder feature will be available soon!");
-    }
-
-    function showMonthlyTable() {
-      alert("Monthly Table view will be integrated soon.");
-    }
-
-    function compareLoans() {
-      alert("Loan comparison coming soon.");
-    }
-
-    const translations = {
-      en: {
-        appTitle: "Advanced EMI Calculator",
-        labelLoanAmount: "Loan Amount",
-        labelInterestRate: "Interest Rate (%)",
-        labelLoanTerm: "Loan Term (years)",
-        labelPrepayFreq: "Prepayment Frequency",
-        labelExtraPayment: "Extra Payment (₹)",
-        labelStartYear: "Start From Year",
-        btnCalculate: "Calculate",
-        btnMonthlyTable: "Monthly Table",
-        btnCompareLoans: "Compare Loans",
-        labelEMI: "EMI:",
-        labelInterest: "Total Interest:",
-        labelPayment: "Total Payment:",
-        btnReminder: "Send Reminder",
-        btnBarChart: "📊 Bar Chart",
-        btnPieChart: "🥧 Pie Chart",
-        btnLineChart: "📈 Line Chart"
-      },
-      hi: {
-        appTitle: "उन्नत ईएमआई कैलकुलेटर",
-        labelLoanAmount: "ऋण राशि",
-        labelInterestRate: "ब्याज दर (%)",
-        labelLoanTerm: "ऋण अवधि (वर्षों)",
-        labelPrepayFreq: "प्रीपेमेंट आवृत्ति",
-        labelExtraPayment: "अतिरिक्त भुगतान (₹)",
-        labelStartYear: "शुरुआत वर्ष से",
-        btnCalculate: "गणना करें",
-        btnMonthlyTable: "मासिक तालिका",
-        btnCompareLoans: "ऋण की तुलना",
-        labelEMI: "ईएमआई:",
-        labelInterest: "कुल ब्याज:",
-        labelPayment: "कुल भुगतान:",
-        btnReminder: "अनुस्मारक भेजें",
-        btnBarChart: "📊 बार चार्ट",
-        btnPieChart: "🥧 पाई चार्ट",
-        btnLineChart: "📈 रेखा चार्ट"
-      },
-      bn: {
-        appTitle: "উন্নত EMI ক্যালকুলেটর",
-        labelLoanAmount: "ঋণের পরিমাণ",
-        labelInterestRate: "সুদ হার (%)",
-        labelLoanTerm: "ঋণের মেয়াদ (বছর)",
-        labelPrepayFreq: "প্রিপেমেন্ট ফ্রিকোয়েন্সি",
-        labelExtraPayment: "অতিরিক্ত পেমেন্ট (₹)",
-        labelStartYear: "শুরু বছর",
-        btnCalculate: "গণনা করুন",
-        btnMonthlyTable: "মাসিক টেবিল",
-        btnCompareLoans: "ঋণ তুলনা করুন",
-        labelEMI: "EMI:",
-        labelInterest: "মোট সুদ:",
-        labelPayment: "মোট পেমেন্ট:",
-        btnReminder: "রিমাইন্ডার পাঠান",
-        btnBarChart: "📊 বার চার্ট",
-        btnPieChart: "🥧 পাই চার্ট",
-        btnLineChart: "📈 লাইন চার্ট"
-      }
-      // Add other 6 translations here (gu, te, ta, mr, kn, ml)
-    };
-
-    function changeLanguage() {
-      const lang = document.getElementById("languageSelect").value;
-      applyLanguage(lang);
-    }
-
-    function applyLanguage(lang) {
-      const tr = translations[lang] || translations.en;
-      for (const id in tr) {
-        const el = document.getElementById(id);
-        if (el) el.innerText = tr[id];
-      }
-    }
-
-    function detectAndSetLanguage() {
-      const userLang = navigator.language.slice(0, 2);
-      const supported = Object.keys(translations);
-      const langToSet = supported.includes(userLang) ? userLang : 'en';
-      document.getElementById("languageSelect").value = langToSet;
-      applyLanguage(langToSet);
-    }
-
-    window.onload = () => {
-      detectAndSetLanguage();
-    };
-  </script>
 </body>
 </html>
