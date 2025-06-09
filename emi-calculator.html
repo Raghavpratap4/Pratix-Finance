@@ -1,301 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#3b82f6" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" href="logo.png" />
-  <title>EMI Calculator - Pratix Finance</title>
-
-  <!-- Chart.js -->
+  <title>Advanced EMI Calculator | Pratix Finance</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- html2pdf.js -->
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js"></script>
-
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9fafb;
-      color: #111827;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
+    :root {
+      --primary: #4e54c8;
+      --secondary: #8f94fb;
+      --bg: #f7f9fc;
+      --text: #333;
+      --card: #fff;
+      --shadow: rgba(0, 0, 0, 0.1);
     }
 
-    .dark-mode {
-      background-color: #111827;
-      color: #f9fafb;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
       padding: 1rem;
-    }
-
-    .logo-title-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-grow: 1;
       position: relative;
+      color: white;
+      text-align: center;
     }
 
-    .logo-title-container img {
-      height: 40px;
-      margin-right: 1rem;
+    header img {
+      height: 50px;
+      margin-right: 10px;
     }
 
     .menu {
       position: absolute;
-      right: 0;
+      top: 15px;
+      right: 20px;
       cursor: pointer;
     }
 
-    .menu-options {
-      display: none;
+    .menu ul {
       position: absolute;
-      top: 2.5rem;
+      top: 30px;
       right: 0;
-      background-color: white;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      z-index: 1000;
+      background: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 8px var(--shadow);
+      list-style: none;
+      display: none;
     }
 
-    .menu-options button {
-      padding: 0.5rem 1rem;
-      width: 100%;
-      background: none;
-      border: none;
+    .menu:hover ul {
+      display: block;
+    }
+
+    .menu ul li {
+      padding: 10px 20px;
       cursor: pointer;
-      text-align: left;
     }
 
-    .menu-options button:hover {
-      background-color: #f3f4f6;
+    .menu ul li:hover {
+      background: #f1f1f1;
     }
 
     main {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 1rem;
-      background: white;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      flex: 1;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
     }
 
-    label {
-      display: block;
-      margin-top: 1rem;
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 6px 20px var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
     }
 
-    input {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
+    .card h2 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 0.5rem;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
     }
 
     .result {
-      margin-top: 1rem;
+      font-size: 1.5rem;
+      color: #222;
       font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .charts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
     }
 
     canvas {
-      margin-top: 2rem;
-      width: 100% !important;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px var(--shadow);
+      padding: 1rem;
     }
 
     footer {
-      margin-top: 2rem;
-      font-size: 0.875rem;
-      color: #6b7280;
+      text-align: center;
+      padding: 1rem;
+      background: #eee;
+      font-size: 0.9rem;
+      color: #555;
     }
 
-    @media (max-width: 600px) {
-      main {
-        padding: 1rem;
+    @media (max-width: 768px) {
+      .charts {
+        flex-direction: column;
       }
     }
   </style>
 </head>
-
 <body>
   <header>
-    <div class="logo-title-container">
-      <img src="logo.png" alt="Logo" />
-      <h1>EMI Calculator</h1>
-      <div class="menu" onclick="toggleMenu()">
-        ⋮
-        <div class="menu-options" id="menuOptions">
-          <button onclick="toggleDarkMode()">Dark/Light Mode</button>
-          <button onclick="downloadPDF()">Download PDF</button>
-          <button onclick="sharePDF()">Share PDF</button>
-          <button onclick="viewHistory()">History</button>
-          <button onclick="promptPWAInstall()">Download App</button>
-          <select onchange="changeLanguage(this.value)">
-            <option value="en">English</option>
-            <option value="hi">Hindi</option>
-            <option value="bn">Bengali</option>
-            <option value="fr">French</option>
-            <option value="ru">Russian</option>
-            <option value="de">German</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-          </select>
-        </div>
-      </div>
+    <img src="logo.png" alt="Pratix Finance Logo">
+    <h1>Advanced EMI Calculator</h1>
+    <div class="menu">
+      ⋮
+      <ul>
+        <li>🌙 Toggle Dark Mode</li>
+        <li>📄 Download PDF</li>
+        <li>🔗 Share PDF</li>
+        <li>🕓 History</li>
+        <li>⬇ Download App</li>
+      </ul>
     </div>
   </header>
 
   <main>
-    <label>Loan Amount
-      <input type="number" id="loanAmount" placeholder="e.g. 500000" />
-    </label>
-    <label>Interest Rate (Annual %)
-      <input type="number" id="interestRate" placeholder="e.g. 7.5" />
-    </label>
-    <label>Loan Tenure (Years)
-      <input type="number" id="loanTenure" placeholder="e.g. 5" />
-    </label>
-    <button onclick="calculateEMI()">Calculate EMI</button>
+    <div class="card">
+      <h2>Loan Details</h2>
+      <div class="input-group">
+        <label>Loan Amount (₹)</label>
+        <input type="number" id="amount" placeholder="e.g. 1000000">
+      </div>
+      <div class="input-group">
+        <label>Interest Rate (% p.a.)</label>
+        <input type="number" id="rate" placeholder="e.g. 7.5">
+      </div>
+      <div class="input-group">
+        <label>Loan Tenure (in years)</label>
+        <input type="number" id="tenure" placeholder="e.g. 5">
+      </div>
+      <button onclick="calculateEMI()">Calculate EMI</button>
+      <div class="result" id="emiResult">Your EMI: ₹ 0</div>
+    </div>
 
-    <div class="result" id="emiResult"></div>
-
-    <canvas id="barChart"></canvas>
-    <canvas id="pieChart"></canvas>
+    <div class="charts">
+      <canvas id="pieChart" width="300" height="300"></canvas>
+      <canvas id="barChart" width="300" height="300"></canvas>
+    </div>
   </main>
 
   <footer>
-    © 2025 Pratix Finance — All rights reserved
+    PRATIX FINANCE<br>Raghav Pratap © 2025
   </footer>
 
   <script>
-    let isDark = false;
-    let deferredPrompt;
-    let lang = 'en';
-
-    const translations = {
-      en: { result: 'Monthly EMI: ₹', error: 'Please enter valid inputs' },
-      hi: { result: 'मासिक ईएमआई: ₹', error: 'कृपया मान्य इनपुट दर्ज करें' },
-      bn: { result: 'মাসিক EMI: ₹', error: 'বৈধ ইনপুট দিন' },
-      fr: { result: 'EMI mensuel: ₹', error: 'Veuillez entrer des valeurs valides' },
-      ru: { result: 'Ежемесячный платеж: ₹', error: 'Пожалуйста, введите допустимые значения' },
-      de: { result: 'Monatliche EMI: ₹', error: 'Bitte gültige Eingaben machen' },
-      ja: { result: '月々のEMI: ₹', error: '有効な入力をしてください' },
-      ko: { result: '월 EMI: ₹', error: '유효한 값을 입력해주세요' }
-    };
-
-    function toggleMenu() {
-      const menu = document.getElementById('menuOptions');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function toggleDarkMode() {
-      isDark = !isDark;
-      document.body.classList.toggle('dark-mode', isDark);
-    }
-
     function calculateEMI() {
-      const P = parseFloat(document.getElementById('loanAmount').value);
-      const R = parseFloat(document.getElementById('interestRate').value) / 12 / 100;
-      const N = parseFloat(document.getElementById('loanTenure').value) * 12;
-      if (!P || !R || !N) {
-        document.getElementById('emiResult').innerText = translations[lang].error;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const rate = parseFloat(document.getElementById("rate").value) / 12 / 100;
+      const tenure = parseFloat(document.getElementById("tenure").value) * 12;
+
+      if (!amount || !rate || !tenure) {
+        document.getElementById("emiResult").innerText = "Please enter all values.";
         return;
       }
-      const emi = P * R * Math.pow(1 + R, N) / (Math.pow(1 + R, N) - 1);
-      document.getElementById('emiResult').innerText = `${translations[lang].result} ${emi.toFixed(2)}`;
-      updateCharts(P, emi * N - P, emi);
-      localStorage.setItem('emiHistory', JSON.stringify({ P, R, N, emi }));
-    }
 
-    function updateCharts(principal, interest, emi) {
-      const bar = new Chart(document.getElementById('barChart'), {
-        type: 'bar',
+      const emi = (amount * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+      const totalPayment = emi * tenure;
+      const totalInterest = totalPayment - amount;
+
+      document.getElementById("emiResult").innerText = `Your EMI: ₹ ${emi.toFixed(2)}`;
+
+      // Pie Chart
+      const pie = document.getElementById("pieChart").getContext("2d");
+      new Chart(pie, {
+        type: "pie",
         data: {
-          labels: ['Principal', 'Interest'],
+          labels: ["Principal", "Interest"],
           datasets: [{
-            label: 'Amount ₹',
-            data: [principal, interest],
-            backgroundColor: ['#3b82f6', '#f59e0b']
+            data: [amount, totalInterest],
+            backgroundColor: ["#4e54c8", "#8f94fb"]
           }]
-        },
-        options: { responsive: true, plugins: { legend: { display: false } } }
+        }
       });
-      const pie = new Chart(document.getElementById('pieChart'), {
-        type: 'pie',
+
+      // Bar Chart
+      const bar = document.getElementById("barChart").getContext("2d");
+      new Chart(bar, {
+        type: "bar",
         data: {
-          labels: ['Principal', 'Interest'],
+          labels: ["Principal", "Interest"],
           datasets: [{
-            data: [principal, interest],
-            backgroundColor: ['#3b82f6', '#f59e0b']
+            label: "Amount (₹)",
+            data: [amount, totalInterest],
+            backgroundColor: ["#4e54c8", "#8f94fb"]
           }]
-        },
-        options: { responsive: true }
+        }
       });
     }
-
-    function downloadPDF() {
-      if (!navigator.onLine) return alert('Requires internet');
-      const element = document.querySelector('main');
-      html2pdf().set({ margin: 0.5, filename: 'EMI_Report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: {}, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
-    }
-
-    function sharePDF() {
-      if (!navigator.onLine) return alert('Requires internet');
-      alert('PDF sharing functionality coming soon!');
-    }
-
-    function viewHistory() {
-      const data = JSON.parse(localStorage.getItem('emiHistory'));
-      if (!data) return alert('No history found');
-      alert(`Loan: ₹${data.P}
-Rate: ${(data.R * 12 * 100).toFixed(2)}%
-Tenure: ${(data.N / 12).toFixed(0)} yrs
-EMI: ₹${data.emi.toFixed(2)}`);
-    }
-
-    function promptPWAInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(choice => {
-          if (choice.outcome === 'accepted') console.log('User accepted A2HS');
-          deferredPrompt = null;
-        });
-      } else {
-        alert('App already installed or prompt unavailable.');
-      }
-    }
-
-    function changeLanguage(selected) {
-      lang = selected;
-      calculateEMI();
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
   </script>
-
-  <script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js")
-      .then(() => console.log("Service Worker Registered"));
-  }
-</script>
-
 </body>
-
 </html>
