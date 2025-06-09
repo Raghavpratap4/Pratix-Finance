@@ -4,255 +4,258 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Advanced EMI Calculator | Pratix Finance</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root {
-      --primary: #4e54c8;
-      --secondary: #8f94fb;
-      --bg: #f7f9fc;
-      --text: #333;
-      --card: #fff;
-      --shadow: rgba(0, 0, 0, 0.1);
-    }
-
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
     }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      padding: 1rem;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #3f0d65, #5b21b6);
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      color: white;
-      text-align: center;
+      min-height: 100vh;
     }
-
-    header img {
-      height: 50px;
-      margin-right: 10px;
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(17, 17, 17, 0.75);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
-
-    .menu {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      cursor: pointer;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
-
-    .menu ul {
-      position: absolute;
-      top: 30px;
-      right: 0;
-      background: white;
-      border: 1px solid #ddd;
-      box-shadow: 0 4px 8px var(--shadow);
-      list-style: none;
-      display: none;
+    .header h2 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1.5rem;
     }
-
-    .menu:hover ul {
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    .input-group label {
+      font-weight: 500;
+      margin-bottom: 5px;
       display: block;
     }
-
-    .menu ul li {
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    .menu ul li:hover {
-      background: #f1f1f1;
-    }
-
-    main {
-      flex: 1;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      box-shadow: 0 6px 20px var(--shadow);
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .card h2 {
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 1rem;
-    }
-
-    .input-group label {
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
     .input-group input,
     .input-group select {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      outline: none;
-    }
-
-    button {
-      padding: 12px 20px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      color: white;
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
       border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 1rem;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
-
-    .result {
-      font-size: 1.5rem;
-      color: #222;
-      font-weight: bold;
-      margin-top: 1rem;
+    .input-group input::placeholder {
+      color: #ccc;
     }
-
-    .charts {
+    .buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 2rem;
+      gap: 1rem;
+      margin: 1.5rem 0;
     }
-
-    canvas {
-      background: #fff;
+    button {
+      flex: 1;
+      background: #6366f1;
+      border: none;
       border-radius: 12px;
-      box-shadow: 0 4px 10px var(--shadow);
-      padding: 1rem;
+      padding: 12px;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
-
+    button:hover {
+      background: #4f46e5;
+    }
+    .summary {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+    .summary p {
+      margin: 8px 0;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0;
+    }
+    canvas {
+      margin-top: 1rem;
+    }
     footer {
       text-align: center;
-      padding: 1rem;
-      background: #eee;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    @media (max-width: 768px) {
-      .charts {
-        flex-direction: column;
-      }
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Pratix Finance Logo">
-    <h1>Advanced EMI Calculator</h1>
-    <div class="menu">
-      ⋮
-      <ul>
-        <li>🌙 Toggle Dark Mode</li>
-        <li>📄 Download PDF</li>
-        <li>🔗 Share PDF</li>
-        <li>🕓 History</li>
-        <li>⬇ Download App</li>
-      </ul>
-    </div>
-  </header>
-
-  <main>
-    <div class="card">
-      <h2>Loan Details</h2>
-      <div class="input-group">
-        <label>Loan Amount (₹)</label>
-        <input type="number" id="amount" placeholder="e.g. 1000000">
-      </div>
-      <div class="input-group">
-        <label>Interest Rate (% p.a.)</label>
-        <input type="number" id="rate" placeholder="e.g. 7.5">
-      </div>
-      <div class="input-group">
-        <label>Loan Tenure (in years)</label>
-        <input type="number" id="tenure" placeholder="e.g. 5">
-      </div>
-      <button onclick="calculateEMI()">Calculate EMI</button>
-      <div class="result" id="emiResult">Your EMI: ₹ 0</div>
+  <div class="container">
+    <div class="header">
+      <h2>Advanced EMI Calculator</h2>
+      <button onclick="installPWA()">Install</button>
     </div>
 
-    <div class="charts">
-      <canvas id="pieChart" width="300" height="300"></canvas>
-      <canvas id="barChart" width="300" height="300"></canvas>
+    <div class="input-group">
+      <label>Loan Amount</label>
+      <input type="number" id="loanAmount" placeholder="Enter loan amount" />
     </div>
-  </main>
+    <div class="input-group">
+      <label>Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="Annual interest rate (%)" />
+    </div>
+    <div class="input-group">
+      <label>Loan Term (years)</label>
+      <input type="number" id="loanTerm" placeholder="Loan term in years" />
+    </div>
+    <div class="input-group">
+      <label>Prepayment Frequency</label>
+      <select id="prepayFreq">
+        <option value="once">Once</option>
+        <option value="yearly">Yearly</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Extra Payment (₹)</label>
+      <input type="number" id="extraPayment" placeholder="Optional prepayment amount" />
+    </div>
+    <div class="input-group">
+      <label>Start From Year</label>
+      <select id="startYear">
+        <option value="1">Year 1</option>
+        <option value="2" selected>Year 2</option>
+        <option value="3">Year 3</option>
+        <option value="4">Year 4</option>
+      </select>
+    </div>
+
+    <div class="buttons">
+      <button onclick="calculateEMI()">Calculate</button>
+      <button>Monthly Table</button>
+      <button>Compare Loans</button>
+    </div>
+
+    <div class="summary">
+      <p><strong>EMI:</strong> ₹<span id="emi">0</span>/month</p>
+      <p><strong>Total Interest:</strong> ₹<span id="interest">0</span></p>
+      <p><strong>Total Payment:</strong> ₹<span id="payment">0</span></p>
+      <button onclick="sendReminder()">📩 Send Reminder</button>
+    </div>
+
+    <div class="toggle-row">
+      <input type="checkbox" id="showLine" onchange="toggleChart()" />
+      <label for="showLine" style="margin-left: 10px;">Show Line Chart</label>
+    </div>
+    <canvas id="emiChart" height="200"></canvas>
+  </div>
 
   <footer>
-    PRATIX FINANCE<br>Raghav Pratap © 2025
+    © 2025 Pratix Finance — All rights reserved
   </footer>
 
   <script>
-    function calculateEMI() {
-      const amount = parseFloat(document.getElementById("amount").value);
-      const rate = parseFloat(document.getElementById("rate").value) / 12 / 100;
-      const tenure = parseFloat(document.getElementById("tenure").value) * 12;
+    let chart;
 
-      if (!amount || !rate || !tenure) {
-        document.getElementById("emiResult").innerText = "Please enter all values.";
-        return;
+    function calculateEMI() {
+      const P = +document.getElementById('loanAmount').value;
+      const R = +document.getElementById('interestRate').value / 1200;
+      const N = +document.getElementById('loanTerm').value * 12;
+      const prepay = +document.getElementById('extraPayment').value || 0;
+      const freq = document.getElementById('prepayFreq').value;
+
+      if (!P || !R || !N) return;
+
+      let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      let totalPayment = emi * N;
+      let totalInterest = totalPayment - P;
+
+      if (freq === 'once') {
+        totalPayment -= prepay;
+        totalInterest -= prepay;
       }
 
-      const emi = (amount * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-      const totalPayment = emi * tenure;
-      const totalInterest = totalPayment - amount;
+      document.getElementById('emi').innerText = emi.toFixed(0);
+      document.getElementById('interest').innerText = totalInterest.toFixed(0);
+      document.getElementById('payment').innerText = totalPayment.toFixed(0);
 
-      document.getElementById("emiResult").innerText = `Your EMI: ₹ ${emi.toFixed(2)}`;
+      updateChart(P, totalInterest, prepay);
+    }
 
-      // Pie Chart
-      const pie = document.getElementById("pieChart").getContext("2d");
-      new Chart(pie, {
-        type: "pie",
-        data: {
-          labels: ["Principal", "Interest"],
-          datasets: [{
-            data: [amount, totalInterest],
-            backgroundColor: ["#4e54c8", "#8f94fb"]
-          }]
-        }
-      });
+    function updateChart(principal, interest, prepay) {
+      const ctx = document.getElementById('emiChart').getContext('2d');
+      if (chart) chart.destroy();
 
-      // Bar Chart
-      const bar = document.getElementById("barChart").getContext("2d");
-      new Chart(bar, {
-        type: "bar",
-        data: {
-          labels: ["Principal", "Interest"],
-          datasets: [{
-            label: "Amount (₹)",
-            data: [amount, totalInterest],
-            backgroundColor: ["#4e54c8", "#8f94fb"]
-          }]
-        }
-      });
+      const showLine = document.getElementById('showLine').checked;
+      if (showLine) {
+        chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Principal', 'Interest', 'Prepayment'],
+            datasets: [{
+              label: 'Amount (₹)',
+              data: [principal, interest, prepay],
+              borderColor: '#4f46e5',
+              backgroundColor: '#8b5cf6',
+              fill: false,
+              tension: 0.3,
+              pointBackgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
+              pointRadius: 5
+            }]
+          }
+        });
+      } else {
+        chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Principal', 'Interest', 'Prepayment'],
+            datasets: [{
+              data: [principal, interest, prepay],
+              backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
+              hoverOffset: 16
+            }]
+          },
+          options: {
+            cutout: '65%',
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return `₹${tooltipItem.raw}`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function toggleChart() {
+      calculateEMI();
+    }
+
+    function sendReminder() {
+      alert("Reminder feature coming soon!");
+    }
+
+    function installPWA() {
+      alert("PWA install logic goes here.");
     }
   </script>
 </body>
