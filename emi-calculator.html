@@ -4,58 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Advanced EMI Calculator | Pratix Finance</title>
+  <link rel="manifest" href="manifest.json" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
     }
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #3f0d65, #5b21b6);
       color: #ffffff;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      overflow-x: hidden;
     }
     .container {
-      width: 100%;
-      max-width: 500px;
-      background: rgba(17, 17, 17, 0.75);
+      width: 95%;
+      max-width: 550px;
+      background: rgba(17, 17, 17, 0.8);
       border-radius: 20px;
-      backdrop-filter: blur(10px);
       padding: 2rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      margin: 1rem;
     }
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 1rem;
     }
     .header h2 {
       margin: 0;
-      font-weight: 600;
       font-size: 1.5rem;
+      font-weight: bold;
     }
     .input-group {
       margin-bottom: 1rem;
     }
     .input-group label {
-      font-weight: 500;
-      margin-bottom: 5px;
       display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
     }
     .input-group input,
     .input-group select {
       width: 100%;
       padding: 12px;
-      border-radius: 12px;
-      border: none;
       font-size: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
     }
     .input-group input::placeholder {
       color: #ccc;
@@ -64,199 +70,283 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin: 1.5rem 0;
+      margin-top: 1.5rem;
     }
-    button {
+    .buttons button {
       flex: 1;
-      background: #6366f1;
+      padding: 12px;
       border: none;
       border-radius: 12px;
-      padding: 12px;
       font-size: 1rem;
-      color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
+      background: #6366f1;
+      color: white;
+      transition: background 0.3s;
     }
-    button:hover {
+    .buttons button:hover {
       background: #4f46e5;
     }
     .summary {
+      margin-top: 1.5rem;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 16px;
       padding: 1rem;
-      margin-top: 1.5rem;
     }
     .summary p {
       margin: 8px 0;
     }
     .toggle-row {
       display: flex;
+      gap: 10px;
       align-items: center;
-      margin: 1rem 0;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
     }
     canvas {
       margin-top: 1rem;
+      max-width: 100%;
+    }
+    .chart-selector {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+    .chart-selector label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lang-select {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    select#language {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      border: none;
     }
     footer {
       text-align: center;
       margin-top: 2rem;
       font-size: 0.85rem;
-      opacity: 0.6;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="captureArea">
     <div class="header">
-      <h2>Advanced EMI Calculator</h2>
-      <button onclick="installPWA()">Install</button>
+      <h2 id="title">Advanced EMI Calculator</h2>
+      <button onclick="installPWA()">📲 Install</button>
     </div>
-
     <div class="input-group">
-      <label>Loan Amount</label>
+      <label id="label-loan-amount">Loan Amount</label>
       <input type="number" id="loanAmount" placeholder="Enter loan amount" />
     </div>
     <div class="input-group">
-      <label>Interest Rate (%)</label>
-      <input type="number" id="interestRate" placeholder="Annual interest rate (%)" />
+      <label id="label-interest-rate">Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="Annual interest rate" />
     </div>
     <div class="input-group">
-      <label>Loan Term (years)</label>
-      <input type="number" id="loanTerm" placeholder="Loan term in years" />
+      <label id="label-loan-term">Loan Term (Years)</label>
+      <input type="number" id="loanTerm" placeholder="Duration in years" />
     </div>
     <div class="input-group">
-      <label>Prepayment Frequency</label>
+      <label id="label-prepay-freq">Prepayment Frequency</label>
       <select id="prepayFreq">
+        <option value="none" selected>None</option>
         <option value="once">Once</option>
         <option value="yearly">Yearly</option>
       </select>
     </div>
     <div class="input-group">
-      <label>Extra Payment (₹)</label>
-      <input type="number" id="extraPayment" placeholder="Optional prepayment amount" />
+      <label id="label-extra-payment">Extra Payment (₹)</label>
+      <input type="number" id="extraPayment" placeholder="Optional prepayment" />
     </div>
     <div class="input-group">
-      <label>Start From Year</label>
+      <label id="label-start-year">Start From Year</label>
       <select id="startYear">
         <option value="1">Year 1</option>
-        <option value="2" selected>Year 2</option>
+        <option value="2">Year 2</option>
         <option value="3">Year 3</option>
         <option value="4">Year 4</option>
       </select>
     </div>
 
     <div class="buttons">
-      <button onclick="calculateEMI()">Calculate</button>
-      <button>Monthly Table</button>
-      <button>Compare Loans</button>
+      <button onclick="calculateEMI()" id="btn-calculate">Calculate</button>
+      <button onclick="generatePDF()" id="btn-download">📄 Download PDF</button>
+      <button onclick="showReminder()" id="btn-reminder">📩 Reminder</button>
     </div>
 
     <div class="summary">
-      <p><strong>EMI:</strong> ₹<span id="emi">0</span>/month</p>
-      <p><strong>Total Interest:</strong> ₹<span id="interest">0</span></p>
-      <p><strong>Total Payment:</strong> ₹<span id="payment">0</span></p>
-      <button onclick="sendReminder()">📩 Send Reminder</button>
+      <p><strong id="label-emi">EMI:</strong> ₹<span id="emi">0</span>/month</p>
+      <p><strong id="label-interest">Total Interest:</strong> ₹<span id="interest">0</span></p>
+      <p><strong id="label-payment">Total Payment:</strong> ₹<span id="payment">0</span></p>
     </div>
 
-    <div class="toggle-row">
-      <input type="checkbox" id="showLine" onchange="toggleChart()" />
-      <label for="showLine" style="margin-left: 10px;">Show Line Chart</label>
+    <div class="chart-selector">
+      <label><input type="radio" name="chartType" value="bar" checked onchange="toggleChart()" /> Bar Chart</label>
+      <label><input type="radio" name="chartType" value="pie" onchange="toggleChart()" /> Pie Chart</label>
+      <label><input type="radio" name="chartType" value="line" onchange="toggleChart()" /> Line Chart</label>
     </div>
-    <canvas id="emiChart" height="200"></canvas>
-  </div>
 
-  <footer>
-    © 2025 Pratix Finance — All rights reserved
-  </footer>
+    <canvas id="emiChart" height="250"></canvas>
 
-  <script>
-    let chart;
+    <div class="lang-select">
+      <label for="language" id="label-language">🌐 Language:</label>
+      <select id="language" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="bn">বাংলা</option>
+        <option value="fr">Français</option>
+        <option value="ru">Русский</option>
+        <option value="de">Deutsch</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
 
-    function calculateEMI() {
-      const P = +document.getElementById('loanAmount').value;
-      const R = +document.getElementById('interestRate').value / 1200;
-      const N = +document.getElementById('loanTerm').value * 12;
-      const prepay = +document.getElementById('extraPayment').value || 0;
-      const freq = document.getElementById('prepayFreq').value;
+    <footer>
+      © 2025 Pratix Finance — All rights reserved
+    </footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  let chart;
+  const langMap = {
+    en: { loanAmount: "Loan Amount", interestRate: "Interest Rate (%)", loanTerm: "Loan Term (Years)", prepayFreq: "Prepayment Frequency", extraPayment: "Extra Payment (₹)", startYear: "Start From Year", emi: "EMI:", interest: "Total Interest:", payment: "Total Payment:", calculate: "Calculate", reminder: "📩 Reminder", download: "📄 Download PDF", language: "🌐 Language:" },
+    hi: { loanAmount: "ऋण राशि", interestRate: "ब्याज दर (%)", loanTerm: "ऋण अवधि (वर्ष)", prepayFreq: "पूर्व भुगतान आवृत्ति", extraPayment: "अतिरिक्त भुगतान (₹)", startYear: "कब से शुरू करें", emi: "ईएमआई:", interest: "कुल ब्याज:", payment: "कुल भुगतान:", calculate: "गणना करें", reminder: "📩 रिमाइंडर", download: "📄 पीडीएफ डाउनलोड", language: "🌐 भाषा:" },
+    bn: { loanAmount: "ঋণের পরিমাণ", interestRate: "সুদের হার (%)", loanTerm: "ঋণের মেয়াদ (বছর)", prepayFreq: "প্রিপেমেন্ট ফ্রিকোয়েন্সি", extraPayment: "অতিরিক্ত পরিশোধ (₹)", startYear: "শুরু বছর", emi: "EMI:", interest: "মোট সুদ:", payment: "মোট পেমেন্ট:", calculate: "গণনা করুন", reminder: "📩 রিমাইন্ডার", download: "📄 পিডিএফ ডাউনলোড", language: "🌐 ভাষা:" },
+    fr: { loanAmount: "Montant du prêt", interestRate: "Taux d'intérêt (%)", loanTerm: "Durée du prêt (années)", prepayFreq: "Fréquence de remboursement anticipé", extraPayment: "Paiement supplémentaire (₹)", startYear: "Commencer à partir de l'année", emi: "EMI:", interest: "Intérêt total:", payment: "Paiement total:", calculate: "Calculer", reminder: "📩 Rappel", download: "📄 Télécharger le PDF", language: "🌐 Langue:" },
+    ru: { loanAmount: "Сумма кредита", interestRate: "Процентная ставка (%)", loanTerm: "Срок кредита (лет)", prepayFreq: "Частота досрочного погашения", extraPayment: "Дополнительный платеж (₹)", startYear: "Начать с года", emi: "EMI:", interest: "Общий процент:", payment: "Общая выплата:", calculate: "Рассчитать", reminder: "📩 Напоминание", download: "📄 Скачать PDF", language: "🌐 Язык:" },
+    de: { loanAmount: "Darlehensbetrag", interestRate: "Zinssatz (%)", loanTerm: "Laufzeit (Jahre)", prepayFreq: "Sondertilgungsfrequenz", extraPayment: "Zusätzliche Zahlung (₹)", startYear: "Startjahr", emi: "EMI:", interest: "Gesamtzins:", payment: "Gesamtzahlung:", calculate: "Berechnen", reminder: "📩 Erinnerung", download: "📄 PDF herunterladen", language: "🌐 Sprache:" },
+    ja: { loanAmount: "ローン金額", interestRate: "金利 (%)", loanTerm: "ローン期間 (年)", prepayFreq: "繰上返済頻度", extraPayment: "追加支払い (₹)", startYear: "開始年", emi: "EMI:", interest: "総利息:", payment: "総支払額:", calculate: "計算する", reminder: "📩 リマインダー", download: "📄 PDFをダウンロード", language: "🌐 言語:" },
+    ko: { loanAmount: "대출 금액", interestRate: "이자율 (%)", loanTerm: "대출 기간 (년)", prepayFreq: "선불 빈도", extraPayment: "추가 지불 (₹)", startYear: "시작 연도", emi: "EMI:", interest: "총 이자:", payment: "총 납부금:", calculate: "계산하기", reminder: "📩 리마인더", download: "📄 PDF 다운로드", language: "🌐 언어:" },
+    es: { loanAmount: "Monto del préstamo", interestRate: "Tasa de interés (%)", loanTerm: "Plazo del préstamo (años)", prepayFreq: "Frecuencia de pago anticipado", extraPayment: "Pago adicional (₹)", startYear: "Año de inicio", emi: "EMI:", interest: "Interés total:", payment: "Pago total:", calculate: "Calcular", reminder: "📩 Recordatorio", download: "📄 Descargar PDF", language: "🌐 Idioma:" }
+  };
 
-      if (!P || !R || !N) return;
+  function calculateEMI() {
+    const P = +document.getElementById('loanAmount').value;
+    const R = +document.getElementById('interestRate').value / 1200;
+    const N = +document.getElementById('loanTerm').value * 12;
+    const prepay = +document.getElementById('extraPayment').value;
+    const freq = document.getElementById('prepayFreq').value;
 
-      let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-      let totalPayment = emi * N;
-      let totalInterest = totalPayment - P;
+    if (!P || !R || !N) return;
 
-      if (freq === 'once') {
-        totalPayment -= prepay;
-        totalInterest -= prepay;
+    let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+    let totalPayment = emi * N;
+    let totalInterest = totalPayment - P;
+
+    if (freq === 'once') {
+      totalPayment -= prepay;
+      totalInterest -= prepay;
+    } else if (freq === 'yearly') {
+      let remaining = P;
+      for (let i = 0; i < N; i++) {
+        let interest = remaining * R;
+        let principal = emi - interest;
+        remaining -= principal;
+        if ((i + 1) % 12 === 0) remaining -= prepay;
+        if (remaining <= 0) {
+          totalPayment = emi * (i + 1);
+          break;
+        }
       }
-
-      document.getElementById('emi').innerText = emi.toFixed(0);
-      document.getElementById('interest').innerText = totalInterest.toFixed(0);
-      document.getElementById('payment').innerText = totalPayment.toFixed(0);
-
-      updateChart(P, totalInterest, prepay);
+      totalInterest = totalPayment - P;
     }
 
-    function updateChart(principal, interest, prepay) {
-      const ctx = document.getElementById('emiChart').getContext('2d');
-      if (chart) chart.destroy();
+    document.getElementById('emi').innerText = Math.round(emi);
+    document.getElementById('interest').innerText = Math.round(totalInterest);
+    document.getElementById('payment').innerText = Math.round(totalPayment);
 
-      const showLine = document.getElementById('showLine').checked;
-      if (showLine) {
-        chart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['Principal', 'Interest', 'Prepayment'],
-            datasets: [{
-              label: 'Amount (₹)',
-              data: [principal, interest, prepay],
-              borderColor: '#4f46e5',
-              backgroundColor: '#8b5cf6',
-              fill: false,
-              tension: 0.3,
-              pointBackgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
-              pointRadius: 5
-            }]
-          }
-        });
-      } else {
-        chart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Principal', 'Interest', 'Prepayment'],
-            datasets: [{
-              data: [principal, interest, prepay],
-              backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
-              hoverOffset: 16
-            }]
-          },
-          options: {
-            cutout: '65%',
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function (tooltipItem) {
-                    return `₹${tooltipItem.raw}`;
-                  }
-                }
+    updateChart(P, totalInterest, prepay);
+  }
+
+  function updateChart(principal, interest, prepay) {
+    const ctx = document.getElementById('emiChart').getContext('2d');
+    if (chart) chart.destroy();
+    const type = document.querySelector('input[name="chartType"]:checked').value;
+
+    let data = {
+      labels: ['Principal', 'Interest', 'Prepayment'],
+      datasets: [{
+        data: [principal, interest, prepay],
+        backgroundColor: ['#3b82f6', '#ec4899', '#10b981']
+      }]
+    };
+
+    let config = {
+      type,
+      data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: type !== 'line' },
+          tooltip: {
+            callbacks: {
+              label: function (item) {
+                return `₹${item.raw}`;
               }
             }
           }
-        });
+        }
       }
-    }
+    };
 
-    function toggleChart() {
-      calculateEMI();
-    }
+    chart = new Chart(ctx, config);
+  }
 
-    function sendReminder() {
-      alert("Reminder feature coming soon!");
-    }
+  function toggleChart() {
+    calculateEMI();
+  }
 
-    function installPWA() {
-      alert("PWA install logic goes here.");
+  function changeLanguage(code) {
+    const t = langMap[code];
+    document.getElementById('label-loan-amount').innerText = t.loanAmount;
+    document.getElementById('label-interest-rate').innerText = t.interestRate;
+    document.getElementById('label-loan-term').innerText = t.loanTerm;
+    document.getElementById('label-prepay-freq').innerText = t.prepayFreq;
+    document.getElementById('label-extra-payment').innerText = t.extraPayment;
+    document.getElementById('label-start-year').innerText = t.startYear;
+    document.getElementById('label-emi').innerText = t.emi;
+    document.getElementById('label-interest').innerText = t.interest;
+    document.getElementById('label-payment').innerText = t.payment;
+    document.getElementById('btn-calculate').innerText = t.calculate;
+    document.getElementById('btn-reminder').innerText = t.reminder;
+    document.getElementById('btn-download').innerText = t.download;
+    document.getElementById('label-language').innerText = t.language;
+  }
+
+  function detectLanguage() {
+    const lang = navigator.language.slice(0, 2);
+    if (langMap[lang]) {
+      document.getElementById('language').value = lang;
+      changeLanguage(lang);
     }
-  </script>
+  }
+
+  function generatePDF() {
+    html2pdf().from(document.body).set({ filename: 'EMI-Report.pdf', margin: 0.5 }).save();
+  }
+
+  function showReminder() {
+    alert("Reminder feature coming soon.");
+  }
+
+  window.onload = () => {
+    detectLanguage();
+    calculateEMI();
+  };
+</script>
 </body>
 </html>
