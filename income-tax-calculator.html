@@ -3,143 +3,222 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Income Tax Calculator</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <title>Pratix Finance - All Tools One Place</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #f4f4f4, #e8f0fe);
+    :root {
+      --bg: #0d0f14;
+      --card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #ffffff;
+      --subtext: #b0b0b0;
+      --highlight: #5ef8ff;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 0 1rem;
     }
-    h1 {
-      text-align: center;
-      color: #333;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-top: 1rem;
     }
-    label, select, input, button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--highlight);
     }
-    button {
-      padding: 10px;
-      background-color: #007bff;
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    select, .dots {
+      background: rgba(255, 255, 255, 0.06);
       color: white;
-      border: none;
-      border-radius: 5px;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #0056b3;
+
+    .hero {
+      text-align: left;
+      margin-top: 2.5rem;
+      max-width: 800px;
     }
-    .result {
-      background: #f0f0f0;
-      padding: 15px;
+
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      color: var(--subtext);
+      font-size: 1rem;
+    }
+
+    .grid {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 12px rgba(94, 248, 255, 0.2);
+    }
+
+    .icon {
+      font-size: 2rem;
+    }
+
+    .card h3 {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: var(--subtext);
+    }
+
+    .card a {
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: white;
+      background: #1e90ff;
+      padding: 0.5rem 1rem;
       border-radius: 8px;
-      margin-top: 15px;
-    }
-    #languageSelector {
-      margin-bottom: 15px;
-    }
-    footer {
       text-align: center;
-      font-size: 0.9em;
-      color: #555;
-      margin-top: 20px;
+      text-decoration: none;
+      width: fit-content;
+    }
+
+    .coming-soon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: #fff;
+      background: #444;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 3rem 0 1rem;
+      font-size: 0.85rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <select id="languageSelector">
-      <option value="en">English</option>
-      <option value="hi">हिन्दी</option>
-      <option value="bn">বাংলা</option>
-      <option value="fr">Français</option>
-      <option value="ru">Русский</option>
-      <option value="es">Español</option>
-      <option value="ja">日本語</option>
-      <option value="ko">한국어</option>
-    </select>
-
-    <h1 data-translate="title">Income Tax Calculator</h1>
-    <label for="income" data-translate="enterIncome">Enter Annual Income (₹)</label>
-    <input type="number" id="income" placeholder="500000">
-
-    <button onclick="calculateTax()" data-translate="calculate">Calculate</button>
-    <button onclick="resetForm()" data-translate="reset">Reset</button>
-    <button onclick="showPreview()" data-translate="preview">Preview</button>
-
-    <div id="resultSection" class="result" style="display:none;"></div>
-
-    <div id="previewSection" style="display:none; padding: 20px; background:#fff; border-radius:12px; box-shadow:0 0 10px rgba(0,0,0,0.2); margin-top: 20px;">
-      <div id="previewArea">
-        <img src="logo.png" alt="Pratix Finance Logo" style="width:100px;">
-        <h2 data-translate="previewTitle">Income Tax Summary</h2>
-        <div id="previewData"></div>
-        <canvas id="pieChart" style="max-width:300px;"></canvas>
-        <canvas id="barChart" style="max-width:300px;"></canvas>
-        <div style="margin-top:10px;">
-          <button onclick="downloadImage()" data-translate="downloadImage">Download Image</button>
-          <button onclick="downloadPDF()" data-translate="downloadPDF">Download PDF</button>
-          <button onclick="shareResult()" data-translate="share">Share</button>
-        </div>
-      </div>
+  <header>
+    <div class="logo">PRATIX FINANCE</div>
+    <div class="controls">
+      <select>
+        <option>English</option>
+        <option>हिन्दी</option>
+        <option>বাংলা</option>
+        <option>मराठी</option>
+        <option>தமிழ்</option>
+        <option>తెలుగు</option>
+        <option>ગુજરાતી</option>
+        <option>മലയാളം</option>
+        <option>ਪੰਜਾਬੀ</option>
+      </select>
+      <div class="dots">⋯</div>
     </div>
+  </header>
 
-    <footer>
-      <p data-translate="footer">This Income Tax Calculator helps you estimate tax under India’s current slabs. For official info, consult a tax professional. Contact: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
-    </footer>
+  <section class="hero">
+    <h1>All Your Financial Tools, One Place.</h1>
+    <p>Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <div class="icon">💰</div>
+      <h3>EMI Calculator</h3>
+      <p>Quickly calculate EMIs</p>
+      <a href="#">Launch Calculator →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>SIP Calculator</h3>
+      <p>Estimate SIP returns</p>
+      <a href="#">Launch Calculator →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📄</div>
+      <h3>Income Tax Calculator</h3>
+      <p>Plan your income taxes</p>
+      <a href="#">Launch Calculator →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🛡️</div>
+      <h3>FD Calculator</h3>
+      <p>Find maturity amount</p>
+      <a href="#">Launch Calculator →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📅</div>
+      <h3>RD Calculator</h3>
+      <p>Project RD investments</p>
+      <span class="coming-soon">Coming Soon</span>
+      <a href="#">Launch Calculator →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🏠</div>
+      <h3>HRA Calculator</h3>
+      <p>Calculate HRA exemptions</p>
+      <a href="#">Launch Calculator →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🐷</div>
+      <h3>NPS Calculator</h3>
+      <p>Plan for your retirement</p>
+      <a href="#">Launch Calculator →</a>
+    </div>
+  </section>
+
+  <div class="footer">
+    © 2025 Pratix Finance — All rights reserved
   </div>
-
-  <script>
-    const translations = {
-      en: {
-        title: "Income Tax Calculator",
-        enterIncome: "Enter Annual Income (₹)",
-        calculate: "Calculate",
-        reset: "Reset",
-        preview: "Preview",
-        previewTitle: "Income Tax Summary",
-        downloadImage: "Download Image",
-        downloadPDF: "Download PDF",
-        share: "Share",
-        yourTax: "Your Income Tax is:",
-        income: "Annual Income:",
-        tax: "Tax Payable:",
-        afterTax: "Remaining Income:",
-        footer: "This Income Tax Calculator helps you estimate tax under India’s current slabs. For official info, consult a tax professional. Contact: pratixfinance4@gmail.com"
-      },
-      hi: {title:"इनकम टैक्स कैलकुलेटर",enterIncome:"वार्षिक आय दर्ज करें (₹)",calculate:"गणना करें",reset:"रीसेट करें",preview:"पूर्वावलोकन",previewTitle:"आयकर सारांश",downloadImage:"छवि डाउनलोड करें",downloadPDF:"पीडीएफ डाउनलोड करें",share:"साझा करें",yourTax:"आपका आयकर है:",income:"वार्षिक आय:",tax:"देय कर:",afterTax:"शेष आय:",footer:"यह इनकम टैक्स कैलकुलेटर भारत के वर्तमान स्लैब के तहत टैक्स का अनुमान लगाने में मदद करता है। आधिकारिक जानकारी के लिए एक टैक्स प्रोफेशनल से परामर्श करें। संपर्क: pratixfinance4@gmail.com"},
-      bn: {title:"আয়কর ক্যালকুলেটর",enterIncome:"বার্ষিক আয় লিখুন (₹)",calculate:"গণনা করুন",reset:"রিসেট করুন",preview:"পূর্বরূপ",previewTitle:"আয়কর সংক্ষিপ্তসার",downloadImage:"ছবি ডাউনলোড করুন",downloadPDF:"পিডিএফ ডাউনলোড করুন",share:"শেয়ার করুন",yourTax:"আপনার আয়কর:",income:"বার্ষিক আয়:",tax:"করযোগ্য:",afterTax:"অবশিষ্ট আয়:",footer:"এই আয়কর ক্যালকুলেটর আপনাকে ভারতের বর্তমান স্ল্যাব অনুসারে ট্যাক্স অনুমান করতে সাহায্য করে। আনুষ্ঠানিক তথ্যের জন্য, একজন ট্যাক্স পেশাদারের সাথে পরামর্শ করুন। যোগাযোগ: pratixfinance4@gmail.com"},
-      fr: {title:"Calculateur d'impôt sur le revenu",enterIncome:"Entrez le revenu annuel (₹)",calculate:"Calculer",reset:"Réinitialiser",preview:"Aperçu",previewTitle:"Résumé de l'impôt",downloadImage:"Télécharger l'image",downloadPDF:"Télécharger le PDF",share:"Partager",yourTax:"Votre impôt sur le revenu est:",income:"Revenu annuel:",tax:"Impôt dû:",afterTax:"Revenu restant:",footer:"Ce calculateur d'impôt vous aide à estimer l'impôt selon les tranches actuelles de l'Inde. Pour des informations officielles, consultez un professionnel. Contact: pratixfinance4@gmail.com"},
-      ru: {title:"Калькулятор подоходного налога",enterIncome:"Введите годовой доход (₹)",calculate:"Рассчитать",reset:"Сброс",preview:"Предпросмотр",previewTitle:"Сводка по налогам",downloadImage:"Скачать изображение",downloadPDF:"Скачать PDF",share:"Поделиться",yourTax:"Ваш подоходный налог:",income:"Годовой доход:",tax:"Подлежащий оплате налог:",afterTax:"Оставшийся доход:",footer:"Этот калькулятор налога помогает оценить налог по действующим ставкам в Индии. Для официальной информации проконсультируйтесь со специалистом. Контакт: pratixfinance4@gmail.com"},
-      es: {title:"Calculadora de Impuesto sobre la Renta",enterIncome:"Ingrese ingreso anual (₹)",calculate:"Calcular",reset:"Restablecer",preview:"Vista previa",previewTitle:"Resumen de Impuestos",downloadImage:"Descargar Imagen",downloadPDF:"Descargar PDF",share:"Compartir",yourTax:"Su impuesto sobre la renta es:",income:"Ingreso anual:",tax:"Impuesto a pagar:",afterTax:"Ingreso restante:",footer:"Esta calculadora le ayuda a estimar impuestos bajo los tramos actuales de India. Para información oficial, consulte a un profesional. Contacto: pratixfinance4@gmail.com"},
-      ja: {title:"所得税計算機",enterIncome:"年間所得を入力 (₹)",calculate:"計算",reset:"リセット",preview:"プレビュー",previewTitle:"税金の概要",downloadImage:"画像をダウンロード",downloadPDF:"PDFをダウンロード",share:"共有",yourTax:"あなたの所得税は:",income:"年間所得:",tax:"支払う税金:",afterTax:"残りの所得:",footer:"この計算機は、インドの現行税率に基づいて税金を見積もるのに役立ちます。公式情報は税理士にご相談ください。連絡先: pratixfinance4@gmail.com"},
-      ko: {title:"소득세 계산기",enterIncome:"연간 소득 입력 (₹)",calculate:"계산",reset:"초기화",preview:"미리보기",previewTitle:"소득세 요약",downloadImage:"이미지 다운로드",downloadPDF:"PDF 다운로드",share:"공유",yourTax:"당신의 소득세는:",income:"연간 소득:",tax:"납부 세금:",afterTax:"남은 소득:",footer:"이 소득세 계산기는 인도의 현재 세율에 따라 세금을 추정하는 데 도움이 됩니다. 공식 정보는 세무 전문가에게 문의하세요. 연락처: pratixfinance4@gmail.com"}
-    };
-
-    document.getElementById('languageSelector').addEventListener('change', changeLanguage);
-
-    function changeLanguage() {
-      const lang = document.getElementById("languageSelector").value;
-      document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.getAttribute('data-translate');
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
-        }
-      });
-    }
-  </script>
 </body>
 </html>
