@@ -9,170 +9,131 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-
+  * {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #121212;
-  color: #f5f5f5;
+  background: linear-gradient(135deg, #3f0d65, #5b21b6);
+  color: #ffffff;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
   min-height: 100vh;
+  padding: 1rem;
 }
-
 .container {
-  background: #1e1e1e;
   width: 100%;
-  max-width: 450px;
-  margin: 30px auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+  max-width: 500px;
+  background: rgba(17, 17, 17, 0.75);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
-
-#titleText {
-  font-size: 1.5em;
-  font-weight: 600;
+.header h2 {
   margin: 0;
+  font-weight: 600;
+  font-size: 1.5rem;
 }
-
-.top-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-select, input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  background: #2b2b2b;
-  border: 1px solid #444;
-  border-radius: 6px;
-  color: #f5f5f5;
-  font-size: 1em;
-}
-
-select:focus, input:focus {
-  outline: none;
-  border-color: #00f0ff;
-}
-
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
-
-.buttons, .bottom-options {
+.input-group label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+.input-group input, .input-group select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.input-group input::placeholder {
+  color: #ccc;
+}
+.buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
-
 button {
-  padding: 10px 15px;
-  background: #00bcd4;
-  color: white;
+  flex: 1;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  color: white;
   cursor: pointer;
-  font-weight: 500;
   transition: background 0.3s ease;
 }
-
 button:hover {
-  background: #0097a7;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
 }
-
-button:disabled {
-  background: #555;
-  cursor: not-allowed;
-}
-
 .summary {
-  background: #2a2a2a;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 20px;
-  text-align: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-top: 1.5rem;
 }
-
 .summary p {
-  margin: 5px 0;
+  margin: 8px 0;
 }
-
-.chart-toggle {
+.toggle-row {
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  margin: 1rem 0;
 }
-
-.chart-toggle label {
-  font-size: 0.95em;
-}
-
 canvas {
-  background: #1a1a1a;
-  border-radius: 10px;
-  padding: 10px;
-  max-width: 100%;
+  margin-top: 1rem;
+  width: 100% !important;
+  height: auto !important;
 }
-
-.faq-box {
-  background: #2b2b2b;
-  padding: 10px;
-  border-left: 4px solid #00bcd4;
-  margin-top: 15px;
-  border-radius: 8px;
-  font-size: 0.95em;
+.language-row {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
 }
-
+.language-row select {
+  margin-left: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+}
 footer {
   text-align: center;
-  font-size: 0.85em;
-  color: #aaa;
-  margin-top: 20px;
-  padding: 15px 10px;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
 }
-
-/* Responsive layout */
 @media screen and (max-width: 600px) {
   .container {
-    padding: 15px;
-    margin: 20px 10px;
+    padding: 1.2rem;
   }
-
-  #titleText {
-    font-size: 1.3em;
+  .header h2 {
+    font-size: 1.25rem;
   }
-
-  .top-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .buttons, .bottom-options {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   button {
-    width: 100%;
+    font-size: 0.95rem;
+    padding: 10px;
   }
 }
+
   </style>
 </head>
 <body>
