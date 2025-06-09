@@ -1,224 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pratix Finance - All Tools One Place</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pratix Finance - All Calculators</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #0d0f14;
-      --card: rgba(255, 255, 255, 0.04);
-      --border: rgba(255, 255, 255, 0.1);
-      --text: #ffffff;
-      --subtext: #b0b0b0;
-      --highlight: #5ef8ff;
-    }
-
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      padding: 0 1rem;
+      background: #0e1117;
+      color: #fff;
+      padding: 2rem;
     }
 
-    header {
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
       border-radius: 12px;
-      margin-top: 1rem;
+      margin-bottom: 2rem;
     }
 
     .logo {
+      font-size: 1.2rem;
       font-weight: 700;
-      font-size: 1.3rem;
-      color: var(--highlight);
-    }
-
-    .controls {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 10px;
     }
 
-    select, .dots {
-      background: rgba(255, 255, 255, 0.06);
+    .menu {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .menu select, .menu button {
+      background: rgba(255,255,255,0.05);
+      border: none;
       color: white;
-      border: 1px solid var(--border);
-      padding: 0.4rem 0.6rem;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
       font-size: 0.9rem;
       cursor: pointer;
     }
 
-    .hero {
-      text-align: left;
-      margin-top: 2.5rem;
-      max-width: 800px;
-    }
-
-    .hero h1 {
-      font-size: 2.2rem;
+    h1 {
+      font-size: 2.5rem;
       font-weight: 700;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
-    .hero p {
-      color: var(--subtext);
+    .subtext {
       font-size: 1rem;
+      color: #c5c5c5;
+      margin-bottom: 2rem;
     }
 
     .grid {
-      margin-top: 2rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.5rem;
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: 16px;
       padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      backdrop-filter: blur(20px);
       position: relative;
-      transition: transform 0.3s;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 12px rgba(94, 248, 255, 0.2);
+      transform: translateY(-5px);
     }
 
-    .icon {
+    .card .icon {
       font-size: 2rem;
+      margin-bottom: 0.8rem;
     }
 
     .card h3 {
+      font-size: 1.2rem;
       font-weight: 600;
-      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
     }
 
     .card p {
-      font-size: 0.95rem;
-      color: var(--subtext);
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 1.2rem;
     }
 
-    .card a {
-      margin-top: auto;
-      font-size: 0.9rem;
+    .card button {
+      background: #ffffff10;
       color: white;
-      background: #1e90ff;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1rem;
+      border: none;
       border-radius: 8px;
-      text-align: center;
-      text-decoration: none;
-      width: fit-content;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .coming-soon {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      font-size: 0.7rem;
+      top: 1rem;
+      right: 1rem;
+      background: #ffffff10;
       color: #fff;
-      background: #444;
-      padding: 2px 6px;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.5rem;
       border-radius: 6px;
+      text-transform: uppercase;
     }
 
-    .footer {
-      text-align: center;
-      margin: 3rem 0 1rem;
-      font-size: 0.85rem;
-      color: #666;
-    }
+    /* Icons (using emoji or you can use real icons/images) */
+    .gold { color: gold; }
+    .purple { color: #bb6bd9; }
+    .teal { color: #26c6da; }
+    .orange { color: orange; }
+    .blue { color: #42a5f5; }
+    .green { color: #66bb6a; }
+    .pig { color: #b2ebf2; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">PRATIX FINANCE</div>
-    <div class="controls">
+
+  <div class="header">
+    <div class="logo">
+      <span style="font-size: 1.5rem;">🅿️</span> PRATIX FINANCE
+    </div>
+    <div class="menu">
       <select>
         <option>English</option>
-        <option>हिन्दी</option>
-        <option>বাংলা</option>
-        <option>मराठी</option>
-        <option>தமிழ்</option>
-        <option>తెలుగు</option>
-        <option>ગુજરાતી</option>
-        <option>മലയാളം</option>
-        <option>ਪੰਜਾਬੀ</option>
+        <option>Hindi</option>
+        <option>Marathi</option>
+        <option>Gujarati</option>
+        <option>Bengali</option>
+        <option>Kannada</option>
+        <option>Tamil</option>
+        <option>Telugu</option>
+        <option>Malayalam</option>
       </select>
-      <div class="dots">⋯</div>
+      <button>⋮</button>
     </div>
-  </header>
+  </div>
 
-  <section class="hero">
-    <h1>All Your Financial Tools, One Place.</h1>
-    <p>Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
-  </section>
+  <h1>All Your Financial Tools, <br>One Place.</h1>
+  <p class="subtext">Powerful, accurate, and easy-to-use calculators<br>from Pratix Finance</p>
 
-  <section class="grid">
+  <div class="grid">
     <div class="card">
-      <div class="icon">💰</div>
+      <div class="icon gold">🪙</div>
       <h3>EMI Calculator</h3>
       <p>Quickly calculate EMIs</p>
-      <a href="#">Launch Calculator →</a>
+      <button>Launch Calculator →</button>
     </div>
+
     <div class="card">
-      <div class="icon">📊</div>
+      <div class="icon purple">📊</div>
       <h3>SIP Calculator</h3>
       <p>Estimate SIP returns</p>
-      <a href="#">Launch Calculator →</a>
+      <button>Launch Calculator →</button>
     </div>
+
     <div class="card">
-      <div class="icon">📄</div>
+      <div class="icon teal">📄</div>
       <h3>Income Tax Calculator</h3>
       <p>Plan your income taxes</p>
-      <a href="#">Launch Calculator →</a>
+      <button>Launch Calculator →</button>
     </div>
+
     <div class="card">
-      <div class="icon">🛡️</div>
+      <div class="icon orange">🛡️</div>
       <h3>FD Calculator</h3>
       <p>Find maturity amount</p>
-      <a href="#">Launch Calculator →</a>
+      <button>Launch Calculator →</button>
     </div>
+
     <div class="card">
-      <div class="icon">📅</div>
+      <div class="icon blue">📅</div>
       <h3>RD Calculator</h3>
       <p>Project RD investments</p>
-      <span class="coming-soon">Coming Soon</span>
-      <a href="#">Launch Calculator →</a>
+      <div class="coming-soon">Coming Soon</div>
+      <button>Launch Calculator →</button>
     </div>
+
     <div class="card">
-      <div class="icon">🏠</div>
+      <div class="icon green">🏠</div>
       <h3>HRA Calculator</h3>
       <p>Calculate HRA exemptions</p>
-      <a href="#">Launch Calculator →</a>
+      <button>Launch Calculator →</button>
     </div>
+
     <div class="card">
-      <div class="icon">🐷</div>
+      <div class="icon green">🏠</div>
+      <h3>HRA Calculator</h3>
+      <p>Calculate HRA exemptions</p>
+      <button>Launch Calculator →</button>
+    </div>
+
+    <div class="card">
+      <div class="icon pig">🐷</div>
       <h3>NPS Calculator</h3>
       <p>Plan for your retirement</p>
-      <a href="#">Launch Calculator →</a>
+      <button>Launch Calculator →</button>
     </div>
-  </section>
-
-  <div class="footer">
-    © 2025 Pratix Finance — All rights reserved
   </div>
+
 </body>
 </html>
