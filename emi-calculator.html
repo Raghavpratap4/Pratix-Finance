@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,29 +9,376 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
   <style>
-    /* Styles omitted here for brevity in this explanation */
-    /* Full CSS is already in your approved UI layout and will be included */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #3f0d65, #5b21b6);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(17, 17, 17, 0.75);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .header h2 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    .input-group label {
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .input-group input::placeholder {
+      color: #ccc;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    button {
+      flex: 1;
+      background: #6366f1;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #4f46e5;
+    }
+    .summary {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+    .summary p {
+      margin: 8px 0;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .chart-controls {
+      display: flex;
+      gap: 10px;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .chart-controls button {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid #6366f1;
+    }
+    canvas {
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      .buttons {
+        flex-direction: column;
+      }
+      .toggle-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- HTML structure here: input fields, charts, summary, language selector, buttons -->
-  <!-- Matches your approved UI exactly -->
-  <!-- Includes: Loan input, Interest, Term, Prepayment, Start Year, Chart toggles, Results summary -->
+  <div class="container" id="calculatorApp">
+    <div class="header">
+      <h2 id="appTitle">Advanced EMI Calculator</h2>
+      <select id="languageSelect" onchange="changeLanguage()" aria-label="Select Language">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिंदी</option>
+        <option value="bn">🇧🇩 বাংলা</option>
+        <option value="gu">🇮🇳 ગુજરાતી</option>
+        <option value="te">🇮🇳 తెలుగు</option>
+        <option value="ta">🇮🇳 தமிழ்</option>
+        <option value="mr">🇮🇳 मराठी</option>
+        <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+        <option value="ml">🇮🇳 മലയാളം</option>
+      </select>
+    </div>
 
-  <!-- Language selector, chart switch, chart container, responsive design, etc. -->
+    <div class="input-group">
+      <label id="labelLoanAmount">Loan Amount</label>
+      <input type="number" id="loanAmount" placeholder="Enter Loan Amount"/>
+    </div>
+    <div class="input-group">
+      <label id="labelInterestRate">Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="Enter Interest Rate"/>
+    </div>
+    <div class="input-group">
+      <label id="labelLoanTerm">Loan Term (years)</label>
+      <input type="number" id="loanTerm" placeholder="Enter Loan Term"/>
+    </div>
+    <div class="input-group">
+      <label id="labelPrepayFreq">Prepayment Frequency</label>
+      <select id="prepayFreq">
+        <option value="once">Once</option>
+        <option value="yearly">Yearly</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label id="labelExtraPayment">Extra Payment (₹)</label>
+      <input type="number" id="extraPayment" placeholder="Enter Extra Payment"/>
+    </div>
+    <div class="input-group">
+      <label id="labelStartYear">Start From Year</label>
+      <select id="startYear">
+        <option value="1">Year 1</option>
+        <option value="2" selected>Year 2</option>
+        <option value="3">Year 3</option>
+        <option value="4">Year 4</option>
+      </select>
+    </div>
+    <div class="buttons">
+      <button onclick="calculateEMI()" id="btnCalculate">Calculate</button>
+      <button onclick="showMonthlyTable()" id="btnMonthlyTable">Monthly Table</button>
+      <button onclick="compareLoans()" id="btnCompareLoans">Compare Loans</button>
+    </div>
 
-  <!-- Footer -->
+    <div class="summary">
+      <p><strong id="labelEMI">EMI:</strong> ₹<span id="emi">0</span>/month</p>
+      <p><strong id="labelInterest">Total Interest:</strong> ₹<span id="interest">0</span></p>
+      <p><strong id="labelPayment">Total Payment:</strong> ₹<span id="payment">0</span></p>
+      <button onclick="sendReminder()">📩 <span id="btnReminder">Send Reminder</span></button>
+    </div>
+
+    <div class="chart-controls">
+      <button onclick="setChartType('bar')" id="btnBarChart">📊 Bar Chart</button>
+      <button onclick="setChartType('pie')" id="btnPieChart">🥧 Pie Chart</button>
+      <button onclick="setChartType('line')" id="btnLineChart">📈 Line Chart</button>
+    </div>
+
+    <canvas id="emiChart" height="250"></canvas>
+  </div>
+
   <footer>
     © 2025 Pratix Finance — All rights reserved
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // JavaScript logic for EMI Calculation, Chart updates, Language translation
-    // PDF generation, auto language detection, prepayment logic, responsive charts
-    // Real-time UI updates, toggle chart views (Pie/Line/Bar), and dark/light mode
+    let chart;
+    let chartType = 'bar';
 
-    // JS content is based on previous parts and combined here.
-    // Full working version included in the downloadable file.
+    function calculateEMI() {
+      const P = +document.getElementById('loanAmount').value;
+      const R = +document.getElementById('interestRate').value / 1200;
+      const N = +document.getElementById('loanTerm').value * 12;
+      const prepay = +document.getElementById('extraPayment').value;
+      const freq = document.getElementById('prepayFreq').value;
+
+      if (!P || !R || !N) return;
+
+      let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      let totalPayment = emi * N;
+      let totalInterest = totalPayment - P;
+
+      if (freq === 'once') {
+        totalPayment -= prepay;
+        totalInterest -= prepay;
+      }
+
+      document.getElementById('emi').innerText = emi.toFixed(0);
+      document.getElementById('interest').innerText = totalInterest.toFixed(0);
+      document.getElementById('payment').innerText = totalPayment.toFixed(0);
+
+      updateChart(P, totalInterest, prepay);
+    }
+
+    function updateChart(principal, interest, prepay) {
+      const ctx = document.getElementById('emiChart').getContext('2d');
+      if (chart) chart.destroy();
+
+      const data = {
+        labels: ['Principal', 'Interest', 'Prepayment'],
+        datasets: [{
+          label: '₹ Amount',
+          data: [principal, interest, prepay],
+          backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
+          borderColor: '#fff',
+          borderWidth: 1
+        }]
+      };
+
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: { display: chartType !== 'bar' },
+          tooltip: {
+            callbacks: {
+              label: function (item) {
+                return `₹${item.raw}`;
+              }
+            }
+          }
+        }
+      };
+
+      chart = new Chart(ctx, {
+        type: chartType,
+        data: data,
+        options: options
+      });
+    }
+
+    function setChartType(type) {
+      chartType = type;
+      calculateEMI();
+    }
+
+    function sendReminder() {
+      alert("Email reminder feature will be available soon!");
+    }
+
+    function showMonthlyTable() {
+      alert("Monthly Table view will be integrated soon.");
+    }
+
+    function compareLoans() {
+      alert("Loan comparison coming soon.");
+    }
+
+    const translations = {
+      en: {
+        appTitle: "Advanced EMI Calculator",
+        labelLoanAmount: "Loan Amount",
+        labelInterestRate: "Interest Rate (%)",
+        labelLoanTerm: "Loan Term (years)",
+        labelPrepayFreq: "Prepayment Frequency",
+        labelExtraPayment: "Extra Payment (₹)",
+        labelStartYear: "Start From Year",
+        btnCalculate: "Calculate",
+        btnMonthlyTable: "Monthly Table",
+        btnCompareLoans: "Compare Loans",
+        labelEMI: "EMI:",
+        labelInterest: "Total Interest:",
+        labelPayment: "Total Payment:",
+        btnReminder: "Send Reminder",
+        btnBarChart: "📊 Bar Chart",
+        btnPieChart: "🥧 Pie Chart",
+        btnLineChart: "📈 Line Chart"
+      },
+      hi: {
+        appTitle: "उन्नत ईएमआई कैलकुलेटर",
+        labelLoanAmount: "ऋण राशि",
+        labelInterestRate: "ब्याज दर (%)",
+        labelLoanTerm: "ऋण अवधि (वर्षों)",
+        labelPrepayFreq: "प्रीपेमेंट आवृत्ति",
+        labelExtraPayment: "अतिरिक्त भुगतान (₹)",
+        labelStartYear: "शुरुआत वर्ष से",
+        btnCalculate: "गणना करें",
+        btnMonthlyTable: "मासिक तालिका",
+        btnCompareLoans: "ऋण की तुलना",
+        labelEMI: "ईएमआई:",
+        labelInterest: "कुल ब्याज:",
+        labelPayment: "कुल भुगतान:",
+        btnReminder: "अनुस्मारक भेजें",
+        btnBarChart: "📊 बार चार्ट",
+        btnPieChart: "🥧 पाई चार्ट",
+        btnLineChart: "📈 रेखा चार्ट"
+      },
+      bn: {
+        appTitle: "উন্নত EMI ক্যালকুলেটর",
+        labelLoanAmount: "ঋণের পরিমাণ",
+        labelInterestRate: "সুদ হার (%)",
+        labelLoanTerm: "ঋণের মেয়াদ (বছর)",
+        labelPrepayFreq: "প্রিপেমেন্ট ফ্রিকোয়েন্সি",
+        labelExtraPayment: "অতিরিক্ত পেমেন্ট (₹)",
+        labelStartYear: "শুরু বছর",
+        btnCalculate: "গণনা করুন",
+        btnMonthlyTable: "মাসিক টেবিল",
+        btnCompareLoans: "ঋণ তুলনা করুন",
+        labelEMI: "EMI:",
+        labelInterest: "মোট সুদ:",
+        labelPayment: "মোট পেমেন্ট:",
+        btnReminder: "রিমাইন্ডার পাঠান",
+        btnBarChart: "📊 বার চার্ট",
+        btnPieChart: "🥧 পাই চার্ট",
+        btnLineChart: "📈 লাইন চার্ট"
+      }
+      // Add other 6 translations here (gu, te, ta, mr, kn, ml)
+    };
+
+    function changeLanguage() {
+      const lang = document.getElementById("languageSelect").value;
+      applyLanguage(lang);
+    }
+
+    function applyLanguage(lang) {
+      const tr = translations[lang] || translations.en;
+      for (const id in tr) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = tr[id];
+      }
+    }
+
+    function detectAndSetLanguage() {
+      const userLang = navigator.language.slice(0, 2);
+      const supported = Object.keys(translations);
+      const langToSet = supported.includes(userLang) ? userLang : 'en';
+      document.getElementById("languageSelect").value = langToSet;
+      applyLanguage(langToSet);
+    }
+
+    window.onload = () => {
+      detectAndSetLanguage();
+    };
   </script>
 </body>
 </html>
