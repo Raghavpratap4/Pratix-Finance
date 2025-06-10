@@ -3,214 +3,264 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title id="title">Pratix Finance - Financial Tools</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
+  <title>Pratix Finance - Financial Tools</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --text-color: #ffffff;
+      --glow-color: rgba(0, 186, 255, 0.4);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --border-glow: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    body.light {
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-color: #111827;
+      --glow-color: rgba(0, 186, 255, 0.2);
+      --glass-bg: rgba(0, 0, 0, 0.05);
+      --border-glow: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #0e0e0e;
-      color: #fff;
+      background: var(--bg-color);
+      color: var(--text-color);
+      padding: 1rem;
+      transition: all 0.3s ease;
     }
-    header, footer {
-      text-align: center;
-      padding: 20px;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
     }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 40px 20px;
-      text-align: center;
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+
+    .logo-icon {
+      font-size: 1.5rem;
+      color: #00baff;
     }
-    p {
-      font-size: 1.1rem;
-      color: #ccc;
+
+    .menu {
+      display: flex;
+      gap: 0.5rem;
     }
-    .card {
-      background: rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 30px;
-      margin: 40px auto;
-      backdrop-filter: blur(10px);
-      max-width: 600px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
-    }
-    .card h2 {
-      margin: 0;
-      font-size: 1.4rem;
-    }
-    .card p {
-      margin: 10px 0;
-    }
-    .launch-btn {
-      padding: 10px 20px;
-      border: none;
+
+    .menu select,
+    .menu button {
+      background: var(--glass-bg);
+      border: var(--border-glow);
+      color: var(--text-color);
+      padding: 0.4rem 0.8rem;
       border-radius: 8px;
-      background: #00c6ff;
-      color: #000;
-      font-weight: bold;
+      font-size: 1rem;
       cursor: pointer;
-      margin-top: 10px;
     }
-    select {
-      padding: 6px 10px;
-      border-radius: 5px;
+
+    .hero {
+      text-align: left;
+      max-width: 700px;
+      margin: 2rem auto;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      color: #ccc;
+      margin-top: 0.8rem;
+      font-size: 1.1rem;
+    }
+
+    body.light .hero p {
+      color: #444;
+    }
+
+    .bulb {
+      position: absolute;
+      top: -20px;
+      right: -30px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at center, rgba(0, 186, 255, 0.8), transparent 70%);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      filter: blur(4px);
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+    }
+
+    .card {
+      background: var(--glass-bg);
+      border: var(--border-glow);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 0 20px var(--glow-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card .icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .card p {
+      color: #ccc;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    body.light .card p {
+      color: #333;
+    }
+
+    .card button {
+      margin-top: auto;
+      background: #ffffff12;
+      color: #fff;
+      padding: 0.5rem 1rem;
       border: none;
-      margin-top: 15px;
-      background: #fff;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .card button:hover {
+      background: #00baff;
       color: #000;
-      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin: 3rem 0 1rem;
+      color: #777;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <select id="langSelect" title="Select Language">
-      <option value="en">🌐 English</option>
-      <option value="hi">🇮🇳 Hindi</option>
-      <option value="bn">🇧🇩 Bengali</option>
-      <option value="fr">🇫🇷 French</option>
-      <option value="es">🇪🇸 Spanish</option>
-      <option value="ru">🇷🇺 Russian</option>
-      <option value="ja">🇯🇵 Japanese</option>
-      <option value="ko">🇰🇷 Korean</option>
-      <option value="de">🇩🇪 German</option>
-    </select>
+    <div class="logo">
+      <span class="logo-icon">🅿️</span>
+      PRATIX FINANCE
+    </div>
+    <div class="menu">
+      <button onclick="toggleTheme()">🌟</button>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+        <option value="bn">বাংলা</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="de">Deutsch</option>
+      </select>
+      <button>⋯</button>
+    </div>
   </header>
 
-  <div class="container">
-    <h1 id="main_heading">All Your Financial Tools,<br>One Place.</h1>
-    <p id="main_subheading">Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
+  <div class="hero">
+    <h1 data-i18n="tagline">All Your Financial Tools, <br>One Place.</h1>
+    <p data-i18n="subtitle">Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
+    <div class="bulb"></div>
+  </div>
 
+  <div class="grid">
     <div class="card">
-      <h2 id="emi_title">EMI Calculator</h2>
-      <p id="emi_desc">Quickly calculate EMIs</p>
-      <a href="emi-calculator.html">
-        <button class="launch-btn" id="emi_btn">Launch Calculator →</button>
+      <div class="icon">🪙</div>
+      <h3 data-i18n="emiTitle">EMI Calculator</h3>
+      <p data-i18n="emiDesc">Quickly calculate EMIs</p>
+      <a href="emi-calculator.html" style="text-decoration: none;">
+        <button data-i18n="launch">Launch Calculator →</button>
       </a>
     </div>
   </div>
 
   <footer>
-    <p id="footer">© 2025 Pratix Finance — All rights reserved</p>
+    © 2025 Pratix Finance — All rights reserved
   </footer>
 
   <script>
-    const translations = {
-      en: {
-        title: "Pratix Finance - Financial Tools",
-        main_heading: "All Your Financial Tools, <br>One Place.",
-        main_subheading: "Powerful, accurate, and easy-to-use calculators from Pratix Finance",
-        emi_title: "EMI Calculator",
-        emi_desc: "Quickly calculate EMIs",
-        emi_btn: "Launch Calculator →",
-        footer: "© 2025 Pratix Finance — All rights reserved"
-      },
-      hi: {
-        title: "Pratix Finance - वित्तीय उपकरण",
-        main_heading: "आपके सभी वित्तीय उपकरण,<br>एक ही स्थान पर।",
-        main_subheading: "Pratix Finance से सटीक और उपयोग में आसान कैलकुलेटर",
-        emi_title: "ईएमआई कैलकुलेटर",
-        emi_desc: "तेजी से ईएमआई की गणना करें",
-        emi_btn: "कैलकुलेटर चालू करें →",
-        footer: "© 2025 प्राटिक्स फाइनेंस — सर्वाधिकार सुरक्षित"
-      },
-      bn: {
-        title: "Pratix Finance - আর্থিক সরঞ্জাম",
-        main_heading: "আপনার সব আর্থিক সরঞ্জাম,<br>এক জায়গায়।",
-        main_subheading: "Pratix Finance থেকে নির্ভুল ও ব্যবহারযোগ্য ক্যালকুলেটর",
-        emi_title: "EMI ক্যালকুলেটর",
-        emi_desc: "দ্রুত EMI গণনা করুন",
-        emi_btn: "ক্যালকুলেটর চালু করুন →",
-        footer: "© 2025 Pratix Finance — সর্বস্বত্ব সংরক্ষিত"
-      },
-      fr: {
-        title: "Pratix Finance - Outils Financiers",
-        main_heading: "Tous vos outils financiers,<br>à un seul endroit.",
-        main_subheading: "Des calculateurs puissants et faciles à utiliser de Pratix Finance",
-        emi_title: "Calculateur de prêt",
-        emi_desc: "Calculez rapidement vos EMI",
-        emi_btn: "Lancer le calculateur →",
-        footer: "© 2025 Pratix Finance — Tous droits réservés"
-      },
-      es: {
-        title: "Pratix Finance - Herramientas Financieras",
-        main_heading: "Todas tus herramientas financieras,<br>en un solo lugar.",
-        main_subheading: "Calculadoras poderosas y fáciles de usar de Pratix Finance",
-        emi_title: "Calculadora EMI",
-        emi_desc: "Calcula tus EMI rápidamente",
-        emi_btn: "Abrir Calculadora →",
-        footer: "© 2025 Pratix Finance — Todos los derechos reservados"
-      },
-      ru: {
-        title: "Pratix Finance - Финансовые инструменты",
-        main_heading: "Все ваши финансовые инструменты<br>в одном месте.",
-        main_subheading: "Мощные и удобные калькуляторы от Pratix Finance",
-        emi_title: "Калькулятор EMI",
-        emi_desc: "Быстро рассчитать EMI",
-        emi_btn: "Запустить калькулятор →",
-        footer: "© 2025 Pratix Finance — Все права защищены"
-      },
-      ja: {
-        title: "Pratix Finance - ファイナンシャルツール",
-        main_heading: "すべての金融ツールを<br>1か所に。",
-        main_subheading: "Pratix Financeの強力で使いやすい計算ツール",
-        emi_title: "EMI計算機",
-        emi_desc: "EMIをすばやく計算",
-        emi_btn: "計算機を起動 →",
-        footer: "© 2025 Pratix Finance — 無断転載を禁じます"
-      },
-      ko: {
-        title: "Pratix Finance - 금융 도구",
-        main_heading: "모든 금융 도구를<br>한 곳에서.",
-        main_subheading: "Pratix Finance의 강력하고 사용하기 쉬운 계산기",
-        emi_title: "EMI 계산기",
-        emi_desc: "빠르게 EMI 계산",
-        emi_btn: "계산기 실행 →",
-        footer: "© 2025 Pratix Finance — 판권 소유"
-      },
-      de: {
-        title: "Pratix Finance - Finanztools",
-        main_heading: "Alle Ihre Finanztools<br>an einem Ort.",
-        main_subheading: "Leistungsstarke, benutzerfreundliche Rechner von Pratix Finance",
-        emi_title: "EMI-Rechner",
-        emi_desc: "Schnell EMI berechnen",
-        emi_btn: "Rechner starten →",
-        footer: "© 2025 Pratix Finance — Alle Rechte vorbehalten"
-      }
+    const toggleTheme = () => {
+      const body = document.body;
+      const isLight = body.classList.toggle('light');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
     };
 
-    const elements = ["title", "main_heading", "main_subheading", "emi_title", "emi_desc", "emi_btn", "footer"];
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light');
+      }
 
-    function translate(lang) {
-      const dict = translations[lang] || translations["en"];
-      document.title = dict.title;
-      elements.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          if (id === "main_heading") {
-            el.innerHTML = dict[id];
-          } else {
-            el.textContent = dict[id];
-          }
-        }
-      });
-    }
+      // Auto detect language
+      const userLang = navigator.language.slice(0, 2);
+      const supported = ['en','hi','bn','fr','es','ru','ja','ko','de'];
+      if (supported.includes(userLang)) {
+        document.getElementById('language').value = userLang;
+      }
 
-    // Auto detect language
-    const browserLang = (navigator.language || navigator.userLanguage || "en").substring(0, 2);
-    const supportedLangs = Object.keys(translations);
-    const defaultLang = supportedLangs.includes(browserLang) ? browserLang : "en";
-    document.getElementById("langSelect").value = defaultLang;
-    translate(defaultLang);
-
-    // Change on select
-    document.getElementById("langSelect").addEventListener("change", function () {
-      translate(this.value);
+      // Simple i18n — optional for full integration later
     });
   </script>
 </body>
