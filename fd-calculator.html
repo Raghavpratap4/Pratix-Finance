@@ -11,7 +11,7 @@
       --bg-color: #0b0f19;
       --card-bg: #111827;
       --text-color: #ffffff;
-      --glow-color: rgba(0, 186, 255, 0.4);
+      --glow-color: rgba(0, 186, 255, 0.7);
       --glass-bg: rgba(255, 255, 255, 0.05);
       --border-glow: 1px solid rgba(255, 255, 255, 0.1);
     }
@@ -52,16 +52,31 @@
     .menu {
       display: flex;
       gap: 1rem;
+      align-items: center;
     }
 
-    .menu select,
+    .menu select {
+      background: var(--glass-bg);
+      border: var(--border-glow);
+      color: white;
+      padding: 0.4rem 2rem 0.4rem 1.8rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background-image: url('https://img.icons8.com/ios-filled/24/language.png');
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      background-size: 16px;
+      appearance: none;
+    }
+
     .menu button {
       background: var(--glass-bg);
       border: var(--border-glow);
       color: white;
       padding: 0.4rem 0.8rem;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 1.2rem;
       cursor: pointer;
     }
 
@@ -86,10 +101,10 @@
 
     .bulb {
       position: absolute;
-      top: -20px;
-      right: -30px;
-      width: 80px;
-      height: 80px;
+      top: -30px;
+      right: -40px;
+      width: 90px;
+      height: 90px;
       background: radial-gradient(circle at center, rgba(0, 186, 255, 0.7), transparent 70%);
       border-radius: 50%;
       animation: pulse 2s infinite;
@@ -102,7 +117,7 @@
       }
       50% {
         opacity: 1;
-        transform: scale(1.1);
+        transform: scale(1.15);
       }
       100% {
         opacity: 0.6;
@@ -123,20 +138,9 @@
       border: var(--border-glow);
       border-radius: 20px;
       padding: 1.5rem;
+      box-shadow: 0 0 20px var(--glow-color);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 0 12px rgba(0, 186, 255, 0.2);
-      animation: subtleGlow 2.5s ease-in-out infinite;
-    }
-
-    @keyframes subtleGlow {
-      0%, 100% {
-        box-shadow: 0 0 12px rgba(0, 186, 255, 0.2);
-      }
-      50% {
-        box-shadow: 0 0 20px rgba(0, 186, 255, 0.4);
-      }
     }
 
     .card .icon {
@@ -186,75 +190,33 @@
       PRATIX FINANCE
     </div>
     <div class="menu">
-      <select>
-        <option>English</option>
-        <option>हिंदी</option>
-        <option>বাংলা</option>
-        <option>मराठी</option>
-        <option>தமிழ்</option>
-        <option>తెలుగు</option>
-        <option>ગુજરાતી</option>
-        <option>ಕನ್ನಡ</option>
-        <option>اردو</option>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+        <option value="bn">বাংলা</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="ru">Русский</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="de">Deutsch</option>
       </select>
       <button>⋯</button>
     </div>
   </header>
 
   <div class="hero">
-    <h1>All Your Financial Tools, <br>One Place.</h1>
-    <p>Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
+    <h1 data-i18n="headline">All Your Financial Tools, <br>One Place.</h1>
+    <p data-i18n="tagline">Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
     <div class="bulb"></div>
   </div>
 
   <div class="grid">
     <div class="card">
       <div class="icon">🪙</div>
-      <h3>EMI Calculator</h3>
-      <p>Quickly calculate EMIs</p>
-      <button>Launch Calculator →</button>
-    </div>
-
-    <div class="card">
-      <div class="icon">📊</div>
-      <h3>SIP Calculator</h3>
-      <p>Estimate SIP returns</p>
-      <button>Launch Calculator →</button>
-    </div>
-
-    <div class="card">
-      <div class="icon">📄</div>
-      <h3>Income Tax Calculator</h3>
-      <p>Plan your income taxes</p>
-      <button>Launch Calculator →</button>
-    </div>
-
-    <div class="card">
-      <div class="icon">🛡️</div>
-      <h3>FD Calculator</h3>
-      <p>Find maturity amount</p>
-      <button>Launch Calculator →</button>
-    </div>
-
-    <div class="card">
-      <div class="icon">📅</div>
-      <h3>RD Calculator</h3>
-      <p>Project RD investments</p>
-      <button>Launch Calculator →</button>
-    </div>
-
-    <div class="card">
-      <div class="icon">🏠</div>
-      <h3>HRA Calculator</h3>
-      <p>Calculate HRA exemptions</p>
-      <button>Launch Calculator →</button>
-    </div>
-
-    <div class="card">
-      <div class="icon">🐷</div>
-      <h3>NPS Calculator</h3>
-      <p>Plan for your retirement</p>
-      <button>Launch Calculator →</button>
+      <h3 data-i18n="emiTitle">EMI Calculator</h3>
+      <p data-i18n="emiDesc">Quickly calculate EMIs</p>
+      <button data-i18n="launch">Launch Calculator →</button>
     </div>
   </div>
 
@@ -262,5 +224,86 @@
     © 2025 Pratix Finance — All rights reserved
   </footer>
 
+  <script>
+    const translations = {
+      hi: {
+        headline: "आपके सभी वित्तीय उपकरण, एक स्थान पर।",
+        tagline: "Pratix Finance के शक्तिशाली और आसान कैलकुलेटर",
+        emiTitle: "EMI कैलकुलेटर",
+        emiDesc: "EMI जल्दी से निकालें",
+        launch: "कैलकुलेटर शुरू करें →"
+      },
+      bn: {
+        headline: "আপনার সমস্ত আর্থিক সরঞ্জাম, এক জায়গায়।",
+        tagline: "Pratix Finance-এর শক্তিশালী ও সহজ ক্যালকুলেটর",
+        emiTitle: "EMI ক্যালকুলেটর",
+        emiDesc: "দ্রুত EMI হিসাব করুন",
+        launch: "ক্যালকুলেটর চালু করুন →"
+      },
+      fr: {
+        headline: "Tous vos outils financiers, à un seul endroit.",
+        tagline: "Des calculateurs puissants et simples de Pratix Finance",
+        emiTitle: "Calculateur d’EMI",
+        emiDesc: "Calculez vos EMI rapidement",
+        launch: "Lancer le calculateur →"
+      },
+      es: {
+        headline: "Todas tus herramientas financieras en un solo lugar.",
+        tagline: "Calculadoras potentes y fáciles de usar de Pratix Finance",
+        emiTitle: "Calculadora EMI",
+        emiDesc: "Calcula EMI rápidamente",
+        launch: "Abrir calculadora →"
+      },
+      ru: {
+        headline: "Все ваши финансовые инструменты в одном месте.",
+        tagline: "Мощные и простые калькуляторы от Pratix Finance",
+        emiTitle: "Калькулятор EMI",
+        emiDesc: "Быстро рассчитайте EMI",
+        launch: "Запустить калькулятор →"
+      },
+      ja: {
+        headline: "すべての金融ツールを1か所で。",
+        tagline: "Pratix Finance の強力で簡単な計算機",
+        emiTitle: "EMI計算機",
+        emiDesc: "EMIを素早く計算",
+        launch: "計算機を起動 →"
+      },
+      ko: {
+        headline: "모든 금융 도구를 한 곳에.",
+        tagline: "Pratix Finance의 강력하고 쉬운 계산기",
+        emiTitle: "EMI 계산기",
+        emiDesc: "EMI 빠르게 계산하기",
+        launch: "계산기 실행 →"
+      },
+      de: {
+        headline: "Alle Ihre Finanztools an einem Ort.",
+        tagline: "Leistungsstarke und einfache Rechner von Pratix Finance",
+        emiTitle: "EMI-Rechner",
+        emiDesc: "Schnell EMI berechnen",
+        launch: "Rechner starten →"
+      }
+    };
+
+    document.getElementById("languageSelect").addEventListener("change", function () {
+      const lang = this.value;
+      const i18nElems = document.querySelectorAll("[data-i18n]");
+      i18nElems.forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+    });
+
+    // Auto-detect browser language
+    window.addEventListener("DOMContentLoaded", () => {
+      const userLang = navigator.language.slice(0, 2);
+      const langSelect = document.getElementById("languageSelect");
+      if (translations[userLang]) {
+        langSelect.value = userLang;
+        langSelect.dispatchEvent(new Event("change"));
+      }
+    });
+  </script>
 </body>
 </html>
