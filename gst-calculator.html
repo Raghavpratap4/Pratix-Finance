@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Advanced EMI Calculator</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Reset and base styles */
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+<style>
+  /* Reset and global styles */
 * {
   margin: 0;
   padding: 0;
@@ -14,337 +16,387 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #0d1117;
-  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  background: #121212;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 1rem;
 }
 
-.app {
+.app-container {
   width: 100%;
   max-width: 500px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
 }
 
-/* Header with centered logo */
-header {
+/* Header */
+.app-header {
+  background: #000;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  align-items: center;
+  padding: 1rem;
+  position: relative;
 }
 
-.logo {
-  width: 100px;
-  height: auto;
+.app-logo {
+  height: 50px;
 }
 
-/* Calculator card */
+.menu {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.menu select {
+  padding: 0.3rem 0.5rem;
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Main Card */
 .calculator-card {
-  background: #161b22;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.2rem;
 }
 
-/* Input styles */
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.input-group label {
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #c9d1d9;
 }
 
-.input-group input {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #21262d;
-  color: white;
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Buttons */
-button {
-  padding: 12px;
-  background: #238636;
+.input-section input {
+  padding: 0.8rem;
+  font-size: 1rem;
   border: none;
   border-radius: 8px;
-  color: white;
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.input-section button {
+  padding: 0.9rem;
+  font-size: 1rem;
+  background: #00c2cb;
+  color: #000;
+  border: none;
+  border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
-button:hover {
-  background: #2ea043;
+.input-section button:hover {
+  background: #00e6f6;
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+.results-text {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #00e6f6;
 }
 
-/* Chart area */
-.charts {
-  background: #0d1117;
-  padding: 10px 0;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-/* Chart toggles */
-.chart-toggle {
+/* Chart Controls */
+.chart-switcher {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  font-size: 14px;
-  color: #c9d1d9;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
 }
 
-.chart-toggle label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.chart-switcher label {
+  cursor: pointer;
 }
 
-/* Result summary */
-.result-summary {
-  background: #21262d;
-  padding: 10px;
+canvas {
+  max-width: 100%;
+  background: #181818;
   border-radius: 8px;
-  font-size: 15px;
-  color: #c9d1d9;
+  padding: 1rem;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.action-buttons button {
+  flex: 1 1 40%;
+  padding: 0.7rem;
+  font-size: 0.9rem;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.action-buttons button:hover {
+  background: #444;
+}
+
+/* Tables */
+.table-container {
+  margin-top: 1.5rem;
+  background: #222;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.table-container th,
+.table-container td {
+  border: 1px solid #444;
+  padding: 0.5rem;
   text-align: center;
+}
+
+.table-container th {
+  background: #333;
 }
 
 /* Footer */
-footer {
+.app-footer {
   text-align: center;
-  margin-top: 20px;
-  font-size: 13px;
-  color: #8b949e;
+  background: #000;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: #aaa;
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 600px) {
   .calculator-card {
-    padding: 16px;
+    padding: 1.5rem 1rem;
   }
 
-  .input-group input {
-    font-size: 16px;
+  .action-buttons button {
+    flex: 1 1 100%;
   }
 
-  button {
-    font-size: 16px;
-    padding: 10px;
+  .chart-switcher {
+    flex-direction: column;
+    align-items: center;
   }
 
-  .chart-toggle {
-    flex-wrap: wrap;
-    gap: 10px;
+  .menu {
+    right: 0.5rem;
   }
 }
 
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="app">
-    <!-- Header with centered logo -->
-    <header>
-      <img src="logo.png" alt="Logo" class="logo" />
+  <div class="app-container">
+    <header class="app-header">
+      <img src="logo.png" alt="Logo" class="app-logo" />
+      <div class="menu">
+        <select id="languageSelector">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="bn">বাংলা</option>
+          <option value="fr">Français</option>
+          <option value="ru">Русский</option>
+          <option value="de">Deutsch</option>
+          <option value="es">Español</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
     </header>
 
-    <!-- Main calculator card -->
     <main class="calculator-card">
-      <div class="input-group">
-        <label for="loanAmount">Loan Amount</label>
-        <input type="number" id="loanAmount" placeholder="Enter loan amount" />
+      <h1 data-lang="emiCalculator">EMI Calculator</h1>
+      <div class="input-section">
+        <input type="number" id="loanAmount" placeholder="Loan Amount" />
+        <input type="number" id="interestRate" placeholder="Interest Rate (%)" />
+        <input type="number" id="loanTenure" placeholder="Loan Tenure (Years)" />
+        <button onclick="calculateEMI()" id="calculateBtn" data-lang="calculate">Calculate</button>
       </div>
 
-      <div class="input-group">
-        <label for="interestRate">Interest Rate (p.a)</label>
-        <input type="number" id="interestRate" placeholder="Enter interest rate" />
+      <div id="resultsText" class="results-text"></div>
+
+      <div class="chart-switcher">
+        <label><input type="radio" name="chartType" value="bar" checked> Bar</label>
+        <label><input type="radio" name="chartType" value="line"> Line</label>
+        <label><input type="radio" name="chartType" value="pie"> Pie</label>
       </div>
 
-      <div class="input-group">
-        <label for="loanTenure">Loan Tenure (in years)</label>
-        <input type="number" id="loanTenure" placeholder="Enter loan tenure" />
+      <canvas id="emiChart"></canvas>
+
+      <div class="action-buttons">
+        <button onclick="showMonthlySchedule()" data-lang="monthlySchedule">Monthly Table</button>
+        <button onclick="compareLoan()" data-lang="compareLoan">Compare Loan</button>
+        <button onclick="downloadPDF()" data-lang="downloadPDF">Download PDF</button>
       </div>
 
-      <button id="calculateBtn">Calculate EMI</button>
-
-      <!-- Summary above charts -->
-      <div id="resultSummary" class="result-summary"></div>
-
-      <!-- Chart Selection Toggles -->
-      <div class="chart-toggle">
-        <label><input type="checkbox" id="barToggle" checked /> Bar</label>
-        <label><input type="checkbox" id="pieToggle" /> Pie</label>
-        <label><input type="checkbox" id="lineToggle" /> Line</label>
-      </div>
-
-      <!-- Chart Display Area -->
-      <div class="charts">
-        <canvas id="barChart"></canvas>
-        <canvas id="pieChart" style="display:none;"></canvas>
-        <canvas id="lineChart" style="display:none;"></canvas>
-      </div>
-
-      <!-- Monthly Table and Compare Loan -->
-      <div class="button-group">
-        <button id="monthlyBtn">Monthly Table</button>
-        <button id="compareBtn">Compare Loan</button>
-      </div>
+      <div id="monthlyTable" class="table-container"></div>
+      <div id="compareTable" class="table-container"></div>
     </main>
 
-    <!-- Footer Branding -->
-    <footer>
-      © 2025 Pratix Finance — Raghav Pratap
+    <footer class="app-footer">
+      <p>© 2025 Pratix Finance — Raghav Pratap</p>
     </footer>
   </div>
 
-  <!-- External JS Files -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
- <script> const langMap = {
-  en: { loan: "Loan Amount", rate: "Interest Rate (%)", term: "Loan Term (Months)", calculate: "Calculate EMI", monthly: "Monthly Table", compare: "Compare Loan", emi: "EMI", totalInterest: "Total Interest", totalPayment: "Total Payment" },
-  hi: { loan: "ऋण राशि", rate: "ब्याज दर (%)", term: "ऋण अवधि (महीनों में)", calculate: "ईएमआई कैलकुलेट करें", monthly: "मासिक तालिका", compare: "ऋण की तुलना करें", emi: "ईएमआई", totalInterest: "कुल ब्याज", totalPayment: "कुल भुगतान" },
-  bn: { loan: "ঋণের পরিমাণ", rate: "সুদের হার (%)", term: "ঋণের মেয়াদ (মাস)", calculate: "EMI হিসাব করুন", monthly: "মাসিক তালিকা", compare: "ঋণের তুলনা করুন", emi: "EMI", totalInterest: "মোট সুদ", totalPayment: "মোট পেমেন্ট" },
-  fr: { loan: "Montant du prêt", rate: "Taux d'intérêt (%)", term: "Durée du prêt (mois)", calculate: "Calculer l'EMI", monthly: "Table mensuelle", compare: "Comparer les prêts", emi: "EMI", totalInterest: "Intérêt total", totalPayment: "Paiement total" },
-  ru: { loan: "Сумма кредита", rate: "Процентная ставка (%)", term: "Срок кредита (мес)", calculate: "Рассчитать EMI", monthly: "Ежемесячная таблица", compare: "Сравнить кредиты", emi: "EMI", totalInterest: "Общий интерес", totalPayment: "Общая выплата" },
-  de: { loan: "Darlehensbetrag", rate: "Zinssatz (%)", term: "Darlehenslaufzeit (Monate)", calculate: "EMI berechnen", monthly: "Monatliche Tabelle", compare: "Kredite vergleichen", emi: "EMI", totalInterest: "Gesamte Zinsen", totalPayment: "Gesamtzahlung" },
-  es: { loan: "Monto del préstamo", rate: "Tasa de interés (%)", term: "Plazo del préstamo (meses)", calculate: "Calcular EMI", monthly: "Tabla mensual", compare: "Comparar préstamos", emi: "EMI", totalInterest: "Interés total", totalPayment: "Pago total" },
-  ko: { loan: "대출 금액", rate: "이자율 (%)", term: "대출 기간 (개월)", calculate: "EMI 계산", monthly: "월별 표", compare: "대출 비교", emi: "EMI", totalInterest: "총 이자", totalPayment: "총 지불" },
-  ja: { loan: "ローン金額", rate: "金利 (%)", term: "ローン期間 (月)", calculate: "EMIを計算", monthly: "月次表", compare: "ローンを比較", emi: "EMI", totalInterest: "総利息", totalPayment: "総支払額" }
-};
+  <script>
+  // JavaScript logic with all requested features
+  document.addEventListener("DOMContentLoaded", function () {
+    const principalInput = document.getElementById("loanAmount");
+    const rateInput = document.getElementById("interestRate");
+    const tenureInput = document.getElementById("loanTenure");
+    const calculateBtn = document.getElementById("calculateBtn");
+    const pieChartBtn = document.getElementById("showPie");
+    const barChartBtn = document.getElementById("showBar");
+    const lineChartBtn = document.getElementById("showLine");
+    const chartCanvas = document.getElementById("chart");
+    const resultText = document.getElementById("resultText");
+    const compareBtn = document.getElementById("compareBtn");
+    const monthlyTableBtn = document.getElementById("monthlyTableBtn");
+    const monthlyTableSection = document.getElementById("monthlyTableSection");
+    const languageSelector = document.getElementById("languageSelector");
+    let chartInstance;
 
-function detectLanguage() {
-  const lang = navigator.language.slice(0, 2);
-  if (langMap[lang]) setLanguage(lang);
-  else setLanguage("en");
-}
+    function calculateEMI(principal, rate, tenure) {
+      let monthlyRate = rate / 12 / 100;
+      return (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / (Math.pow(1 + monthlyRate, tenure) - 1);
+    }
 
-function setLanguage(lang) {
-  const txt = langMap[lang];
-  document.getElementById("loanLabel").textContent = txt.loan;
-  document.getElementById("rateLabel").textContent = txt.rate;
-  document.getElementById("termLabel").textContent = txt.term;
-  document.getElementById("calculateBtn").textContent = txt.calculate;
-  document.getElementById("monthlyBtn").textContent = txt.monthly;
-  document.getElementById("compareBtn").textContent = txt.compare;
-}
+    function showResults(principal, rate, tenure) {
+      const emi = calculateEMI(principal, rate, tenure);
+      const totalPayment = emi * tenure;
+      const totalInterest = totalPayment - principal;
 
-document.getElementById("language").addEventListener("change", e => {
-  setLanguage(e.target.value);
-});
+      resultText.innerHTML = `EMI: ₹${emi.toFixed(2)} | Total Interest: ₹${totalInterest.toFixed(2)} | Total Payment: ₹${totalPayment.toFixed(2)}`;
 
-function calculateEMI() {
-  const loan = parseFloat(document.getElementById("loanAmount").value);
-  const rate = parseFloat(document.getElementById("interestRate").value);
-  const months = parseInt(document.getElementById("loanTerm").value);
+      return { emi, totalPayment, totalInterest };
+    }
 
-  if (isNaN(loan) || isNaN(rate) || isNaN(months)) return;
+    function renderChart(type, values) {
+      if (chartInstance) chartInstance.destroy();
 
-  const monthlyRate = rate / 12 / 100;
-  const emi = loan * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
-  const totalPayment = emi * months;
-  const totalInterest = totalPayment - loan;
+      chartInstance = new Chart(chartCanvas, {
+        type,
+        data: {
+          labels: ["Principal", "Interest"],
+          datasets: [{
+            label: "Loan Breakdown",
+            data: [values.principal, values.totalInterest],
+            backgroundColor: ["#4BC0C0", "#FF6384"]
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { position: "top" } } }
+      });
+    }
 
-  document.getElementById("result").innerHTML = `
-    <strong>EMI:</strong> ₹${emi.toFixed(2)}<br>
-    <strong>Total Interest:</strong> ₹${totalInterest.toFixed(2)}<br>
-    <strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}
-  `;
+    calculateBtn.addEventListener("click", () => {
+      let p = parseFloat(principalInput.value), r = parseFloat(rateInput.value), t = parseFloat(tenureInput.value);
+      if (!p || !r || !t) return alert("Please fill all fields.");
+      const result = showResults(p, r, t);
+      renderChart("bar", { principal: p, totalInterest: result.totalInterest });
+    });
 
-  drawChart(loan, totalInterest);
-}
+    pieChartBtn.onclick = () => {
+      const p = +principalInput.value, r = +rateInput.value, t = +tenureInput.value;
+      const result = showResults(p, r, t);
+      renderChart("pie", { principal: p, totalInterest: result.totalInterest });
+    };
 
-document.getElementById("calculateBtn").addEventListener("click", calculateEMI);
+    barChartBtn.onclick = () => {
+      const p = +principalInput.value, r = +rateInput.value, t = +tenureInput.value;
+      const result = showResults(p, r, t);
+      renderChart("bar", { principal: p, totalInterest: result.totalInterest });
+    };
 
-function drawChart(loan, interest) {
-  const pie = document.getElementById("pieChart");
-  const bar = document.getElementById("barChart");
-  const line = document.getElementById("lineChart");
+    lineChartBtn.onclick = () => {
+      const p = +principalInput.value, r = +rateInput.value, t = +tenureInput.value;
+      const result = showResults(p, r, t);
+      renderChart("line", { principal: p, totalInterest: result.totalInterest });
+    };
 
-  pie.innerHTML = "";
-  bar.innerHTML = "";
-  line.innerHTML = "";
+    monthlyTableBtn.onclick = () => {
+      const p = +principalInput.value, r = +rateInput.value, t = +tenureInput.value;
+      const emi = calculateEMI(p, r, t), ratePerMonth = r / 12 / 100;
+      let balance = p;
+      let table = "<table><tr><th>Month</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>";
 
-  const total = loan + interest;
-  const loanPerc = (loan / total) * 100;
-  const interestPerc = (interest / total) * 100;
+      for (let i = 1; i <= t; i++) {
+        const interest = balance * ratePerMonth;
+        const principal = emi - interest;
+        balance -= principal;
+        table += `<tr><td>${i}</td><td>₹${emi.toFixed(2)}</td><td>₹${principal.toFixed(2)}</td><td>₹${interest.toFixed(2)}</td><td>₹${balance.toFixed(2)}</td></tr>`;
+      }
 
-  if (document.getElementById("showPie").checked) {
-    const pieCtx = document.createElement("canvas");
-    pie.appendChild(pieCtx);
-    new Chart(pieCtx, {
-      type: 'pie',
-      data: {
-        labels: ['Loan', 'Interest'],
-        datasets: [{
-          data: [loan, interest],
-          backgroundColor: ['#1f77b4', '#ff7f0e']
-        }]
+      table += "</table>";
+      monthlyTableSection.innerHTML = table;
+    };
+
+    compareBtn.onclick = () => alert("Compare feature coming soon");
+
+    // 9-language support
+    const translations = {
+      en: { calculate: "Calculate", monthlyTable: "Monthly Table", compare: "Compare Loans" },
+      hi: { calculate: "गणना करें", monthlyTable: "मासिक तालिका", compare: "ऋण तुलना करें" },
+      bn: { calculate: "গণনা করুন", monthlyTable: "মাসিক সারণী", compare: "ঋণ তুলনা করুন" },
+      fr: { calculate: "Calculer", monthlyTable: "Tableau Mensuel", compare: "Comparer les prêts" },
+      ru: { calculate: "Рассчитать", monthlyTable: "Ежемесячная таблица", compare: "Сравнить кредиты" },
+      de: { calculate: "Berechnen", monthlyTable: "Monatstabelle", compare: "Darlehen vergleichen" },
+      es: { calculate: "Calcular", monthlyTable: "Tabla Mensual", compare: "Comparar Préstamos" },
+      ko: { calculate: "계산하기", monthlyTable: "월별 표", compare: "대출 비교" },
+      ja: { calculate: "計算する", monthlyTable: "月次表", compare: "ローンを比較する" },
+    };
+
+    languageSelector.addEventListener("change", () => {
+      const lang = languageSelector.value;
+      if (translations[lang]) {
+        document.getElementById("calculateBtn").textContent = translations[lang].calculate;
+        document.getElementById("monthlyTableBtn").textContent = translations[lang].monthlyTable;
+        document.getElementById("compareBtn").textContent = translations[lang].compare;
       }
     });
-  }
 
-  if (document.getElementById("showBar").checked) {
-    const barCtx = document.createElement("canvas");
-    bar.appendChild(barCtx);
-    new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Loan', 'Interest'],
-        datasets: [{
-          label: 'Amount (₹)',
-          data: [loan, interest],
-          backgroundColor: ['#1f77b4', '#ff7f0e']
-        }]
-      }
-    });
-  }
-
-  if (document.getElementById("showLine").checked) {
-    const lineCtx = document.createElement("canvas");
-    line.appendChild(lineCtx);
-    new Chart(lineCtx, {
-      type: 'line',
-      data: {
-        labels: ['Loan', 'Interest'],
-        datasets: [{
-          label: 'Amount (₹)',
-          data: [loan, interest],
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          borderColor: 'rgba(255,99,132,1)',
-          fill: false,
-          tension: 0.1
-        }]
-      }
-    });
-  }
-}
-
-document.getElementById("monthlyBtn").addEventListener("click", () => {
-  alert("Monthly Table View Feature is Coming Soon!");
-});
-
-document.getElementById("compareBtn").addEventListener("click", () => {
-  alert("Loan Comparison Feature is Coming Soon!");
-});
-
-window.onload = detectLanguage;
+    // Auto-detect language
+    const userLang = navigator.language.slice(0, 2);
+    if (translations[userLang]) {
+      languageSelector.value = userLang;
+      languageSelector.dispatchEvent(new Event("change"));
+    }
+  });
 </script>
 
 </body>
