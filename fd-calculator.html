@@ -3,376 +3,264 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FD Calculator | Pratix Finance</title>
+  <title>Pratix Finance - Financial Tools</title>
   <style>
-    body {
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --text-color: #ffffff;
+      --glow-color: rgba(0, 186, 255, 0.4);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --border-glow: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    * {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #e3f2fd, #fff);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
       padding: 1rem;
     }
-    .container {
-      width: 100%;
-      max-width: 600px;
-      background: #fff;
-      border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    .logo {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .logo img {
-      width: 120px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .language-selector {
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-    }
-    label, select, input {
-      margin: 0.5rem 0;
-      width: 100%;
-      padding: 0.6rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    .btn-group {
+
+    header {
       display: flex;
       justify-content: space-between;
-      margin: 1rem 0;
+      align-items: center;
+      padding: 1rem 0;
     }
-    button {
-      flex: 1;
-      margin: 0 0.5rem;
-      padding: 0.6rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      color: white;
-    }
-    .reset-btn { background-color: #9e9e9e; }
-    .calc-btn { background-color: #2196f3; }
-    .preview-btn { background-color: #4caf50; }
-    .output, .charts, .footer {
-      margin-top: 1.5rem;
-    }
-    .output div {
-      padding: 0.5rem;
-      background: #f1f1f1;
-      border-radius: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    canvas {
-      margin-top: 1rem;
-      max-width: 100%;
-    }
-    .download-share {
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 600;
       display: flex;
-      justify-content: space-around;
-      margin: 1rem 0;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .download-share button {
-      background-color: #ff9800;
+
+    .logo-icon {
+      font-size: 1.5rem;
+      color: #00baff;
     }
-    .footer {
+
+    .menu {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .menu select,
+    .menu button {
+      background: var(--glass-bg);
+      border: var(--border-glow);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
       font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .hero {
+      text-align: left;
+      max-width: 700px;
+      margin: 2rem auto;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      color: #ccc;
+      margin-top: 0.8rem;
+      font-size: 1.1rem;
+    }
+
+    .bulb {
+      position: absolute;
+      top: -20px;
+      right: -30px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at center, rgba(0, 186, 255, 0.7), transparent 70%);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+    }
+
+    .card {
+      background: var(--glass-bg);
+      border: var(--border-glow);
+      border-radius: 20px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 0 12px rgba(0, 186, 255, 0.2);
+      animation: subtleGlow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes subtleGlow {
+      0%, 100% {
+        box-shadow: 0 0 12px rgba(0, 186, 255, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(0, 186, 255, 0.4);
+      }
+    }
+
+    .card .icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .card p {
+      color: #ccc;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .card button {
+      margin-top: auto;
+      background: #ffffff12;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .card button:hover {
+      background: #00baff;
+    }
+
+    footer {
       text-align: center;
-      margin-top: 2rem;
-      color: #555;
-    }
-    .footer a {
-      color: #2196f3;
-      text-decoration: none;
-    }
-    #previewSection {
-      display: none;
-      background: white;
-      border: 2px dashed #2196f3;
-      padding: 1rem;
-      border-radius: 1rem;
+      margin: 3rem 0 1rem;
+      color: #777;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <header>
     <div class="logo">
-      <img src="https://i.imgur.com/U4k8V7N.png" alt="Pratix Finance Logo"/>
+      <span class="logo-icon">🅿️</span>
+      PRATIX FINANCE
     </div>
-
-    <h1 id="title">Fixed Deposit Calculator</h1>
-
-    <div class="language-selector">
-      <label for="language">🌐 Select Language</label>
-      <select id="language" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="hi">हिन्दी</option>
-        <option value="bn">বাংলা</option>
-        <option value="fr">Français</option>
-        <option value="ru">Русский</option>
-        <option value="es">Español</option>
-        <option value="ja">日本語</option>
-        <option value="ko">한국어</option>
+    <div class="menu">
+      <select>
+        <option>English</option>
+        <option>हिंदी</option>
+        <option>বাংলা</option>
+        <option>मराठी</option>
+        <option>தமிழ்</option>
+        <option>తెలుగు</option>
+        <option>ગુજરાતી</option>
+        <option>ಕನ್ನಡ</option>
+        <option>اردو</option>
       </select>
+      <button>⋯</button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>All Your Financial Tools, <br>One Place.</h1>
+    <p>Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
+    <div class="bulb"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🪙</div>
+      <h3>EMI Calculator</h3>
+      <p>Quickly calculate EMIs</p>
+      <button>Launch Calculator →</button>
     </div>
 
-    <label id="principalLabel">Enter Principal Amount</label>
-    <input type="number" id="principal" placeholder="e.g. 100000" />
-
-    <label id="rateLabel">Annual Interest Rate (%)</label>
-    <input type="number" id="rate" placeholder="e.g. 6.5" />
-
-    <label id="timeLabel">Time Period (in Years)</label>
-    <input type="number" id="time" placeholder="e.g. 5" />
-
-    <label id="frequencyLabel">Compounding Frequency</label>
-    <select id="frequency">
-      <option value="12">Monthly</option>
-      <option value="4">Quarterly</option>
-      <option value="2">Half-Yearly</option>
-      <option value="1">Yearly</option>
-    </select>
-
-    <div class="btn-group">
-      <button class="reset-btn" onclick="resetForm()" id="resetBtn">Reset</button>
-      <button class="calc-btn" onclick="calculateFD()" id="calcBtn">Calculate</button>
-      <button class="preview-btn" onclick="showPreview()" id="previewBtn">Preview</button>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>SIP Calculator</h3>
+      <p>Estimate SIP returns</p>
+      <button>Launch Calculator →</button>
     </div>
 
-    <div class="output" id="outputSection" style="display:none;">
-      <div id="maturityAmount"></div>
-      <div id="totalInterest"></div>
+    <div class="card">
+      <div class="icon">📄</div>
+      <h3>Income Tax Calculator</h3>
+      <p>Plan your income taxes</p>
+      <button>Launch Calculator →</button>
     </div>
 
-    <div class="charts" id="chartSection" style="display:none;">
-      <canvas id="pieChart"></canvas>
-      <canvas id="barChart"></canvas>
+    <div class="card">
+      <div class="icon">🛡️</div>
+      <h3>FD Calculator</h3>
+      <p>Find maturity amount</p>
+      <button>Launch Calculator →</button>
     </div>
 
-    <div class="download-share" id="downloadSection" style="display:none;">
-      <button onclick="downloadImage()">Download Image</button>
-      <button onclick="downloadPDF()">Download PDF</button>
-      <button onclick="shareResult()">Share</button>
+    <div class="card">
+      <div class="icon">📅</div>
+      <h3>RD Calculator</h3>
+      <p>Project RD investments</p>
+      <button>Launch Calculator →</button>
     </div>
 
-    <div id="previewSection"></div>
+    <div class="card">
+      <div class="icon">🏠</div>
+      <h3>HRA Calculator</h3>
+      <p>Calculate HRA exemptions</p>
+      <button>Launch Calculator →</button>
+    </div>
 
-    <div class="footer">
-      <p id="description">
-        This Fixed Deposit Calculator helps you estimate maturity value and interest earned on your deposit. Enter your deposit amount, interest rate, time period, and frequency to calculate.
-      </p>
-      <p>📧 Contact: <a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
+    <div class="card">
+      <div class="icon">🐷</div>
+      <h3>NPS Calculator</h3>
+      <p>Plan for your retirement</p>
+      <button>Launch Calculator →</button>
     </div>
   </div>
 
-  <!-- Chart.js and JS will be included in Part 2 -->
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-  let pieChart, barChart;
-
-  function calculateFD() {
-    const P = parseFloat(document.getElementById("principal").value);
-    const R = parseFloat(document.getElementById("rate").value) / 100;
-    const T = parseFloat(document.getElementById("time").value);
-    const N = parseInt(document.getElementById("frequency").value);
-
-    if (!P || !R || !T || !N) {
-      alert("Please fill all input fields");
-      return;
-    }
-
-    const A = P * Math.pow(1 + R / N, N * T);
-    const interest = A - P;
-
-    document.getElementById("outputSection").style.display = "block";
-    document.getElementById("chartSection").style.display = "block";
-    document.getElementById("downloadSection").style.display = "flex";
-
-    document.getElementById("maturityAmount").innerText = `${translations[currentLang].maturity}: ₹${A.toFixed(2)}`;
-    document.getElementById("totalInterest").innerText = `${translations[currentLang].interest}: ₹${interest.toFixed(2)}`;
-
-    drawCharts(P, interest, T, R, N);
-  }
-
-  function drawCharts(P, interest, T, R, N) {
-    const ctxPie = document.getElementById('pieChart').getContext('2d');
-    const ctxBar = document.getElementById('barChart').getContext('2d');
-
-    if (pieChart) pieChart.destroy();
-    if (barChart) barChart.destroy();
-
-    pieChart = new Chart(ctxPie, {
-      type: 'pie',
-      data: {
-        labels: [translations[currentLang].principal, translations[currentLang].interest],
-        datasets: [{
-          data: [P, interest],
-          backgroundColor: ['#42a5f5', '#66bb6a']
-        }]
-      }
-    });
-
-    // Bar chart for growth per year
-    let barLabels = [], barData = [];
-    for (let i = 1; i <= T; i++) {
-      const yearValue = P * Math.pow(1 + R / N, N * i);
-      barLabels.push(`${i} ${translations[currentLang].year}`);
-      barData.push(yearValue.toFixed(2));
-    }
-
-    barChart = new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels: barLabels,
-        datasets: [{
-          label: translations[currentLang].growth,
-          data: barData,
-          backgroundColor: '#ffb74d'
-        }]
-      }
-    });
-  }
-
-  function resetForm() {
-    document.getElementById("principal").value = '';
-    document.getElementById("rate").value = '';
-    document.getElementById("time").value = '';
-    document.getElementById("frequency").value = '12';
-    document.getElementById("outputSection").style.display = "none";
-    document.getElementById("chartSection").style.display = "none";
-    document.getElementById("downloadSection").style.display = "none";
-    document.getElementById("previewSection").style.display = "none";
-  }
-
-  function showPreview() {
-    const preview = document.getElementById("previewSection");
-    preview.innerHTML = `
-      <div class="logo"><img src="https://i.imgur.com/U4k8V7N.png" width="100"/></div>
-      <h2>${translations[currentLang].title}</h2>
-      <p><strong>${translations[currentLang].principal}:</strong> ₹${document.getElementById("principal").value}</p>
-      <p><strong>${translations[currentLang].rate}:</strong> ${document.getElementById("rate").value}%</p>
-      <p><strong>${translations[currentLang].time}:</strong> ${document.getElementById("time").value} ${translations[currentLang].years}</p>
-      <p><strong>${translations[currentLang].interest}:</strong> ${document.getElementById("totalInterest").innerText}</p>
-      <p><strong>${translations[currentLang].maturity}:</strong> ${document.getElementById("maturityAmount").innerText}</p>
-      <canvas id="previewPie" width="300"></canvas>
-      <canvas id="previewBar" width="300"></canvas>
-    `;
-    preview.style.display = "block";
-
-    const pieCtx = document.getElementById('previewPie').getContext('2d');
-    const barCtx = document.getElementById('previewBar').getContext('2d');
-    const P = parseFloat(document.getElementById("principal").value);
-    const R = parseFloat(document.getElementById("rate").value) / 100;
-    const T = parseFloat(document.getElementById("time").value);
-    const N = parseInt(document.getElementById("frequency").value);
-    const A = P * Math.pow(1 + R / N, N * T);
-    const interest = A - P;
-
-    new Chart(pieCtx, {
-      type: 'pie',
-      data: {
-        labels: [translations[currentLang].principal, translations[currentLang].interest],
-        datasets: [{
-          data: [P, interest],
-          backgroundColor: ['#42a5f5', '#66bb6a']
-        }]
-      }
-    });
-
-    let barLabels = [], barData = [];
-    for (let i = 1; i <= T; i++) {
-      const yearValue = P * Math.pow(1 + R / N, N * i);
-      barLabels.push(`${i} ${translations[currentLang].year}`);
-      barData.push(yearValue.toFixed(2));
-    }
-
-    new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: barLabels,
-        datasets: [{
-          label: translations[currentLang].growth,
-          data: barData,
-          backgroundColor: '#ffb74d'
-        }]
-      }
-    });
-  }
-
-  async function downloadImage() {
-    const element = document.getElementById("previewSection");
-    const canvas = await html2canvas(element);
-    const link = document.createElement("a");
-    link.download = "FD_Result.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  }
-
-  async function downloadPDF() {
-    const element = document.getElementById("previewSection");
-    const canvas = await html2canvas(element);
-    const imgData = canvas.toDataURL('image/png');
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-    pdf.addImage(imgData, 'PNG', 10, 10, 190, 0);
-    pdf.save("FD_Result.pdf");
-  }
-
-  function shareResult() {
-    const text = `${translations[currentLang].title} 📊\n${document.getElementById("maturityAmount").innerText}\n${document.getElementById("totalInterest").innerText}`;
-    if (navigator.share) {
-      navigator.share({ title: "FD Calculator", text });
-    } else {
-      alert("Sharing not supported on this browser.");
-    }
-  }
-
-  // 🔁 Multilingual Support
-  const translations = {
-    en: { title: "Fixed Deposit Calculator", principal: "Principal", rate: "Interest Rate", time: "Time Period", years: "years", frequency: "Frequency", interest: "Total Interest", maturity: "Maturity Amount", year: "Year", growth: "Maturity Growth" },
-    hi: { title: "फिक्स्ड डिपॉजिट कैलकुलेटर", principal: "मूलधन", rate: "ब्याज दर", time: "समय अवधि", years: "साल", frequency: "आवृत्ति", interest: "कुल ब्याज", maturity: "परिपक्व राशि", year: "वर्ष", growth: "परिपक्वता वृद्धि" },
-    bn: { title: "এফডি ক্যালকুলেটর", principal: "মূলধন", rate: "সুদের হার", time: "সময়কাল", years: "বছর", frequency: "ঘনত্ব", interest: "মোট সুদ", maturity: "পরিপক্বতা", year: "বছর", growth: "বৃদ্ধি" },
-    fr: { title: "Calculateur de dépôt à terme", principal: "Principal", rate: "Taux d'intérêt", time: "Durée", years: "ans", frequency: "Fréquence", interest: "Intérêt total", maturity: "Montant à l'échéance", year: "An", growth: "Croissance" },
-    ru: { title: "Калькулятор срочного вклада", principal: "Основной", rate: "Процентная ставка", time: "Период времени", years: "лет", frequency: "Частота", interest: "Общий процент", maturity: "Сумма к погашению", year: "Год", growth: "Рост" },
-    es: { title: "Calculadora de depósito fijo", principal: "Principal", rate: "Tasa de interés", time: "Período", years: "años", frequency: "Frecuencia", interest: "Interés total", maturity: "Monto al vencimiento", year: "Año", growth: "Crecimiento" },
-    ja: { title: "定期預金計算機", principal: "元本", rate: "金利", time: "期間", years: "年", frequency: "頻度", interest: "総利息", maturity: "満期額", year: "年", growth: "増加" },
-    ko: { title: "정기예금 계산기", principal: "원금", rate: "이자율", time: "기간", years: "년", frequency: "빈도", interest: "총 이자", maturity: "만기 금액", year: "년", growth: "성장" }
-  };
-
-  let currentLang = "en";
-
-  function changeLanguage() {
-    currentLang = document.getElementById("language").value;
-    const t = translations[currentLang];
-    document.getElementById("title").innerText = t.title;
-    document.getElementById("principalLabel").innerText = t.principal;
-    document.getElementById("rateLabel").innerText = t.rate;
-    document.getElementById("timeLabel").innerText = t.time;
-    document.getElementById("frequencyLabel").innerText = t.frequency;
-    document.getElementById("calcBtn").innerText = "📊 " + (t.title.includes("FD") ? "Calculate" : t.title);
-    document.getElementById("resetBtn").innerText = "🔄 " + (t.title.includes("FD") ? "Reset" : t.title);
-    document.getElementById("previewBtn").innerText = "👁️ " + (t.title.includes("FD") ? "Preview" : t.title);
-    document.getElementById("description").innerText = t.title + " helps you estimate your maturity and interest earned.";
-  }
-
-  window.onload = changeLanguage;
-</script>
+  <footer>
+    © 2025 Pratix Finance — All rights reserved
+  </footer>
 
 </body>
 </html>
