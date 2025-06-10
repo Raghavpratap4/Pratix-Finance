@@ -3,265 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pratix Finance - All Tools</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+  <title id="title">Pratix Finance - Financial Tools</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
   <style>
-    :root {
-      --bg-color: #0d1117;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --glow-color: rgba(0, 195, 255, 0.5);
-    }
-
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: #ffffff;
-      overflow-x: hidden;
+      background: #0e0e0e;
+      color: #fff;
     }
-
+    header, footer {
+      text-align: center;
+      padding: 20px;
+    }
     .container {
-      max-width: 1200px;
+      max-width: 900px;
       margin: auto;
-      padding: 2rem;
+      padding: 40px 20px;
+      text-align: center;
     }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      padding: 1rem 2rem;
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      margin-bottom: 2rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-
-    .logo img {
-      height: 32px;
-      margin-right: 0.6rem;
-    }
-
-    .menu {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    select, .dots {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      padding: 0.4rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-    }
-
     h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
     }
-
-    .subheading {
+    p {
       font-size: 1.1rem;
-      opacity: 0.8;
+      color: #ccc;
     }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    
     .card {
-  background: var(--glass-bg);
-  border: var(--border-glow);
-  border-radius: 20px;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  left: -20%;
-  width: 140%;
-  height: 140%;
-  background: radial-gradient(circle at center, rgba(0, 186, 255, 0.3), transparent 70%);
-  animation: cardGlow 3s ease-in-out infinite;
-  z-index: 0;
-  filter: blur(30px);
-}
-
-@keyframes cardGlow {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.08);
-    opacity: 0.9;
-  }
-}
-
-.card > * {
-  position: relative;
-  z-index: 1;
-}
-
-
-   
-    .launch {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      font-weight: 600;
+      background: rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 30px;
+      margin: 40px auto;
+      backdrop-filter: blur(10px);
+      max-width: 600px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    .card p {
+      margin: 10px 0;
+    }
+    .launch-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #00c6ff;
+      color: #000;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
+      margin-top: 10px;
     }
-
-    .launch:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .icon {
-      font-size: 2.4rem;
-    }
-
-    .glow {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      top: -30px;
-      right: -30px;
-      background: var(--glow-color);
-      filter: blur(40px);
-      z-index: 0;
-      border-radius: 50%;
-    }
-
-    .coming-soon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
-    }
-
-    @media(max-width: 600px) {
-      h1 { font-size: 1.8rem; }
+    select {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 15px;
+      background: #fff;
+      color: #000;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
+  <header>
+    <select id="langSelect" title="Select Language">
+      <option value="en">🌐 English</option>
+      <option value="hi">🇮🇳 Hindi</option>
+      <option value="bn">🇧🇩 Bengali</option>
+      <option value="fr">🇫🇷 French</option>
+      <option value="es">🇪🇸 Spanish</option>
+      <option value="ru">🇷🇺 Russian</option>
+      <option value="ja">🇯🇵 Japanese</option>
+      <option value="ko">🇰🇷 Korean</option>
+      <option value="de">🇩🇪 German</option>
+    </select>
+  </header>
+
   <div class="container">
-    <header>
-      <div class="logo">
-        <img src="logo.png" alt="Logo" />
-        PRATIX FINANCE
-      </div>
-      <div class="menu">
-        <select>
-          <option>English</option>
-          <option>Hindi</option>
-          <option>Bengali</option>
-          <option>Marathi</option>
-          <option>Tamil</option>
-          <option>Telugu</option>
-          <option>Gujarati</option>
-          <option>Kannada</option>
-          <option>Malayalam</option>
-        </select>
-        <div class="dots">•••</div>
-      </div>
-    </header>
+    <h1 id="main_heading">All Your Financial Tools,<br>One Place.</h1>
+    <p id="main_subheading">Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
 
-    <main>
-      <h1>All Your Financial Tools, One Place.</h1>
-      <div class="subheading">
-        Powerful, accurate, and easy-to-use calculators from Pratix Finance
-      </div>
-
-      <div class="grid">
-        <div class="card"><div class="glow"></div>
-          <div class="icon">🪙</div>
-          <h3>EMI Calculator</h3>
-          <p>Quickly calculate EMIs</p>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">📊</div>
-          <h3>SIP Calculator</h3>
-          <p>Estimate SIP returns</p>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">🧾</div>
-          <h3>Income Tax Calculator</h3>
-          <p>Plan your income taxes</p>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">🛡️</div>
-          <h3>FD Calculator</h3>
-          <p>Find maturity amount</p>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">📅</div>
-          <h3>RD Calculator</h3>
-          <p>Project RD investments</p>
-          <div class="coming-soon">COMING SOON</div>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">🏠</div>
-          <h3>HRA Calculator</h3>
-          <p>Calculate HRA exemptions</p>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">🐷</div>
-          <h3>NPS Calculator</h3>
-          <p>Plan for your retirement</p>
-          <div class="launch">Launch Calculator →</div>
-        </div>
-
-        <div class="card"><div class="glow"></div>
-          <div class="icon">📈</div>
-          <h3>More Tools</h3>
-          <p>Coming soon</p>
-          <div class="launch">Stay Tuned →</div>
-        </div>
-      </div>
-    </main>
+    <div class="card">
+      <h2 id="emi_title">EMI Calculator</h2>
+      <p id="emi_desc">Quickly calculate EMIs</p>
+      <a href="emi-calculator.html">
+        <button class="launch-btn" id="emi_btn">Launch Calculator →</button>
+      </a>
+    </div>
   </div>
+
+  <footer>
+    <p id="footer">© 2025 Pratix Finance — All rights reserved</p>
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        title: "Pratix Finance - Financial Tools",
+        main_heading: "All Your Financial Tools, <br>One Place.",
+        main_subheading: "Powerful, accurate, and easy-to-use calculators from Pratix Finance",
+        emi_title: "EMI Calculator",
+        emi_desc: "Quickly calculate EMIs",
+        emi_btn: "Launch Calculator →",
+        footer: "© 2025 Pratix Finance — All rights reserved"
+      },
+      hi: {
+        title: "Pratix Finance - वित्तीय उपकरण",
+        main_heading: "आपके सभी वित्तीय उपकरण,<br>एक ही स्थान पर।",
+        main_subheading: "Pratix Finance से सटीक और उपयोग में आसान कैलकुलेटर",
+        emi_title: "ईएमआई कैलकुलेटर",
+        emi_desc: "तेजी से ईएमआई की गणना करें",
+        emi_btn: "कैलकुलेटर चालू करें →",
+        footer: "© 2025 प्राटिक्स फाइनेंस — सर्वाधिकार सुरक्षित"
+      },
+      bn: {
+        title: "Pratix Finance - আর্থিক সরঞ্জাম",
+        main_heading: "আপনার সব আর্থিক সরঞ্জাম,<br>এক জায়গায়।",
+        main_subheading: "Pratix Finance থেকে নির্ভুল ও ব্যবহারযোগ্য ক্যালকুলেটর",
+        emi_title: "EMI ক্যালকুলেটর",
+        emi_desc: "দ্রুত EMI গণনা করুন",
+        emi_btn: "ক্যালকুলেটর চালু করুন →",
+        footer: "© 2025 Pratix Finance — সর্বস্বত্ব সংরক্ষিত"
+      },
+      fr: {
+        title: "Pratix Finance - Outils Financiers",
+        main_heading: "Tous vos outils financiers,<br>à un seul endroit.",
+        main_subheading: "Des calculateurs puissants et faciles à utiliser de Pratix Finance",
+        emi_title: "Calculateur de prêt",
+        emi_desc: "Calculez rapidement vos EMI",
+        emi_btn: "Lancer le calculateur →",
+        footer: "© 2025 Pratix Finance — Tous droits réservés"
+      },
+      es: {
+        title: "Pratix Finance - Herramientas Financieras",
+        main_heading: "Todas tus herramientas financieras,<br>en un solo lugar.",
+        main_subheading: "Calculadoras poderosas y fáciles de usar de Pratix Finance",
+        emi_title: "Calculadora EMI",
+        emi_desc: "Calcula tus EMI rápidamente",
+        emi_btn: "Abrir Calculadora →",
+        footer: "© 2025 Pratix Finance — Todos los derechos reservados"
+      },
+      ru: {
+        title: "Pratix Finance - Финансовые инструменты",
+        main_heading: "Все ваши финансовые инструменты<br>в одном месте.",
+        main_subheading: "Мощные и удобные калькуляторы от Pratix Finance",
+        emi_title: "Калькулятор EMI",
+        emi_desc: "Быстро рассчитать EMI",
+        emi_btn: "Запустить калькулятор →",
+        footer: "© 2025 Pratix Finance — Все права защищены"
+      },
+      ja: {
+        title: "Pratix Finance - ファイナンシャルツール",
+        main_heading: "すべての金融ツールを<br>1か所に。",
+        main_subheading: "Pratix Financeの強力で使いやすい計算ツール",
+        emi_title: "EMI計算機",
+        emi_desc: "EMIをすばやく計算",
+        emi_btn: "計算機を起動 →",
+        footer: "© 2025 Pratix Finance — 無断転載を禁じます"
+      },
+      ko: {
+        title: "Pratix Finance - 금융 도구",
+        main_heading: "모든 금융 도구를<br>한 곳에서.",
+        main_subheading: "Pratix Finance의 강력하고 사용하기 쉬운 계산기",
+        emi_title: "EMI 계산기",
+        emi_desc: "빠르게 EMI 계산",
+        emi_btn: "계산기 실행 →",
+        footer: "© 2025 Pratix Finance — 판권 소유"
+      },
+      de: {
+        title: "Pratix Finance - Finanztools",
+        main_heading: "Alle Ihre Finanztools<br>an einem Ort.",
+        main_subheading: "Leistungsstarke, benutzerfreundliche Rechner von Pratix Finance",
+        emi_title: "EMI-Rechner",
+        emi_desc: "Schnell EMI berechnen",
+        emi_btn: "Rechner starten →",
+        footer: "© 2025 Pratix Finance — Alle Rechte vorbehalten"
+      }
+    };
+
+    const elements = ["title", "main_heading", "main_subheading", "emi_title", "emi_desc", "emi_btn", "footer"];
+
+    function translate(lang) {
+      const dict = translations[lang] || translations["en"];
+      document.title = dict.title;
+      elements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (id === "main_heading") {
+            el.innerHTML = dict[id];
+          } else {
+            el.textContent = dict[id];
+          }
+        }
+      });
+    }
+
+    // Auto detect language
+    const browserLang = (navigator.language || navigator.userLanguage || "en").substring(0, 2);
+    const supportedLangs = Object.keys(translations);
+    const defaultLang = supportedLangs.includes(browserLang) ? browserLang : "en";
+    document.getElementById("langSelect").value = defaultLang;
+    translate(defaultLang);
+
+    // Change on select
+    document.getElementById("langSelect").addEventListener("change", function () {
+      translate(this.value);
+    });
+  </script>
 </body>
 </html>
