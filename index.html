@@ -12,7 +12,7 @@
       --card-bg: #111827;
       --text-color: #ffffff;
       --glow-color: rgba(0, 186, 255, 0.4);
-      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-bg: rgba(255, 255, 255, 0.05); /* Transparent white for dark mode glass effect */
       --border-glow: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -25,16 +25,16 @@
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg-color);
-      color: var(--text-color);
-      padding: 1rem;
+      color: var(--text-color); /* Main text color */
+      padding: 1rem; /* Default padding for small screens */
       transition: background 0.3s, color 0.3s;
     }
 
     body.light-mode {
       --bg-color: #ffffff;
-      --text-color: #111827;
+      --text-color: #111827; /* This is the main dark text color for light mode */
       --card-bg: #f0f0f0;
-      --glass-bg: rgba(0, 0, 0, 0.05);
+      --glass-bg: rgba(0, 0, 0, 0.05); /* Transparent black for light mode glass effect */
       --border-glow: 1px solid rgba(0, 0, 0, 0.1);
     }
 
@@ -54,8 +54,10 @@
     }
 
     .logo-icon {
-      font-size: 1.5rem;
-      color: #00baff;
+      width: 30px; /* Set a specific width for the logo image */
+      height: 30px; /* Set a specific height for the logo image */
+      object-fit: contain; /* Ensures the image scales properly within its bounds */
+      vertical-align: middle; /* Helps align the image with text */
     }
 
     .menu {
@@ -68,16 +70,79 @@
     .menu button {
       background: var(--glass-bg);
       border: var(--border-glow);
-      color: var(--text-color);
+      color: var(--text-color); /* Uses dynamic text color variable */
       padding: 0.4rem 0.8rem;
       border-radius: 8px;
       font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s ease;
+      -webkit-appearance: none; /* Remove default styling for better control */
+      -moz-appearance: none;
+      appearance: none;
+      text-align: center;
     }
+
+    /* Specific styling for select options to ensure visibility */
+    .menu select option {
+        background-color: var(--card-bg); /* Use card background for options */
+        color: var(--text-color); /* Use general text color */
+    }
+
+    body.light-mode .menu select option {
+        background-color: var(--card-bg); /* Use card background for options in light mode */
+        color: var(--text-color); /* Use dark text color for options in light mode */
+    }
+
 
     .menu select:focus {
       outline: none;
+    }
+
+    /* Dropdown specific styles */
+    .more-options-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none; /* Hidden by default */
+      position: absolute;
+      background-color: var(--card-bg);
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1; /* Ensure it's above other content */
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      right: 0; /* Align to the right of the button */
+      top: calc(100% + 5px); /* Position below the button */
+      border: var(--border-glow); /* Apply glow border to dropdown */
+    }
+
+    .dropdown-content button {
+      color: var(--text-color);
+      padding: 0.8rem 1rem;
+      text-decoration: none;
+      display: block;
+      background: none; /* Override specific button background */
+      border: none; /* Override specific button border */
+      width: 100%;
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 0; /* Remove specific button border-radius within dropdown */
+    }
+
+    .dropdown-content button:hover {
+      background-color: rgba(0, 186, 255, 0.2); /* Highlight on hover */
+      color: var(--text-color); /* Maintain color on hover */
+    }
+
+    body.light-mode .dropdown-content button:hover {
+        background-color: rgba(0, 186, 255, 0.1); /* Lighter hover for light mode */
+    }
+
+    .more-options-dropdown.show-dropdown .dropdown-content {
+      display: block; /* Show when 'show-dropdown' class is active */
     }
 
     .hero {
@@ -88,15 +153,22 @@
     }
 
     .hero h1 {
-      font-size: 2.5rem;
+      font-size: 2.5rem; /* Default font size for hero title */
       font-weight: 700;
       line-height: 1.3;
     }
 
     .hero p {
-      color: #ccc;
+      color: #ccc; /* Default (dark mode) light text */
       margin-top: 0.8rem;
-      font-size: 1.1rem;
+      font-size: 1.1rem; /* Default font size for hero description */
+    }
+
+    /* Explicitly set text colors for specific elements in light mode */
+    body.light-mode .hero p,
+    body.light-mode .card p,
+    body.light-mode footer {
+        color: var(--text-color); /* Ensures these use the dark text color set for light mode */
     }
 
     .bulb {
@@ -155,7 +227,7 @@
     }
 
     .card p {
-      color: #ccc;
+      color: #ccc; /* Default (dark mode) light text */
       font-size: 0.95rem;
       margin-bottom: 1rem;
     }
@@ -163,7 +235,7 @@
     .card button {
       margin-top: auto;
       background: #ffffff12;
-      color: var(--text-color);
+      color: var(--text-color); /* Uses dynamic text color variable */
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 10px;
@@ -174,7 +246,7 @@
 
     body.light-mode .card button {
       background: #11182711;
-      color: #111827;
+      color: #111827; /* Explicitly dark for buttons in light mode */
     }
 
     .card button:hover {
@@ -187,13 +259,71 @@
       cursor: pointer;
       background: none;
       border: none;
-      color: var(--text-color);
+      color: var(--text-color); /* Uses dynamic text color variable */
     }
 
     footer {
       text-align: center;
       margin: 3rem 0 1rem;
-      color: #777;
+      color: #777; /* Default (dark mode) slightly darker text */
+    }
+
+    /* --- Responsive Adjustments using Media Queries --- */
+
+    /* For tablets and larger screens (min-width: 768px) */
+    @media (min-width: 768px) {
+      body {
+        padding: 2rem; /* Increase overall padding */
+      }
+      .hero h1 {
+        font-size: 3rem; /* Larger font size for hero title */
+      }
+      .hero p {
+        font-size: 1.2rem; /* Larger font size for hero description */
+      }
+      .bulb {
+        top: -30px; /* Adjust bulb position for larger screens */
+        right: -40px;
+        width: 100px; /* Larger bulb */
+        height: 100px;
+      }
+    }
+
+    /* For very small screens (max-width: 480px) */
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 1rem; /* Smaller logo text */
+      }
+      .logo-icon {
+        width: 25px; /* Slightly smaller logo image */
+        height: 25px;
+      }
+      .menu {
+        flex-wrap: wrap; /* Allow menu items to wrap to the next line */
+        justify-content: flex-end; /* Keep menu items aligned to the right */
+        gap: 0.5rem; /* Reduce spacing between menu items */
+      }
+      .menu select,
+      .menu button,
+      .dropdown-content button { /* Apply smaller font/padding to dropdown items too */
+        padding: 0.3rem 0.6rem; /* Smaller padding for menu items */
+        font-size: 0.8rem; /* Smaller font size for menu items */
+      }
+      .hero h1 {
+        font-size: 2rem; /* Smaller font size for hero title */
+      }
+      .hero p {
+        font-size: 1rem; /* Smaller font size for hero description */
+      }
+      .bulb {
+        top: -10px; /* Adjust bulb position for smaller screens */
+        right: -10px;
+        width: 60px; /* Smaller bulb */
+        height: 60px;
+      }
+      .card {
+        padding: 1rem; /* Slightly less padding for cards on small screens */
+      }
     }
   </style>
 </head>
@@ -201,7 +331,7 @@
 
   <header>
     <div class="logo">
-      <span class="logo-icon">logo.png</span>
+      <img src="https://placehold.co/30x30/00baff/ffffff?text=Logo" alt="Pratix Finance Logo" class="logo-icon inline-block align-middle" onerror="this.onerror=null; this.src='https://placehold.co/30x30/00baff/ffffff?text=P.F';" />
       PRATIX FINANCE
     </div>
     <div class="menu">
@@ -216,7 +346,14 @@
         <option value="ko">한국어</option>
         <option value="de">Deutsch</option>
       </select>
-      <button title="More Options">⋯</button>
+
+      <div class="more-options-dropdown">
+        <button class="more-options-btn" title="More Options">⋯</button>
+        <div class="dropdown-content">
+          <button id="feedbackBtnElement" onclick="window.location.href='mailto:pratixfinance4@gmail.com?subject=App Feedback'" title="Send Feedback">Feedback</button>
+          </div>
+      </div>
+
       <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌟</button>
     </div>
   </header>
@@ -242,29 +379,38 @@
 
   <script>
     const translations = {
-      en: { heroTitle: "All Your Financial Tools,<br>One Place.", heroDesc: "Powerful, accurate, and easy-to-use calculators from Pratix Finance", emiTitle: "EMI Calculator", emiDesc: "Quickly calculate EMIs", emiLaunch: "Launch Calculator →" },
-      hi: { heroTitle: "आपके सभी वित्तीय टूल,<br>एक ही स्थान पर।", heroDesc: "Pratix Finance के सटीक और उपयोगी कैलकुलेटर", emiTitle: "ईएमआई कैलकुलेटर", emiDesc: "ईएमआई जल्दी से निकालें", emiLaunch: "कैलकुलेटर शुरू करें →" },
-      bn: { heroTitle: "আপনার সব ফিনান্স টুল,<br>এক জায়গায়।", heroDesc: "Pratix Finance থেকে সঠিক এবং সহজ ক্যালকুলেটর", emiTitle: "ইএমআই ক্যালকুলেটর", emiDesc: "দ্রুত EMI হিসাব করুন", emiLaunch: "ক্যালকুলেটর চালু করুন →" },
-      fr: { heroTitle: "Tous vos outils financiers,<br>au même endroit.", heroDesc: "Des calculateurs puissants et faciles de Pratix Finance", emiTitle: "Calculateur EMI", emiDesc: "Calculez vos EMI rapidement", emiLaunch: "Lancer le calculateur →" },
-      es: { heroTitle: "Todas tus herramientas financieras,<br>en un solo lugar.", heroDesc: "Calculadoras precisas y fáciles de Pratix Finance", emiTitle: "Calculadora EMI", emiDesc: "Calcula EMI rápidamente", emiLaunch: "Lanzar calculadora →" },
-      ru: { heroTitle: "Все ваши финансы,<br>в одном месте.", heroDesc: "Точные и простые калькуляторы от Pratix Finance", emiTitle: "Калькулятор EMI", emiDesc: "Быстро рассчитайте EMI", emiLaunch: "Запустить калькулятор →" },
-      ja: { heroTitle: "すべての金融ツールを、<br>一箇所に。", heroDesc: "Pratix Financeの使いやすい正確な計算機", emiTitle: "EMI計算機", emiDesc: "素早くEMIを計算", emiLaunch: "計算機を起動 →" },
-      ko: { heroTitle: "모든 금융 도구,<br>한 곳에서.", heroDesc: "Pratix Finance의 정확하고 쉬운 계산기", emiTitle: "EMI 계산기", emiDesc: "빠르게 EMI 계산", emiLaunch: "계산기 실행 →" },
-      de: { heroTitle: "Alle Ihre Finanztools,<br>an einem Ort.", heroDesc: "Leistungsstarke, genaue Rechner von Pratix Finance", emiTitle: "EMI-Rechner", emiDesc: "Berechnen Sie EMI schnell", emiLaunch: "Rechner starten →" }
+      en: { heroTitle: "All Your Financial Tools,<br>One Place.", heroDesc: "Powerful, accurate, and easy-to-use calculators from Pratix Finance", emiTitle: "EMI Calculator", emiDesc: "Quickly calculate EMIs", emiLaunch: "Launch Calculator →", feedbackBtn: "Feedback" },
+      hi: { heroTitle: "आपके सभी वित्तीय टूल,<br>एक ही स्थान पर।", heroDesc: "Pratix Finance के सटीक और उपयोगी कैलकुलेटर", emiTitle: "ईएमआई कैलकुलेटर", emiDesc: "ईएमआई जल्दी से निकालें", emiLaunch: "कैलculator शुरू करें →", feedbackBtn: "प्रतिक्रिया" },
+      bn: { heroTitle: "আপনার সব ফিনান্স টুল,<br>এক জায়গায়।", heroDesc: "Pratix Finance থেকে সঠিক এবং সহজ ক্যালকুলেটর", emiTitle: "ইএমआई ক্যালকুলেটর", emiDesc: "দ্রুত EMI হিসাব করুন", emiLaunch: "ক্যালculator চালু করুন →", feedbackBtn: "মতামত" },
+      fr: { heroTitle: "Tous vos outils financiers,<br>au même endroit.", heroDesc: "Des calculateurs puissants et faciles de Pratix Finance", emiTitle: "Calculateur EMI", emiDesc: "Calculez vos EMI rapidement", emiLaunch: "Lancer le calculateur →", feedbackBtn: "Commentaires" },
+      es: { heroTitle: "Todas tus herramientas financieras,<br>en un solo lugar.", heroDesc: "Calculadoras precisas y fáciles de Pratix Finance", emiTitle: "Calculadora EMI", emiDesc: "Calcula EMI rápidamente", emiLaunch: "Lanzar calculadora →", feedbackBtn: "Comentarios" },
+      ru: { heroTitle: "Все ваши финансы,<br>в одном месте.", heroDesc: "Точные и простые калькуляторы от Pratix Finance", emiTitle: "Калькулятор EMI", emiDesc: "Быстро рассчитайте EMI", emiLaunch: "Запустить калькулятор →", feedbackBtn: "Обратная связь" },
+      ja: { heroTitle: "すべての金融ツールを、<br>一箇所に。", heroDesc: "Pratix Financeの使いやすい正確な計算機", emiTitle: "EMI計算機", emiDesc: "素早くEMIを計算", emiLaunch: "計算機を起動 →", feedbackBtn: "フィードバック" },
+      ko: { heroTitle: "모든 금융 도구,<br>한 곳에서.", heroDesc: "Pratix Finance의 정확하고 쉬운 계산기", emiTitle: "EMI 계산기", emiDesc: "빠르게 EMI 계산", emiLaunch: "계산기 실행 →", feedbackBtn: "피드백" },
+      de: { heroTitle: "Alle Ihre Finanztools,<br>an einem Ort.", heroDesc: "Leistungsstarke, genaue Rechner von Pratix Finance", emiTitle: "EMI-Rechner", emiDesc: "Berechnen Sie EMI schnell", emiLaunch: "Rechner starten →", feedbackBtn: "Rückmeldung" }
     };
 
-    document.getElementById('languageSelector').addEventListener('change', function () {
-      const lang = this.value;
-      const t = translations[lang];
-      document.getElementById('heroTitle').innerHTML = t.heroTitle;
-      document.getElementById('heroDesc').innerText = t.heroDesc;
-      document.getElementById('emiTitle').innerText = t.emiTitle;
-      document.getElementById('emiDesc').innerText = t.emiDesc;
-      document.getElementById('emiLaunch').innerText = t.emiLaunch;
-    });
+    const feedbackButtonElement = document.getElementById('feedbackBtnElement'); // Get the feedback button by its new ID
 
-    // Auto detect language
-    window.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const moreOptionsBtn = document.querySelector('.more-options-btn');
+      const moreOptionsDropdown = document.querySelector('.more-options-dropdown');
+
+      moreOptionsBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent click from bubbling up to window and closing dropdown immediately
+        moreOptionsDropdown.classList.toggle('show-dropdown');
+      });
+
+      // Close the dropdown if the user clicks outside of it
+      window.addEventListener('click', (event) => {
+        if (!event.target.closest('.more-options-dropdown')) { // Check if click is outside the dropdown container
+          if (moreOptionsDropdown.classList.contains('show-dropdown')) {
+            moreOptionsDropdown.classList.remove('show-dropdown');
+          }
+        }
+      });
+
+      // Initialize language on load
       const browserLang = navigator.language.slice(0, 2);
       const supported = Object.keys(translations);
       const lang = supported.includes(browserLang) ? browserLang : 'en';
@@ -275,6 +421,22 @@
       document.getElementById('emiTitle').innerText = t.emiTitle;
       document.getElementById('emiDesc').innerText = t.emiDesc;
       document.getElementById('emiLaunch').innerText = t.emiLaunch;
+      if (feedbackButtonElement) { // Ensure button exists before updating text
+        feedbackButtonElement.innerText = t.feedbackBtn;
+      }
+    });
+
+    document.getElementById('languageSelector').addEventListener('change', function () {
+      const lang = this.value;
+      const t = translations[lang];
+      document.getElementById('heroTitle').innerHTML = t.heroTitle;
+      document.getElementById('heroDesc').innerText = t.heroDesc;
+      document.getElementById('emiTitle').innerText = t.emiTitle;
+      document.getElementById('emiDesc').innerText = t.emiDesc;
+      document.getElementById('emiLaunch').innerText = t.emiLaunch;
+      if (feedbackButtonElement) { // Ensure button exists before updating text
+        feedbackButtonElement.innerText = t.feedbackBtn;
+      }
     });
 
     function toggleTheme() {
