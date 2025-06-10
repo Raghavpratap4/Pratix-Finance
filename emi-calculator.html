@@ -3,460 +3,298 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Advanced EMI Calculator | Pratix Finance</title>
-  <link rel="manifest" href="manifest.json" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Advanced EMI Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: #fff;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #3f0d65, #5b21b6);
-      color: #ffffff;
+      padding: 0;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
-      padding: 1rem;
     }
+
     .container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 30px;
       width: 100%;
       max-width: 500px;
-      background: rgba(17, 17, 17, 0.75);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      padding: 2rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8.5px);
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
-    .header h2 {
-      margin: 0;
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-    .lang-select {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      color: white;
-      border-radius: 10px;
-      padding: 6px;
-    }
-    .input-group {
-      margin-bottom: 1rem;
-    }
-    .input-group label {
-      font-weight: 500;
-      margin-bottom: 5px;
+
+    label {
       display: block;
+      margin-top: 15px;
+      font-weight: 600;
     }
-    .input-group input,
-    .input-group select {
+
+    input[type="number"], select {
       width: 100%;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 10px;
+      margin-top: 5px;
       border: none;
-      font-size: 1rem;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.1);
       color: #fff;
     }
-    .input-group input::placeholder {
-      color: #ccc;
-    }
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
+
     button {
-      flex: 1;
-      background: #6366f1;
-      border: none;
-      border-radius: 12px;
+      margin-top: 20px;
+      width: 100%;
       padding: 12px;
-      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      background: #00c6ff;
+      background: linear-gradient(to right, #0072ff, #00c6ff);
       color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-    button:hover {
-      background: #4f46e5;
-    }
-    .summary {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      padding: 1rem;
-      margin-top: 1.5rem;
-    }
-    .summary p {
-      margin: 8px 0;
-    }
-    .toggle-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin: 1rem 0;
-    }
-    canvas {
-      margin-top: 1rem;
-      width: 100% !important;
-      height: auto !important;
-    }
-    footer {
+
+    .results {
+      margin-top: 25px;
       text-align: center;
-      margin-top: 2rem;
-      font-size: 0.85rem;
-      opacity: 0.6;
+      font-size: 16px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .controls button {
+      flex: 1 1 48%;
+    }
+
+    .language-selector {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+      }
+      h1 {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="language-selector">
+    <select id="language" onchange="changeLanguage(this.value)">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="bn">বাংলা</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="ko">한국어</option>
+      <option value="ja">日本語</option>
+    </select>
+  </div>
   <div class="container">
-    <div class="header">
-      <h2 id="title">Advanced EMI Calculator</h2>
-      <select class="lang-select" id="languageSelector" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="hi">🇮🇳 Hindi</option>
-        <option value="bn">🇧🇩 Bengali</option>
-        <option value="fr">🇫🇷 French</option>
-        <option value="ru">🇷🇺 Russian</option>
-        <option value="de">🇩🇪 German</option>
-        <option value="es">🇪🇸 Spanish</option>
-        <option value="ko">🇰🇷 Korean</option>
-        <option value="ja">🇯🇵 Japanese</option>
-      </select>
+    <h1 id="title">Advanced EMI Calculator</h1>
+
+    <label for="loan" id="loanLabel">Loan Amount</label>
+    <input type="number" id="loan" placeholder="Enter loan amount" />
+
+    <label for="rate" id="rateLabel">Annual Interest Rate (%)</label>
+    <input type="number" id="rate" step="0.01" placeholder="Enter interest rate" />
+
+    <label for="months" id="tenureLabel">Loan Tenure (in months)</label>
+    <input type="number" id="months" placeholder="Enter tenure in months" />
+
+    <button id="calculateBtn" onclick="calculateEMI()">Calculate</button>
+
+    <div class="controls">
+      <button id="monthlyTableBtn" onclick="showMonthlyTable()">Show Monthly Table</button>
+      <button id="compareBtn" onclick="compareLoans()">Compare Loan</button>
     </div>
 
-    <div class="input-group">
-      <label id="label-loan">Loan Amount</label>
-      <input type="number" id="loanAmount" placeholder="Enter amount" />
+    <div class="results" id="result">
+      <!-- EMI results will appear here -->
     </div>
-    <div class="input-group">
-      <label id="label-rate">Interest Rate (%)</label>
-      <input type="number" id="interestRate" placeholder="e.g. 8.5" />
-    </div>
-    <div class="input-group">
-      <label id="label-term">Loan Term (years)</label>
-      <input type="number" id="loanTerm" placeholder="e.g. 10" />
-    </div>
-    <div class="input-group">
-      <label id="label-freq">Prepayment Frequency</label>
-      <select id="prepayFreq">
-        <option value="once">Once</option>
-        <option value="yearly">Yearly</option>
-      </select>
-    </div>
-    <div class="input-group">
-      <label id="label-extra">Extra Payment (₹)</label>
-      <input type="number" id="extraPayment" placeholder="e.g. 50000" />
-    </div>
-    <div class="input-group">
-      <label id="label-start">Start From Year</label>
-      <select id="startYear">
-        <option value="1">Year 1</option>
-        <option value="2">Year 2</option>
-        <option value="3">Year 3</option>
-        <option value="4">Year 4</option>
-      </select>
-    </div>
+  </div>
+</body>
+</html>
+  <canvas id="chart" style="margin-top: 30px; width: 100%; max-width: 100%; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px;"></canvas>
 
-    <div class="buttons">
-      <button onclick="calculateEMI()" id="btn-calculate">Calculate</button>
-      <button onclick="showMonthlySchedule()" id="btn-monthly">Monthly Table</button>
-      <button onclick="showCompareView()" id="btn-compare">Compare Loans</button>
-    </div>
-
-    <div class="summary">
-      <p><strong id="label-emi">EMI:</strong> ₹<span id="emi">0</span>/month</p>
-      <p><strong id="label-interest">Total Interest:</strong> ₹<span id="interest">0</span></p>
-      <p><strong id="label-payment">Total Payment:</strong> ₹<span id="payment">0</span></p>
-      <button onclick="sendReminder()" id="btn-reminder">📩 Send Reminder</button>
-    </div>
-
-    <div class="toggle-row">
-      <div>
-        <input type="radio" name="chartType" id="barChart" value="bar" checked onchange="toggleChartType()">
-        <label for="barChart" id="label-bar">Bar Chart</label>
-      </div>
-      <div>
-        <input type="radio" name="chartType" id="pieChart" value="doughnut" onchange="toggleChartType()">
-        <label for="pieChart" id="label-pie">Pie Chart</label>
-      </div>
-      <div>
-        <input type="radio" name="chartType" id="lineChart" value="line" onchange="toggleChartType()">
-        <label for="lineChart" id="label-line">Line Chart</label>
-      </div>
-    </div>
-
-    <canvas id="emiChart" height="200"></canvas>
+  <!-- Results Table -->
+  <div id="scheduleTable" style="margin-top: 30px; overflow-x: auto; display: none;">
+    <table border="1" style="width: 100%; text-align: center; border-collapse: collapse; background: rgba(255,255,255,0.03); color: white;">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Principal</th>
+          <th>Interest</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody id="scheduleBody"></tbody>
+    </table>
   </div>
 
-  <footer>
-    © 2025 Pratix Finance — All rights reserved
-  </footer>
-<script>
-const translations = {
-  en: {
-    title: "Advanced EMI Calculator",
-    "label-loan": "Loan Amount",
-    "label-rate": "Interest Rate (%)",
-    "label-term": "Loan Term (years)",
-    "label-freq": "Prepayment Frequency",
-    "label-extra": "Extra Payment (₹)",
-    "label-start": "Start From Year",
-    "btn-calculate": "Calculate",
-    "btn-monthly": "Monthly Table",
-    "btn-compare": "Compare Loans",
-    "label-emi": "EMI:",
-    "label-interest": "Total Interest:",
-    "label-payment": "Total Payment:",
-    "btn-reminder": "📩 Send Reminder",
-    "label-bar": "Bar Chart",
-    "label-pie": "Pie Chart",
-    "label-line": "Line Chart"
-  },
-  hi: {
-    title: "उन्नत EMI कैलकुलेटर",
-    "label-loan": "ऋण राशि",
-    "label-rate": "ब्याज दर (%)",
-    "label-term": "ऋण अवधि (वर्षों में)",
-    "label-freq": "पूर्वभुगतान आवृत्ति",
-    "label-extra": "अतिरिक्त भुगतान (₹)",
-    "label-start": "शुरुआत का वर्ष",
-    "btn-calculate": "गणना करें",
-    "btn-monthly": "मासिक तालिका",
-    "btn-compare": "ऋण तुलना",
-    "label-emi": "EMI:",
-    "label-interest": "कुल ब्याज:",
-    "label-payment": "कुल भुगतान:",
-    "btn-reminder": "📩 अनुस्मारक भेजें",
-    "label-bar": "बार चार्ट",
-    "label-pie": "पाई चार्ट",
-    "label-line": "लाइन चार्ट"
-  },
-  bn: {
-    title: "উন্নত EMI ক্যালকুলেটর",
-    "label-loan": "ঋণের পরিমাণ",
-    "label-rate": "সুদের হার (%)",
-    "label-term": "ঋণের মেয়াদ (বছর)",
-    "label-freq": "প্রিপেমেন্ট ফ্রিকোয়েন্সি",
-    "label-extra": "অতিরিক্ত পেমেন্ট (₹)",
-    "label-start": "কোন বছর থেকে শুরু",
-    "btn-calculate": "হিসাব করুন",
-    "btn-monthly": "মাসিক টেবিল",
-    "btn-compare": "ঋণ তুলনা",
-    "label-emi": "EMI:",
-    "label-interest": "মোট সুদ:",
-    "label-payment": "মোট পেমেন্ট:",
-    "btn-reminder": "📩 অনুস্মারক পাঠান",
-    "label-bar": "বার চার্ট",
-    "label-pie": "পাই চার্ট",
-    "label-line": "লাইন চার্ট"
-  },
-  fr: {
-    title: "Calculateur EMI Avancé",
-    "label-loan": "Montant du prêt",
-    "label-rate": "Taux d'intérêt (%)",
-    "label-term": "Durée du prêt (années)",
-    "label-freq": "Fréquence de paiement",
-    "label-extra": "Paiement supplémentaire (€)",
-    "label-start": "Commencer à partir de l'année",
-    "btn-calculate": "Calculer",
-    "btn-monthly": "Tableau mensuel",
-    "btn-compare": "Comparer les prêts",
-    "label-emi": "EMI:",
-    "label-interest": "Intérêt total:",
-    "label-payment": "Paiement total:",
-    "btn-reminder": "📩 Envoyer un rappel",
-    "label-bar": "Graphique à barres",
-    "label-pie": "Camembert",
-    "label-line": "Graphique en ligne"
-  },
-  ru: {
-    title: "Расширенный EMI калькулятор",
-    "label-loan": "Сумма кредита",
-    "label-rate": "Процентная ставка (%)",
-    "label-term": "Срок кредита (лет)",
-    "label-freq": "Частота досрочной выплаты",
-    "label-extra": "Доплата (₽)",
-    "label-start": "Начать с года",
-    "btn-calculate": "Рассчитать",
-    "btn-monthly": "Ежемесячная таблица",
-    "btn-compare": "Сравнить кредиты",
-    "label-emi": "EMI:",
-    "label-interest": "Общие проценты:",
-    "label-payment": "Общая выплата:",
-    "btn-reminder": "📩 Отправить напоминание",
-    "label-bar": "Столбчатая диаграмма",
-    "label-pie": "Круговая диаграмма",
-    "label-line": "Линейная диаграмма"
-  },
-  de: {
-    title: "Erweiterter EMI-Rechner",
-    "label-loan": "Darlehensbetrag",
-    "label-rate": "Zinssatz (%)",
-    "label-term": "Darlehenslaufzeit (Jahre)",
-    "label-freq": "Sonderzahlungsfrequenz",
-    "label-extra": "Zusatzzahlung (€)",
-    "label-start": "Ab welchem Jahr",
-    "btn-calculate": "Berechnen",
-    "btn-monthly": "Monatliche Tabelle",
-    "btn-compare": "Darlehen vergleichen",
-    "label-emi": "EMI:",
-    "label-interest": "Gesamtzinsen:",
-    "label-payment": "Gesamtzahlung:",
-    "btn-reminder": "📩 Erinnerung senden",
-    "label-bar": "Balkendiagramm",
-    "label-pie": "Kreisdiagramm",
-    "label-line": "Liniendiagramm"
-  },
-  es: {
-    title: "Calculadora EMI Avanzada",
-    "label-loan": "Monto del préstamo",
-    "label-rate": "Tasa de interés (%)",
-    "label-term": "Plazo del préstamo (años)",
-    "label-freq": "Frecuencia de prepago",
-    "label-extra": "Pago adicional (€)",
-    "label-start": "Comenzar desde el año",
-    "btn-calculate": "Calcular",
-    "btn-monthly": "Tabla mensual",
-    "btn-compare": "Comparar préstamos",
-    "label-emi": "EMI:",
-    "label-interest": "Interés total:",
-    "label-payment": "Pago total:",
-    "btn-reminder": "📩 Enviar recordatorio",
-    "label-bar": "Gráfico de barras",
-    "label-pie": "Gráfico circular",
-    "label-line": "Gráfico de líneas"
-  },
-  ko: {
-    title: "고급 EMI 계산기",
-    "label-loan": "대출 금액",
-    "label-rate": "이자율 (%)",
-    "label-term": "대출 기간 (년)",
-    "label-freq": "조기 상환 빈도",
-    "label-extra": "추가 납입 (₩)",
-    "label-start": "시작 연도",
-    "btn-calculate": "계산",
-    "btn-monthly": "월별 테이블",
-    "btn-compare": "대출 비교",
-    "label-emi": "EMI:",
-    "label-interest": "총 이자:",
-    "label-payment": "총 납입:",
-    "btn-reminder": "📩 알림 보내기",
-    "label-bar": "막대 차트",
-    "label-pie": "원형 차트",
-    "label-line": "선형 차트"
-  },
-  ja: {
-    title: "高度なEMI計算機",
-    "label-loan": "ローン金額",
-    "label-rate": "金利 (%)",
-    "label-term": "ローン期間（年）",
-    "label-freq": "前払いの頻度",
-    "label-extra": "追加支払い (¥)",
-    "label-start": "開始年",
-    "btn-calculate": "計算",
-    "btn-monthly": "月次表",
-    "btn-compare": "ローンを比較",
-    "label-emi": "EMI:",
-    "label-interest": "総利息:",
-    "label-payment": "総支払額:",
-    "btn-reminder": "📩 リマインダーを送信",
-    "label-bar": "棒グラフ",
-    "label-pie": "円グラフ",
-    "label-line": "折れ線グラフ"
-  }
-};
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-function changeLanguage(langCode) {
-  const langData = translations[langCode] || translations["en"];
-  for (const key in langData) {
-    const el = document.getElementById(key);
-    if (el) el.innerText = langData[key];
-  }
-  document.documentElement.lang = langCode;
-}
+  <!-- Language detection (Auto and Manual) -->
+  <script>
+    const userLang = navigator.language || navigator.userLanguage;
+    const langMap = {
+      en: "English",
+      hi: "हिन्दी",
+      bn: "বাংলা",
+      fr: "Français",
+      ru: "Русский",
+      de: "Deutsch",
+      es: "Español",
+      ko: "한국어",
+      ja: "日本語",
+    };
 
-function detectLanguage() {
-  const lang = navigator.language.slice(0, 2);
-  const supported = Object.keys(translations);
-  const matched = supported.includes(lang) ? lang : "en";
-  document.getElementById("languageSelector").value = matched;
-  changeLanguage(matched);
-}
-
-window.onload = detectLanguage;
-</script>
-<script>
-let currentChart = null;
-
-function calculateEMI() {
-  const loan = parseFloat(document.getElementById("loanAmount").value);
-  const rate = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
-  const term = parseFloat(document.getElementById("loanTerm").value) * 12;
-
-  if (isNaN(loan) || isNaN(rate) || isNaN(term)) return;
-
-  const emi = (loan * rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
-  const totalPayment = emi * term;
-  const totalInterest = totalPayment - loan;
-
-  document.getElementById("emiValue").innerText = "₹ " + emi.toFixed(2);
-  document.getElementById("interestValue").innerText = "₹ " + totalInterest.toFixed(2);
-  document.getElementById("totalValue").innerText = "₹ " + totalPayment.toFixed(2);
-
-  updateChart(loan, totalInterest);
-}
-
-function updateChart(principal, interest) {
-  const ctx = document.getElementById("chartCanvas").getContext("2d");
-  if (currentChart) currentChart.destroy();
-
-  const chartType = document.querySelector('input[name="chartType"]:checked').value;
-
-  currentChart = new Chart(ctx, {
-    type: chartType,
-    data: {
-      labels: ["Principal", "Interest"],
-      datasets: [{
-        label: "EMI Breakdown",
-        data: [principal, interest],
-        backgroundColor: ["#4caf50", "#f44336"],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: chartType !== 'bar' }
+    window.addEventListener("DOMContentLoaded", () => {
+      const shortLang = userLang.slice(0, 2);
+      if (langMap[shortLang]) {
+        document.getElementById("language").value = shortLang;
+        changeLanguage(shortLang);
       }
+    });
+  </script>
+<script>
+  const translations = {
+    en: { loan: "Loan Amount", rate: "Interest Rate (%)", term: "Loan Term (years)", freq: "Prepayment Frequency", extra: "Extra Payment (₹)", start: "Start From Year", emi: "EMI", interest: "Total Interest", payment: "Total Payment", calculate: "Calculate", table: "Monthly Table", compare: "Compare Loans", reminder: "📩 Send Reminder" },
+    hi: { loan: "ऋण राशि", rate: "ब्याज दर (%)", term: "ऋण अवधि (वर्ष)", freq: "प्रीपेमेंट आवृत्ति", extra: "अतिरिक्त भुगतान (₹)", start: "साल से शुरू करें", emi: "ईएमआई", interest: "कुल ब्याज", payment: "कुल भुगतान", calculate: "गणना करें", table: "मासिक तालिका", compare: "ऋण तुलना", reminder: "📩 अनुस्मारक भेजें" },
+    bn: { loan: "ঋণের পরিমাণ", rate: "সুদের হার (%)", term: "ঋণের মেয়াদ (বছর)", freq: "অগ্রিম পরিশোধ ফ্রিকোয়েন্সি", extra: "অতিরিক্ত অর্থপ্রদান (₹)", start: "বছর থেকে শুরু", emi: "ইএমআই", interest: "মোট সুদ", payment: "মোট অর্থপ্রদান", calculate: "গণনা করুন", table: "মাসিক সারণি", compare: "ঋণ তুলনা", reminder: "📩 রিমাইন্ডার পাঠান" },
+    fr: { loan: "Montant du prêt", rate: "Taux d'intérêt (%)", term: "Durée du prêt (ans)", freq: "Fréquence de remboursement anticipé", extra: "Paiement supplémentaire (₹)", start: "Commencer à partir de l'année", emi: "EMI", interest: "Intérêt total", payment: "Paiement total", calculate: "Calculer", table: "Table mensuelle", compare: "Comparer les prêts", reminder: "📩 Envoyer un rappel" },
+    ru: { loan: "Сумма кредита", rate: "Процентная ставка (%)", term: "Срок кредита (лет)", freq: "Частота досрочного погашения", extra: "Дополнительный платеж (₹)", start: "Начать с года", emi: "EMI", interest: "Общий интерес", payment: "Общая выплата", calculate: "Рассчитать", table: "Ежемесячная таблица", compare: "Сравнить кредиты", reminder: "📩 Отправить напоминание" },
+    de: { loan: "Darlehensbetrag", rate: "Zinssatz (%)", term: "Darlehenslaufzeit (Jahre)", freq: "Sondertilgungsfrequenz", extra: "Zusätzliche Zahlung (₹)", start: "Startjahr", emi: "EMI", interest: "Gesamtzinsen", payment: "Gesamtzahlung", calculate: "Berechnen", table: "Monatstabelle", compare: "Kredite vergleichen", reminder: "📩 Erinnerung senden" },
+    es: { loan: "Monto del préstamo", rate: "Tasa de interés (%)", term: "Plazo del préstamo (años)", freq: "Frecuencia de prepago", extra: "Pago extra (₹)", start: "Comenzar desde el año", emi: "EMI", interest: "Interés total", payment: "Pago total", calculate: "Calcular", table: "Tabla mensual", compare: "Comparar préstamos", reminder: "📩 Enviar recordatorio" },
+    ko: { loan: "대출 금액", rate: "이자율 (%)", term: "대출 기간 (년)", freq: "조기상환 빈도", extra: "추가 지불 (₹)", start: "시작 연도", emi: "EMI", interest: "총 이자", payment: "총 지급액", calculate: "계산", table: "월별 표", compare: "대출 비교", reminder: "📩 알림 보내기" },
+    ja: { loan: "ローン金額", rate: "金利 (%)", term: "ローン期間 (年)", freq: "繰上返済頻度", extra: "追加支払い (₹)", start: "年から開始", emi: "EMI", interest: "総利息", payment: "総支払い", calculate: "計算", table: "月次表", compare: "ローン比較", reminder: "📩 リマインダーを送信" },
+  };
+
+  function changeLanguage(lang) {
+    const t = translations[lang];
+    if (!t) return;
+
+    document.querySelector("label[for='loanAmount']").innerText = t.loan;
+    document.querySelector("label[for='interestRate']").innerText = t.rate;
+    document.querySelector("label[for='loanTerm']").innerText = t.term;
+    document.querySelector("label[for='prepayFreq']").innerText = t.freq;
+    document.querySelector("label[for='extraPayment']").innerText = t.extra;
+    document.querySelector("label[for='startYear']").innerText = t.start;
+
+    document.getElementById("calcBtn").innerText = t.calculate;
+    document.getElementById("tableBtn").innerText = t.table;
+    document.getElementById("compareBtn").innerText = t.compare;
+    document.getElementById("reminderBtn").innerText = t.reminder;
+
+    document.querySelector("#emiLabel").innerText = t.emi + ": ₹";
+    document.querySelector("#interestLabel").innerText = t.interest + ": ₹";
+    document.querySelector("#paymentLabel").innerText = t.payment + ": ₹";
+  }
+
+  document.getElementById("language").addEventListener("change", (e) => {
+    changeLanguage(e.target.value);
+  });
+
+  function calculateEMI() {
+    const P = +document.getElementById("loanAmount").value;
+    const R = +document.getElementById("interestRate").value / 1200;
+    const N = +document.getElementById("loanTerm").value * 12;
+    const prepay = +document.getElementById("extraPayment").value;
+    const freq = document.getElementById("prepayFreq").value;
+
+    if (!P || !R || !N) return;
+
+    let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+    let totalPayment = emi * N;
+    let totalInterest = totalPayment - P;
+
+    if (freq === "once") {
+      totalPayment -= prepay;
+      totalInterest -= prepay;
     }
+
+    document.getElementById("emiVal").innerText = Math.round(emi);
+    document.getElementById("interestVal").innerText = Math.round(totalInterest);
+    document.getElementById("paymentVal").innerText = Math.round(totalPayment);
+
+    drawChart(P, totalInterest, prepay);
+    generateSchedule(P, R, N);
+  }
+
+  function drawChart(principal, interest, prepay) {
+    const ctx = document.getElementById("chart").getContext("2d");
+    if (window.emiChart) window.emiChart.destroy();
+    window.emiChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["Principal", "Interest", "Prepayment"],
+        datasets: [{
+          data: [principal, interest, prepay],
+          backgroundColor: ["#6366f1", "#f97316", "#10b981"]
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
+    });
+  }
+
+  function generateSchedule(P, R, N) {
+    let balance = P;
+    let tbody = "";
+    for (let i = 1; i <= N; i++) {
+      const interest = balance * R;
+      const principal = ((P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1)) - interest;
+      balance -= principal;
+
+      tbody += `<tr>
+        <td>${i}</td>
+        <td>₹${principal.toFixed(0)}</td>
+        <td>₹${interest.toFixed(0)}</td>
+        <td>₹${balance.toFixed(0)}</td>
+      </tr>`;
+    }
+    document.getElementById("scheduleBody").innerHTML = tbody;
+    document.getElementById("scheduleTable").style.display = "block";
+  }
+
+  document.getElementById("calcBtn").addEventListener("click", calculateEMI);
+  document.getElementById("tableBtn").addEventListener("click", () => {
+    document.getElementById("scheduleTable").scrollIntoView({ behavior: "smooth" });
   });
-}
 
-document.getElementById("calculateBtn").addEventListener("click", calculateEMI);
-
-// Handle Chart Toggle
-document.querySelectorAll('input[name="chartType"]').forEach((radio) => {
-  radio.addEventListener("change", () => {
-    calculateEMI();
+  document.getElementById("compareBtn").addEventListener("click", () => {
+    alert("Compare feature coming soon!");
   });
-});
 
-// Language selector manual change
-document.getElementById("languageSelector").addEventListener("change", function () {
-  const selected = this.value;
-  changeLanguage(selected);
-});
+  document.getElementById("reminderBtn").addEventListener("click", () => {
+    alert("Reminder feature will be added manually later.");
+  });
+
+  window.onload = calculateEMI;
 </script>
 </body>
 </html>
