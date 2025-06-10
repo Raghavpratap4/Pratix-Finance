@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pratix Finance - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pratix Finance - Homepage</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     * {
@@ -12,35 +12,43 @@
       box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
     }
+
     body {
       background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
       color: #fff;
       padding: 2rem;
       overflow-x: hidden;
+      position: relative;
     }
+
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
     }
+
     .brand {
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
+
     .brand img {
       height: 36px;
     }
+
     .brand h1 {
       font-size: 1.4rem;
       font-weight: bold;
     }
+
     .top-controls {
       display: flex;
       gap: 1rem;
       align-items: center;
     }
+
     .lang-btn, .menu-btn {
       background: rgba(255,255,255,0.1);
       padding: 0.5rem;
@@ -51,49 +59,58 @@
       font-size: 1.1rem;
     }
 
-    /* Enhanced Glow */
-    .glow {
+    /* Glowing Bulb */
+    .glow-circle {
       position: absolute;
       top: 7rem;
-      left: 45%;
-      width: 180px;
-      height: 180px;
-      background: rgba(0, 200, 255, 0.25);
+      left: 47%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(0, 200, 255, 1) 40%, transparent 70%);
+      box-shadow:
+        0 0 20px rgba(0, 200, 255, 0.8),
+        0 0 40px rgba(0, 200, 255, 0.6),
+        0 0 80px rgba(0, 200, 255, 0.4);
       border-radius: 50%;
-      filter: blur(100px);
-      z-index: 0;
-      animation: pulse 3s ease-in-out infinite;
+      z-index: 1;
+      animation: glowPulse 3s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
     }
 
     main {
       margin-top: 3rem;
       position: relative;
+      z-index: 2;
     }
+
     h2 {
       font-size: 2.3rem;
       font-weight: bold;
       margin-bottom: 0.5rem;
-      position: relative;
-      z-index: 1;
     }
+
     p.tagline {
       color: #ccc;
       font-size: 1rem;
       margin-bottom: 2rem;
-      position: relative;
-      z-index: 1;
     }
+
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.5rem;
-      position: relative;
-      z-index: 1;
     }
+
     .card {
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(8px);
@@ -102,19 +119,23 @@
       transition: all 0.3s;
       border: 1px solid rgba(255,255,255,0.1);
     }
+
     .card:hover {
       transform: translateY(-4px);
       box-shadow: 0 0 20px rgba(0, 200, 255, 0.2);
     }
+
     .card h3 {
       font-size: 1.2rem;
       margin-top: 1rem;
     }
+
     .card p {
       color: #aaa;
       margin-top: 0.25rem;
       font-size: 0.9rem;
     }
+
     .launch {
       margin-top: 1rem;
       background: #007bff;
@@ -125,9 +146,11 @@
       cursor: pointer;
       font-weight: 500;
     }
+
     .launch:hover {
       background: #0066cc;
     }
+
     .soon {
       display: inline-block;
       margin-top: 1rem;
@@ -138,6 +161,7 @@
       font-weight: 600;
       font-size: 0.85rem;
     }
+
     @media (max-width: 600px) {
       .brand h1 {
         font-size: 1.2rem;
@@ -146,6 +170,8 @@
   </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
     <div class="brand">
       <img src="logo.png" alt="Pratix Logo" />
@@ -157,8 +183,10 @@
     </div>
   </header>
 
-  <div class="glow"></div>
+  <!-- Glowing Circle -->
+  <div class="glow-circle"></div>
 
+  <!-- Main Content -->
   <main>
     <h2>All Your Financial Tools,<br>One Place.</h2>
     <p class="tagline">Powerful, accurate, and easy-to-use calculators from Pratix Finance</p>
@@ -170,6 +198,7 @@
         <p>Quickly calculate EMIs</p>
         <a href="emi-calculator.html"><button class="launch">Launch Calculator →</button></a>
       </div>
+
       <div class="card">
         <img src="https://img.icons8.com/ios/50/combo-chart.png" width="36" />
         <h3>SIP Calculator</h3>
@@ -178,5 +207,6 @@
       </div>
     </section>
   </main>
+
 </body>
 </html>
