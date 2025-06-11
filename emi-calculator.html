@@ -10,7 +10,7 @@
     body {
       background-color: #0f172a;
       color: white;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
       padding: 20px;
     }
     .container {
@@ -156,36 +156,56 @@
   <div class="footer">© 2025 Pratix Finance — All rights reserved</div>
 </div>
 
-<!-- PDF SECTION -->
-<div id="pdfExportSection" style="padding: 40px; font-family: 'Segoe UI'; display: none; background: white; color: black;">
-  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
-    <img src="logo.png" style="height: 60px;">
-    <h1 style="font-size: 2rem; margin: 0;">
-      <span style="color: black; font-weight: 700;">Pratix</span>
-      <span style="background: linear-gradient(to right, #3b82f6, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Calculator</span>
+<!-- PDF EXPORT SECTION - Styled like the reference image -->
+<div id="pdfExportSection" style="padding: 45px 0 0 0; font-family: 'Segoe UI', 'Inter', Arial; display: none; background: #f9fafb; color: #222;">
+  <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 30px; margin-left: 48px;">
+    <img src="logo-colored.png" style="height: 70px; border-radius: 20px;">
+    <h1 style="font-size: 2.8rem; margin: 0; font-weight: 700; letter-spacing: -.5px;">
+      <span style="color: #222;">Pratix</span>
+      <span style="background: linear-gradient(to right, #3b82f6, #0ea5e9, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Calculator</span>
     </h1>
   </div>
 
-  <div style="display: flex; gap: 40px; background: #f3f4f6; padding: 20px; border-radius: 10px;">
-    <div style="flex: 1;">
-      <p><strong>Loan Amount:</strong> ₹<span id="pdf-loanAmount">0</span></p>
-      <p><strong>Annual Interest:</strong> <span id="pdf-interestRate">0</span>%</p>
-      <p><strong>Prepayment Amount:</strong> ₹<span id="pdf-prepaymentAmount">0</span></p>
+  <div style="display: flex; gap: 24px; justify-content: center; margin-bottom: 24px;">
+    <div style="background: #f1f5fb; border-radius: 16px; padding: 24px 28px 24px 32px; min-width: 370px; box-shadow: 0 2px 12px #0001;">
+      <div style="font-weight: 700; font-size: 1.23rem; margin-bottom: 10px;">
+        <span>Loan Amount:</span>
+        <span style="font-weight: 400; margin-left: 12px;">₹<span id="pdf-loanAmount">0</span></span>
+      </div>
+      <div style="font-weight: 700; font-size: 1.23rem; margin-bottom: 10px;">
+        <span>Annual Interest:</span>
+        <span style="font-weight: 400; margin-left: 12px;"><span id="pdf-interestRate">0</span>%</span>
+      </div>
+      <div style="font-weight: 700; font-size: 1.23rem;">
+        <span>Prepayment Amount:</span>
+        <span style="font-weight: 400; margin-left: 12px;">₹<span id="pdf-prepaymentAmount">0</span></span>
+      </div>
     </div>
-    <div style="flex: 1;">
-      <p><strong>Loan Tenure:</strong> <span id="pdf-loanTenure">0</span> <span id="pdf-tenureUnit">Years</span></p>
+    <div style="background: #f1f5fb; border-radius: 16px; padding: 24px 32px; min-width: 270px; box-shadow: 0 2px 12px #0001;">
+      <div style="font-weight: 700; font-size: 1.23rem;">
+        Annual Interest Rate: <span style="font-weight: 400; margin-left: 10px;"><span id="pdf-interestRate2"></span>%</span>
+      </div>
+      <div style="font-weight: 700; font-size: 1.23rem; margin-top: 10px;">
+        Loan Tenure <span style="font-weight: 400; margin-left: 10px;" id="pdf-loanTenure"></span> <span style="font-weight: 400;" id="pdf-tenureUnit"></span>
+      </div>
     </div>
   </div>
 
-  <div style="background: #f1f5f9; padding: 20px; border-radius: 10px; margin-top: 30px;">
-    <p><strong>Monthly EMI:</strong> ₹<span id="pdf-emi">0</span></p>
-    <p><strong>Total Interest:</strong> ₹<span id="pdf-totalInterest">0</span></p>
-    <p><strong>Total Payment:</strong> ₹<span id="pdf-totalPayment">0</span></p>
-    <p><strong>Interest Saved:</strong> ₹<span id="pdf-interestSaved">0</span></p>
+  <div style="background: #f4f8fd; border-radius: 16px; padding: 28px 40px; margin: 0 auto 24px auto; width: 92%; max-width: 700px;  box-shadow: 0 2px 12px #0001;">
+    <div style="display: flex; flex-direction: column; gap: 20px; font-size: 1.28rem;">
+      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Monthly EMI:</span><span>₹<span id="pdf-emi">0</span></span></div>
+      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Total Interest:</span><span>₹<span id="pdf-totalInterest">0</span></span></div>
+      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Total Payment:</span><span>₹<span id="pdf-totalPayment">0</span></span></div>
+      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Interest Saved:</span><span>₹<span id="pdf-interestSaved">0</span></span></div>
+    </div>
   </div>
 
-  <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
-    <canvas id="pdfChart" width="400" height="300"></canvas>
+  <div style="background: #fff; border-radius: 16px; padding: 24px 0 10px 0; margin: 0 auto 30px auto; width: 92%; max-width: 700px; box-shadow: 0 2px 12px #0001; border:1.5px solid #e5e7eb;">
+    <canvas id="pdfChart" width="340" height="260" style="display: block; margin: 0 auto;"></canvas>
+    <div style="display: flex; gap: 25px; justify-content: center; margin-top: 24px; font-weight:700; font-size:1.14rem;">
+      <span style="display: flex; align-items: center;"><span style="width:18px;height:18px;display:inline-block;background:linear-gradient(90deg,#3b82f6,#a21caf 80%);border-radius:2px;margin-right:8px;"></span> Emi Interest</span>
+      <span style="display: flex; align-items: center;"><span style="width:18px;height:18px;display:inline-block;background:#facc15;border-radius:2px;margin-right:8px;"></span> Total Interest</span>
+    </div>
   </div>
 </div>
 
@@ -285,10 +305,11 @@ function showSchedule(schedule) {
     </tbody>`;
 }
 
-// --- FIXED PDF EXPORT FUNCTION ---
+// --- FIXED PDF EXPORT FUNCTION, MATCHING THE REFERENCE IMAGE ---
 function generateVisualPDF() {
   document.getElementById("pdf-loanAmount").textContent = document.getElementById("loanAmount").value;
   document.getElementById("pdf-interestRate").textContent = document.getElementById("interestRate").value;
+  document.getElementById("pdf-interestRate2").textContent = document.getElementById("interestRate").value;
   document.getElementById("pdf-prepaymentAmount").textContent = document.getElementById("prepaymentAmount").value || 0;
   document.getElementById("pdf-loanTenure").textContent = document.getElementById("loanTenure").value;
   document.getElementById("pdf-tenureUnit").textContent = document.getElementById("tenureUnit").value;
@@ -297,34 +318,46 @@ function generateVisualPDF() {
   document.getElementById("pdf-totalPayment").textContent = document.getElementById("totalPayment").textContent;
   document.getElementById("pdf-interestSaved").textContent = document.getElementById("interestSaved").textContent;
 
-  // Chart for PDF
-  const ctx = document.getElementById('pdfChart').getContext('2d');
-  // Destroy previous chart if exists
+  // Show the PDF section
+  const pdfSection = document.getElementById("pdfExportSection");
+  pdfSection.style.display = "block";
+
+  // Chart for PDF with gradient
+  const pdfChartCanvas = document.getElementById('pdfChart');
+  const ctx = pdfChartCanvas.getContext('2d');
   if (window.pdfChartInstance) window.pdfChartInstance.destroy();
+
+  // Gradient for 'Emi Interest' slice
+  const gradient = ctx.createLinearGradient(0, 0, pdfChartCanvas.width, pdfChartCanvas.height);
+  gradient.addColorStop(0, '#3b82f6');
+  gradient.addColorStop(1, '#a21caf');
+
   window.pdfChartInstance = new Chart(ctx, {
     type: 'pie',
     data: {
-      labels: ['Total Interest', 'EMI Interest'],
+      labels: ['Emi Interest', 'Total Interest'],
       datasets: [{
         label: 'EMI Breakdown',
         data: [
-          parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0,
           parseFloat(document.getElementById("totalPayment").textContent.replace(/[^0-9.]/g, "")) -
+          parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0,
           parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0
         ],
-        backgroundColor: ['#facc15', '#3b82f6']
+        backgroundColor: [
+          gradient,
+          '#facc15'
+        ]
       }]
     },
     options: {
       responsive: false,
-      plugins: { legend: { display: false } }
+      plugins: {
+        legend: { display: false }
+      }
     }
   });
 
-  // Show the PDF section before export
-  const pdfSection = document.getElementById("pdfExportSection");
-  pdfSection.style.display = "block";
-
+  // Wait for chart to render, then export PDF
   setTimeout(() => {
     html2pdf().set({
       margin: 0.5,
@@ -333,10 +366,9 @@ function generateVisualPDF() {
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     }).from(pdfSection).save().then(() => {
-      // Hide the section again after export
       pdfSection.style.display = "none";
     });
-  }, 500);
+  }, 700); // allow chart to render
 }
 
 window.onload = () => {
