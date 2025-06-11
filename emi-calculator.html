@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>EMI Calculator - Pratix Finance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EMI Calculator Final Fixed</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
@@ -11,238 +11,328 @@
       background-color: #0f172a;
       color: white;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
       padding: 20px;
     }
-
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
-      background-color: #1e293b;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #38bdf8;
     }
-
     h1 {
-      font-size: 2rem;
       text-align: center;
+      color: #38bdf8;
+      font-size: 2.2rem;
+      font-weight: bold;
       margin-bottom: 1rem;
       background: linear-gradient(to right, #38bdf8, #facc15);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
+    label { margin-top: 1rem; display: block; font-weight: bold; }
+    input, select {
+      width: 100%; padding: 0.8rem; margin-top: 0.5rem;
+      border: none; border-radius: 8px; background: #334155;
+      color: white; font-size: 1rem;
     }
-
     button {
-      background-color: #3b82f6;
-      color: white;
-      cursor: pointer;
+      background: #38bdf8; color: #0f172a; padding: 1rem; border: none;
+      width: 100%; margin-top: 1.5rem; font-size: 1.1rem;
+      font-weight: bold; border-radius: 8px; cursor: pointer;
     }
-
     .results, .schedule {
-      background-color: #334155;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 20px;
+      margin-top: 2rem; background: #1e293b; padding: 1rem; border-radius: 10px;
     }
-
     canvas {
-      background-color: white;
       margin-top: 20px;
-      border-radius: 8px;
+      background: #0f172a;
+      border-radius: 10px;
+      height: 220px !important;
+      max-width: 100%;
     }
-
-    .footer {
+    table {
+      width: 100%; margin-top: 1rem;
+      border-collapse: collapse;
+      color: white;
+    }
+    th, td {
+      padding: 10px;
       text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
+      border-bottom: 1px solid #334155;
+    }
+    th {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
       color: #94a3b8;
+    }
+    .prepayment-section {
+      display: none;
+      margin-top: 10px;
+    }
+    .flex-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div style="text-align: center;">
-      <img src="logo.png" style="height: 60px;">
-      <h1>Pratix EMI Calculator</h1>
-    </div>
-    <label>Loan Amount (₹)</label>
-    <input type="number" id="loanAmount" />
+<body class="dark-mode">
 
-    <label>Annual Interest Rate (%)</label>
-    <input type="number" id="interestRate" />
+<!-- Theme toggle -->
+<div style="position: absolute; top: 20px; right: 20px;">
+  <button id="themeToggle" onclick="toggleTheme()" style="background:none;border:none;font-size:24px;cursor:pointer;color:white;">⭐</button>
+</div>
 
-    <label>Loan Tenure</label>
-    <input type="number" id="loanTenure" />
-    <select id="tenureUnit">
-      <option value="Years">Years</option>
-      <option value="Months">Months</option>
-    </select>
-
-    <label>Prepayment Amount (₹)</label>
-    <input type="number" id="prepaymentAmount" />
-
-    <button onclick="calculateEMI(); buttonClickEffect(this);">Calculate EMI</button>
-
-    <div class="results">
-      <p><strong>Monthly EMI:</strong> ₹<span id="emi">0</span></p>
-      <p><strong>Total Interest:</strong> ₹<span id="totalInterest">0</span></p>
-      <p><strong>Total Payment:</strong> ₹<span id="totalPayment">0</span></p>
-      <p><strong>Interest Saved:</strong> ₹<span id="interestSaved">0</span></p>
-    </div>
-
-    <canvas id="chart" width="400" height="250"></canvas>
-
-    <!-- PDF Export Section (Hidden but styled) -->
-    <div id="pdfExportSection" style="padding: 30px; display: none; background: white; color: black; font-family: 'Segoe UI', sans-serif;">
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
-        <img src="logo.png" style="height: 60px;">
-        <h1 style="font-size: 2rem; margin: 0;">
-          <span style="color: black; font-weight: 700;">Pratix</span>
-          <span style="background: linear-gradient(to right, #3b82f6, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Calculator</span>
-        </h1>
-      </div>
-
-      <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 30px; font-size: 16px; font-weight: 500; background: #f3f4f6; padding: 20px; border-radius: 10px;">
-        <div style="flex: 1; min-width: 250px;">
-          <p><strong>Loan Amount:</strong> ₹<span id="pdf-loanAmount">0</span></p>
-          <p><strong>Interest Rate:</strong> <span id="pdf-interestRate">0</span>%</p>
-          <p><strong>Prepayment:</strong> ₹<span id="pdf-prepaymentAmount">0</span></p>
-        </div>
-        <div style="flex: 1; min-width: 250px;">
-          <p><strong>Tenure:</strong> <span id="pdf-loanTenure">0</span> <span id="pdf-tenureUnit">Years</span></p>
-        </div>
-      </div>
-
-      <div style="background: #e2e8f0; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-        <p><strong>Monthly EMI:</strong> ₹<span id="pdf-emi">0</span></p>
-        <p><strong>Total Interest:</strong> ₹<span id="pdf-totalInterest">0</span></p>
-        <p><strong>Total Payment:</strong> ₹<span id="pdf-totalPayment">0</span></p>
-        <p><strong>Interest Saved:</strong> ₹<span id="pdf-interestSaved">0</span></p>
-      </div>
-
-      <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
-        <canvas id="pdfChart" width="400" height="300" style="margin: 0 auto; display: block;"></canvas>
-      </div>
-    </div>
-
-    <div style="text-align: center; margin: 30px 0;">
-      <button onclick="generateVisualPDF()" style="padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 6px; font-size: 16px;">
-        📄 Download Styled PDF
-      </button>
-    </div>
-  </div> <!-- close container -->
-
-  <div class="footer">
-    © 2025 Pratix Finance — All rights reserved
+<div class="container">
+  <div style="text-align: center; margin-bottom: 1rem;">
+    <img src="logo.png" alt="Logo" style="height: 60px; vertical-align: middle; margin-right: 10px;">
+    <h1 style="display: inline-block; vertical-align: middle;" id="title">EMI Calculator</h1>
   </div>
 
-  <script>
-    function calculateEMI() {
-      const principal = parseFloat(document.getElementById("loanAmount").value);
-      const rate = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
-      let tenure = parseInt(document.getElementById("loanTenure").value);
-      const unit = document.getElementById("tenureUnit").value;
-      const prepay = parseFloat(document.getElementById("prepaymentAmount").value) || 0;
+  <label>Loan Amount (₹)</label>
+  <input type="number" id="loanAmount" value="500000" />
 
-      if (unit === "Years") tenure *= 12;
+  <label>Annual Interest Rate (%)</label>
+  <input type="number" id="interestRate" value="8.5" />
 
-      const emi = (principal * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-      const totalPayment = emi * tenure - prepay;
-      const totalInterest = totalPayment - principal;
-      const savedInterest = prepay > 0 ? prepay * rate : 0;
+  <label>Loan Tenure</label>
+  <div class="flex-row">
+    <input type="number" id="loanTenure" value="5" />
+    <select id="tenureUnit">
+      <option value="years" selected>Years</option>
+      <option value="months">Months</option>
+    </select>
+  </div>
 
-      document.getElementById("emi").textContent = emi.toFixed(2);
-      document.getElementById("totalInterest").textContent = totalInterest.toFixed(2);
-      document.getElementById("totalPayment").textContent = (totalPayment + prepay).toFixed(2);
-      document.getElementById("interestSaved").textContent = savedInterest.toFixed(2);
+  <label>Enable Prepayment?</label>
+  <select id="enablePrepayment" onchange="togglePrepay()">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
 
-      renderChart(totalInterest, totalPayment);
+  <div class="prepayment-section" id="prepaymentSection">
+    <label>Prepayment Amount (₹)</label>
+    <input type="number" id="prepaymentAmount" value="100000" />
+    <label>Prepay After (Months)</label>
+    <input type="number" id="prepaymentMonth" value="12" />
+  </div>
+
+  <label>Recurring Prepayment Amount (₹/year)</label>
+  <input type="number" id="recurringPrepay" value="0" />
+
+  <label>Chart Type</label>
+  <select id="chartType" onchange="renderChart()">
+    <option value="pie">Pie</option>
+    <option value="bar">Bar</option>
+    <option value="line">Line</option>
+  </select>
+
+  <button onclick="calculateEMI()">Calculate EMI</button>
+
+  <div class="results">
+    <p><strong>Monthly EMI:</strong> ₹<span id="monthlyEmi">0</span></p>
+    <p><strong>Total Interest:</strong> ₹<span id="totalInterest">0</span></p>
+    <p><strong>Total Payment:</strong> ₹<span id="totalPayment">0</span></p>
+    <p><strong>Interest Saved:</strong> ₹<span id="interestSaved">0</span></p>
+    <p><strong>Tenure Reduced:</strong> <span id="tenureReduced">0</span> months</p>
+  </div>
+
+  <div style="max-width: 450px; margin: 20px auto;">
+    <canvas id="emiChart"></canvas>
+  </div>
+
+  <div class="schedule">
+    <h3>EMI Schedule</h3>
+    <table id="scheduleTable"></table>
+  </div>
+
+  <div class="footer">© 2025 Pratix Finance — All rights reserved</div>
+</div>
+
+<!-- PDF SECTION -->
+<div id="pdfExportSection" style="padding: 40px; font-family: 'Segoe UI'; display: none; background: white; color: black;">
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+    <img src="logo.png" style="height: 60px;">
+    <h1 style="font-size: 2rem; margin: 0;">
+      <span style="color: black; font-weight: 700;">Pratix</span>
+      <span style="background: linear-gradient(to right, #3b82f6, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Calculator</span>
+    </h1>
+  </div>
+
+  <div style="display: flex; gap: 40px; background: #f3f4f6; padding: 20px; border-radius: 10px;">
+    <div style="flex: 1;">
+      <p><strong>Loan Amount:</strong> ₹<span id="pdf-loanAmount">0</span></p>
+      <p><strong>Annual Interest:</strong> <span id="pdf-interestRate">0</span>%</p>
+      <p><strong>Prepayment Amount:</strong> ₹<span id="pdf-prepaymentAmount">0</span></p>
+    </div>
+    <div style="flex: 1;">
+      <p><strong>Loan Tenure:</strong> <span id="pdf-loanTenure">0</span> <span id="pdf-tenureUnit">Years</span></p>
+    </div>
+  </div>
+
+  <div style="background: #f1f5f9; padding: 20px; border-radius: 10px; margin-top: 30px;">
+    <p><strong>Monthly EMI:</strong> ₹<span id="pdf-emi">0</span></p>
+    <p><strong>Total Interest:</strong> ₹<span id="pdf-totalInterest">0</span></p>
+    <p><strong>Total Payment:</strong> ₹<span id="pdf-totalPayment">0</span></p>
+    <p><strong>Interest Saved:</strong> ₹<span id="pdf-interestSaved">0</span></p>
+  </div>
+
+  <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+    <canvas id="pdfChart" width="400" height="300"></canvas>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <button onclick="generateVisualPDF()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 16px;">
+    📄 Download Styled PDF
+  </button>
+</div>
+
+<script>
+function togglePrepay() {
+  document.getElementById("prepaymentSection").style.display =
+    document.getElementById("enablePrepayment").value === "yes" ? "block" : "none";
+}
+
+let chartInstance = null;
+function renderChart(principal = 0, interest = 0) {
+  const type = document.getElementById("chartType").value;
+  const ctx = document.getElementById("emiChart").getContext("2d");
+  if (chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
+    type: type,
+    data: {
+      labels: ['Principal', 'Interest'],
+      datasets: [{
+        label: 'Amount (₹)',
+        data: [principal, interest],
+        backgroundColor: ['#38bdf8', '#facc15']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: 'white' } } },
+      scales: (type === 'pie') ? {} : {
+        x: { ticks: { color: 'white' }, grid: { color: '#334155' }},
+        y: { ticks: { color: 'white' }, grid: { color: '#334155' }}
+      }
     }
+  });
+}
 
-    function renderChart(interest, total) {
-      const ctx = document.getElementById("chart").getContext("2d");
-      if (window.myChart) window.myChart.destroy();
-      window.myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ["Interest", "Principal"],
-          datasets: [{
-            data: [interest, total - interest],
-            backgroundColor: ['#facc15', '#3b82f6']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }
-      });
+function calculateEMI() {
+  const P = parseFloat(document.getElementById("loanAmount").value);
+  const R = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
+  const rawTenure = parseInt(document.getElementById("loanTenure").value);
+  const unit = document.getElementById("tenureUnit").value;
+  const originalN = unit === "years" ? rawTenure * 12 : rawTenure;
+  let N = originalN;
+  const enablePrepay = document.getElementById("enablePrepayment").value === "yes";
+  const prepayAmount = enablePrepay ? parseFloat(document.getElementById("prepaymentAmount").value || 0) : 0;
+  const prepayMonth = enablePrepay ? parseInt(document.getElementById("prepaymentMonth").value || 0) : 0;
+  const recurringPrepay = parseFloat(document.getElementById("recurringPrepay").value || 0);
+
+  const EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+  let balance = P;
+  let schedule = [];
+  let totalInterest = 0;
+
+  for (let i = 1; i <= N; i++) {
+    const interest = balance * R;
+    const principal = EMI - interest;
+    balance -= principal;
+
+    if (i === prepayMonth) balance -= prepayAmount;
+    if (recurringPrepay > 0 && i % 12 === 0) balance -= recurringPrepay;
+    if (balance < 0) balance = 0;
+
+    totalInterest += interest;
+    schedule.push({ month: i, emi: EMI.toFixed(2), principal: principal.toFixed(2), interest: interest.toFixed(2), balance: balance.toFixed(2) });
+    if (balance <= 0) break;
+  }
+
+  const totalPayment = EMI * schedule.length + (prepayMonth > 0 ? prepayAmount : 0);
+  const originalEMI = (P * R * Math.pow(1 + R, originalN)) / (Math.pow(1 + R, originalN) - 1);
+  const originalTotalPayment = originalEMI * originalN;
+  const interestSaved = Math.max(0, originalTotalPayment - totalPayment);
+  const tenureReduced = Math.max(0, originalN - schedule.length);
+
+  document.getElementById("monthlyEmi").innerText = EMI.toFixed(2);
+  document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
+  document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
+  document.getElementById("interestSaved").innerText = interestSaved.toFixed(2);
+  document.getElementById("tenureReduced").innerText = tenureReduced;
+
+  renderChart(P, totalInterest);
+  showSchedule(schedule);
+}
+
+function showSchedule(schedule) {
+  const table = document.getElementById("scheduleTable");
+  table.innerHTML = `
+    <thead>
+      <tr><th>Month</th><th>EMI (₹)</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>
+    </thead>
+    <tbody>
+      ${schedule.map(r => `<tr><td>${r.month}</td><td>${r.emi}</td><td>${r.principal}</td><td>${r.interest}</td><td>${r.balance}</td></tr>`).join('')}
+    </tbody>`;
+}
+
+function generateVisualPDF() {
+  document.getElementById("pdf-loanAmount").textContent = document.getElementById("loanAmount").value;
+  document.getElementById("pdf-interestRate").textContent = document.getElementById("interestRate").value;
+  document.getElementById("pdf-prepaymentAmount").textContent = document.getElementById("prepaymentAmount").value || 0;
+  document.getElementById("pdf-loanTenure").textContent = document.getElementById("loanTenure").value;
+  document.getElementById("pdf-tenureUnit").textContent = document.getElementById("tenureUnit").value;
+  document.getElementById("pdf-emi").textContent = document.getElementById("monthlyEmi").textContent;
+  document.getElementById("pdf-totalInterest").textContent = document.getElementById("totalInterest").textContent;
+  document.getElementById("pdf-totalPayment").textContent = document.getElementById("totalPayment").textContent;
+  document.getElementById("pdf-interestSaved").textContent = document.getElementById("interestSaved").textContent;
+
+  const ctx = document.getElementById('pdfChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Total Interest', 'EMI Interest'],
+      datasets: [{
+        label: 'EMI Breakdown',
+        data: [
+          parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0,
+          parseFloat(document.getElementById("totalPayment").textContent.replace(/[^0-9.]/g, "")) -
+          parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0
+        ],
+        backgroundColor: ['#facc15', '#3b82f6']
+      }]
+    },
+    options: {
+      responsive: false,
+      plugins: { legend: { display: false } }
     }
+  });
 
-    function buttonClickEffect(btn) {
-      const originalColor = btn.style.backgroundColor;
-      btn.style.backgroundColor = '#22c55e';
-      setTimeout(() => {
-        btn.style.backgroundColor = originalColor;
-      }, 300);
-    }
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 0.5,
+      filename: 'Pratix_EMI_Report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(document.getElementById("pdfExportSection")).save();
+  }, 500);
+}
 
-    function generateVisualPDF() {
-      document.getElementById("pdf-loanAmount").textContent = document.getElementById("loanAmount").value;
-      document.getElementById("pdf-interestRate").textContent = document.getElementById("interestRate").value;
-      document.getElementById("pdf-prepaymentAmount").textContent = document.getElementById("prepaymentAmount").value || 0;
-      document.getElementById("pdf-loanTenure").textContent = document.getElementById("loanTenure").value;
-      document.getElementById("pdf-tenureUnit").textContent = document.getElementById("tenureUnit").value;
-      document.getElementById("pdf-emi").textContent = document.getElementById("emi").textContent;
-      document.getElementById("pdf-totalInterest").textContent = document.getElementById("totalInterest").textContent;
-      document.getElementById("pdf-totalPayment").textContent = document.getElementById("totalPayment").textContent;
-      document.getElementById("pdf-interestSaved").textContent = document.getElementById("interestSaved").textContent;
+window.onload = () => {
+  togglePrepay();
+  calculateEMI();
+};
+</script>
 
-      const ctx = document.getElementById("pdfChart").getContext("2d");
-      new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ['Total Interest', 'Principal'],
-          datasets: [{
-            data: [
-              parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0,
-              parseFloat(document.getElementById("totalPayment").textContent.replace(/[^0-9.]/g, "")) -
-              parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0
-            ],
-            backgroundColor: ['#facc15', '#3b82f6']
-          }]
-        },
-        options: {
-          responsive: false,
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-
-      setTimeout(() => {
-        html2pdf().set({
-          margin: 0.5,
-          filename: 'Pratix_EMI_Report.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        }).from(document.getElementById("pdfExportSection")).save();
-      }, 1500);
-    }
-  </script>
 </body>
 </html>
