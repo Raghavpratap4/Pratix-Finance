@@ -230,6 +230,22 @@ function downloadSchedulePDF() {
       <span style="color: #222;">Pratix</span>
       <span style="background: linear-gradient(to right, #3b82f6, #0ea5e9, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Calculator</span>
     </h1>
+    <!-- EMI Schedule PDF Table -->
+<div style="background: #fff; padding: 24px; margin: 30px auto 20px auto; width: 92%; max-width: 700px; border-radius: 14px; box-shadow: 0 2px 12px #0001;">
+  <h3 style="margin-bottom: 16px; font-weight: 700; font-size: 1.3rem; color: #1e293b;">EMI Schedule</h3>
+  <table id="pdfScheduleTable" style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
+    <thead style="background: #f3f4f6;">
+      <tr>
+        <th style="padding: 8px; border: 1px solid #e5e7eb;">Month</th>
+        <th style="padding: 8px; border: 1px solid #e5e7eb;">EMI</th>
+        <th style="padding: 8px; border: 1px solid #e5e7eb;">Principal</th>
+        <th style="padding: 8px; border: 1px solid #e5e7eb;">Interest</th>
+        <th style="padding: 8px; border: 1px solid #e5e7eb;">Balance</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
   </div>
 
   <div style="display: flex; gap: 24px; justify-content: center; margin-bottom: 24px;">
@@ -479,12 +495,19 @@ window.onload = () => {
 
 function downloadSchedulePDF() {
   const scheduleTable = document.getElementById("scheduleTable");
-  const pdfScheduleTable = document.getElementById("pdfScheduleTable").querySelector("tbody");
-  pdfScheduleTable.innerHTML = "";
+  const pdfTable = document.getElementById("pdfScheduleTable")?.querySelector("tbody");
 
+  if (!scheduleTable || !pdfTable) {
+    alert("Please calculate EMI first.");
+    return;
+  }
+
+  pdfTable.innerHTML = "";
   for (let row of scheduleTable.querySelectorAll("tbody tr")) {
-    const cells = Array.from(row.cells).map(cell => `<td style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">${cell.textContent}</td>`);
-    pdfScheduleTable.innerHTML += `<tr>${cells.join("")}</tr>`;
+    const cells = Array.from(row.cells).map(cell =>
+      `<td style='padding: 8px; border: 1px solid #e5e7eb; text-align: center;'>${cell.textContent}</td>`
+    );
+    pdfTable.innerHTML += `<tr>${cells.join("")}</tr>`;
   }
 
   const pdfSection = document.getElementById("pdfExportSection");
@@ -508,6 +531,7 @@ function downloadSchedulePDF() {
     });
   }, 1000);
 }
+
 
 </script>
 
