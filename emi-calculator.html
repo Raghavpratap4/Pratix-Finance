@@ -390,7 +390,7 @@ function showSchedule(schedule) {
 }
 
 function generateVisualPDF() {
-  // 1. Update PDF content with current results
+  // Fill PDF data
   document.getElementById("pdf-loanAmount").textContent = parseFloat(document.getElementById("loanAmount").value).toLocaleString('en-IN');
   document.getElementById("pdf-interestRate").textContent = parseFloat(document.getElementById("interestRate").value).toFixed(1);
   document.getElementById("pdf-interestRate2").textContent = parseFloat(document.getElementById("interestRate").value).toFixed(1);
@@ -398,94 +398,36 @@ function generateVisualPDF() {
   document.getElementById("pdf-loanTenure").textContent = document.getElementById("loanTenure").value;
   document.getElementById("pdf-tenureUnit").textContent = document.getElementById("tenureUnit").value;
 
-  document.getElementById("pdf-emi").textContent = parseFloat(document.getElementById("monthlyEmi").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  document.getElementById("pdf-totalInterest").textContent = parseFloat(document.getElementById("totalInterest").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  document.getElementById("pdf-totalPayment").textContent = parseFloat(document.getElementById("totalPayment").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  document.getElementById("pdf-interestSaved").textContent = parseFloat(document.getElementById("interestSaved").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  document.getElementById("pdf-emi").textContent = document.getElementById("monthlyEmi").textContent;
+  document.getElementById("pdf-totalInterest").textContent = document.getElementById("totalInterest").textContent;
+  document.getElementById("pdf-totalPayment").textContent = document.getElementById("totalPayment").textContent;
+  document.getElementById("pdf-interestSaved").textContent = document.getElementById("interestSaved").textContent;
 
+  // Show PDF section off-screen
   const pdfSection = document.getElementById("pdfExportSection");
+  pdfSection.style.display = "block";
+  pdfSection.style.position = "absolute";
+  pdfSection.style.left = "-9999px";
+  pdfSection.style.top = "0";
 
-  // 2. Temporarily show the PDF section off-screen to allow rendering
-  pdfSection.style.position = 'absolute';
-  pdfSection.style.left = '-9999px';
-  pdfSection.style.top = '-9999px';
-  pdfSection.style.display = 'block';
-
-  // 3. Render the PDF Chart
-  const pdfChartCanvas = document.getElementById('pdfChart');
-  const ctx = pdfChartCanvas.getContext('2d');
-
-  if (pdfChartInstance) {
-    pdfChartInstance.destroy();
-  }
-
-  const totalPaymentValue = parseFloat(document.getElementById("totalPayment").textContent.replace(/[^0-9.]/g, ""));
-  const totalInterestValue = parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, ""));
-  const principalAmount = (totalPaymentValue - totalInterestValue) || 0;
-
-  const gradient = ctx.createLinearGradient(0, 0, pdfChartCanvas.width, pdfChartCanvas.height);
-  gradient.addColorStop(0, '#3b82f6');
-  gradient.addColorStop(1, '#a21caf');
-
-  pdfChartInstance = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: ['Emi Interest', 'Total Interest'],
-      datasets: [{
-        label: 'EMI Breakdown',
-        data: [
-          principalAmount,
-          totalInterestValue
-        ],
-        backgroundColor: [
-          gradient,
-          '#facc15'
-        ],
-        borderWidth: 1,
-        borderColor: '#f9fafb'
-      }]
-    },
-    options: {
-      responsive: false,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false }
-      },
-      cutout: '0%',
-      layout: {
-        padding: 0
-      }
-    }
-  });
-
-  // 4. Wait for chart to render and browser to layout the content
+  // Wait for content to render
   setTimeout(() => {
     html2pdf().set({
       margin: 0.5,
       filename: 'Pratix_EMI_Report.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        logging: true,
-        // foreignObjectRendering: true // Keep this commented unless you need it for specific SVG/foreignObject issues
-      },
+      html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     }).from(pdfSection).save().then(() => {
-      // 5. Hide the PDF section again after generation
+      // Clean up
       pdfSection.style.display = "none";
-      pdfSection.style.position = '';
-      pdfSection.style.left = '';
-      pdfSection.style.top = '';
-
-      if (pdfChartInstance) {
-          pdfChartInstance.destroy();
-          pdfChartInstance = null;
-      }
+      pdfSection.style.position = "";
+      pdfSection.style.left = "";
+      pdfSection.style.top = "";
     });
-  }, 1000); // 1 second delay
+  }, 1000);
 }
+
 
 // This ensures calculateEMI runs on page load to populate initial data
 window.onload = () => {
@@ -502,6 +444,7 @@ function downloadSchedulePDF() {
     return;
   }
 
+  // Copy EMI rows to PDF table
   pdfTable.innerHTML = "";
   for (let row of scheduleTable.querySelectorAll("tbody tr")) {
     const cells = Array.from(row.cells).map(cell =>
@@ -511,10 +454,10 @@ function downloadSchedulePDF() {
   }
 
   const pdfSection = document.getElementById("pdfExportSection");
-  pdfSection.style.position = 'absolute';
-  pdfSection.style.left = '-9999px';
-  pdfSection.style.top = '-9999px';
-  pdfSection.style.display = 'block';
+  pdfSection.style.display = "block";
+  pdfSection.style.position = "absolute";
+  pdfSection.style.left = "-9999px";
+  pdfSection.style.top = "0";
 
   setTimeout(() => {
     html2pdf().set({
@@ -525,9 +468,9 @@ function downloadSchedulePDF() {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     }).from(pdfSection).save().then(() => {
       pdfSection.style.display = "none";
-      pdfSection.style.position = '';
-      pdfSection.style.left = '';
-      pdfSection.style.top = '';
+      pdfSection.style.position = "";
+      pdfSection.style.left = "";
+      pdfSection.style.top = "";
     });
   }, 1000);
 }
