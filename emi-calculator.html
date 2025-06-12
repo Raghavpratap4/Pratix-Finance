@@ -1,286 +1,941 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EMI Calculator Final Fixed</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js">
+let isDark = true;
 
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.style.backgroundColor = isDark ? '#0f172a' : '#f0f0f0';
+  document.body.style.color = isDark ? 'white' : '#222';
+  document.querySelectorAll("input, select, button").forEach(el => {
+    el.style.background = isDark ? '#334155' : '#fff';
+    el.style.color = isDark ? 'white' : '#000';
+    el.style.border = isDark ? 'none' : '1px solid #ccc';
+  });
+  document.querySelectorAll("canvas").forEach(c => {
+    c.style.background = isDark ? '#0f172a' : '#fff';
+  });
+}
+
+
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.classList.contains("dark-mode");
+  body.classList.toggle("dark-mode", !isDark);
+  body.classList.toggle("light-mode", isDark);
+}
+
+
+function buttonClickEffect(btn) {
+  const originalColor = btn.style.backgroundColor;
+  btn.style.backgroundColor = '#22c55e'; // green
+  setTimeout(() => {
+    btn.style.backgroundColor = originalColor;
+  }, 300);
+}
+
+</script>
+<script>
+    
+    function translateUI(lang) {
+// cleaned
+      const t = {
+        en: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI Calculator", btn: "Calculate EMI", saved: "Interest Saved:", reduced: "Tenure Reduced:" },
+        hi: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "ईएमआई कैलकुलेटर", btn: "ईएमआई कैलकुलेट करें", saved: "बचत ब्याज:", reduced: "समय अवधि में कमी:" },
+        bn: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI ক্যালকুলেটর", btn: "EMI হিসাব করুন", saved: "সঞ্চিত সুদ:", reduced: "কমানো হয়েছে:" },
+        fr: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "Calculateur EMI", btn: "Calculer EMI", saved: "Intérêt économisé:", reduced: "Durée réduite:" },
+        es: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "Calculadora EMI", btn: "Calcular EMI", saved: "Interés ahorrado:", reduced: "Plazo reducido:" },
+        de: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI-Rechner", btn: "EMI berechnen", saved: "Zinsen gespart:", reduced: "Laufzeit reduziert:" },
+        ru: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "Калькулятор EMI", btn: "Рассчитать EMI", saved: "Сэкономленные проценты:", reduced: "Срок уменьшен:" },
+        ja: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI計算機", btn: "EMIを計算", saved: "節約された利息:", reduced: "短縮された期間:" },
+        ko: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI 계산기", btn: "EMI 계산", saved: "절약된 이자:", reduced: "기간 단축:" }
+      };
+
+      const L = t[lang] || t.en;
+      document.getElementById("title").innerText = L.title;
+
+      document.getElementById("label-loanAmt").innerText = L.loanAmt;
+      document.getElementById("label-interest").innerText = L.interest;
+      document.getElementById("label-tenure").innerText = L.tenure;
+      document.getElementById("label-enable").innerText = L.enable;
+      document.getElementById("label-prepayAmt").innerText = L.prepayAmt;
+      document.getElementById("label-prepayAfter").innerText = L.prepayAfter;
+      document.getElementById("label-recurring").innerText = L.recurring;
+      document.getElementById("label-chart").innerText = L.chart;
+      document.getElementById("label-schedule").innerText = L.schedule;
+      document.getElementById("label-saved").innerText = L.saved;
+      document.getElementById("label-reduced").innerText = L.reduced;
+      document.getElementById("label-interest").innerText = L.interest;
+      document.getElementById("label-tenure").innerText = L.tenure;
+      document.getElementById("label-enable").innerText = L.enable;
+      document.getElementById("label-prepayAmt").innerText = L.prepayAmt;
+      document.getElementById("label-prepayAfter").innerText = L.prepayAfter;
+      document.getElementById("label-recurring").innerText = L.recurring;
+      document.getElementById("label-chart").innerText = L.chart;
+      document.getElementById("label-schedule").innerText = L.schedule;
+
+      document.querySelector("button").innerText = L.btn;
+      
+      
+    }
+
+    // CLEANED onload
+      const browserLang = navigator.language.slice(0, 2);
+      const supportedLangs = ["en","hi","bn","fr","es","de","ru","ja","ko"];
+      const selectedLang = supportedLangs.includes(browserLang) ? browserLang : "en";
+      document.getElementById("languageSelect").value = selectedLang;
+      translateUI(selectedLang);
+      togglePrepay();
+      calculateEMI();
+    };
+
+
+let isDark = true;
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.style.backgroundColor = isDark ? '#0f172a' : '#f0f0f0';
+  document.body.style.color = isDark ? 'white' : '#222';
+  document.querySelectorAll("input, select, button").forEach(el => {
+    el.style.background = isDark ? '#334155' : '#fff';
+    el.style.color = isDark ? 'white' : '#000';
+    el.style.border = isDark ? 'none' : '1px solid #ccc';
+  });
+  document.querySelectorAll("canvas").forEach(c => {
+    c.style.background = isDark ? '#0f172a' : '#fff';
+  });
+}
+
+
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.classList.contains("dark-mode");
+  body.classList.toggle("dark-mode", !isDark);
+  body.classList.toggle("light-mode", isDark);
+}
+
+
+function buttonClickEffect(btn) {
+  const originalColor = btn.style.backgroundColor;
+  btn.style.backgroundColor = '#22c55e'; // green
+  setTimeout(() => {
+    btn.style.backgroundColor = originalColor;
+  }, 300);
+}
+
+</script>
   <style>
-    body {
-      background-color: #0f172a;
-      color: white;
-      font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
-      padding: 20px;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #38bdf8;
-    }
-    h1 {
-      text-align: center;
-      color: #38bdf8;
-      font-size: 2.2rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      background: linear-gradient(to right, #38bdf8, #facc15);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    body { background-color: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+    .container { max-width: 900px; margin: auto; background: #1e293b; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px #38bdf8; }
+    h1 { text-align: center; color: #38bdf8; }
     label { margin-top: 1rem; display: block; font-weight: bold; }
-    input, select {
-      width: 100%; padding: 0.8rem; margin-top: 0.5rem;
-      border: none; border-radius: 8px; background: #334155;
-      color: white; font-size: 1rem;
-    }
-    button {
-      background: #38bdf8; color: #0f172a; padding: 1rem; border: none;
-      width: 100%; margin-top: 1.5rem; font-size: 1.1rem;
-      font-weight: bold; border-radius: 8px; cursor: pointer;
-    }
-    .results, .schedule {
-      margin-top: 2rem; background: #1e293b; padding: 1rem; border-radius: 10px;
-    }
-    canvas {
-      margin-top: 20px;
-      background: #0f172a;
-      border-radius: 10px;
-      height: 220px !important;
-      max-width: 100%;
-    }
-    table {
-      width: 100%; margin-top: 1rem;
-      border-collapse: collapse;
-      color: white;
-    }
-    th, td {
-      padding: 10px;
-      text-align: center;
-      border-bottom: 1px solid #334155;
-    }
-    th {
-      background: #38bdf8;
-      color: #0f172a;
-    }
-    .footer {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #94a3b8;
-    }
-    .prepayment-section {
-      display: none;
-      margin-top: 10px;
-    }
-    .flex-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-  </style>
+    input, select { width: 100%; padding: 0.8rem; margin-top: 0.5rem; border: none; border-radius: 8px; background: #334155; color: white; font-size: 1rem; }
+    button { background: #38bdf8; color: #0f172a; padding: 1rem; border: none; width: 100%; margin-top: 1.5rem; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
+    .results, .schedule { margin-top: 2rem; background: #1e293b; padding: 1rem; border-radius: 10px; }
+    canvas { margin-top: 20px; background: #0f172a; border-radius: 10px; height: 220px !important; max-width: 100%; }
+    table { width: 100%; margin-top: 1rem; border-collapse: collapse; color: white; }
+    th, td { padding: 10px; text-align: center; border-bottom: 1px solid #334155; }
+    th { background: #38bdf8; color: #0f172a; }
+    .footer { margin-top: 2rem; text-align: center; font-size: 0.9rem; color: #94a3b8; }
+    .prepayment-section { display: none; margin-top: 10px; }
+    .flex-row { display: flex; gap: 10px; align-items: center; }
+  
+  body.light-mode {
+    background-color: #f9f9f9;
+    color: #111;
+  }
+
+  body.light-mode h1,
+  body.light-mode label,
+  body.light-mode strong,
+  body.light-mode span,
+  body.light-mode h3,
+  body.light-mode p {
+    color: #111 !important;
+  }
+
+  body.light-mode th {
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  body.light-mode td {
+    color: #111;
+  }
+
+  body.light-mode .footer {
+    color: #555;
+  }
+
+  body.light-mode {
+    background-color: #f9f9f9 !important;
+    color: #111 !important;
+  }
+
+  body.light-mode h1,
+  body.light-mode h3,
+  body.light-mode label,
+  body.light-mode strong,
+  body.light-mode span,
+  body.light-mode p {
+    color: #111 !important;
+  }
+
+  body.light-mode .container {
+    background-color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  body.light-mode input,
+  body.light-mode select,
+  body.light-mode button {
+    background-color: #ffffff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+  }
+
+  body.light-mode .results,
+  body.light-mode .schedule {
+    background-color: #f3f4f6 !important;
+  }
+
+  body.light-mode canvas {
+    background-color: #ffffff !important;
+  }
+
+  body.light-mode th {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+  }
+
+  body.light-mode td {
+    color: #111 !important;
+  }
+
+  body.light-mode .footer {
+    color: #444 !important;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #38bdf8, #facc15);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  body.light-mode h1 {
+    background: linear-gradient(to right, #0ea5e9, #eab308);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+
+<style>
+  body.dark-mode {
+    background-color: #0f172a;
+    color: white;
+  }
+  body.light-mode {
+    background-color: #f9f9f9;
+    color: #111;
+  }
+  .container input, .container select, .container button {
+    background-color: #334155;
+    color: white;
+    border: none;
+  }
+  body.light-mode .container input,
+  body.light-mode .container select {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+  }
+  body.light-mode .container button {
+    background-color: #2563eb;
+    color: #fff;
+  }
+  canvas {
+    transition: background 0.3s ease;
+  }
+  body.light-mode canvas {
+    background-color: #fff !important;
+  }
+
+  body.light-mode {
+    background-color: #f9f9f9;
+    color: #111;
+  }
+
+  body.light-mode h1,
+  body.light-mode label,
+  body.light-mode strong,
+  body.light-mode span,
+  body.light-mode h3,
+  body.light-mode p {
+    color: #111 !important;
+  }
+
+  body.light-mode th {
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  body.light-mode td {
+    color: #111;
+  }
+
+  body.light-mode .footer {
+    color: #555;
+  }
+
+  body.light-mode {
+    background-color: #f9f9f9 !important;
+    color: #111 !important;
+  }
+
+  body.light-mode h1,
+  body.light-mode h3,
+  body.light-mode label,
+  body.light-mode strong,
+  body.light-mode span,
+  body.light-mode p {
+    color: #111 !important;
+  }
+
+  body.light-mode .container {
+    background-color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  body.light-mode input,
+  body.light-mode select,
+  body.light-mode button {
+    background-color: #ffffff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+  }
+
+  body.light-mode .results,
+  body.light-mode .schedule {
+    background-color: #f3f4f6 !important;
+  }
+
+  body.light-mode canvas {
+    background-color: #ffffff !important;
+  }
+
+  body.light-mode th {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+  }
+
+  body.light-mode td {
+    color: #111 !important;
+  }
+
+  body.light-mode .footer {
+    color: #444 !important;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #38bdf8, #facc15);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  body.light-mode h1 {
+    background: linear-gradient(to right, #0ea5e9, #eab308);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body class="dark-mode">
 
-<!-- Theme toggle -->
 <div style="position: absolute; top: 20px; right: 20px;">
   <button id="themeToggle" onclick="toggleTheme()" style="background:none;border:none;font-size:24px;cursor:pointer;color:white;">⭐</button>
 </div>
 
-<div class="container">
-  <div style="text-align: center; margin-bottom: 1rem;">
-    <img src="logo.png" alt="Logo" style="height: 60px; vertical-align: middle; margin-right: 10px;">
-    <h1 style="display: inline-block; vertical-align: middle;" id="title">EMI Calculator</h1>
-  </div>
-
-  <label>Loan Amount (₹)</label>
-  <input type="number" id="loanAmount" value="500000" />
-
-  <label>Annual Interest Rate (%)</label>
-  <input type="number" id="interestRate" value="8.5" />
-
-  <label>Loan Tenure</label>
-  <div class="flex-row">
-    <input type="number" id="loanTenure" value="5" />
-    <select id="tenureUnit">
-      <option value="years" selected>Years</option>
-      <option value="months">Months</option>
-    </select>
-  </div>
-
-  <label>Enable Prepayment?</label>
-  <select id="enablePrepayment" onchange="togglePrepay()">
-    <option value="no">No</option>
-    <option value="yes">Yes</option>
-  </select>
-
-  <div class="prepayment-section" id="prepaymentSection">
-    <label>Prepayment Amount (₹)</label>
-    <input type="number" id="prepaymentAmount" value="100000" />
-    <label>Prepay After (Months)</label>
-    <input type="number" id="prepaymentMonth" value="12" />
-  </div>
-
-  <label>Recurring Prepayment Amount (₹/year)</label>
-  <input type="number" id="recurringPrepay" value="0" />
-
-  <label>Chart Type</label>
-  <select id="chartType" onchange="renderChart()">
-    <option value="pie">Pie</option>
-    <option value="bar">Bar</option>
-    <option value="line">Line</option>
-  </select>
-
-  <button onclick="calculateEMI()">Calculate EMI</button>
-
-  <div class="results">
-    <p><strong>Monthly EMI:</strong> ₹<span id="monthlyEmi">0</span></p>
-    <p><strong>Total Interest:</strong> ₹<span id="totalInterest">0</span></p>
-    <p><strong>Total Payment:</strong> ₹<span id="totalPayment">0</span></p>
-    <p><strong>Interest Saved:</strong> ₹<span id="interestSaved">0</span></p>
-    <p><strong>Tenure Reduced:</strong> <span id="tenureReduced">0</span> months</p>
-  </div>
-
-  <div style="max-width: 450px; margin: 20px auto;">
-    <canvas id="emiChart"></canvas>
-  </div>
-
-  <div class="schedule">
-    <h3>EMI Schedule</h3>
-    <table id="scheduleTable"></table>
-  </div>
-
-  <div class="footer">© 2025 Pratix Finance — All rights reserved</div>
+  <div class="container">
+    
+<div style="text-align: right; margin-bottom: 10px;">
+  
 </div>
 
-  <div style="display: flex; gap: 24px; justify-content: center; margin-bottom: 24px;">
-    <div style="background: #f1f5fb; border-radius: 16px; padding: 24px 28px 24px 32px; min-width: 370px; box-shadow: 0 2px 12px #0001;">
-      <div style="font-weight: 700; font-size: 1.23rem; margin-bottom: 10px;">
-        <span>Loan Amount:</span>
-        <span style="font-weight: 400; margin-left: 12px;">₹<span id="pdf-loanAmount">0</span></span>
-      </div>
-      <div style="font-weight: 700; font-size: 1.23rem; margin-bottom: 10px;">
-        <span>Annual Interest:</span>
-        <span style="font-weight: 400; margin-left: 12px;"><span id="pdf-interestRate">0</span>%</span>
-      </div>
-      <div style="font-weight: 700; font-size: 1.23rem;">
-        <span>Prepayment Amount:</span>
-        <span style="font-weight: 400; margin-left: 12px;">₹<span id="pdf-prepaymentAmount">0</span></span>
-      </div>
+
+<div style="text-align: center; margin-bottom: 1rem;">
+  <img src="logo.png" alt="Logo" style="height: 60px; vertical-align: middle; margin-right: 10px;">
+  <h1 style="display: inline-block; vertical-align: middle;" id="title">EMI Calculator</h1>
+</div>
+
+    <label><span id="label-loanAmt">Loan Amount (₹)</span></label>
+    <input type="number" id="loanAmount" name="loanAmount" value="500000" />
+
+    <label><span id="label-interest">Annual Interest Rate (%)</span></label>
+    <input type="number" id="interestRate" name="interestRate" value="8.5" />
+
+    <label><span id="label-tenure">Loan Tenure</span></label>
+    <div class="flex-row">
+      <input type="number" id="loanTenure" name="loanTenure" value="5" />
+      <select id="tenureUnit" name="tenureUnit">
+        <option value="years" selected>Years</option>
+        <option value="months">Months</option>
+      </select>
     </div>
-    <div style="background: #f1f5fb; border-radius: 16px; padding: 24px 32px; min-width: 270px; box-shadow: 0 2px 12px #0001;">
-      <div style="font-weight: 700; font-size: 1.23rem;">
-        Annual Interest Rate: <span style="font-weight: 400; margin-left: 10px;"><span id="pdf-interestRate2"></span>%</span>
-      </div>
-      <div style="font-weight: 700; font-size: 1.23rem; margin-top: 10px;">
-        Loan Tenure <span style="font-weight: 400; margin-left: 10px;" id="pdf-loanTenure"></span> <span style="font-weight: 400;" id="pdf-tenureUnit"></span>
-      </div>
+
+    <label><span id="label-enable">Enable Prepayment?</span></label>
+    <select id="enablePrepayment" onchange="togglePrepay()">
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <div class="prepayment-section" id="prepaymentSection">
+      <label><span id="label-prepayAmt">Prepayment Amount (₹)</span></label>
+      <input type="number" id="prepaymentAmount" name="prepaymentAmount" value="100000" />
+      <label><span id="label-prepayAfter">Prepay After (Months)</span></label>
+      <input type="number" id="prepaymentMonth" name="prepaymentMonth" value="12" />
     </div>
+
+    <label><span id="label-recurring">Recurring Prepayment Amount (₹/year)</span></label>
+    <input type="number" id="recurringPrepay" name="recurringPrepay" value="0" />
+
+    <label><span id="label-chart">Chart Type</span></label>
+    <select id="chartType" name="chartType" onchange="renderChart()">
+      <option value="pie">Pie</option>
+      <option value="bar">Bar</option>
+      <option value="line">Line</option>
+    </select>
+
+    <button onclick="calculateEMI(); buttonClickEffect(this);">Calculate EMI</button>
+
+    <div class="results">
+      <p><strong>Monthly EMI:</strong> ₹<span id="monthlyEmi">0</span></p>
+      <p><strong>Total Interest:</strong> ₹<span id="totalInterest">0</span></p>
+      <p><strong>Total Payment:</strong> ₹<span id="totalPayment">0</span></p>
+      <p><strong><span id="label-saved">Interest Saved:</span></strong> ₹<span id="interestSaved">0</span></p>
+      <p><strong><span id="label-reduced">Tenure Reduced:</span></strong> <span id="tenureReduced">0</span> months</p>
+    </div>
+
+    <div style="max-width: 450px; margin: 20px auto;">
+      <canvas id="emiChart"></canvas>
+    </div>
+
+    <div class="schedule">
+      <h3 id="label-schedule">EMI Schedule</h3>
+      <table id="scheduleTable"></table>
+    </div>
+
+    <div class="footer">© 2025 Pratix Finance — All rights reserved</div>
   </div>
 
-  <div style="background: #f4f8fd; border-radius: 16px; padding: 28px 40px; margin: 0 auto 24px auto; width: 92%; max-width: 700px;  box-shadow: 0 2px 12px #0001;">
-    <div style="display: flex; flex-direction: column; gap: 20px; font-size: 1.28rem;">
-      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Monthly EMI:</span><span>₹<span id="pdf-emi">0</span></span></div>
-      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Total Interest:</span><span>₹<span id="pdf-totalInterest">0</span></span></div>
-      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Total Payment:</span><span>₹<span id="pdf-totalPayment">0</span></span></div>
-      <div style="display: flex; justify-content: space-between;"><span style="font-weight:700;">Interest Saved:</span><span>₹<span id="pdf-interestSaved">0</span></span></div>
-    </div>
-  </div>
+  <script>
+    let chartInstance = null;
 
-  <div style="background: #fff; border-radius: 16px; padding: 24px 0 10px 0; margin: 0 auto 30px auto; width: 92%; max-width: 700px; box-shadow: 0 2px 12px #0001; border:1.5px solid #e5e7eb;">
-    <canvas id="pdfChart" width="340" height="260" style="display: block; margin: 0 auto;"></canvas>
-    <div style="display: flex; gap: 25px; justify-content: center; margin-top: 24px; font-weight:700; font-size:1.14rem;">
-      <span style="display: flex; align-items: center;"><span style="width:18px;height:18px;display:inline-block;background:linear-gradient(90deg,#3b82f6,#a21caf 80%);border-radius:2px;margin-right:8px;"></span> Emi Interest</span>
-      <span style="display: flex; align-items: center;"><span style="width:18px;height:18px;display:inline-block;background:#facc15;border-radius:2px;margin-right:8px;"></span> Total Interest</span>
-    </div>
-<script>
-
-function togglePrepay() {
-  document.getElementById("prepaymentSection").style.display =
-    document.getElementById("enablePrepayment").value === "yes" ? "block" : "none";
-}
-
-function renderChart(principal = 0, interest = 0) {
-  const type = document.getElementById("chartType").value;
-  const ctx = document.getElementById("emiChart").getContext("2d");
-  if (chartInstance) chartInstance.destroy();
-  chartInstance = new Chart(ctx, {
-    type: type,
-    data: {
-      labels: ['Principal', 'Interest'],
-      datasets: [{
-        label: 'Amount (₹)',
-        data: [principal, interest],
-        backgroundColor: ['#38bdf8', '#facc15']
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: 'white' } } },
-      scales: (type === 'pie') ? {} : {
-        x: { ticks: { color: 'white' }, grid: { color: '#334155' }},
-        y: { ticks: { color: 'white' }, grid: { color: '#334155' }}
-      }
+    function togglePrepay() {
+      document.getElementById("prepaymentSection").style.display =
+        document.getElementById("enablePrepayment").value === "yes" ? "block" : "none";
     }
+
+    function calculateEMI() {
+      const P = parseFloat(document.getElementById("loanAmount").value);
+      const R = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
+      const rawTenure = parseInt(document.getElementById("loanTenure").value);
+      const unit = document.getElementById("tenureUnit").value;
+      const originalN = unit === "years" ? rawTenure * 12 : rawTenure;
+      let N = originalN;
+
+      const enablePrepay = document.getElementById("enablePrepayment").value === "yes";
+      const prepayAmount = enablePrepay ? parseFloat(document.getElementById("prepaymentAmount").value || 0) : 0;
+      const prepayMonth = enablePrepay ? parseInt(document.getElementById("prepaymentMonth").value || 0) : 0;
+      const recurringPrepay = parseFloat(document.getElementById("recurringPrepay").value || 0);
+
+      const EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      let balance = P;
+      let schedule = [];
+      let totalInterest = 0;
+
+      for (let i = 1; i <= N; i++) {
+        const interest = balance * R;
+        const principal = EMI - interest;
+        balance -= principal;
+
+        if (i === prepayMonth) {
+          balance -= prepayAmount;
+          if (balance < 0) balance = 0;
+        }
+
+        if (recurringPrepay > 0 && i % 12 === 0 && balance > 0) {
+          balance -= recurringPrepay;
+          if (balance < 0) balance = 0;
+        }
+
+        totalInterest += interest;
+        schedule.push({
+          month: i,
+          emi: EMI.toFixed(2),
+          principal: principal.toFixed(2),
+          interest: interest.toFixed(2),
+          balance: balance.toFixed(2)
+        });
+
+        if (balance <= 0) break;
+      }
+
+      const totalPayment = EMI * schedule.length + (prepayMonth > 0 ? prepayAmount : 0);
+      const originalEMI = (P * R * Math.pow(1 + R, originalN)) / (Math.pow(1 + R, originalN) - 1);
+      const originalTotalPayment = originalEMI * originalN;
+      const interestSaved = Math.max(0, originalTotalPayment - totalPayment);
+      const tenureReduced = Math.max(0, originalN - schedule.length);
+
+      document.getElementById("monthlyEmi").innerText = EMI.toFixed(2);
+      document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
+      document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
+      document.getElementById("interestSaved").innerText = interestSaved.toFixed(2);
+      document.getElementById("tenureReduced").innerText = tenureReduced;
+
+      renderChart(P, totalInterest);
+      showSchedule(schedule);
+    }
+
+    function renderChart(principal, interest) {
+      const type = document.getElementById("chartType").value;
+      const ctx = document.getElementById("emiChart").getContext("2d");
+
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctx, {
+        type: type,
+        data: {
+          labels: ['Principal', 'Interest'],
+          datasets: [{
+            label: 'Amount (₹)',
+            data: [principal, interest],
+            backgroundColor: ['#38bdf8', '#facc15'],
+            borderColor: '#38bdf8',
+            fill: false,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: 'white' } } },
+          scales: (type === 'bar' || type === 'line') ? {
+            x: { ticks: { color: 'white' }, grid: { color: '#334155' }},
+            y: { ticks: { color: 'white' }, grid: { color: '#334155' }}
+          } : {}
+        }
+      });
+    }
+
+    function showSchedule(schedule) {
+      const table = document.getElementById("scheduleTable");
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>EMI (₹)</th>
+            <th>Principal</th>
+            <th>Interest</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${schedule.map(row => `
+            <tr>
+              <td>${row.month}</td>
+              <td>${row.emi}</td>
+              <td>${row.principal}</td>
+              <td>${row.interest}</td>
+              <td>${row.balance}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+    }
+
+    window.onload = () => {
+      togglePrepay();
+      calculateEMI();
+    };
+  
+    
+    function translateUI(lang) {
+      const t = {
+        en: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI Calculator", btn: "Calculate EMI", saved: "Interest Saved:", reduced: "Tenure Reduced:" },
+        hi: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "ईएमआई कैलकुलेटर", btn: "ईएमआई कैलकुलेट करें", saved: "बचत ब्याज:", reduced: "समय अवधि में कमी:" },
+        bn: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI ক্যালকুলেটর", btn: "EMI হিসাব করুন", saved: "সঞ্চিত সুদ:", reduced: "কমানো হয়েছে:" },
+        fr: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "Calculateur EMI", btn: "Calculer EMI", saved: "Intérêt économisé:", reduced: "Durée réduite:" },
+        es: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "Calculadora EMI", btn: "Calcular EMI", saved: "Interés ahorrado:", reduced: "Plazo reducido:" },
+        de: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI-Rechner", btn: "EMI berechnen", saved: "Zinsen gespart:", reduced: "Laufzeit reduziert:" },
+        ru: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "Калькулятор EMI", btn: "Рассчитать EMI", saved: "Сэкономленные проценты:", reduced: "Срок уменьшен:" },
+        ja: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI計算機", btn: "EMIを計算", saved: "節約された利息:", reduced: "短縮された期間:" },
+        ko: {
+          loanAmt: "Loan Amount (₹)",
+          interest: "Annual Interest Rate (%)",
+          tenure: "Loan Tenure",
+          enable: "Enable Prepayment?",
+          prepayAmt: "Prepayment Amount (₹)",
+          prepayAfter: "Prepay After (Months)",
+          recurring: "Recurring Prepayment Amount (₹/year)",
+          chart: "Chart Type",
+          schedule: "EMI Schedule",
+          title: "EMI 계산기", btn: "EMI 계산", saved: "절약된 이자:", reduced: "기간 단축:" }
+      };
+
+      const L = t[lang] || t.en;
+      document.getElementById("title").innerText = L.title;
+
+      document.getElementById("label-loanAmt").innerText = L.loanAmt;
+      document.getElementById("label-interest").innerText = L.interest;
+      document.getElementById("label-tenure").innerText = L.tenure;
+      document.getElementById("label-enable").innerText = L.enable;
+      document.getElementById("label-prepayAmt").innerText = L.prepayAmt;
+      document.getElementById("label-prepayAfter").innerText = L.prepayAfter;
+      document.getElementById("label-recurring").innerText = L.recurring;
+      document.getElementById("label-chart").innerText = L.chart;
+      document.getElementById("label-schedule").innerText = L.schedule;
+      document.getElementById("label-saved").innerText = L.saved;
+      document.getElementById("label-reduced").innerText = L.reduced;
+      document.getElementById("label-interest").innerText = L.interest;
+      document.getElementById("label-tenure").innerText = L.tenure;
+      document.getElementById("label-enable").innerText = L.enable;
+      document.getElementById("label-prepayAmt").innerText = L.prepayAmt;
+      document.getElementById("label-prepayAfter").innerText = L.prepayAfter;
+      document.getElementById("label-recurring").innerText = L.recurring;
+      document.getElementById("label-chart").innerText = L.chart;
+      document.getElementById("label-schedule").innerText = L.schedule;
+
+      document.querySelector("button").innerText = L.btn;
+      
+      
+    }
+
+    window.onload = () => {
+      const browserLang = navigator.language.slice(0, 2);
+      const supportedLangs = ["en","hi","bn","fr","es","de","ru","ja","ko"];
+      const selectedLang = supportedLangs.includes(browserLang) ? browserLang : "en";
+      document.getElementById("languageSelect").value = selectedLang;
+      translateUI(selectedLang);
+      togglePrepay();
+      calculateEMI();
+    };
+
+
+let isDark = true;
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.style.backgroundColor = isDark ? '#0f172a' : '#f0f0f0';
+  document.body.style.color = isDark ? 'white' : '#222';
+  document.querySelectorAll("input, select, button").forEach(el => {
+    el.style.background = isDark ? '#334155' : '#fff';
+    el.style.color = isDark ? 'white' : '#000';
+    el.style.border = isDark ? 'none' : '1px solid #ccc';
+  });
+  document.querySelectorAll("canvas").forEach(c => {
+    c.style.background = isDark ? '#0f172a' : '#fff';
   });
 }
 
-function calculateEMI() {
-  const P = parseFloat(document.getElementById("loanAmount").value);
-  const R = parseFloat(document.getElementById("interestRate").value) / 12 / 100;
-  const rawTenure = parseInt(document.getElementById("loanTenure").value);
-  const unit = document.getElementById("tenureUnit").value;
-  const originalN = unit === "years" ? rawTenure * 12 : rawTenure;
-  let N = originalN;
-  const enablePrepay = document.getElementById("enablePrepayment").value === "yes";
-  const prepayAmount = enablePrepay ? parseFloat(document.getElementById("prepaymentAmount").value || 0) : 0;
-  const prepayMonth = enablePrepay ? parseInt(document.getElementById("prepaymentMonth").value || 0) : 0;
-  const recurringPrepay = parseFloat(document.getElementById("recurringPrepay").value || 0);
 
-  const EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-  let balance = P;
-  let schedule = [];
-  let totalInterest = 0;
-
-  for (let i = 1; i <= N; i++) {
-    const interest = balance * R;
-    const principal = EMI - interest;
-    balance -= principal;
-
-    if (i === prepayMonth) balance -= prepayAmount;
-    if (recurringPrepay > 0 && i % 12 === 0) balance -= recurringPrepay;
-    if (balance < 0) balance = 0;
-
-    totalInterest += interest;
-    schedule.push({ month: i, emi: EMI.toFixed(2), principal: principal.toFixed(2), interest: interest.toFixed(2), balance: balance.toFixed(2) });
-    if (balance <= 0) break;
-  }
-
-  const totalPayment = EMI * schedule.length + (prepayMonth > 0 ? prepayAmount : 0);
-  const originalEMI = (P * R * Math.pow(1 + R, originalN)) / (Math.pow(1 + R, originalN) - 1);
-  const originalTotalPayment = originalEMI * originalN;
-  const interestSaved = Math.max(0, originalTotalPayment - totalPayment);
-  const tenureReduced = Math.max(0, originalN - schedule.length);
-
-  document.getElementById("monthlyEmi").innerText = EMI.toFixed(2);
-  document.getElementById("totalInterest").innerText = totalInterest.toFixed(2);
-  document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
-  document.getElementById("interestSaved").innerText = interestSaved.toFixed(2);
-  document.getElementById("tenureReduced").innerText = tenureReduced;
-
-  renderChart(P, totalInterest);
-  showSchedule(schedule);
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.classList.contains("dark-mode");
+  body.classList.toggle("dark-mode", !isDark);
+  body.classList.toggle("light-mode", isDark);
 }
-// This ensures calculateEMI runs on page load to populate initial data
-window.onload = () => {
-  togglePrepay();
-  calculateEMI();
-};
+
+
+function buttonClickEffect(btn) {
+  const originalColor = btn.style.backgroundColor;
+  btn.style.backgroundColor = '#22c55e'; // green
+  setTimeout(() => {
+    btn.style.backgroundColor = originalColor;
+  }, 300);
+}
 
 </script>
+
+<!-- PDF EXPORT SECTION -->
+<div id="pdfExportSection" style="padding: 40px; font-family: 'Segoe UI', sans-serif; display: none; background: white; color: black;">
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+    <img src="logo.png" style="height: 60px;">
+    <h1 style="font-size: 2rem; margin: 0;">
+      <span style="color: black; font-weight: 700;">Pratix</span>
+      <span style="background: linear-gradient(to right, #3b82f6, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Calculator</span>
+    </h1>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 30px; font-size: 16px; font-weight: 500; background: #f3f4f6; padding: 20px; border-radius: 10px;">
+    <div style="flex: 1; min-width: 250px;">
+      <p><strong>Loan Amount:</strong> ₹<span id="pdf-loanAmount">0</span></p>
+      <p><strong>Annual Interest:</strong> <span id="pdf-interestRate">0</span>%</p>
+      <p><strong>Prepayment Amount:</strong> ₹<span id="pdf-prepaymentAmount">0</span></p>
+    </div>
+    <div style="flex: 1; min-width: 250px;">
+      <p><strong>Annual Interest Rate:</strong> <span id="pdf-rateLabel">Rate-%</span></p>
+      <p><strong>Loan Tenure:</strong> <span id="pdf-loanTenure">0</span> <span id="pdf-tenureUnit">Years</span></p>
+    </div>
+  </div>
+
+  <div style="background: #f1f5f9; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+    <p><strong>Monthly EMI:</strong> ₹<span id="pdf-emi">0</span></p>
+    <p><strong>Total Interest:</strong> ₹<span id="pdf-totalInterest">0</span></p>
+    <p><strong>Total Payment:</strong> ₹<span id="pdf-totalPayment">0</span></p>
+    <p><strong>Interest Saved:</strong> ₹<span id="pdf-interestSaved">0</span></p>
+  </div>
+
+  <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+    <canvas id="pdfChart" width="400" height="300" style="margin: 0 auto; display: block;"></canvas>
+    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 10px; font-size: 14px;">
+      <div><span style="color: #facc15;">■</span> Total Interest</div>
+      <div><span style="color: #3b82f6;">■</span> EMI Interest</div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <button onclick="generateVisualPDF()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 16px;">
+    📄 Download Styled PDF
+  </button>
+</div>
+
+<script>
+function generateVisualPDF() {
+  // Copy values
+  document.getElementById("pdf-loanAmount").textContent = document.getElementById("loanAmount").value;
+  document.getElementById("pdf-interestRate").textContent = document.getElementById("interestRate").value;
+  document.getElementById("pdf-prepaymentAmount").textContent = document.getElementById("prepaymentAmount").value || 0;
+  document.getElementById("pdf-loanTenure").textContent = document.getElementById("loanTenure").value;
+  document.getElementById("pdf-tenureUnit").textContent = document.getElementById("tenureUnit").value;
+  document.getElementById("pdf-emi").textContent = document.getElementById("emi").textContent;
+  document.getElementById("pdf-totalInterest").textContent = document.getElementById("totalInterest").textContent;
+  document.getElementById("pdf-totalPayment").textContent = document.getElementById("totalPayment").textContent;
+  document.getElementById("pdf-interestSaved").textContent = document.getElementById("interestSaved").textContent;
+
+  // Render chart
+  const ctx = document.getElementById('pdfChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Total Interest', 'EMI Interest'],
+      datasets: [{
+        label: 'EMI Breakdown',
+        data: [
+          parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0,
+          parseFloat(document.getElementById("totalPayment").textContent.replace(/[^0-9.]/g, "")) -
+          parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, "")) || 0
+        ],
+        backgroundColor: ['#facc15', '#3b82f6']
+      }]
+    },
+    options: {
+      responsive: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+
+  // Wait then export
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 0.5,
+      filename: 'Pratix_EMI_Report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(document.getElementById("pdfExportSection")).save();
+  }, 500);
+}
+</script>
 </body>
+
 </html>
