@@ -4,74 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EMI Calculator Final Fixed</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js">
-function downloadSchedulePDF() {
-  const scheduleTable = document.getElementById("scheduleTable");
-  const pdfScheduleTable = document.getElementById("pdfScheduleTable").querySelector("tbody");
-  pdfScheduleTable.innerHTML = "";
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  for (let row of scheduleTable.querySelectorAll("tbody tr")) {
-    const cells = Array.from(row.cells).map(cell => `<td style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">${cell.textContent}</td>`);
-    pdfScheduleTable.innerHTML += `<tr>${cells.join("")}</tr>`;
-  }
-
-  const pdfSection = document.getElementById("pdfExportSection");
-  pdfSection.style.position = 'absolute';
-  pdfSection.style.left = '-9999px';
-  pdfSection.style.top = '-9999px';
-  pdfSection.style.display = 'block';
-
-  setTimeout(() => {
-    html2pdf().set({
-      margin: 0.5,
-      filename: 'EMI_Schedule_Report.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    }).from(pdfSection).save().then(() => {
-      pdfSection.style.display = "none";
-      pdfSection.style.position = '';
-      pdfSection.style.left = '';
-      pdfSection.style.top = '';
-    });
-  }, 1000);
-}
-
-</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
-function downloadSchedulePDF() {
-  const scheduleTable = document.getElementById("scheduleTable");
-  const pdfScheduleTable = document.getElementById("pdfScheduleTable").querySelector("tbody");
-  pdfScheduleTable.innerHTML = "";
-
-  for (let row of scheduleTable.querySelectorAll("tbody tr")) {
-    const cells = Array.from(row.cells).map(cell => `<td style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">${cell.textContent}</td>`);
-    pdfScheduleTable.innerHTML += `<tr>${cells.join("")}</tr>`;
-  }
-
-  const pdfSection = document.getElementById("pdfExportSection");
-  pdfSection.style.position = 'absolute';
-  pdfSection.style.left = '-9999px';
-  pdfSection.style.top = '-9999px';
-  pdfSection.style.display = 'block';
-
-  setTimeout(() => {
-    html2pdf().set({
-      margin: 0.5,
-      filename: 'EMI_Schedule_Report.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    }).from(pdfSection).save().then(() => {
-      pdfSection.style.display = "none";
-      pdfSection.style.position = '';
-      pdfSection.style.left = '';
-      pdfSection.style.top = '';
-    });
-  }, 1000);
-}
-
-</script>
   <style>
     body {
       background-color: #0f172a;
