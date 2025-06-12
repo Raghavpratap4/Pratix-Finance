@@ -1,0 +1,16 @@
+{
+  "name": "pratix-finance-tools",
+  "version": "1.0.0",
+  "description": "Financial calculators and tools by Pratix Finance",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Build complete - static files ready'",
+    "start": "python3 -m http.server 3000",
+    "dev": "python3 -m http.server 3000"
+  },
+  "keywords": ["finance", "calculator", "emi", "tools"],
+  "author": "Pratix Finance",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
