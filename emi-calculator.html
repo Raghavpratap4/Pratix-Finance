@@ -16,38 +16,6 @@
  <link rel="canonical" href="https://pratix-finance.vercel.app/emi-calculator.html" />
   <title>EMI Calculator Final Fixed</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js">
-let isDark = true;
-
-function toggleTheme() {
-  isDark = !isDark;
-  document.body.style.backgroundColor = isDark ? '#0f172a' : '#f0f0f0';
-  document.body.style.color = isDark ? 'white' : '#222';
-  document.querySelectorAll("input, select, button").forEach(el => {
-    el.style.background = isDark ? '#334155' : '#fff';
-    el.style.color = isDark ? 'white' : '#000';
-    el.style.border = isDark ? 'none' : '1px solid #ccc';
-  });
-  document.querySelectorAll("canvas").forEach(c => {
-    c.style.background = isDark ? '#0f172a' : '#fff';
-  });
-}
-
-
-function toggleTheme() {
-  const body = document.body;
-  const isDark = body.classList.contains("dark-mode");
-  body.classList.toggle("dark-mode", !isDark);
-  body.classList.toggle("light-mode", isDark);
-}
-
-
-function buttonClickEffect(btn) {
-  const originalColor = btn.style.backgroundColor;
-  btn.style.backgroundColor = '#22c55e'; // green
-  setTimeout(() => {
-    btn.style.backgroundColor = originalColor;
-  }, 300);
-}
 
 </script>
 <script>
@@ -155,47 +123,6 @@ function buttonClickEffect(btn) {
           schedule: "EMI Schedule",
           title: "EMI 계산기", btn: "EMI 계산", saved: "절약된 이자:", reduced: "기간 단축:" }
       };
-
-      const L = t[lang] || t.en;
-      document.getElementById("title").innerText = L.title;
-
-      document.getElementById("label-loanAmt").innerText = L.loanAmt;
-      document.getElementById("label-interest").innerText = L.interest;
-      document.getElementById("label-tenure").innerText = L.tenure;
-      document.getElementById("label-enable").innerText = L.enable;
-      document.getElementById("label-prepayAmt").innerText = L.prepayAmt;
-      document.getElementById("label-prepayAfter").innerText = L.prepayAfter;
-      document.getElementById("label-recurring").innerText = L.recurring;
-      document.getElementById("label-chart").innerText = L.chart;
-      document.getElementById("label-schedule").innerText = L.schedule;
-      document.getElementById("label-saved").innerText = L.saved;
-      document.getElementById("label-reduced").innerText = L.reduced;
-      document.getElementById("label-interest").innerText = L.interest;
-      document.getElementById("label-tenure").innerText = L.tenure;
-      document.getElementById("label-enable").innerText = L.enable;
-      document.getElementById("label-prepayAmt").innerText = L.prepayAmt;
-      document.getElementById("label-prepayAfter").innerText = L.prepayAfter;
-      document.getElementById("label-recurring").innerText = L.recurring;
-      document.getElementById("label-chart").innerText = L.chart;
-      document.getElementById("label-schedule").innerText = L.schedule;
-
-      document.querySelector("button").innerText = L.btn;
-      
-      
-    }
-
-    // CLEANED onload
-      const browserLang = navigator.language.slice(0, 2);
-      const supportedLangs = ["en","hi","bn","fr","es","de","ru","ja","ko"];
-      const selectedLang = supportedLangs.includes(browserLang) ? browserLang : "en";
-      document.getElementById("languageSelect").value = selectedLang;
-      translateUI(selectedLang);
-      togglePrepay();
-      calculateEMI();
-    };
-
-
-let isDark = true;
 
 function toggleTheme() {
   isDark = !isDark;
@@ -908,7 +835,8 @@ function generateVisualPDF() {
 
   // Render chart
   const ctx = document.getElementById('pdfChart').getContext('2d');
-  new Chart(ctx, {
+  if (window.pdfChart) window.pdfChart.destroy();
+window.pdfChart =new Chart(ctx, {
     type: 'pie',
     data: {
       labels: ['Total Interest', 'EMI Interest'],
