@@ -461,6 +461,11 @@ function buttonClickEffect(btn) {
     <div style="max-width: 450px; margin: 20px auto;">
       <canvas id="emiChart"></canvas>
     </div>
+    <div style="text-align: center; margin: 30px 0;">
+  <button onclick="generateVisualPDF()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 16px;">
+    📄 Download PDF
+  </button>
+</div>
 
     <div class="schedule">
       <h3 id="label-schedule">EMI Schedule</h3>
@@ -812,12 +817,6 @@ function buttonClickEffect(btn) {
       <div><span style="color: #3b82f6;">■</span> EMI Interest</div>
     </div>
   </div>
-</div>
-
-<div style="text-align: center; margin: 30px 0;">
-  <button onclick="generateVisualPDF()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 16px;">
-    📄 Download Styled PDF
-  </button>
 </div>
 
 <script>
