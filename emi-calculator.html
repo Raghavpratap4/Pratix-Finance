@@ -214,14 +214,16 @@
     📄 Download Styled PDF
   </button>
 </div>
-
 <script>
+// Global variables for chart instances (declared once, at the very top of the script)
+let chartInstance = null; // For the main calculator chart
+let pdfChartInstance = null; // For the PDF chart
+
 function togglePrepay() {
   document.getElementById("prepaymentSection").style.display =
     document.getElementById("enablePrepayment").value === "yes" ? "block" : "none";
 }
 
-let chartInstance = null;
 function renderChart(principal = 0, interest = 0) {
   const type = document.getElementById("chartType").value;
   const ctx = document.getElementById("emiChart").getContext("2d");
@@ -304,12 +306,9 @@ function showSchedule(schedule) {
       ${schedule.map(r => `<tr><td>${r.month}</td><td>${r.emi}</td><td>${r.principal}</td><td>${r.interest}</td><td>${r.balance}</td></tr>`).join('')}
     </tbody>`;
 }
-// Global variable to hold the PDF chart instance (if not already at the top of your script)
-let pdfChartInstance = null; // <- This should be inside your <script> tags, but outside any function
 
 function generateVisualPDF() {
   // 1. Update PDF content with current results
-  // Use toLocaleString() to format numbers for better readability in the PDF
   document.getElementById("pdf-loanAmount").textContent = parseFloat(document.getElementById("loanAmount").value).toLocaleString('en-IN');
   document.getElementById("pdf-interestRate").textContent = parseFloat(document.getElementById("interestRate").value).toFixed(1);
   document.getElementById("pdf-interestRate2").textContent = parseFloat(document.getElementById("interestRate").value).toFixed(1);
@@ -317,7 +316,6 @@ function generateVisualPDF() {
   document.getElementById("pdf-loanTenure").textContent = document.getElementById("loanTenure").value;
   document.getElementById("pdf-tenureUnit").textContent = document.getElementById("tenureUnit").value;
 
-  // Format Monthly EMI, Total Interest, Total Payment, Interest Saved too
   document.getElementById("pdf-emi").textContent = parseFloat(document.getElementById("monthlyEmi").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   document.getElementById("pdf-totalInterest").textContent = parseFloat(document.getElementById("totalInterest").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   document.getElementById("pdf-totalPayment").textContent = parseFloat(document.getElementById("totalPayment").textContent).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -326,96 +324,92 @@ function generateVisualPDF() {
   const pdfSection = document.getElementById("pdfExportSection");
 
   // 2. Temporarily show the PDF section off-screen to allow rendering
-  // This is crucial for html2canvas to capture it.
   pdfSection.style.position = 'absolute';
-  pdfSection.style.left = '-9999px'; // Move it far off-screen
+  pdfSection.style.left = '-9999px';
   pdfSection.style.top = '-9999px';
-  pdfSection.style.display = 'block'; // Make it visible (but off-screen)
+  pdfSection.style.display = 'block';
 
   // 3. Render the PDF Chart
   const pdfChartCanvas = document.getElementById('pdfChart');
   const ctx = pdfChartCanvas.getContext('2d');
 
-  // Destroy existing chart instance if any
   if (pdfChartInstance) {
     pdfChartInstance.destroy();
   }
 
-  // Define colors for the chart including the gradient
   const totalPaymentValue = parseFloat(document.getElementById("totalPayment").textContent.replace(/[^0-9.]/g, ""));
   const totalInterestValue = parseFloat(document.getElementById("totalInterest").textContent.replace(/[^0-9.]/g, ""));
-  const principalAmount = (totalPaymentValue - totalInterestValue) || 0; // Calculate Principal
+  const principalAmount = (totalPaymentValue - totalInterestValue) || 0;
 
-  // Create gradient for 'Emi Interest' (Principal) slice
   const gradient = ctx.createLinearGradient(0, 0, pdfChartCanvas.width, pdfChartCanvas.height);
-  gradient.addColorStop(0, '#3b82f6'); // Start color
-  gradient.addColorStop(1, '#a21caf'); // End color
+  gradient.addColorStop(0, '#3b82f6');
+  gradient.addColorStop(1, '#a21caf');
 
   pdfChartInstance = new Chart(ctx, {
     type: 'pie',
     data: {
-      // Ensure the labels match your legend: 'Emi Interest' (Principal) and 'Total Interest'
       labels: ['Emi Interest', 'Total Interest'],
       datasets: [{
         label: 'EMI Breakdown',
         data: [
-          principalAmount, // Data for 'Emi Interest' (Principal)
-          totalInterestValue // Data for 'Total Interest'
+          principalAmount,
+          totalInterestValue
         ],
         backgroundColor: [
-          gradient,     // Color for 'Emi Interest' (Principal)
-          '#facc15'     // Color for 'Total Interest'
+          gradient,
+          '#facc15'
         ],
         borderWidth: 1,
-        borderColor: '#f9fafb' // Matching background color for border
+        borderColor: '#f9fafb'
       }]
     },
     options: {
-      responsive: false, // Important for fixed size in PDF
-      maintainAspectRatio: false, // Important for fixed size in PDF
+      responsive: false,
+      maintainAspectRatio: false,
       plugins: {
-        legend: { display: false }, // Legend is displayed via HTML
-        tooltip: { enabled: false } // Disable tooltips for static PDF
+        legend: { display: false },
+        tooltip: { enabled: false }
       },
-      cutout: '0%', // Full pie chart
+      cutout: '0%',
       layout: {
-        padding: 0 // No extra padding
+        padding: 0
       }
     }
   });
 
   // 4. Wait for chart to render and browser to layout the content
-  // Increased timeout for robustness.
   setTimeout(() => {
     html2pdf().set({
       margin: 0.5,
       filename: 'Pratix_EMI_Report.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: {
-        scale: 2, // Higher scale for better resolution in PDF
-        useCORS: true, // Crucial if your logo.png or other assets are not on the same origin
-        logging: true, // Enable logging to debug html2canvas issues in console
-        // For debugging blank images, uncomment the following line:
-        // foreignObjectRendering: true // Sometimes helps with SVGs and complex layouts
+        scale: 2,
+        useCORS: true,
+        logging: true,
+        // foreignObjectRendering: true // Keep this commented unless you need it for specific SVG/foreignObject issues
       },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     }).from(pdfSection).save().then(() => {
       // 5. Hide the PDF section again after generation
       pdfSection.style.display = "none";
-      pdfSection.style.position = ''; // Reset position
+      pdfSection.style.position = '';
       pdfSection.style.left = '';
       pdfSection.style.top = '';
 
-      // Optional: Destroy the PDF chart instance if it's no longer needed
       if (pdfChartInstance) {
           pdfChartInstance.destroy();
-          pdfChartInstance = null; // Clear reference
+          pdfChartInstance = null;
       }
     });
-  }, 1000); // 1 second delay should be sufficient for rendering
+  }, 1000); // 1 second delay
 }
 
+// This ensures calculateEMI runs on page load to populate initial data
+window.onload = () => {
+  togglePrepay();
+  calculateEMI();
+};
 </script>
-
 </body>
 </html>
