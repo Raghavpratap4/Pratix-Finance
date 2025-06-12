@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pratix-finance.vercel.app/sitemap.xml
