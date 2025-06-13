@@ -851,6 +851,7 @@ window.pdfChart =new Chart(ctx, {
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     }).from(document.getElementById("pdfExportSection")).save();
+    document.getElementById("pdfExportSection").style.display = 'block';
   }, 500);
 }
 </script>
