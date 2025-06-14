@@ -781,17 +781,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Form inputs - Add real-time formatting
-    const loanAmountInput = document.querySelector('input[placeholder="10,00,000"]');
-    if (loanAmountInput) {
-        loanAmountInput.addEventListener('input', function() {
-            // Format number with commas
+    // Form inputs - Add real-time formatting and validation
+    function formatNumberInput(input) {
+        if (!input) return;
+        
+        input.addEventListener('input', function() {
             let value = this.value.replace(/,/g, '');
             if (!isNaN(value) && value !== '') {
-                this.value = parseInt(value).toLocaleString('en-IN');
+                const numValue = parseInt(value);
+                // Validate min/max values
+                const min = parseInt(this.getAttribute('min')) || 0;
+                const max = parseInt(this.getAttribute('max')) || Infinity;
+                
+                if (numValue < min) {
+                    this.value = min;
+                } else if (numValue > max) {
+                    this.value = max;
+                } else {
+                    this.value = numValue;
+                }
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            // Ensure value is within range on blur
+            const value = parseInt(this.value) || parseInt(this.getAttribute('min')) || 0;
+            const min = parseInt(this.getAttribute('min')) || 0;
+            const max = parseInt(this.getAttribute('max')) || Infinity;
+            
+            if (value < min) {
+                this.value = min;
+            } else if (value > max) {
+                this.value = max;
             }
         });
     }
+
+    // Apply formatting to all number inputs
+    document.querySelectorAll('input[type="number"]').forEach(formatNumberInput);
     
     // Prepayment Calculator functionality
     let prepaymentChart = null;

@@ -30,7 +30,6 @@
         <!-- Header -->
         <header class="app-header">
             <div class="header-content">
-                <h1 class="app-title">FinCalc Pro</h1>
                 <div class="header-actions">
                     <button class="icon-btn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -51,20 +50,28 @@
                     <div class="calculator-form">
                         <div class="input-group">
                             <label>Loan Amount</label>
+                            <div class="slider-display" id="loanAmountDisplay">₹10,00,000</div>
+                            <input type="range" id="loanAmountSlider" min="100000" max="10000000" step="100000" value="1000000" class="slider">
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="loanAmountInput" placeholder="10,00,000" class="calc-input" value="1000000">
+                                <input type="number" id="loanAmountInput" placeholder="10,00,000" class="calc-input" value="1000000" min="100000" max="10000000">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Interest Rate (%)</label>
-                            <input type="number" id="interestRateInput" placeholder="8.5" class="calc-input" value="8.5" step="0.01">
+                            <div class="slider-display" id="interestRateDisplay">8.5%</div>
+                            <input type="range" id="interestRateSlider" min="1" max="20" step="0.1" value="8.5" class="slider">
+                            <input type="number" id="interestRateInput" placeholder="8.5" class="calc-input" value="8.5" step="0.01" min="1" max="20">
                         </div>
                         <div class="input-group">
                             <label>Loan Tenure (Years)</label>
-                            <input type="number" id="loanTenureInput" placeholder="20" class="calc-input" value="20">
+                            <div class="slider-display" id="loanTenureDisplay">20 Years</div>
+                            <input type="range" id="loanTenureSlider" min="1" max="40" step="1" value="20" class="slider">
+                            <input type="number" id="loanTenureInput" placeholder="20" class="calc-input" value="20" min="1" max="40">
                         </div>
-                        <button class="calculate-btn" id="calculateEMI">Calculate EMI</button>
+                        <button class="calculate-btn" id="calculateEMI">
+                            <span class="btn-text">Calculate EMI</span>
+                        </button>
                     </div>
                     <div class="result-card">
                         <div class="result-item">
@@ -148,12 +155,12 @@
                             <label>Prepayment Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="prepaymentAmount" placeholder="2,00,000" class="calc-input">
+                                <input type="number" id="prepaymentAmount" placeholder="2,00,000" class="calc-input" value="200000" min="10000">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Prepay After (Months)</label>
-                            <input type="number" id="prepayAfterMonths" placeholder="12" class="calc-input">
+                            <input type="number" id="prepayAfterMonths" placeholder="12" class="calc-input" value="12" min="1" max="240">
                         </div>
                         <div class="input-group">
                             <label>Prepayment Option</label>
@@ -245,16 +252,16 @@
                                 <label>Loan Amount</label>
                                 <div class="input-wrapper">
                                     <span class="currency">₹</span>
-                                    <input type="number" id="loan1Amount" placeholder="10,00,000" class="calc-input">
+                                    <input type="number" id="loan1Amount" placeholder="10,00,000" class="calc-input" value="1000000" min="100000">
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Interest Rate (%)</label>
-                                <input type="number" id="loan1Rate" placeholder="8.5" class="calc-input" step="0.01">
+                                <input type="number" id="loan1Rate" placeholder="8.5" class="calc-input" step="0.01" value="8.5" min="1" max="20">
                             </div>
                             <div class="input-group">
                                 <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loan1Tenure" placeholder="20" class="calc-input">
+                                <input type="number" id="loan1Tenure" placeholder="20" class="calc-input" value="20" min="1" max="40">
                             </div>
                         </div>
 
@@ -265,16 +272,16 @@
                                 <label>Loan Amount</label>
                                 <div class="input-wrapper">
                                     <span class="currency">₹</span>
-                                    <input type="number" id="loan2Amount" placeholder="10,00,000" class="calc-input">
+                                    <input type="number" id="loan2Amount" placeholder="10,00,000" class="calc-input" value="1000000" min="100000">
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Interest Rate (%)</label>
-                                <input type="number" id="loan2Rate" placeholder="8.75" class="calc-input" step="0.01">
+                                <input type="number" id="loan2Rate" placeholder="8.75" class="calc-input" step="0.01" value="8.75" min="1" max="20">
                             </div>
                             <div class="input-group">
                                 <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loan2Tenure" placeholder="20" class="calc-input">
+                                <input type="number" id="loan2Tenure" placeholder="20" class="calc-input" value="20" min="1" max="40">
                             </div>
                         </div>
 
@@ -285,16 +292,16 @@
                                 <label>Loan Amount</label>
                                 <div class="input-wrapper">
                                     <span class="currency">₹</span>
-                                    <input type="number" id="loan3Amount" placeholder="10,00,000" class="calc-input">
+                                    <input type="number" id="loan3Amount" placeholder="10,00,000" class="calc-input" value="1000000" min="100000">
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Interest Rate (%)</label>
-                                <input type="number" id="loan3Rate" placeholder="8.25" class="calc-input" step="0.01">
+                                <input type="number" id="loan3Rate" placeholder="8.25" class="calc-input" step="0.01" value="8.25" min="1" max="20">
                             </div>
                             <div class="input-group">
                                 <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loan3Tenure" placeholder="20" class="calc-input">
+                                <input type="number" id="loan3Tenure" placeholder="20" class="calc-input" value="20" min="1" max="40">
                             </div>
                         </div>
                     </div>
@@ -351,18 +358,18 @@
                                     <label>Monthly Income</label>
                                     <div class="input-wrapper">
                                         <span class="currency">₹</span>
-                                        <input type="number" id="monthlyIncome" placeholder="50,000" class="calc-input">
+                                        <input type="number" id="monthlyIncome" placeholder="50,000" class="calc-input" value="50000" min="10000">
                                     </div>
                                 </div>
                                 <div class="input-group">
                                     <label>Age</label>
-                                    <input type="number" id="applicantAge" placeholder="30" class="calc-input">
+                                    <input type="number" id="applicantAge" placeholder="30" class="calc-input" value="30" min="18" max="65">
                                 </div>
                                 <div class="input-group">
                                     <label>Current EMIs</label>
                                     <div class="input-wrapper">
                                         <span class="currency">₹</span>
-                                        <input type="number" id="currentEMIs" placeholder="15,000" class="calc-input">
+                                        <input type="number" id="currentEMIs" placeholder="15,000" class="calc-input" value="0" min="0">
                                     </div>
                                 </div>
                                 <button class="calculate-btn" id="checkEligibility">Check Eligibility</button>
@@ -397,16 +404,16 @@
                                     <label>Desired EMI</label>
                                     <div class="input-wrapper">
                                         <span class="currency">₹</span>
-                                        <input type="number" id="desiredEMI" placeholder="50,000" class="calc-input">
+                                        <input type="number" id="desiredEMI" placeholder="50,000" class="calc-input" value="50000" min="1000">
                                     </div>
                                 </div>
                                 <div class="input-group">
                                     <label>Interest Rate (%)</label>
-                                    <input type="number" id="reverseInterestRate" placeholder="8.5" class="calc-input" step="0.01">
+                                    <input type="number" id="reverseInterestRate" placeholder="8.5" class="calc-input" step="0.01" value="8.5" min="1" max="20">
                                 </div>
                                 <div class="input-group">
                                     <label>Loan Tenure (Years)</label>
-                                    <input type="number" id="reverseTenure" placeholder="20" class="calc-input">
+                                    <input type="number" id="reverseTenure" placeholder="20" class="calc-input" value="20" min="1" max="40">
                                 </div>
                                 <button class="calculate-btn" id="calculateReverseLoan">Calculate Loan Amount</button>
                             </div>
@@ -440,12 +447,12 @@
                                     <label>Loan Amount</label>
                                     <div class="input-wrapper">
                                         <span class="currency">₹</span>
-                                        <input type="number" id="gstLoanAmount" placeholder="10,00,000" class="calc-input">
+                                        <input type="number" id="gstLoanAmount" placeholder="10,00,000" class="calc-input" value="1000000" min="100000">
                                     </div>
                                 </div>
                                 <div class="input-group">
                                     <label>Processing Fee (%)</label>
-                                    <input type="number" id="processingFee" placeholder="1" class="calc-input" step="0.01">
+                                    <input type="number" id="processingFee" placeholder="1" class="calc-input" step="0.01" value="1" min="0" max="5">
                                 </div>
                                 <div class="input-group">
                                     <label>GST Rate (%)</label>
@@ -487,20 +494,20 @@
                                     <label>Monthly Amount</label>
                                     <div class="input-wrapper">
                                         <span class="currency">₹</span>
-                                        <input type="number" id="monthlyAmount" placeholder="50,000" class="calc-input">
+                                        <input type="number" id="monthlyAmount" placeholder="50,000" class="calc-input" value="50000" min="1000">
                                     </div>
                                 </div>
                                 <div class="input-group">
                                     <label>SIP Expected Returns (%)</label>
-                                    <input type="number" id="sipReturns" placeholder="12" class="calc-input" step="0.01">
+                                    <input type="number" id="sipReturns" placeholder="12" class="calc-input" step="0.01" value="12" min="1" max="30">
                                 </div>
                                 <div class="input-group">
                                     <label>Loan Interest Rate (%)</label>
-                                    <input type="number" id="loanRate" placeholder="8.5" class="calc-input" step="0.01">
+                                    <input type="number" id="loanRate" placeholder="8.5" class="calc-input" step="0.01" value="8.5" min="1" max="20">
                                 </div>
                                 <div class="input-group">
                                     <label>Time Period (Years)</label>
-                                    <input type="number" id="timePeriod" placeholder="20" class="calc-input">
+                                    <input type="number" id="timePeriod" placeholder="20" class="calc-input" value="20" min="1" max="40">
                                 </div>
                                 <button class="calculate-btn" id="compareSIPEMI">Compare SIP vs EMI</button>
                             </div>
