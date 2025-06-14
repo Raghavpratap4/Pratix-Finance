@@ -125,15 +125,51 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        // Refresh button functionality
+        const refreshEMIBtn = document.getElementById('refreshEMI');
+        if (refreshEMIBtn) {
+            refreshEMIBtn.addEventListener('click', function() {
+                // Clear all input fields
+                if (document.getElementById('loanAmountInput')) document.getElementById('loanAmountInput').value = '';
+                if (document.getElementById('interestRateInput')) document.getElementById('interestRateInput').value = '';
+                if (document.getElementById('loanTenureInput')) document.getElementById('loanTenureInput').value = '';
+                
+                // Reset sliders to default values
+                if (document.getElementById('loanAmountSlider')) document.getElementById('loanAmountSlider').value = '1000000';
+                if (document.getElementById('interestRateSlider')) document.getElementById('interestRateSlider').value = '8.5';
+                if (document.getElementById('loanTenureSlider')) document.getElementById('loanTenureSlider').value = '20';
+                
+                // Update displays
+                if (document.getElementById('loanAmountDisplay')) document.getElementById('loanAmountDisplay').textContent = '₹10,00,000';
+                if (document.getElementById('interestRateDisplay')) document.getElementById('interestRateDisplay').textContent = '8.5%';
+                if (document.getElementById('loanTenureDisplay')) document.getElementById('loanTenureDisplay').textContent = '20 Years';
+                
+                // Clear results
+                if (document.getElementById('monthlyEMI')) document.getElementById('monthlyEMI').textContent = '₹0';
+                if (document.getElementById('totalInterest')) document.getElementById('totalInterest').textContent = '₹0';
+                if (document.getElementById('totalAmount')) document.getElementById('totalAmount').textContent = '₹0';
+                
+                showNotification('EMI calculator refreshed!', 'info');
+            });
+        }
+        
         // Initial calculation
         calculateEMI();
         initChart();
     }
     
     function calculateEMI() {
-        const principal = parseInt(document.getElementById('loanAmountInput')?.value) || 1000000;
-        const annualRate = parseFloat(document.getElementById('interestRateInput')?.value) || 8.5;
-        const years = parseInt(document.getElementById('loanTenureInput')?.value) || 20;
+        const principal = parseInt(document.getElementById('loanAmountInput')?.value) || 0;
+        const annualRate = parseFloat(document.getElementById('interestRateInput')?.value) || 0;
+        const years = parseInt(document.getElementById('loanTenureInput')?.value) || 0;
+        
+        if (principal <= 0 || annualRate <= 0 || years <= 0) {
+            // Clear results if any input is empty or invalid
+            document.getElementById('monthlyEMI').textContent = '₹0';
+            document.getElementById('totalInterest').textContent = '₹0';
+            document.getElementById('totalAmount').textContent = '₹0';
+            return;
+        }
         
         const monthlyRate = annualRate / 12 / 100;
         const totalMonths = years * 12;
@@ -1029,9 +1065,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Add refresh functionality for prepayment calculator
+    function addPrepaymentRefresh() {
+        const refreshPrepaymentBtn = document.getElementById('refreshPrepayment');
+        if (refreshPrepaymentBtn) {
+            refreshPrepaymentBtn.addEventListener('click', function() {
+                // Clear prepayment inputs
+                if (document.getElementById('prepaymentAmount')) document.getElementById('prepaymentAmount').value = '';
+                if (document.getElementById('prepayAfterMonths')) document.getElementById('prepayAfterMonths').value = '';
+                
+                // Reset radio buttons to default
+                if (document.getElementById('reduceTenure')) document.getElementById('reduceTenure').checked = true;
+                
+                // Hide results
+                const resultsSection = document.getElementById('prepaymentResults');
+                if (resultsSection) resultsSection.style.display = 'none';
+                
+                showNotification('Prepayment calculator refreshed!', 'info');
+            });
+        }
+    }
+    
     // Initialize prepayment calculator
     if (document.getElementById('prepayment-impact')) {
         initPrepaymentCalculator();
+        addPrepaymentRefresh();
     }
     
     // Loan Comparison functionality
@@ -1268,9 +1326,36 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
+    // Add refresh functionality for loan comparison
+    function addLoanComparisonRefresh() {
+        const refreshComparisonBtn = document.getElementById('refreshComparison');
+        if (refreshComparisonBtn) {
+            refreshComparisonBtn.addEventListener('click', function() {
+                // Clear all loan comparison inputs
+                const loanInputs = [
+                    'loan1Amount', 'loan1Rate', 'loan1Tenure',
+                    'loan2Amount', 'loan2Rate', 'loan2Tenure',
+                    'loan3Amount', 'loan3Rate', 'loan3Tenure'
+                ];
+                
+                loanInputs.forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    if (input) input.value = '';
+                });
+                
+                // Hide results
+                const resultsSection = document.getElementById('comparisonResults');
+                if (resultsSection) resultsSection.style.display = 'none';
+                
+                showNotification('Loan comparison refreshed!', 'info');
+            });
+        }
+    }
+    
     // Initialize loan comparison
     if (document.getElementById('loan-comparison')) {
         initLoanComparison();
+        addLoanComparisonRefresh();
     }
     
     // Smooth scrolling for better UX
@@ -1435,48 +1520,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navItems.forEach(addHapticFeedback);
     document.querySelectorAll('.calculate-btn, .feature-btn, .setting-btn, .tool-card').forEach(addHapticFeedback);
     
-    // Add touch gesture support for tab switching
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-        mainContent.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        mainContent.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            const swipeThreshold = 100;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                const currentActiveTab = document.querySelector('.nav-item.active');
-                if (currentActiveTab) {
-                    const currentIndex = Array.from(navItems).indexOf(currentActiveTab);
-                    let newIndex;
-                    
-                    if (diff > 0 && currentIndex < navItems.length - 1) {
-                        // Swipe left - next tab
-                        newIndex = currentIndex + 1;
-                    } else if (diff < 0 && currentIndex > 0) {
-                        // Swipe right - previous tab
-                        newIndex = currentIndex - 1;
-                    }
-                    
-                    if (newIndex !== undefined) {
-                        const targetTab = navItems[newIndex].getAttribute('data-tab');
-                        switchTab(targetTab);
-                        navigator.vibrate && navigator.vibrate(30);
-                    }
-                }
-            }
-        }
-    }
+    // Swipe navigation disabled - only footer navigation allowed
     
     // Tools & Extras functionality
     function initToolsExtras() {
@@ -2152,5 +2196,5 @@ Financial Calculator & Planner
 
     // Initialize app
     console.log('FinCalc Pro initialized successfully!');
-    showNotification('Welcome to FinCalc Pro!', 'info');
+    showNotification('Welcome to Pratix Finance!', 'info');
 });

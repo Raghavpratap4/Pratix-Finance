@@ -527,7 +527,8 @@ body::after {
 /* Button Styles */
 .calculate-btn,
 .feature-btn,
-.setting-btn {
+.setting-btn,
+.refresh-btn {
     width: 100%;
     padding: 1rem 2rem;
     background: var(--primary-gradient);
@@ -543,11 +544,22 @@ body::after {
     box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
 }
 
+.refresh-btn {
+    background: var(--secondary-gradient);
+    margin-top: 1rem;
+    box-shadow: 0 4px 16px rgba(100, 45, 151, 0.3);
+}
+
 .calculate-btn:hover,
 .feature-btn:hover,
-.setting-btn:hover {
+.setting-btn:hover,
+.refresh-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.refresh-btn:hover {
+    box-shadow: 0 8px 24px rgba(100, 45, 151, 0.4);
 }
 
 .feature-btn,
