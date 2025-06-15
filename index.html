@@ -54,7 +54,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            padding-top: 400px; /* Adjust based on header height */
+            padding-top: 0;
         }
 
         /* Animated Background */
@@ -89,7 +89,7 @@
 
         /* Header */
         .header {
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             text-align: center;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -101,6 +101,11 @@
             z-index: 1000;
             box-shadow: var(--shadow-glow);
         }
+        
+        /* Main content wrapper to account for fixed header */
+        .main-wrapper {
+            margin-top: 320px; /* Initial spacing for header */
+        }
 
         .logo-container {
             display: flex;
@@ -111,8 +116,8 @@
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             box-shadow: 
                 0 0 30px rgba(255, 255, 255, 0.3),
@@ -134,7 +139,7 @@
         }
 
         .main-title {
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             font-weight: 900;
             background: var(--gold-gradient);
             background-clip: text;
@@ -152,10 +157,10 @@
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--text-secondary);
             font-weight: 400;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         /* Download App Button */
@@ -501,15 +506,15 @@
             }
 
             .main-title {
-                font-size: 4rem;
+                font-size: 3rem;
             }
 
             .header {
-                padding: 3rem 0;
+                padding: 2rem 0;
             }
 
-            body {
-                padding-top: 450px;
+            .main-wrapper {
+                margin-top: 380px;
             }
         }
 
@@ -527,6 +532,10 @@
             .container {
                 padding: 0 2rem;
             }
+
+            .main-wrapper {
+                margin-top: 350px;
+            }
         }
 
         /* Tablet (768px - 991px) */
@@ -541,15 +550,15 @@
             }
 
             .main-title {
-                font-size: 3rem;
-            }
-
-            body {
-                padding-top: 380px;
+                font-size: 2.25rem;
             }
 
             .header {
-                padding: 2rem 0;
+                padding: 1.75rem 0;
+            }
+
+            .main-wrapper {
+                margin-top: 320px;
             }
 
             .search-bar {
@@ -560,8 +569,8 @@
 
         /* Mobile (max-width: 767px) */
         @media (max-width: 767px) {
-            body {
-                padding-top: 320px;
+            .main-wrapper {
+                margin-top: 280px;
             }
 
             .container {
@@ -569,21 +578,21 @@
             }
 
             .main-title {
-                font-size: 2.2rem;
+                font-size: 2rem;
                 line-height: 1.1;
             }
 
             .subtitle {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
 
             .header {
-                padding: 1.5rem 0;
+                padding: 1.25rem 0;
             }
 
             .logo {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
             }
 
             .download-notification {
@@ -648,8 +657,8 @@
 
         /* Small Mobile (max-width: 480px) */
         @media (max-width: 480px) {
-            body {
-                padding-top: 300px;
+            .main-wrapper {
+                margin-top: 260px;
             }
 
             .container {
@@ -657,20 +666,20 @@
             }
 
             .main-title {
-                font-size: 1.8rem;
+                font-size: 1.75rem;
             }
 
             .subtitle {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
 
             .logo {
-                width: 70px;
-                height: 70px;
+                width: 60px;
+                height: 60px;
             }
 
             .header {
-                padding: 1.25rem 0;
+                padding: 1rem 0;
             }
 
             .download-btn {
@@ -725,13 +734,17 @@
 
         /* Very Small Mobile (max-width: 360px) */
         @media (max-width: 360px) {
+            .main-wrapper {
+                margin-top: 240px;
+            }
+
             .main-title {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
             }
 
             .logo {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
 
             .calculator-card {
@@ -838,19 +851,21 @@
         </div>
     </header>
 
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-container">
-                <div class="search-icon">🔍</div>
-                <input type="text" class="search-bar" placeholder="Search for calculators (EMI, SIP, Tax, etc.)" id="searchInput">
-                <div class="search-results" id="searchResults"></div>
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-container">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-bar" placeholder="Search for calculators (EMI, SIP, Tax, etc.)" id="searchInput">
+                    <div class="search-results" id="searchResults"></div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Calculators Section -->
-    <section class="calculators-section">
+        <!-- Calculators Section -->
+        <section class="calculators-section">
         <div class="container">
             <h2 class="section-title">Financial Calculators & Tools</h2>
             <div class="calculators-grid" id="calculatorsGrid">
@@ -999,21 +1014,22 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-links">
-                <a href="#" class="footer-link">About Us</a>
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact</a>
-                <a href="#" class="footer-link">Help</a>
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact</a>
+                    <a href="#" class="footer-link">Help</a>
+                </div>
+                <div class="footer-content">
+                    <p>&copy; 2024 PRATIX FINANCE. All rights reserved.</p>
+                    <p>Empowering your financial decisions with intelligent calculators.</p>
+                </div>
             </div>
-            <div class="footer-content">
-                <p>&copy; 2024 PRATIX FINANCE. All rights reserved.</p>
-                <p>Empowering your financial decisions with intelligent calculators.</p>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
         // Search functionality
@@ -1214,7 +1230,7 @@
         // Register service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                     .then((registration) => {
                         console.log('PWA: Service Worker registered successfully', registration.scope);
                         
@@ -1230,8 +1246,11 @@
                     })
                     .catch((error) => {
                         console.log('PWA: Service Worker registration failed', error);
+                        showInstallNotification('Service Worker registration failed', 'error');
                     });
             });
+        } else {
+            console.log('PWA: Service Workers not supported');
         }
 
         // Check install status on page load

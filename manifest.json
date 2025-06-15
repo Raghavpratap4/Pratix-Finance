@@ -3,7 +3,7 @@
   "name": "PRATIX FINANCE - Financial Calculators & Tools",
   "short_name": "Pratix Finance",
   "description": "Your comprehensive financial calculator suite for EMI, SIP, Tax calculations and more.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#003A68",
   "theme_color": "#31417F",

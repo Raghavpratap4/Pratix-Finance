@@ -1,15 +1,15 @@
 
 const CACHE_NAME = 'pratix-finance-v1.0.0';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/emi-calculator.html',
-  '/style.css',
-  '/script.js',
-  '/logo.png',
-  '/favicon.png',
-  '/favicon.ico',
-  '/manifest.json',
+  './',
+  './index.html',
+  './emi-calculator.html',
+  './style.css',
+  './script.js',
+  './logo.png',
+  './favicon.png',
+  './favicon.ico',
+  './manifest.json',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap',
   'https://cdn.jsdelivr.net/npm/chart.js'
 ];
@@ -95,7 +95,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // Return offline page for navigation requests
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         }
       })
   );
