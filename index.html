@@ -8,6 +8,23 @@
     <meta name="keywords" content="PRATIX FINANCE, EMI calculator, SIP calculator, financial tools, loan calculator, investment calculator" />
     <meta name="author" content="Pratix Finance" />
     <title>PRATIX FINANCE - Financial Calculators & Tools</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+    <meta name="msapplication-TileColor" content="#31417F">
+    <meta name="msapplication-TileImage" content="/favicon.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -732,6 +749,29 @@
             pointer-events: none;
         }
 
+        /* PWA Notification Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -100%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        
+        @keyframes slideOutUp {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -100%);
+            }
+        }
+
         /* Search Results */
         .search-results {
             position: absolute;
@@ -1075,42 +1115,185 @@
             });
         }
 
-        // Download app functionality
-        function checkAppDownloadStatus() {
+        // PWA Install Functionality
+        let deferredPrompt;
+        let isAppInstalled = false;
+
+        // Check if app is already installed
+        function checkIfAppInstalled() {
+            // Check if running as PWA
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                isAppInstalled = true;
+                hideDownloadSection();
+                return;
+            }
+
+            // Check localStorage flag
             const isAppDownloaded = localStorage.getItem('appDownloaded');
-            const downloadSection = document.getElementById('downloadSection');
-            
             if (isAppDownloaded === 'true') {
+                hideDownloadSection();
+                return;
+            }
+        }
+
+        function hideDownloadSection() {
+            const downloadSection = document.getElementById('downloadSection');
+            if (downloadSection) {
                 downloadSection.classList.add('download-section-hidden');
             }
         }
 
-        // Check download status on page load
-        checkAppDownloadStatus();
+        function showInstallNotification(message, type = 'success') {
+            // Create notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? 'linear-gradient(135deg, #00ff88, #00d4ff)' : 'linear-gradient(135deg, #ff4757, #ff6b7a)'};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+                backdrop-filter: blur(20px);
+                animation: slideInDown 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutUp 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
 
-        document.getElementById('downloadApp').addEventListener('click', function(e) {
+        // Listen for beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('PWA: beforeinstallprompt event fired');
+            
+            // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
             
-            // Simulate app download process
+            // Save the event so we can trigger it later
+            deferredPrompt = e;
+            
+            // Show the download button
+            const downloadSection = document.getElementById('downloadSection');
+            if (downloadSection) {
+                downloadSection.classList.remove('download-section-hidden');
+            }
+        });
+
+        // Listen for app installed event
+        window.addEventListener('appinstalled', (e) => {
+            console.log('PWA: App installed successfully');
+            
+            // Mark as installed
+            isAppInstalled = true;
+            localStorage.setItem('appDownloaded', 'true');
+            
+            // Hide download section
+            hideDownloadSection();
+            
+            // Show success notification
+            showInstallNotification('🎉 App installed successfully! You can now find Pratix Finance on your home screen.');
+            
+            // Clear the saved prompt
+            deferredPrompt = null;
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('PWA: Service Worker registered successfully', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showInstallNotification('🔄 App updated! Refresh to see the latest version.');
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.log('PWA: Service Worker registration failed', error);
+                    });
+            });
+        }
+
+        // Check install status on page load
+        checkIfAppInstalled();
+
+        // Download app button click handler
+        document.getElementById('downloadApp').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            if (isAppInstalled) {
+                showInstallNotification('App is already installed!', 'info');
+                return;
+            }
+
+            if (!deferredPrompt) {
+                // Fallback for browsers that don't support beforeinstallprompt
+                showInstallNotification('To install: Open browser menu → "Add to Home Screen" or "Install App"', 'info');
+                return;
+            }
+
+            // Update button state
             this.style.opacity = '0.7';
             this.style.pointerEvents = 'none';
-            this.innerHTML = '<span class="download-icon">⏳</span><span>Downloading...</span>';
+            this.innerHTML = '<span class="download-icon">⏳</span><span>Installing...</span>';
             
-            // Simulate download time
-            setTimeout(() => {
-                // Mark app as downloaded
-                localStorage.setItem('appDownloaded', 'true');
+            try {
+                // Show the install prompt
+                const { outcome } = await deferredPrompt.prompt();
+                console.log('PWA: Install prompt result:', outcome);
                 
-                // Show success message
-                this.innerHTML = '<span class="download-icon">✅</span><span>Downloaded!</span>';
-                this.style.background = 'linear-gradient(135deg, #00ff88 0%, #00d4ff 100%)';
+                if (outcome === 'accepted') {
+                    console.log('PWA: User accepted the install prompt');
+                    
+                    // Update UI
+                    this.innerHTML = '<span class="download-icon">✅</span><span>Installing...</span>';
+                    this.style.background = 'linear-gradient(135deg, #00ff88 0%, #00d4ff 100%)';
+                    
+                    // The appinstalled event will handle the rest
+                } else {
+                    console.log('PWA: User dismissed the install prompt');
+                    
+                    // Reset button
+                    this.style.opacity = '1';
+                    this.style.pointerEvents = 'auto';
+                    this.innerHTML = '<span class="download-icon">📱</span><span>Download App</span>';
+                    
+                    showInstallNotification('Installation cancelled. You can try again anytime!', 'info');
+                }
                 
-                // Hide the entire download section after a brief moment
-                setTimeout(() => {
-                    document.getElementById('downloadSection').classList.add('download-section-hidden');
-                }, 1500);
+                // Clear the prompt
+                deferredPrompt = null;
                 
-            }, 2000); // 2 second download simulation
+            } catch (error) {
+                console.error('PWA: Error during install:', error);
+                
+                // Reset button
+                this.style.opacity = '1';
+                this.style.pointerEvents = 'auto';
+                this.innerHTML = '<span class="download-icon">📱</span><span>Download App</span>';
+                
+                showInstallNotification('Installation failed. Please try again.', 'error');
+            }
         });
 
         // Header is now always visible and fixed

@@ -1,0 +1,63 @@
+
+{
+  "name": "PRATIX FINANCE - Financial Calculators & Tools",
+  "short_name": "Pratix Finance",
+  "description": "Your comprehensive financial calculator suite for EMI, SIP, Tax calculations and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#003A68",
+  "theme_color": "#31417F",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["finance", "productivity", "utilities"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "logo.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "EMI Calculator",
+      "short_name": "EMI Calc",
+      "description": "Calculate loan EMI",
+      "url": "/emi-calculator.html",
+      "icons": [
+        {
+          "src": "favicon.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}

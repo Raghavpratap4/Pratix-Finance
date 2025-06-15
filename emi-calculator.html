@@ -8,11 +8,27 @@
     <meta http-equiv="Expires" content="0" />
     <meta name="description" content="Pratix Finance offers powerful EMI and income tax calculators with advanced features and PDF support." />
     <meta name="keywords" content="EMI calculator, income tax calculator, Pratix Finance, loan interest, gst, sip calculator, raghav pratap" />
-    <meta name="author" content="Raghav Pratap" />
+    <meta name="author" content="Raghav Pratap" content="width=device-width, initial-scale=1.0">
+    <title>FinCalc Pro - Financial Calculator</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <meta name="robots" content="index, follow" />
     <!-- Make sure this matches the correct file -->
      <link rel="canonical" href="https://pratix-finance.vercel.app/emi-calculator.html" />
-    <title>PRATIX FINANCE</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -82,7 +98,7 @@
                             <span class="result-value" id="totalAmount">₹2,00,82,240</span>
                         </div>
                     </div>
-                    
+
                     <div class="chart-container glow-chart">
                         <div class="chart-title">EMI Breakdown</div>
                         <div class="chart-wrapper">
@@ -175,7 +191,7 @@
                             <span class="btn-text">Refresh</span>
                         </button>
                     </div>
-                    
+
                     <div class="comparison-section" style="display: none;" id="prepaymentResults">
                         <div class="impact-summary">
                             <div class="impact-card">
@@ -187,7 +203,7 @@
                                 <p class="impact-value" id="benefitValue">3 Years 2 Months</p>
                             </div>
                         </div>
-                        
+
                         <div class="scenario-comparison">
                             <div class="scenario-card">
                                 <h3>Original Loan</h3>
@@ -206,7 +222,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="scenario-card prepay-scenario">
                                 <h3>With Prepayment</h3>
                                 <div class="scenario-details">
@@ -225,7 +241,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="chart-container glow-chart">
                             <div class="chart-title">Loan Comparison</div>
                             <div class="chart-wrapper">
@@ -240,7 +256,7 @@
             <section id="loan-comparison" class="tab-content">
                 <div class="glass-card">
                     <h2 class="section-title">Loan Comparison</h2>
-                    
+
                     <!-- Loan Input Forms -->
                     <div class="loan-inputs-grid">
                         <!-- Loan 1 -->
@@ -343,7 +359,7 @@
             <section id="tools-extras" class="tab-content">
                 <div class="glass-card">
                     <h2 class="section-title">Tools & Extras</h2>
-                    
+
                     <!-- Loan Eligibility Checker -->
                     <div class="tool-section">
                         <div class="tool-header" data-tool="eligibility">
@@ -583,7 +599,7 @@
             <section id="smart-features" class="tab-content">
                 <div class="glass-card">
                     <h2 class="section-title">Smart Features</h2>
-                    
+
                     <!-- Loan Plan Management -->
                     <div class="feature-section">
                         <h3 class="feature-section-title">Loan Plan Management</h3>
@@ -686,7 +702,7 @@
             <section id="settings" class="tab-content">
                 <div class="glass-card">
                     <h2 class="section-title">Settings</h2>
-                    
+
                     <!-- Theme & Display Settings -->
                     <div class="settings-section">
                         <h3 class="settings-section-title">Theme & Display</h3>
@@ -747,7 +763,7 @@
                                 <div class="setting-info">
                                     <h4>Export Data</h4>
                                     <p>Download your calculation history</p>
-                                </div>
+                                </div><previous_generation>```text
                                 <button class="setting-btn" id="exportData">Export</button>
                             </div>
                             <div class="setting-item">
@@ -772,7 +788,7 @@
                                 </div>
                                 <div class="link-arrow">→</div>
                             </a>
-                            
+
                             <a href="#" class="settings-link" id="helpLink">
                                 <div class="link-icon">❓</div>
                                 <div class="link-content">
@@ -781,7 +797,7 @@
                                 </div>
                                 <div class="link-arrow">→</div>
                             </a>
-                            
+
                             <a href="#" class="settings-link" id="feedbackLink">
                                 <div class="link-icon">💬</div>
                                 <div class="link-content">
@@ -790,7 +806,7 @@
                                 </div>
                                 <div class="link-arrow">→</div>
                             </a>
-                            
+
                             <a href="#" class="settings-link" id="privacyLink">
                                 <div class="link-icon">🔒</div>
                                 <div class="link-content">
