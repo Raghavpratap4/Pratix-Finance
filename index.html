@@ -80,23 +80,15 @@
         .header {
             padding: 2rem 0;
             text-align: center;
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
             z-index: 1000;
-            box-shadow: 
-                0 4px 20px rgba(0, 0, 0, 0.15),
-                0 1px 0 rgba(255, 255, 255, 0.1) inset;
-            -webkit-backdrop-filter: blur(25px);
         }
         
-        /* Main content wrapper to account for fixed header */
+        /* Main content wrapper */
         .main-wrapper {
-            padding-top: 280px;
+            padding-top: 0;
         }
 
         .logo-container {
@@ -1219,7 +1211,52 @@
 
             if (!deferredPrompt) {
                 // Fallback for browsers that don't support beforeinstallprompt
-                showInstallNotification('To install: Open browser menu → "Add to Home Screen" or "Install App"', 'info');
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'PRATIX FINANCE - Financial Calculator',
+                            text: 'Download PRATIX FINANCE for advanced financial calculations',
+                            url: window.location.href
+                        });
+                    } catch (err) {
+                        console.log('Share cancelled');
+                    }
+                } else {
+                    // Provide manual installation instructions
+                    const instructions = document.createElement('div');
+                    instructions.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: rgba(0, 0, 0, 0.9);
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 16px;
+                        max-width: 400px;
+                        z-index: 10000;
+                        text-align: center;
+                        backdrop-filter: blur(20px);
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                    `;
+                    
+                    const browserName = navigator.userAgent.includes('Chrome') ? 'Chrome' : 
+                                      navigator.userAgent.includes('Firefox') ? 'Firefox' : 
+                                      navigator.userAgent.includes('Safari') ? 'Safari' : 'your browser';
+                    
+                    instructions.innerHTML = `
+                        <h3 style="margin-bottom: 1rem;">Install PRATIX FINANCE</h3>
+                        <p style="margin-bottom: 1.5rem;">To install this app:</p>
+                        <ol style="text-align: left; margin-bottom: 1.5rem;">
+                            <li>Open ${browserName} menu (⋮)</li>
+                            <li>Select "Add to Home Screen" or "Install App"</li>
+                            <li>Follow the prompts</li>
+                        </ol>
+                        <button onclick="this.parentElement.remove()" style="background: #4facfe; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">Got it!</button>
+                    `;
+                    
+                    document.body.appendChild(instructions);
+                }
                 return;
             }
 
@@ -1230,7 +1267,8 @@
             
             try {
                 // Show the install prompt
-                const { outcome } = await deferredPrompt.prompt();
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
                 console.log('PWA: Install prompt result:', outcome);
                 
                 if (outcome === 'accepted') {
