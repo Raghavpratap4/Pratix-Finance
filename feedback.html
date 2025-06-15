@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="description" content="Feedback - PRATIX FINANCE by Raghav Pratap" />
+    <title>Feedback - PRATIX FINANCE</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">Feedback</h1>
+                <button class="icon-btn" onclick="goToHome()">🏠</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="glass-card">
+                <h1 class="section-title">We Value Your Feedback</h1>
+                <p class="text-gray-300 mb-8">Your thoughts and suggestions help us improve PRATIX FINANCE. Let us know how we're doing!</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Feedback Form -->
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-white mb-6">Share Your Experience</h2>
+                        
+                        <form class="space-y-6" id="feedbackForm">
+                            <div>
+                                <label for="rating" class="block text-gray-300 font-semibold mb-3">Overall Rating *</label>
+                                <div class="flex space-x-2" id="starRating">
+                                    <span class="star text-3xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="1">⭐</span>
+                                    <span class="star text-3xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="2">⭐</span>
+                                    <span class="star text-3xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="3">⭐</span>
+                                    <span class="star text-3xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="4">⭐</span>
+                                    <span class="star text-3xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="5">⭐</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">Click the stars to rate your experience</p>
+                                <input type="hidden" id="ratingValue" name="rating" required>
+                            </div>
+
+                            <div>
+                                <label for="name" class="block text-gray-300 font-semibold mb-2">Your Name (Optional)</label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    name="name"
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                    placeholder="Enter your name"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-gray-300 font-semibold mb-2">Email (Optional)</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email"
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                    placeholder="Enter your email for follow-up"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="category" class="block text-gray-300 font-semibold mb-2">Feedback Category *</label>
+                                <select 
+                                    id="category" 
+                                    name="category" 
+                                    required
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                >
+                                    <option value="">Select a category</option>
+                                    <option value="general">General Feedback</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="bug">Bug Report</option>
+                                    <option value="ui">User Interface</option>
+                                    <option value="calculator">Calculator Accuracy</option>
+                                    <option value="performance">Performance</option>
+                                    <option value="suggestion">Suggestion</option>
+                                    <option value="compliment">Compliment</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="calculator" class="block text-gray-300 font-semibold mb-2">Which Calculator? (Optional)</label>
+                                <select 
+                                    id="calculator" 
+                                    name="calculator"
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                >
+                                    <option value="">Select calculator</option>
+                                    <option value="emi">EMI Calculator</option>
+                                    <option value="sip">SIP Calculator</option>
+                                    <option value="tax">Tax Calculator</option>
+                                    <option value="gst">GST Calculator</option>
+                                    <option value="fd">FD Calculator</option>
+                                    <option value="general">General App</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-gray-300 font-semibold mb-2">Your Feedback *</label>
+                                <textarea 
+                                    id="message" 
+                                    name="message" 
+                                    rows="6" 
+                                    required
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors resize-vertical"
+                                    placeholder="Share your thoughts, suggestions, or report issues..."
+                                ></textarea>
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105"
+                            >
+                                Submit Feedback 💌
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Feedback Stats & Info -->
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-white mb-6">Why Your Feedback Matters</h2>
+                        
+                        <!-- Impact Stats -->
+                        <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-white mb-4">Your Voice Makes a Difference</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-white">150+</div>
+                                    <div class="text-gray-200 text-sm">Feedback Received</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-white">25+</div>
+                                    <div class="text-gray-200 text-sm">Features Added</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-white">98%</div>
+                                    <div class="text-gray-200 text-sm">Issues Resolved</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-white">4.8⭐</div>
+                                    <div class="text-gray-200 text-sm">Average Rating</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Improvements -->
+                        <div class="bg-black bg-opacity-20 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-white mb-4">Recent Improvements Based on Feedback</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-green-400">✅</span>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Mobile responsiveness improved</p>
+                                        <p class="text-gray-400 text-xs">Suggested by Sarah K.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-green-400">✅</span>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Added chart visualizations</p>
+                                        <p class="text-gray-400 text-xs">Requested by multiple users</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-green-400">✅</span>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Enhanced calculation accuracy</p>
+                                        <p class="text-gray-400 text-xs">Bug report from Amit P.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-green-400">✅</span>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Added save & share features</p>
+                                        <p class="text-gray-400 text-xs">Feature request from community</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Types -->
+                        <div class="bg-black bg-opacity-20 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-white mb-4">Types of Feedback We Love</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">💡</span>
+                                    <div>
+                                        <h4 class="text-white font-medium">Feature Suggestions</h4>
+                                        <p class="text-gray-400 text-sm">Ideas for new calculators or improvements</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🐛</span>
+                                    <div>
+                                        <h4 class="text-white font-medium">Bug Reports</h4>
+                                        <p class="text-gray-400 text-sm">Help us fix issues you encounter</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🎨</span>
+                                    <div>
+                                        <h4 class="text-white font-medium">UI/UX Feedback</h4>
+                                        <p class="text-gray-400 text-sm">Make our interface even better</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">⚡</span>
+                                    <div>
+                                        <h4 class="text-white font-medium">Performance Issues</h4>
+                                        <p class="text-gray-400 text-sm">Help us optimize for speed</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Alternative -->
+                        <div class="bg-gradient-to-r from-blue-600 to-green-600 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-white mb-3">Prefer Direct Contact?</h3>
+                            <p class="text-gray-100 mb-4">
+                                You can also email us directly for detailed feedback or support requests.
+                            </p>
+                            <a 
+                                href="mailto:pratixfinance4@gmail.com?subject=Feedback for PRATIX FINANCE" 
+                                class="inline-flex items-center space-x-2 bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                            >
+                                <span>📧</span>
+                                <span>Email Us</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials -->
+                <div class="mt-12 bg-black bg-opacity-20 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-6">What Users Are Saying</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-gradient-to-br from-blue-600 to-purple-600 p-4 rounded-lg">
+                            <div class="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+                            <p class="text-white text-sm mb-3">"Best financial calculator app I've used. The EMI calculator is super accurate!"</p>
+                            <p class="text-gray-200 text-xs">- Priya S.</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-600 to-blue-600 p-4 rounded-lg">
+                            <div class="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+                            <p class="text-white text-sm mb-3">"Love the clean design and how fast it calculates. Very professional!"</p>
+                            <p class="text-gray-200 text-xs">- Rahul M.</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-600 to-pink-600 p-4 rounded-lg">
+                            <div class="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+                            <p class="text-white text-sm mb-3">"The SIP calculator helped me plan my investments perfectly. Thank you!"</p>
+                            <p class="text-gray-200 text-xs">- Anjali K.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="footer-links">
+                    <a href="about.html" class="footer-link">About Us</a>
+                    <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="terms.html" class="footer-link">Terms of Service</a>
+                    <a href="blog.html" class="footer-link">Blog</a>
+                    <a href="contact.html" class="footer-link">Contact</a>
+                    <a href="feedback.html" class="footer-link">Feedback</a>
+                </div>
+                <div class="footer-content">
+                    <p>&copy; 2025 PRATIX FINANCE by <strong>Raghav Pratap</strong>. All rights reserved.</p>
+                    <p>Empowering your financial decisions with intelligent calculators.</p>
+                    <p class="mt-2">
+                        <a href="mailto:pratixfinance4@gmail.com" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            pratixfinance4@gmail.com
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingValue = document.getElementById('ratingValue');
+        let currentRating = 0;
+
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                currentRating = index + 1;
+                ratingValue.value = currentRating;
+                updateStars();
+            });
+
+            star.addEventListener('mouseover', () => {
+                updateStars(index + 1);
+            });
+        });
+
+        document.getElementById('starRating').addEventListener('mouseleave', () => {
+            updateStars();
+        });
+
+        function updateStars(hoverRating = null) {
+            const rating = hoverRating || currentRating;
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.style.filter = 'none';
+                    star.style.color = '#fbbf24';
+                } else {
+                    star.style.filter = 'grayscale(100%)';
+                    star.style.color = '#6b7280';
+                }
+            });
+        }
+
+        // Initialize stars
+        updateStars();
+
+        // Feedback form handling
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!currentRating) {
+                showNotification('Please provide a rating before submitting.', 'error');
+                return;
+            }
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Create email body
+            const emailBody = `
+Feedback for PRATIX FINANCE
+
+Rating: ${currentRating}/5 stars
+Name: ${data.name || 'Anonymous'}
+Email: ${data.email || 'Not provided'}
+Category: ${data.category}
+Calculator: ${data.calculator || 'N/A'}
+
+Feedback:
+${data.message}
+
+---
+Submitted via Feedback Form
+            `.trim();
+            
+            // Create mailto link
+            const mailtoLink = `mailto:pratixfinance4@gmail.com?subject=Feedback: ${data.category}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            showNotification('Thank you for your feedback! Email client opened.', 'success');
+            
+            // Reset form
+            this.reset();
+            currentRating = 0;
+            ratingValue.value = '';
+            updateStars();
+        });
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg z-50 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white max-w-sm`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

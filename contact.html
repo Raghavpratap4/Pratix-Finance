@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="description" content="Contact PRATIX FINANCE - Get in touch with Raghav Pratap" />
+    <title>Contact Us - PRATIX FINANCE</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">Contact Us</h1>
+                <button class="icon-btn" onclick="goToHome()">🏠</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="glass-card">
+                <h1 class="section-title">Get in Touch</h1>
+                <p class="text-gray-300 mb-8">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Contact Form -->
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-white mb-6">Send us a Message</h2>
+                        
+                        <form class="space-y-6" id="contactForm">
+                            <div>
+                                <label for="name" class="block text-gray-300 font-semibold mb-2">Full Name *</label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    name="name" 
+                                    required
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                    placeholder="Enter your full name"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-gray-300 font-semibold mb-2">Email Address *</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    required
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                    placeholder="Enter your email address"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="subject" class="block text-gray-300 font-semibold mb-2">Subject *</label>
+                                <select 
+                                    id="subject" 
+                                    name="subject" 
+                                    required
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
+                                >
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="bug">Bug Report</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="business">Business Partnership</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="support">Technical Support</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-gray-300 font-semibold mb-2">Message *</label>
+                                <textarea 
+                                    id="message" 
+                                    name="message" 
+                                    rows="6" 
+                                    required
+                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors resize-vertical"
+                                    placeholder="Write your message here..."
+                                ></textarea>
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                            >
+                                Send Message 📧
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-white mb-6">Contact Information</h2>
+                        
+                        <!-- Direct Email -->
+                        <div class="bg-gradient-to-r from-green-600 to-blue-600 p-6 rounded-lg">
+                            <div class="flex items-center space-x-4">
+                                <div class="text-3xl">📧</div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-2">Email Us Directly</h3>
+                                    <a 
+                                        href="mailto:pratixfinance4@gmail.com" 
+                                        class="text-white text-lg font-semibold hover:text-gray-200 transition-colors underline"
+                                    >
+                                        pratixfinance4@gmail.com
+                                    </a>
+                                    <p class="text-gray-100 text-sm mt-1">Click to open in your email client</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Contact Options -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-white">Quick Contact</h3>
+                            
+                            <div class="bg-black bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🕐</span>
+                                    <div>
+                                        <h4 class="text-white font-semibold">Response Time</h4>
+                                        <p class="text-gray-300 text-sm">We typically respond within 24-48 hours</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-black bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🌍</span>
+                                    <div>
+                                        <h4 class="text-white font-semibold">Location</h4>
+                                        <p class="text-gray-300 text-sm">Based in India, serving globally</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-black bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">💼</span>
+                                    <div>
+                                        <h4 class="text-white font-semibold">Business Hours</h4>
+                                        <p class="text-gray-300 text-sm">Monday - Friday, 9 AM - 6 PM IST</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Founder Information -->
+                        <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-6 rounded-lg">
+                            <div class="text-center">
+                                <div class="text-4xl mb-3">👨‍💼</div>
+                                <h3 class="text-xl font-bold text-white mb-2">Raghav Pratap</h3>
+                                <p class="text-gray-100 mb-2">Founder & Creator</p>
+                                <p class="text-gray-200 text-sm">
+                                    Passionate about making financial planning accessible to everyone through innovative calculator tools.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Quick Links -->
+                        <div class="bg-black bg-opacity-20 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-white mb-4">Frequently Asked Questions</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <h4 class="text-white font-medium text-sm">How accurate are your calculators?</h4>
+                                    <p class="text-gray-400 text-xs">Our calculators use industry-standard formulas and are regularly updated for accuracy.</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium text-sm">Is my data secure?</h4>
+                                    <p class="text-gray-400 text-xs">Yes, all calculations happen locally on your device. We don't store any financial data.</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium text-sm">Can I use this for business?</h4>
+                                    <p class="text-gray-400 text-xs">Absolutely! Our tools are free for both personal and business use.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alternative Contact Methods -->
+                <div class="mt-12 bg-black bg-opacity-20 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4">Other Ways to Connect</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="feedback.html" class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                            <div class="text-2xl mb-2">💬</div>
+                            <div class="text-white font-semibold">Send Feedback</div>
+                            <div class="text-gray-200 text-sm">Share your thoughts and suggestions</div>
+                        </a>
+                        
+                        <a href="blog.html" class="bg-green-600 p-4 rounded-lg text-center hover:bg-green-700 transition-colors">
+                            <div class="text-2xl mb-2">📚</div>
+                            <div class="text-white font-semibold">Read Our Blog</div>
+                            <div class="text-gray-200 text-sm">Financial tips and insights</div>
+                        </a>
+                        
+                        <a href="about.html" class="bg-purple-600 p-4 rounded-lg text-center hover:bg-purple-700 transition-colors">
+                            <div class="text-2xl mb-2">ℹ️</div>
+                            <div class="text-white font-semibold">About Us</div>
+                            <div class="text-gray-200 text-sm">Learn more about our mission</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="footer-links">
+                    <a href="about.html" class="footer-link">About Us</a>
+                    <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="terms.html" class="footer-link">Terms of Service</a>
+                    <a href="blog.html" class="footer-link">Blog</a>
+                    <a href="contact.html" class="footer-link">Contact</a>
+                    <a href="feedback.html" class="footer-link">Feedback</a>
+                </div>
+                <div class="footer-content">
+                    <p>&copy; 2025 PRATIX FINANCE by <strong>Raghav Pratap</strong>. All rights reserved.</p>
+                    <p>Empowering your financial decisions with intelligent calculators.</p>
+                    <p class="mt-2">
+                        <a href="mailto:pratixfinance4@gmail.com" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            pratixfinance4@gmail.com
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Create email body
+            const emailBody = `
+Name: ${data.name}
+Email: ${data.email}
+Subject: ${data.subject}
+
+Message:
+${data.message}
+            `.trim();
+            
+            // Create mailto link
+            const mailtoLink = `mailto:pratixfinance4@gmail.com?subject=Contact Form: ${data.subject}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            showNotification('Email client opened! Thank you for your message.', 'success');
+            
+            // Reset form
+            this.reset();
+        });
+
+        function showNotification(message, type) {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg z-50 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
