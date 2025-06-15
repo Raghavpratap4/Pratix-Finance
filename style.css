@@ -913,7 +913,7 @@ body::after {
 }
 
 .tool-header:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 255, 0.08);
 }
 
 .tool-title {
@@ -2023,7 +2023,7 @@ body::after {
 }
 
 /* Large screens - Desktop specific optimizations */
-@media (min-width: 429px) {
+@media (min-width: 429px){
     .app-container {
         border-left: 1px solid var(--glass-border);
         border-right: 1px solid var(--glass-border);
@@ -2683,19 +2683,19 @@ select:focus {
         grid-template-columns: 1fr;
         gap: 0.5rem;
     }
-    
+
     .gst-rate-options {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     .analysis-cards {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .hsn-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .invoice-actions {
         flex-direction: column;
     }
@@ -2705,27 +2705,27 @@ select:focus {
     .item-inputs {
         grid-template-columns: 1fr;
     }
-    
+
     .gst-rate-options {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .analysis-cards {
         grid-template-columns: 1fr;
     }
-    
+
     .hsn-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .invoice-document {
         padding: 1rem;
     }
-    
+
     .invoice-table {
         font-size: 0.75rem;
     }
-    
+
     .invoice-table th,
     .invoice-table td {
         padding: 0.5rem 0.25rem;
@@ -2740,3 +2740,73 @@ select:focus {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Enhanced Notification system */
+        .notification {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            color: white;
+            z-index: 1000;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: slideInDown 0.3s ease;
+            font-weight: 500;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notification-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .notification-message {
+            font-weight: 500;
+            font-size: 0.875rem;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .notification-close:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-error {
+            background: rgba(255, 71, 87, 0.95);
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .notification-success {
+            background: rgba(0, 255, 136, 0.95);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .notification-info {
+            background: rgba(0, 212, 255, 0.95);
+            border-color: rgba(0, 212, 255, 0.3);
+        }

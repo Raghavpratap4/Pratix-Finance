@@ -137,8 +137,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     deductionsSection.style.display = 'block';
                 } else {
                     deductionsSection.style.display = 'none';
+                    // Clear deduction inputs when switching to new regime
+                    ['deduction80C', 'deduction80D', 'hraDeduction', 'homeLoanInterest', 'otherDeductions'].forEach(id => {
+                        const input = document.getElementById(id);
+                        if (input) input.value = '';
+                    });
                 }
-                if (validateTaxInputs()) {
+
+                const salary = document.getElementById('salaryInput')?.value;
+                if (salary && salary > 0) {
                     calculateTax();
                     calculateRegimeComparison();
                 }
@@ -245,68 +252,186 @@ document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('netTakeHome')) document.getElementById('netTakeHome').textContent = '₹0';
     }
 
-    function validateTaxInputs() {
-        const salary = document.getElementById('salaryInput')?.value;
+    // Show notification function for tax calculator
+    function showTaxNotification(message, type = 'info') {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.tax-notification');
+        existingNotifications.forEach(notif => notif.remove());
 
-        if (!salary || salary <= 0) {
-            showNotification('Please enter a valid salary amount', 'error');
-            return false;
+        const notification = document.createElement('div');
+        notification.className = `tax-notification ${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+        `;
+
+        switch(type) {
+            case 'error':
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                break;
+            case 'success':
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                break;
+            case 'warning':
+                notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                break;
+            default:
+                notification.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
         }
 
-        return true;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
     }
 
+    // Validation functions for tax calculator
+    function validateTaxInputs() {
+        const salary = parseFloat(document.getElementById('salaryInput')?.value);
+        const ageCategory = document.querySelector('input[name="ageCategory"]:checked')?.value;
+        const taxRegime = document.querySelector('input[name="taxRegime"]:checked')?.value;
+
+        const errors = [];
+
+        if (!salary || salary <= 0) {
+            errors.push('Please enter a valid annual salary amount');
+        }
+        if (salary < 100000) {
+            errors.push('Minimum salary should be ₹1,00,000 for meaningful calculation');
+        }
+        if (salary > 50000000) {
+            errors.push('Maximum salary limit is ₹5 crores for this calculator');
+        }
+
+        if (!ageCategory) {
+            errors.push('Please select your age category');
+        }
+
+        if (!taxRegime) {
+            errors.push('Please select a tax regime');
+        }
+
+        return errors;
+    }
+
+    function validateDeductions(salary) {
+        const deduction80C = parseFloat(document.getElementById('deduction80C')?.value) || 0;
+        const deduction80D = parseFloat(document.getElementById('deduction80D')?.value) || 0;
+        const hraDeduction = parseFloat(document.getElementById('hraDeduction')?.value) || 0;
+        const homeLoanInterest = parseFloat(document.getElementById('homeLoanInterest')?.value) || 0;
+        const otherDeductions = parseFloat(document.getElementById('otherDeductions')?.value) || 0;
+
+        const warnings = [];
+
+        if (deduction80C > 150000) {
+            warnings.push('80C deduction cannot exceed ₹1,50,000');
+        }
+
+        if (deduction80D > 75000) {
+            warnings.push('80D deduction seems high. Please verify the amount');
+        }
+
+        if (hraDeduction > salary * 0.5) {
+            warnings.push('HRA deduction cannot exceed 50% of salary');
+        }
+
+        if (homeLoanInterest > 200000) {
+            warnings.push('Home loan interest deduction for self-occupied property is limited to ₹2,00,000');
+        }
+
+        return warnings;
+    }
+
+    // Tax calculation function with comprehensive validation
     function calculateTax() {
-        const grossSalary = parseInt(document.getElementById('salaryInput')?.value) || 0;
-        const taxRegime = document.querySelector('input[name="taxRegime"]:checked')?.value || 'old';
-        const ageCategory = document.querySelector('input[name="ageCategory"]:checked')?.value || 'below60';
+        try {
+            // Validate inputs
+            const errors = validateTaxInputs();
+            if (errors.length > 0) {
+                showTaxNotification(errors[0], 'error');
+                return;
+            }
 
-        if (grossSalary <= 0) {
-            clearTaxResults();
-            return;
+            const salary = parseFloat(document.getElementById('salaryInput').value);
+            const ageCategory = document.querySelector('input[name="ageCategory"]:checked').value;
+            const taxRegime = document.querySelector('input[name="taxRegime"]:checked').value;
+
+            // Show loading state
+            const calculateBtn = document.getElementById('calculateTax');
+            const originalText = calculateBtn.innerHTML;
+            calculateBtn.innerHTML = '<span class="btn-text">Calculating...</span>';
+            calculateBtn.disabled = true;
+
+            // Validate deductions for old regime
+            if (taxRegime === 'old') {
+                const warnings = validateDeductions(salary);
+                if (warnings.length > 0) {
+                    showTaxNotification(warnings[0], 'warning');
+                }
+            }
+
+            let taxableIncome = salary;
+            let totalDeductions = 0;
+
+            if (taxRegime === 'old') {
+                // Calculate deductions for old regime
+                const deduction80C = Math.min(parseInt(document.getElementById('deduction80C')?.value) || 0, 150000);
+                const deduction80D = parseInt(document.getElementById('deduction80D')?.value) || 0;
+                const hraDeduction = parseInt(document.getElementById('hraDeduction')?.value) || 0;
+                const homeLoanInterest = parseInt(document.getElementById('homeLoanInterest')?.value) || 0;
+                const otherDeductions = parseInt(document.getElementById('otherDeductions')?.value) || 0;
+
+                totalDeductions = deduction80C + deduction80D + hraDeduction + homeLoanInterest + otherDeductions;
+                taxableIncome = Math.max(salary - totalDeductions, 0);
+            } else {
+                // New regime - standard deduction of ₹50,000
+                totalDeductions = 50000;
+                taxableIncome = Math.max(salary - totalDeductions, 0);
+            }
+
+            // Calculate tax based on regime and age category
+            let taxSlabs;
+            if (taxRegime === 'old') {
+                taxSlabs = TAX_SLABS.old[ageCategory];
+            } else {
+                taxSlabs = TAX_SLABS.new.all;
+            }
+
+            const incomeTax = calculateIncomeTax(taxableIncome, taxSlabs);
+            const cess = incomeTax * 0.04; // 4% Health and Education Cess
+            const totalTax = incomeTax + cess;
+            const netTakeHome = salary - totalTax;
+
+            // Update display
+            document.getElementById('taxableIncome').textContent = `₹${taxableIncome.toLocaleString('en-IN')}`;
+            document.getElementById('incomeTax').textContent = `₹${Math.round(incomeTax).toLocaleString('en-IN')}`;
+            document.getElementById('cess').textContent = `₹${Math.round(cess).toLocaleString('en-IN')}`;
+            document.getElementById('totalTax').textContent = `₹${Math.round(totalTax).toLocaleString('en-IN')}`;
+            document.getElementById('netTakeHome').textContent = `₹${Math.round(netTakeHome).toLocaleString('en-IN')}`;
+
+            // Update chart
+            updateTaxChart(netTakeHome, totalTax);
+        } catch (error) {
+            showTaxNotification('An unexpected error occurred. Please try again.', 'error');
+            console.error("Tax calculation error:", error);
+        } finally {
+            // Reset button state
+            const calculateBtn = document.getElementById('calculateTax');
+            calculateBtn.innerHTML = originalText;
+            calculateBtn.disabled = false;
         }
-
-        let taxableIncome = grossSalary;
-        let totalDeductions = 0;
-
-        if (taxRegime === 'old') {
-            // Calculate deductions for old regime
-            const deduction80C = Math.min(parseInt(document.getElementById('deduction80C')?.value) || 0, 150000);
-            const deduction80D = parseInt(document.getElementById('deduction80D')?.value) || 0;
-            const hraDeduction = parseInt(document.getElementById('hraDeduction')?.value) || 0;
-            const homeLoanInterest = parseInt(document.getElementById('homeLoanInterest')?.value) || 0;
-            const otherDeductions = parseInt(document.getElementById('otherDeductions')?.value) || 0;
-
-            totalDeductions = deduction80C + deduction80D + hraDeduction + homeLoanInterest + otherDeductions;
-            taxableIncome = Math.max(grossSalary - totalDeductions, 0);
-        } else {
-            // New regime - standard deduction of ₹50,000
-            totalDeductions = 50000;
-            taxableIncome = Math.max(grossSalary - totalDeductions, 0);
-        }
-
-        // Calculate tax based on regime and age category
-        let taxSlabs;
-        if (taxRegime === 'old') {
-            taxSlabs = TAX_SLABS.old[ageCategory];
-        } else {
-            taxSlabs = TAX_SLABS.new.all;
-        }
-
-        const incomeTax = calculateIncomeTax(taxableIncome, taxSlabs);
-        const cess = incomeTax * 0.04; // 4% Health and Education Cess
-        const totalTax = incomeTax + cess;
-        const netTakeHome = grossSalary - totalTax;
-
-        // Update display
-        document.getElementById('taxableIncome').textContent = `₹${taxableIncome.toLocaleString('en-IN')}`;
-        document.getElementById('incomeTax').textContent = `₹${Math.round(incomeTax).toLocaleString('en-IN')}`;
-        document.getElementById('cess').textContent = `₹${Math.round(cess).toLocaleString('en-IN')}`;
-        document.getElementById('totalTax').textContent = `₹${Math.round(totalTax).toLocaleString('en-IN')}`;
-        document.getElementById('netTakeHome').textContent = `₹${Math.round(netTakeHome).toLocaleString('en-IN')}`;
-
-        // Update chart
-        updateTaxChart(netTakeHome, totalTax);
     }
 
     function calculateIncomeTax(taxableIncome, taxSlabs) {
