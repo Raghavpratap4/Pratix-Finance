@@ -51,212 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/fd-calculator.html';
     }
 
-    // SIP Calculator JavaScript
-
-    let sipChart = null;
-
-    // Show notification function
-    function showNotification(message, type = 'info') {
-        // Remove existing notifications
-        const existingNotifications = document.querySelectorAll('.notification');
-        existingNotifications.forEach(notif => notif.remove());
-
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 10000;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s ease;
-        `;
-
-        switch(type) {
-            case 'error':
-                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                break;
-            case 'success':
-                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-                break;
-            case 'warning':
-                notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-                break;
-            default:
-                notification.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
-        }
-
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 4000);
-    }
-
-    // Add CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Validation functions
-    function validateSIPInputs() {
-        const monthlyAmount = parseFloat(document.getElementById('monthlyAmountInput')?.value);
-        const returnRate = parseFloat(document.getElementById('returnRateInput')?.value);
-        const investmentPeriod = parseFloat(document.getElementById('investmentPeriodInput')?.value);
-
-        const errors = [];
-
-        if (!monthlyAmount || monthlyAmount < 500) {
-            errors.push('Monthly SIP amount must be at least ₹500');
-        }
-        if (monthlyAmount > 100000) {
-            errors.push('Monthly SIP amount cannot exceed ₹1,00,000');
-        }
-
-        if (!returnRate || returnRate < 1) {
-            errors.push('Expected return rate must be at least 1%');
-        }
-        if (returnRate > 30) {
-            errors.push('Expected return rate cannot exceed 30%');
-        }
-
-        if (!investmentPeriod || investmentPeriod < 1) {
-            errors.push('Investment period must be at least 1 year');
-        }
-        if (investmentPeriod > 40) {
-            errors.push('Investment period cannot exceed 40 years');
-        }
-
-        return errors;
-    }
-
-    function validateGoalInputs() {
-        const targetAmount = parseFloat(document.getElementById('targetAmount')?.value);
-        const goalYears = parseFloat(document.getElementById('goalYears')?.value);
-        const goalReturnRate = parseFloat(document.getElementById('goalReturnRate')?.value);
-
-        const errors = [];
-
-        if (!targetAmount || targetAmount < 10000) {
-            errors.push('Target amount must be at least ₹10,000');
-        }
-        if (targetAmount > 100000000) {
-            errors.push('Target amount cannot exceed ₹10 crores');
-        }
-
-        if (!goalYears || goalYears < 1) {
-            errors.push('Goal period must be at least 1 year');
-        }
-        if (goalYears > 40) {
-            errors.push('Goal period cannot exceed 40 years');
-        }
-
-        if (!goalReturnRate || goalReturnRate < 1) {
-            errors.push('Expected return rate must be at least 1%');
-        }
-        if (goalReturnRate > 30) {
-            errors.push('Expected return rate cannot exceed 30%');
-        }
-
-        return errors;
-    }
-
-    // Slider synchronization
-    function syncSliders() {
-        // Monthly Amount
-        const monthlyAmountSlider = document.getElementById('monthlyAmountSlider');
-        const monthlyAmountInput = document.getElementById('monthlyAmountInput');
-        const monthlyAmountDisplay = document.getElementById('monthlyAmountDisplay');
-
-        if (monthlyAmountSlider && monthlyAmountInput && monthlyAmountDisplay) {
-            monthlyAmountSlider.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                monthlyAmountInput.value = value;
-                monthlyAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')} per month`;
-            });
-
-            monthlyAmountInput.addEventListener('input', function() {
-                const value = parseInt(this.value) || 0;
-                if (value >= 500 && value <= 100000) {
-                    monthlyAmountSlider.value = value;
-                    monthlyAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')} per month`;
-                } else if (value > 100000) {
-                    this.value = 100000;
-                    monthlyAmountSlider.value = 100000;
-                    monthlyAmountDisplay.textContent = `₹${(100000).toLocaleString('en-IN')} per month`;
-                    showNotification('Maximum monthly SIP amount is ₹1,00,000', 'warning');
-                }
-            });
-        }
-
-        // Return Rate
-        const returnRateSlider = document.getElementById('returnRateSlider');
-        const returnRateInput = document.getElementById('returnRateInput');
-        const returnRateDisplay = document.getElementById('returnRateDisplay');
-
-        if (returnRateSlider && returnRateInput && returnRateDisplay) {
-            returnRateSlider.addEventListener('input', function() {
-                const value = parseFloat(this.value);
-                returnRateInput.value = value;
-                returnRateDisplay.textContent = `${value}% annual returns`;
-            });
-
-            returnRateInput.addEventListener('input', function() {
-                const value = parseFloat(this.value) || 0;
-                if (value >= 1 && value <= 30) {
-                    returnRateSlider.value = value;
-                    returnRateDisplay.textContent = `${value}% annual returns`;
-                } else if (value > 30) {
-                    this.value = 30;
-                    returnRateSlider.value = 30;
-                    returnRateDisplay.textContent = '30% annual returns';
-                    showNotification('Maximum expected return is 30%', 'warning');
-                }
-            });
-        }
-
-        // Investment Period
-        const periodSlider = document.getElementById('investmentPeriodSlider');
-        const periodInput = document.getElementById('investmentPeriodInput');
-        const periodDisplay = document.getElementById('investmentPeriodDisplay');
-
-        if (periodSlider && periodInput && periodDisplay) {
-            periodSlider.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                periodInput.value = value;
-                periodDisplay.textContent = `${value} years investment`;
-            });
-
-            periodInput.addEventListener('input', function() {
-                const value = parseInt(this.value) || 0;
-                if (value >= 1 && value <= 40) {
-                    periodSlider.value = value;
-                    periodDisplay.textContent = `${value} years investment`;
-                } else if (value > 40) {
-                    this.value = 40;
-                    periodSlider.value = 40;
-                    periodDisplay.textContent = '40 years investment';
-                    showNotification('Maximum investment period is 40 years', 'warning');
-                }
-            });
-        }
-    }
-
     // SIP Calculator functionality
     let sipChart = null;
     let goalChart = null;
@@ -444,126 +238,78 @@ document.addEventListener('DOMContentLoaded', function() {
         const returnRate = document.getElementById('returnRateInput')?.value;
         const period = document.getElementById('investmentPeriodInput')?.value;
 
-        if (!monthlyAmount || monthlyAmount <= 0 || monthlyAmount < 500) {
-            showNotification('Please enter a valid monthly SIP amount (minimum ₹500)', 'error');
+        if (!monthlyAmount || monthlyAmount <= 0) {
+            showNotification('Please enter a valid monthly SIP amount', 'error');
             return false;
         }
 
-        if (!returnRate || returnRate <= 0 || returnRate > 30) {
-            showNotification('Please enter a valid expected return rate (1% - 30%)', 'error');
+        if (!returnRate || returnRate <= 0) {
+            showNotification('Please enter a valid expected return rate', 'error');
             return false;
         }
 
-        if (!period || period <= 0 || period > 40) {
-            showNotification('Please enter a valid investment period (1 - 40 years)', 'error');
+        if (!period || period <= 0) {
+            showNotification('Please enter a valid investment period', 'error');
             return false;
-        }
-
-        // Additional validation for step-up SIP
-        const sipType = document.querySelector('input[name="sipType"]:checked')?.value;
-        if (sipType === 'stepup') {
-            const stepUpRate = document.getElementById('stepUpRate')?.value;
-            if (!stepUpRate || stepUpRate <= 0 || stepUpRate > 50) {
-                showNotification('Please enter a valid step-up rate (1% - 50%)', 'error');
-                return false;
-            }
         }
 
         return true;
     }
 
-    // SIP Calculation with comprehensive validation
     function calculateSIP() {
-        try {
-            // Validate inputs
-            const errors = validateSIPInputs();
-            if (errors.length > 0) {
-                showNotification(errors[0], 'error');
-                return;
-            }
+        const monthlyAmount = parseFloat(document.getElementById('monthlyAmountInput')?.value) || 0;
+        const annualReturnRate = parseFloat(document.getElementById('returnRateInput')?.value) || 0;
+        const years = parseInt(document.getElementById('investmentPeriodInput')?.value) || 0;
+        const sipType = document.querySelector('input[name="sipType"]:checked')?.value || 'regular';
+        const stepUpRate = parseFloat(document.getElementById('stepUpRate')?.value) || 0;
 
-            const monthlyAmount = parseFloat(document.getElementById('monthlyAmountInput').value);
-            const returnRate = parseFloat(document.getElementById('returnRateInput').value);
-            const investmentPeriod = parseFloat(document.getElementById('investmentPeriodInput').value);
-            const sipType = document.querySelector('input[name="sipType"]:checked')?.value;
-
-            // Show loading state
-            const calculateBtn = document.getElementById('calculateSIP');
-            const originalText = calculateBtn.innerHTML;
-            calculateBtn.innerHTML = '<span class="btn-text">Calculating...</span>';
-            calculateBtn.disabled = true;
-
-            setTimeout(() => {
-                const monthlyRate = returnRate / 12 / 100;
-                const totalMonths = investmentPeriod * 12;
-
-                let maturityValue, totalInvestment;
-
-                if (sipType === 'stepup') {
-                    const stepUpRate = parseFloat(document.getElementById('stepUpRate')?.value) || 10;
-
-                    // Step-up SIP calculation
-                    totalInvestment = 0;
-                    maturityValue = 0;
-                    let currentMonthlyAmount = monthlyAmount;
-
-                    for (let year = 0; year < investmentPeriod; year++) {
-                        const monthsInThisYear = Math.min(12, totalMonths - (year * 12));
-                        const yearlyInvestment = currentMonthlyAmount * monthsInThisYear;
-                        totalInvestment += yearlyInvestment;
-
-                        // Calculate future value for this year's investments
-                        const remainingMonths = totalMonths - (year * 12);
-                        const futureValue = currentMonthlyAmount * (((Math.pow(1 + monthlyRate, remainingMonths) - 1) / monthlyRate) * (1 + monthlyRate));
-                        maturityValue += futureValue;
-
-                        // Increase for next year
-                        currentMonthlyAmount = currentMonthlyAmount * (1 + stepUpRate / 100);
-                    }
-                } else {
-                    // Regular SIP calculation
-                    totalInvestment = monthlyAmount * totalMonths;
-
-                    if (monthlyRate === 0) {
-                        maturityValue = totalInvestment;
-                    } else {
-                        maturityValue = monthlyAmount * (((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate));
-                    }
-                }
-
-                const totalReturns = maturityValue - totalInvestment;
-
-                // Validate calculation results
-                if (isNaN(maturityValue) || isNaN(totalInvestment) || isNaN(totalReturns)) {
-                    throw new Error('Calculation resulted in invalid values');
-                }
-
-                // Update results
-                document.getElementById('totalInvestment').textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
-                document.getElementById('totalReturns').textContent = `₹${Math.round(totalReturns).toLocaleString('en-IN')}`;
-                document.getElementById('maturityValue').textContent = `₹${Math.round(maturityValue).toLocaleString('en-IN')}`;
-
-                // Create chart
-                updateSIPChart(totalInvestment, totalReturns);
-
-                // Show success message
-                showNotification('SIP calculation completed successfully!', 'success');
-
-                // Restore button
-                calculateBtn.innerHTML = originalText;
-                calculateBtn.disabled = false;
-
-            }, 500); // Small delay for better UX
-
-        } catch (error) {
-            console.error('SIP Calculation Error:', error);
-            showNotification('Error in calculation. Please check your inputs.', 'error');
-
-            // Restore button
-            const calculateBtn = document.getElementById('calculateSIP');
-            calculateBtn.innerHTML = '<span class="btn-text">Calculate SIP</span>';
-            calculateBtn.disabled = false;
+        if (monthlyAmount <= 0 || annualReturnRate <= 0 || years <= 0) {
+            document.getElementById('totalInvestment').textContent = '₹0';
+            document.getElementById('totalReturns').textContent = '₹0';
+            document.getElementById('maturityValue').textContent = '₹0';
+            return;
         }
+
+        const monthlyReturnRate = annualReturnRate / 12 / 100;
+        const totalMonths = years * 12;
+
+        let totalInvestment = 0;
+        let maturityValue = 0;
+
+        if (sipType === 'regular') {
+            // Regular SIP calculation
+            totalInvestment = monthlyAmount * totalMonths;
+            maturityValue = monthlyAmount * (((Math.pow(1 + monthlyReturnRate, totalMonths) - 1) / monthlyReturnRate) * (1 + monthlyReturnRate));
+        } else {
+            // Step-up SIP calculation
+            let currentAmount = monthlyAmount;
+            let currentValue = 0;
+
+            for (let year = 1; year <= years; year++) {
+                const monthsInYear = 12;
+                const yearlyInvestment = currentAmount * monthsInYear;
+                totalInvestment += yearlyInvestment;
+
+                // Calculate future value for this year's investments
+                const remainingMonths = (years - year + 1) * 12;
+                const yearlyMaturityValue = currentAmount * (((Math.pow(1 + monthlyReturnRate, remainingMonths) - 1) / monthlyReturnRate) * (1 + monthlyReturnRate));
+                currentValue += yearlyMaturityValue;
+
+                // Step up amount for next year
+                currentAmount = currentAmount * (1 + stepUpRate / 100);
+            }
+            maturityValue = currentValue;
+        }
+
+        const totalReturns = maturityValue - totalInvestment;
+
+        // Update display
+        document.getElementById('totalInvestment').textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
+        document.getElementById('totalReturns').textContent = `₹${Math.round(totalReturns).toLocaleString('en-IN')}`;
+        document.getElementById('maturityValue').textContent = `₹${Math.round(maturityValue).toLocaleString('en-IN')}`;
+
+        // Update chart
+        updateSIPChart(totalInvestment, totalReturns);
     }
 
     function initSIPChart() {
@@ -1152,7 +898,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         },
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                            color: 'rgba(255, 255, 255, ```text
+0.1)'
                         }
                     }
                 }
@@ -1335,61 +1082,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-    }
-
-    // Goal calculation with validation
-    function calculateGoal() {
-        try {
-            // Validate inputs
-            const errors = validateGoalInputs();
-            if (errors.length > 0) {
-                showNotification(errors[0], 'error');
-                return;
-            }
-
-            const targetAmount = parseFloat(document.getElementById('targetAmount').value);
-            const goalYears = parseFloat(document.getElementById('goalYears').value);
-            const goalReturnRate = parseFloat(document.getElementById('goalReturnRate').value);
-
-            const monthlyRate = goalReturnRate / 12 / 100;
-            const totalMonths = goalYears * 12;
-
-            let requiredSIP;
-            if (monthlyRate === 0) {
-                requiredSIP = targetAmount / totalMonths;
-            } else {
-                requiredSIP = targetAmount / (((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate));
-            }
-
-            const totalInvestment = requiredSIP * totalMonths;
-            const totalReturns = targetAmount - totalInvestment;
-
-            // Validate results
-            if (isNaN(requiredSIP) || requiredSIP <= 0) {
-                throw new Error('Invalid SIP calculation');
-            }
-
-            if (requiredSIP > 100000) {
-                showNotification('Required SIP amount is very high. Consider increasing the time period or reducing the target.', 'warning');
-            }
-
-            // Update results
-            document.getElementById('requiredSIP').textContent = `₹${Math.round(requiredSIP).toLocaleString('en-IN')}`;
-            document.getElementById('goalTotalInvestment').textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
-            document.getElementById('goalTotalReturns').textContent = `₹${Math.round(totalReturns).toLocaleString('en-IN')}`;
-
-            // Show goal results
-            document.getElementById('goalResult').style.display = 'block';
-
-            // Create goal chart
-            updateGoalChart(totalInvestment, totalReturns, targetAmount);
-
-            showNotification('Goal planning calculation completed!', 'success');
-
-        } catch (error) {
-            console.error('Goal Calculation Error:', error);
-            showNotification('Error in goal calculation. Please check your inputs.', 'error');
-        }
     }
 
     // Notification system

@@ -142,160 +142,19 @@ document.addEventListener('DOMContentLoaded', function() {
         resetGSTCalculator();
     }
 
-    // Show notification function for GST calculator
-    function showGSTNotification(message, type = 'info') {
-        // Remove existing notifications
-        const existingNotifications = document.querySelectorAll('.gst-notification');
-        existingNotifications.forEach(notif => notif.remove());
-
-        const notification = document.createElement('div');
-        notification.className = `gst-notification ${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 10000;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s ease;
-            max-width: 300px;
-        `;
-
-        switch(type) {
-            case 'error':
-                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                break;
-            case 'success':
-                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-                break;
-            case 'warning':
-                notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-                break;
-            default:
-                notification.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
-        }
-
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 4000);
-    }
-
-    // Validation functions for GST calculator
     function validateGSTInputs() {
-        const amount = parseFloat(document.getElementById('originalAmount')?.value);
-        const gstRate = parseFloat(document.getElementById('gstRate')?.value);
-        const calculationType = document.querySelector('input[name="calculationType"]:checked')?.value;
+        const originalAmount = document.getElementById('originalAmount')?.value;
+        const gstRate = document.getElementById('gstRate')?.value;
 
-        const errors = [];
-
-        if (!amount || amount <= 0) {
-            errors.push('Please enter a valid amount greater than 0');
-        }
-        if (amount > 10000000) {
-            errors.push('Maximum amount is ₹1 crore for this calculator');
+        if (!originalAmount || originalAmount <= 0) {
+            return false;
         }
 
-        if (gstRate === null || gstRate === undefined || isNaN(gstRate)) {
-            errors.push('Please enter a valid GST rate');
-        }
-        if (gstRate < 0) {
-            errors.push('GST rate cannot be negative');
-        }
-        if (gstRate > 50) {
-            errors.push('GST rate cannot exceed 50%');
+        if (!gstRate || gstRate < 0) {
+            return false;
         }
 
-        if (!calculationType) {
-            errors.push('Please select calculation type (Inclusive/Exclusive)');
-        }
-
-        return errors;
-    }
-
-    // GST calculation function with comprehensive validation
-    function calculateGST() {
-        try {
-            // Validate inputs
-            const errors = validateGSTInputs();
-            if (errors.length > 0) {
-                showGSTNotification(errors[0], 'error');
-                return;
-            }
-
-            const amount = parseFloat(document.getElementById('originalAmount').value);
-            const gstRate = parseFloat(document.getElementById('gstRate').value);
-            const calculationType = document.querySelector('input[name="calculationType"]:checked').value;
-
-            // Show loading state
-            const calculateBtn = document.querySelector('.calculate-btn');
-            const originalText = calculateBtn.innerHTML;
-            calculateBtn.innerHTML = 'Calculating...';
-            calculateBtn.disabled = true;
-
-            setTimeout(() => {
-                let baseAmount, gstAmount, finalAmount;
-
-                if (calculationType === 'exclusive') {
-                    // Add GST to the amount (amount is base price)
-                    baseAmount = amount;
-                    gstAmount = (baseAmount * gstRate) / 100;
-                    finalAmount = baseAmount + gstAmount;
-                } else {
-                    // Remove GST from the amount (amount includes GST)
-                    finalAmount = amount;
-                    baseAmount = finalAmount / (1 + (gstRate / 100));
-                    gstAmount = finalAmount - baseAmount;
-                }
-
-                // Calculate CGST and SGST (split equally for domestic transactions)
-                const cgstAmount = gstAmount / 2;
-                const sgstAmount = gstAmount / 2;
-
-                // Validate calculation results
-                if (isNaN(baseAmount) || isNaN(gstAmount) || isNaN(finalAmount)) {
-                    throw new Error('Invalid calculation results');
-                }
-
-                // Update results with proper formatting
-                document.getElementById('baseAmount').textContent = `₹${Math.round(baseAmount).toLocaleString('en-IN')}`;
-                document.getElementById('cgstAmount').textContent = `₹${Math.round(cgstAmount).toLocaleString('en-IN')}`;
-                document.getElementById('sgstAmount').textContent = `₹${Math.round(sgstAmount).toLocaleString('en-IN')}`;
-                document.getElementById('totalGST').textContent = `₹${Math.round(gstAmount).toLocaleString('en-IN')}`;
-                document.getElementById('finalAmount').textContent = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
-
-                // Show results container
-                document.getElementById('resultsContainer').style.display = 'block';
-
-                // Create chart if function exists
-                if (typeof createGSTChart === 'function') {
-                    createGSTChart(baseAmount, cgstAmount, sgstAmount);
-                }
-
-                // Show success message
-                showGSTNotification('GST calculation completed successfully!', 'success');
-
-                // Restore button
-                calculateBtn.innerHTML = originalText;
-                calculateBtn.disabled = false;
-
-            }, 300);
-
-        } catch (error) {
-            console.error('GST Calculation Error:', error);
-            showGSTNotification('Error in calculation. Please check your inputs.', 'error');
-
-            // Restore button
-            const calculateBtn = document.querySelector('.calculate-btn');
-            calculateBtn.innerHTML = 'Calculate GST';
-            calculateBtn.disabled = false;
-        }
+        return true;
     }
 
     function resetGSTCalculator() {
@@ -322,6 +181,54 @@ document.addEventListener('DOMContentLoaded', function() {
             gstChart.data.datasets[0].data = [0, 0, 0];
             gstChart.update();
         }
+    }
+
+    function calculateGST() {
+        const originalAmount = parseFloat(document.getElementById('originalAmount')?.value) || 0;
+        const gstRate = parseFloat(document.getElementById('gstRate')?.value) || 18;
+        const calculationType = document.querySelector('input[name="calculationType"]:checked')?.value || 'exclusive';
+
+        if (originalAmount <= 0) {
+            resetResultsToZero();
+            return;
+        }
+
+        let baseAmount, gstAmount, finalAmount;
+
+        if (calculationType === 'exclusive') {
+            // Add GST to the amount
+            baseAmount = originalAmount;
+            gstAmount = (baseAmount * gstRate) / 100;
+            finalAmount = baseAmount + gstAmount;
+        } else {
+            // Remove GST from the amount
+            finalAmount = originalAmount;
+            baseAmount = finalAmount / (1 + (gstRate / 100));
+            gstAmount = finalAmount - baseAmount;
+        }
+
+        const cgstAmount = gstAmount / 2;
+        const sgstAmount = gstAmount / 2;
+
+        // Update results
+        if (document.getElementById('baseAmount')) {
+            document.getElementById('baseAmount').textContent = `₹${Math.round(baseAmount).toLocaleString('en-IN')}`;
+        }
+        if (document.getElementById('cgstAmount')) {
+            document.getElementById('cgstAmount').textContent = `₹${Math.round(cgstAmount).toLocaleString('en-IN')}`;
+        }
+        if (document.getElementById('sgstAmount')) {
+            document.getElementById('sgstAmount').textContent = `₹${Math.round(sgstAmount).toLocaleString('en-IN')}`;
+        }
+        if (document.getElementById('totalGST')) {
+            document.getElementById('totalGST').textContent = `₹${Math.round(gstAmount).toLocaleString('en-IN')}`;
+        }
+        if (document.getElementById('finalAmount')) {
+            document.getElementById('finalAmount').textContent = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
+        }
+
+        // Update chart
+        updateGSTChart(baseAmount, cgstAmount, sgstAmount);
     }
 
     function resetResultsToZero() {

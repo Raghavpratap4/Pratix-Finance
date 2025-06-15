@@ -6,28 +6,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-
-    <!-- SEO Meta Tags -->
-    <title>EMI Calculator - Calculate Loan EMI, Interest & Amortization | Pratix Finance</title>
-    <meta name="description" content="Free EMI Calculator to calculate loan EMI, total interest, and view amortization schedule. Compare loans, analyze prepayments with Pratix Finance's advanced tools." />
-    <meta name="keywords" content="EMI calculator, loan calculator, mortgage calculator, interest calculator, amortization schedule, prepayment calculator, loan comparison" />
-    <meta name="author" content="Pratix Finance" />
-    <meta name="robots" content="index, follow" />
-
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="EMI Calculator - Calculate Loan EMI & Interest | Pratix Finance" />
-    <meta property="og:description" content="Free EMI Calculator with amortization schedule, prepayment analysis & loan comparison. Get accurate results instantly." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://pratix-finance.vercel.app/emi-calculator.html" />
-    <meta property="og:image" content="https://pratix-finance.vercel.app/logo.png" />
-    <meta property="og:site_name" content="Pratix Finance" />
-
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="EMI Calculator - Calculate Loan EMI & Interest | Pratix Finance" />
-    <meta name="twitter:description" content="Free EMI Calculator with amortization schedule, prepayment analysis & loan comparison. Get accurate results instantly." />
-    <meta name="twitter:image" content="https://pratix-finance.vercel.app/logo.png" />
-    <meta name="twitter:site" content="@pratixfinance" />
+    <meta name="description" content="Pratix Finance offers powerful EMI and income tax calculators with advanced features and PDF support." />
+    <meta name="keywords" content="EMI calculator, income tax calculator, Pratix Finance, loan interest, gst, sip calculator, raghav pratap" />
+    <meta name="author" content="Raghav Pratap" content="width=device-width, initial-scale=1.0">
+    <title>FinCalc Pro - Financial Calculator</title>
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#31417F">
@@ -43,734 +25,914 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
     <link rel="apple-touch-icon" href="/logo.png">
 
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- Chart.js -->
+    <meta name="robots" content="index, follow" />
+    <!-- Make sure this matches the correct file -->
+     <link rel="canonical" href="https://pratix-finance.vercel.app/emi-calculator.html" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "EMI Calculator",
-        "description": "Calculate loan EMI, interest, and view amortization schedule",
-        "url": "https://pratix-finance.vercel.app/emi-calculator.html",
-        "applicationCategory": "Finance",
-        "operatingSystem": "Any",
-        "author": {
-            "@type": "Organization",
-            "name": "Pratix Finance"
-        }
-    }
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1NSSQW00JS');
     </script>
-
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.8);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 35%, #f093fb 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        /* Universal Navigation Bar */
-        .universal-navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 60px;
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 700;
-            font-size: 1.125rem;
-        }
-
-        .navbar-brand img {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-        }
-
-        .navbar-menu {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .navbar-link {
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            color: var(--text-secondary);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .navbar-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-link.active {
-            color: #00f2fe;
-            background: rgba(0, 242, 254, 0.1);
-        }
-
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
-
-        .mobile-menu .navbar-link {
-            display: block;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Header Ad Space */
-        .header-ad {
-            margin-top: 60px;
-            padding: 1rem;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .ad-placeholder {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 1rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header-ad .ad-placeholder {
-            height: 90px;
-            max-width: 728px;
-        }
-
-        .footer-ad .ad-placeholder {
-            height: 90px;
-            max-width: 728px;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 2rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .calculator-container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .calculator-title {
-            font-size: 2rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 2rem;
-            background: var(--accent-gradient);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #00f2fe;
-            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.1);
-        }
-
-        .slider-container {
-            margin-top: 0.5rem;
-        }
-
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.2);
-            outline: none;
-            appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #00f2fe;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 242, 254, 0.3);
-        }
-
-        .calculate-btn {
-            width: 100%;
-            padding: 1rem 2rem;
-            background: var(--accent-gradient);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 242, 254, 0.3);
-        }
-
-        .results-container {
-            margin-top: 2rem;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .result-item {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .result-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-value {
-            color: #00f2fe;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        /* Share Button */
-        .share-container {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .share-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: var(--secondary-gradient);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .share-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
-        }
-
-        /* Footer Ad Space */
-        .footer-ad {
-            padding: 2rem 1rem;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Universal Footer */
-        .universal-footer {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem 1rem 1rem;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--text-primary);
-        }
-
-        .footer-copyright {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar-menu {
-                display: none;
-            }
-
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .header-ad .ad-placeholder,
-            .footer-ad .ad-placeholder {
-                height: 50px;
-                max-width: 320px;
-            }
-
-            .calculator-container {
-                padding: 1.5rem;
-            }
-
-            .calculator-title {
-                font-size: 1.5rem;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
-        }
-
-        /* Chart Container */
-        .chart-container {
-            margin-top: 2rem;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1rem;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: var(--accent-gradient);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-            z-index: 10000;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    </style>
 </head>
 <body>
-    <!-- Universal Navigation Bar -->
-    <nav class="universal-navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-brand">
-                <img src="logo.png" alt="Pratix Finance">
-                PRATIX FINANCE
-            </a>
-
-            <div class="navbar-menu">
-                <a href="emi-calculator.html" class="navbar-link active">EMI</a>
-                <a href="sip-calculator.html" class="navbar-link">SIP</a>
-                <a href="tax-calculator.html" class="navbar-link">Tax</a>
-                <a href="gst-calculator.html" class="navbar-link">GST</a>
-                <a href="fd-calculator.html" class="navbar-link">FD</a>
-                <a href="index.html" class="navbar-link">Home</a>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <button class="icon-btn" onclick="goBack()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">EMI Calculator</h1>
+                <button class="icon-btn" onclick="goToHome()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                </button>
             </div>
+        </header>
 
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
-        </div>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="emi-calculator.html" class="navbar-link active">EMI Calculator</a>
-            <a href="sip-calculator.html" class="navbar-link">SIP Calculator</a>
-            <a href="tax-calculator.html" class="navbar-link">Tax Calculator</a>
-            <a href="gst-calculator.html" class="navbar-link">GST Calculator</a>
-            <a href="fd-calculator.html" class="navbar-link">FD Calculator</a>
-            <a href="index.html" class="navbar-link">Home</a>
-        </div>
-    </nav>
-
-    <!-- Header Ad Space -->
-    <div class="header-ad">
-        <div class="ad-placeholder">
-            📢 Advertisement Space - 728x90 (Desktop) / 320x50 (Mobile)
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="calculator-container">
-            <h1 class="calculator-title">EMI Calculator</h1>
-
-            <div class="input-group">
-                <label class="input-label">Loan Amount</label>
-                <input type="number" class="input-field" id="loanAmount" placeholder="Enter loan amount" min="10000" max="10000000">
-                <div class="slider-container">
-                    <input type="range" class="slider" id="loanAmountSlider" min="10000" max="10000000" value="1000000">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Interest Rate (% per annum)</label>
-                <input type="number" class="input-field" id="interestRate" placeholder="Enter interest rate" min="1" max="30" step="0.1">
-                <div class="slider-container">
-                    <input type="range" class="slider" id="interestRateSlider" min="1" max="30" step="0.1" value="8.5">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Loan Tenure (Years)</label>
-                <input type="number" class="input-field" id="loanTenure" placeholder="Enter loan tenure" min="1" max="40">
-                <div class="slider-container">
-                    <input type="range" class="slider" id="loanTenureSlider" min="1" max="40" value="20">
-                </div>
-            </div>
-
-            <button class="calculate-btn" onclick="calculateEMI()">Calculate EMI</button>
-
-            <div class="results-container" id="resultsContainer" style="display: none;">
-                <div class="results-grid">
-                    <div class="result-item">
-                        <div class="result-label">Monthly EMI</div>
-                        <div class="result-value" id="monthlyEMI">₹0</div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- EMI Calculator Tab -->
+            <section id="emi-calculator" class="tab-content active">
+                <div class="glass-card">
+                    <h2 class="section-title">EMI Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Loan Amount</label>
+                            <div class="slider-display" id="loanAmountDisplay">₹10,00,000</div>
+                            <input type="range" id="loanAmountSlider" min="100000" max="10000000" step="100000" value="1000000" class="slider">
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="loanAmountInput" placeholder="10,00,000" class="calc-input">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Interest Rate (%)</label>
+                            <div class="slider-display" id="interestRateDisplay">8.5%</div>
+                            <input type="range" id="interestRateSlider" min="1" max="20" step="0.1" value="8.5" class="slider">
+                            <input type="number" id="interestRateInput" placeholder="8.5" class="calc-input" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label>Loan Tenure (Years)</label>
+                            <div class="slider-display" id="loanTenureDisplay">20 Years</div>
+                            <input type="range" id="loanTenureSlider" min="1" max="40" step="1" value="20" class="slider">
+                            <input type="number" id="loanTenureInput" placeholder="20" class="calc-input">
+                        </div>
+                        <button class="calculate-btn" id="calculateEMI">
+                            <span class="btn-text">Calculate EMI</span>
+                        </button>
+                        <button class="refresh-btn" id="refreshEMI">
+                            <span class="btn-text">Refresh</span>
+                        </button>
                     </div>
-                    <div class="result-item">
-                        <div class="result-label">Total Interest</div>
-                        <div class="result-value" id="totalInterest">₹0</div>
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="result-label">Monthly EMI</span>
+                            <span class="result-value" id="monthlyEMI">₹83,676</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Interest</span>
+                            <span class="result-value" id="totalInterest">₹80,82,240</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Amount</span>
+                            <span class="result-value" id="totalAmount">₹2,00,82,240</span>
+                        </div>
                     </div>
-                    <div class="result-item">
-                        <div class="result-label">Total Amount</div>
-                        <div class="result-value" id="totalAmount">₹0</div>
+
+                    <div class="chart-container glow-chart">
+                        <div class="chart-title">EMI Breakdown</div>
+                        <div class="chart-wrapper">
+                            <canvas id="emiChart" width="300" height="300"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color principal"></div>
+                                <span class="legend-text">Principal Amount</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color interest"></div>
+                                <span class="legend-text">Interest Amount</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="chart-container">
-                    <canvas id="emiChart"></canvas>
+            <!-- Amortization Table Tab -->
+            <section id="amortization-table" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Amortization Schedule</h2>
+                    <div class="table-container">
+                        <table class="amortization-table">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>₹20,440</td>
+                                    <td>₹80,240</td>
+                                    <td>₹19,79,560</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>₹22,080</td>
+                                    <td>₹78,600</td>
+                                    <td>₹19,57,480</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>₹23,846</td>
+                                    <td>₹76,834</td>
+                                    <td>₹19,33,634</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <!-- Share Container -->
-        <div class="share-container">
-            <button class="share-btn" onclick="shareCalculator()">
-                📤 Share this EMI Calculator
+            <!-- Prepayment Impact Tab -->
+            <section id="prepayment-impact" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Prepayment Impact</h2>
+                    <div class="prepayment-form">
+                        <div class="input-group">
+                            <label>Prepayment Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="prepaymentAmount" placeholder="2,00,000" class="calc-input">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Prepay After (Months)</label>
+                            <input type="number" id="prepayAfterMonths" placeholder="12" class="calc-input">
+                        </div>
+                        <div class="input-group">
+                            <label>Prepayment Option</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="reduceTenure" name="prepayOption" value="tenure" checked>
+                                    <label for="reduceTenure">Reduce Tenure</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="reduceEMI" name="prepayOption" value="emi">
+                                    <label for="reduceEMI">Reduce EMI</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="calculate-btn" id="calculatePrepayment">Calculate Impact</button>
+                        <button class="refresh-btn" id="refreshPrepayment">
+                            <span class="btn-text">Refresh</span>
+                        </button>
+                    </div>
+
+                    <div class="comparison-section" style="display: none;" id="prepaymentResults">
+                        <div class="impact-summary">
+                            <div class="impact-card">
+                                <h3>Interest Saved</h3>
+                                <p class="impact-value" id="interestSaved">₹15,42,000</p>
+                            </div>
+                            <div class="impact-card">
+                                <h3 id="benefitLabel">Time Saved</h3>
+                                <p class="impact-value" id="benefitValue">3 Years 2 Months</p>
+                            </div>
+                        </div>
+
+                        <div class="scenario-comparison">
+                            <div class="scenario-card">
+                                <h3>Original Loan</h3>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Monthly EMI:</span>
+                                        <span id="originalEMI">₹83,676</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Total Interest:</span>
+                                        <span id="originalInterest">₹80,82,240</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Loan Tenure:</span>
+                                        <span id="originalTenure">20 Years</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-card prepay-scenario">
+                                <h3>With Prepayment</h3>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Monthly EMI:</span>
+                                        <span id="newEMI">₹83,676</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Total Interest:</span>
+                                        <span id="newInterest">₹65,40,240</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Loan Tenure:</span>
+                                        <span id="newTenure">16 Years 10 Months</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Loan Comparison</div>
+                            <div class="chart-wrapper">
+                                <canvas id="prepaymentChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loan Comparison Tab -->
+            <section id="loan-comparison" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Loan Comparison</h2>
+
+                    <!-- Loan Input Forms -->
+                    <div class="loan-inputs-grid">
+                        <!-- Loan 1 -->
+                        <div class="loan-input-card">
+                            <h3>Loan Option 1</h3>
+                            <div class="input-group">
+                                <label>Loan Amount</label>
+                                <div class="input-wrapper">
+                                    <span class="currency">₹</span>
+                                    <input type="number" id="loan1Amount" placeholder="10,00,000" class="calc-input">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Interest Rate (%)</label>
+                                <input type="number" id="loan1Rate" placeholder="8.5" class="calc-input" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label>Loan Tenure (Years)</label>
+                                <input type="number" id="loan1Tenure" placeholder="20" class="calc-input">
+                            </div>
+                        </div>
+
+                        <!-- Loan 2 -->
+                        <div class="loan-input-card">
+                            <h3>Loan Option 2</h3>
+                            <div class="input-group">
+                                <label>Loan Amount</label>
+                                <div class="input-wrapper">
+                                    <span class="currency">₹</span>
+                                    <input type="number" id="loan2Amount" placeholder="10,00,000" class="calc-input">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Interest Rate (%)</label>
+                                <input type="number" id="loan2Rate" placeholder="8.75" class="calc-input" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label>Loan Tenure (Years)</label>
+                                <input type="number" id="loan2Tenure" placeholder="20" class="calc-input">
+                            </div>
+                        </div>
+
+                        <!-- Loan 3 -->
+                        <div class="loan-input-card">
+                            <h3>Loan Option 3</h3>
+                            <div class="input-group">
+                                <label>Loan Amount</label>
+                                <div class="input-wrapper">
+                                    <span class="currency">₹</span>
+                                    <input type="number" id="loan3Amount" placeholder="10,00,000" class="calc-input">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Interest Rate (%)</label>
+                                <input type="number" id="loan3Rate" placeholder="8.25" class="calc-input" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label>Loan Tenure (Years)</label>
+                                <input type="number" id="loan3Tenure" placeholder="20" class="calc-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" id="compareLoans">Compare Loans</button>
+                    <button class="refresh-btn" id="refreshComparison">
+                        <span class="btn-text">Refresh</span>
+                    </button>
+
+                    <!-- Comparison Results -->
+                    <div class="comparison-results" style="display: none;" id="comparisonResults">
+                        <!-- Results Table -->
+                        <div class="results-table-container">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Loan Option</th>
+                                        <th>Monthly EMI</th>
+                                        <th>Total Interest</th>
+                                        <th>Total Repayment</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparisonTableBody">
+                                    <!-- Results will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bar Chart -->
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Loan Comparison Analysis</div>
+                            <div class="chart-wrapper">
+                                <canvas id="loanComparisonChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools & Extras Tab -->
+            <section id="tools-extras" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Tools & Extras</h2>
+
+                    <!-- Loan Eligibility Checker -->
+                    <div class="tool-section">
+                        <div class="tool-header" data-tool="eligibility">
+                            <div class="tool-title">
+                                <div class="tool-icon">✅</div>
+                                <h3>Loan Eligibility Checker</h3>
+                            </div>
+                            <div class="expand-icon">▼</div>
+                        </div>
+                        <div class="tool-content" id="eligibility-content">
+                            <div class="tool-form">
+                                <div class="input-group">
+                                    <label>Monthly Income</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="monthlyIncome" placeholder="50,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Age</label>
+                                    <input type="number" id="applicantAge" placeholder="30" class="calc-input">
+                                </div>
+                                <div class="input-group">
+                                    <label>Current EMIs</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="currentEMIs" placeholder="15,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <button class="calculate-btn" id="checkEligibility">Check Eligibility</button>
+                            </div>
+                            <div class="tool-result" id="eligibilityResult" style="display: none;">
+                                <div class="result-card">
+                                    <div class="result-item">
+                                        <span class="result-label">Eligible Loan Amount</span>
+                                        <span class="result-value" id="eligibleAmount">₹45,00,000</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">FOIR (Fixed Obligation to Income Ratio)</span>
+                                        <span class="result-value" id="foirRatio">40%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reverse EMI Calculator -->
+                    <div class="tool-section">
+                        <div class="tool-header" data-tool="reverse-emi">
+                            <div class="tool-title">
+                                <div class="tool-icon">🔄</div>
+                                <h3>Reverse EMI Calculator</h3>
+                            </div>
+                            <div class="expand-icon">▼</div>
+                        </div>
+                        <div class="tool-content" id="reverse-emi-content">
+                            <div class="tool-form">
+                                <div class="input-group">
+                                    <label>Desired EMI</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="desiredEMI" placeholder="50,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Interest Rate (%)</label>
+                                    <input type="number" id="reverseInterestRate" placeholder="8.5" class="calc-input" step="0.01">
+                                </div>
+                                <div class="input-group">
+                                    <label>Loan Tenure (Years)</label>
+                                    <input type="number" id="reverseTenure" placeholder="20" class="calc-input">
+                                </div>
+                                <button class="calculate-btn" id="calculateReverseLoan">Calculate Loan Amount</button>
+                            </div>
+                            <div class="tool-result" id="reverseLoanResult" style="display: none;">
+                                <div class="result-card">
+                                    <div class="result-item">
+                                        <span class="result-label">Maximum Loan Amount</span>
+                                        <span class="result-value" id="maxLoanAmount">₹60,00,000</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Total Interest</span>
+                                        <span class="result-value" id="reverseTotalInterest">₹60,00,000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GST + Processing Fee Impact -->
+                    <div class="tool-section">
+                        <div class="tool-header" data-tool="gst-fees">
+                            <div class="tool-title">
+                                <div class="tool-icon">💳</div>
+                                <h3>GST + Processing Fee Impact</h3>
+                            </div>
+                            <div class="expand-icon">▼</div>
+                        </div>
+                        <div class="tool-content" id="gst-fees-content">
+                            <div class="tool-form">
+                                <div class="input-group">
+                                    <label>Loan Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="gstLoanAmount" placeholder="10,00,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Processing Fee (%)</label>
+                                    <input type="number" id="processingFee" placeholder="1" class="calc-input" step="0.01">
+                                </div>
+                                <div class="input-group">
+                                    <label>GST Rate (%)</label>
+                                    <input type="number" id="gstRate" placeholder="18" class="calc-input">
+                                </div>
+                                <button class="calculate-btn" id="calculateGSTImpact">Calculate Impact</button>
+                            </div>
+                            <div class="tool-result" id="gstImpactResult" style="display: none;">
+                                <div class="result-card">
+                                    <div class="result-item">
+                                        <span class="result-label">Processing Fee</span>
+                                        <span class="result-value" id="processingFeeAmount">₹10,000</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">GST on Processing Fee</span>
+                                        <span class="result-value" id="gstAmount">₹1,800</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Total Upfront Cost</span>
+                                        <span class="result-value" id="totalUpfrontCost">₹11,800</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SIP vs EMI Comparison -->
+                    <div class="tool-section">
+                        <div class="tool-header" data-tool="sip-emi">
+                            <div class="tool-title">
+                                <div class="tool-icon">⚖️</div>
+                                <h3>SIP vs EMI Comparison</h3>
+                            </div>
+                            <div class="expand-icon">▼</div>
+                        </div>
+                        <div class="tool-content" id="sip-emi-content">
+                            <div class="tool-form">
+                                <div class="input-group">
+                                    <label>Monthly Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="monthlyAmount" placeholder="50,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>SIP Expected Returns (%)</label>
+                                    <input type="number" id="sipReturns" placeholder="12" class="calc-input" step="0.01">
+                                </div>
+                                <div class="input-group">
+                                    <label>Loan Interest Rate (%)</label>
+                                    <input type="number" id="loanRate" placeholder="8.5" class="calc-input" step="0.01">
+                                </div>
+                                <div class="input-group">
+                                    <label>Time Period (Years)</label>
+                                    <input type="number" id="timePeriod" placeholder="20" class="calc-input">
+                                </div>
+                                <button class="calculate-btn" id="compareSIPEMI">Compare SIP vs EMI</button>
+                            </div>
+                            <div class="tool-result" id="sipEmiResult" style="display: none;">
+                                <div class="comparison-cards">
+                                    <div class="comparison-card sip-card">
+                                        <h4>SIP Investment</h4>
+                                        <div class="result-item">
+                                            <span class="result-label">Total Invested</span>
+                                            <span class="result-value" id="sipInvested">₹1,20,00,000</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Maturity Value</span>
+                                            <span class="result-value" id="sipMaturity">₹4,94,65,000</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Wealth Created</span>
+                                            <span class="result-value" id="sipWealth">₹3,74,65,000</span>
+                                        </div>
+                                    </div>
+                                    <div class="comparison-card emi-card">
+                                        <h4>Loan Payment</h4>
+                                        <div class="result-item">
+                                            <span class="result-label">Total EMI Paid</span>
+                                            <span class="result-value" id="totalEMIPaid">₹1,20,00,000</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Principal Paid</span>
+                                            <span class="result-value" id="principalPaid">₹60,00,000</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Interest Paid</span>
+                                            <span class="result-value" id="interestPaid">₹60,00,000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comparison-summary">
+                                    <h4>Verdict</h4>
+                                    <p id="comparisonVerdict">SIP investment creates ₹3,74,65,000 more wealth than loan payment</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Original Tools Grid -->
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="goToSIP()">
+                            <div class="tool-icon">📊</div>
+                            <h3>SIP Calculator</h3>
+                            <p>Calculate your mutual fund returns</p>
+                        </div>
+                        <div class="tool-card" onclick="goToGST()">
+                            <div class="tool-icon">💼</div>
+                            <h3>GST Calculator</h3>
+                            <p>Calculate GST for your business</p>
+                        </div>
+                        <div class="tool-card" onclick="goToTax()">
+                            <div class="tool-icon">💰</div>
+                            <h3>Tax Calculator</h3>
+                            <p>Calculate your tax liability</p>
+                        </div>
+                        <div class="tool-card" onclick="goToFD()">
+                            <div class="tool-icon">🏦</div>
+                            <h3>FD Calculator</h3>
+                            <p>Calculate fixed deposit returns</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Smart Features Tab -->
+            <section id="smart-features" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Smart Features</h2>
+
+                    <!-- Loan Plan Management -->
+                    <div class="feature-section">
+                        <h3 class="feature-section-title">Loan Plan Management</h3>
+                        <div class="plan-management-grid">
+                            <div class="plan-card">
+                                <div class="plan-icon">💾</div>
+                                <h4>Save Loan Plan</h4>
+                                <p>Save your current loan calculation to browser storage</p>
+                                <button class="feature-btn" id="saveLoanPlan">Save Plan</button>
+                            </div>
+                            <div class="plan-card">
+                                <div class="plan-icon">📤</div>
+                                <h4>Share Plan</h4>
+                                <p>Generate a shareable link or text for your loan plan</p>
+                                <button class="feature-btn" id="shareLoanPlan">Share Plan</button>
+                            </div>
+                            <div class="plan-card">
+                                <div class="plan-icon">📄</div>
+                                <h4>Download PDF</h4>
+                                <p>Download your loan plan as a professional PDF report</p>
+                                <button class="feature-btn" id="downloadPDF">Download PDF</button>
+                            </div>
+                            <div class="plan-card">
+                                <div class="plan-icon">⏰</div>
+                                <h4>EMI Reminder</h4>
+                                <p>Set up monthly EMI payment reminders</p>
+                                <button class="feature-btn" id="addEMIReminder">Add Reminder</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saved Plans -->
+                    <div class="feature-section">
+                        <h3 class="feature-section-title">Saved Plans</h3>
+                        <div class="saved-plans-container" id="savedPlansContainer">
+                            <div class="no-plans-message">
+                                <p>No saved loan plans yet. Calculate an EMI and save your first plan!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Share Modal -->
+                    <div class="modal-overlay" id="shareModal" style="display: none;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>Share Loan Plan</h3>
+                                <button class="modal-close" id="closeShareModal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="share-option">
+                                    <label>Shareable Link:</label>
+                                    <div class="share-input-group">
+                                        <input type="text" id="shareableLink" readonly class="share-input">
+                                        <button class="copy-btn" id="copyLink">Copy</button>
+                                    </div>
+                                </div>
+                                <div class="share-option">
+                                    <label>Share Text:</label>
+                                    <textarea id="shareText" readonly class="share-textarea"></textarea>
+                                    <button class="copy-btn" id="copyText">Copy Text</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Original Features -->
+                    <div class="feature-section">
+                        <h3 class="feature-section-title">AI & Analytics</h3>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">🤖</div>
+                                <div class="feature-content">
+                                    <h3>AI Loan Assistant</h3>
+                                    <p>Get personalized loan recommendations based on your profile</p>
+                                    <button class="feature-btn">Try Now</button>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📱</div>
+                                <div class="feature-content">
+                                    <h3>Smart Notifications</h3>
+                                    <p>Get alerts for rate changes and payment reminders</p>
+                                    <button class="feature-btn">Enable</button>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-content">
+                                    <h3>Analytics Dashboard</h3>
+                                    <p>Visualize your loan journey with interactive charts</p>
+                                    <button class="feature-btn">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Tab -->
+            <section id="settings" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Settings</h2>
+
+                    <!-- Theme & Display Settings -->
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Theme & Display</h3>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Dark Mode</h4>
+                                    <p>Toggle between dark and light theme</p>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="darkMode" checked>
+                                    <label for="darkMode"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regional Settings -->
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Regional Settings</h3>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Currency</h4>
+                                    <p>Select your preferred currency format</p>
+                                </div>
+                                <select class="setting-select" id="currencySelect">
+                                    <option value="INR" selected>₹ Indian Rupee (INR)</option>
+                                    <option value="USD">$ US Dollar (USD)</option>
+                                    <option value="EUR">€ Euro (EUR)</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Language</h4>
+                                    <p>Choose your preferred language</p>
+                                </div>
+                                <select class="setting-select" id="languageSelect">
+                                    <option value="en" selected>🇺🇸 English</option>
+                                    <option value="hi">🇮🇳 हिंदी (Hindi)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- App Settings -->
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">App Settings</h3>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Notifications</h4>
+                                    <p>Manage your notification preferences</p>
+                                </div>
+                                <button class="setting-btn" id="configureNotifications">Configure</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Export Data</h4>
+                                                                   <p>Download your calculation history</p>
+                                </div>
+                                <button class="setting-btn" id="exportData">Export</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Reset App</h4>
+                                    <p>Clear all saved data and preferences</p>
+                                </div>
+                                <button class="setting-btn danger" id="resetApp">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support & Information -->
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Support & Information</h3>
+                        <div class="settings-links">
+                            <a href="#" class="settings-link" id="aboutLink">
+                                <div class="link-icon">ℹ️</div>
+                                <div class="link-content">
+                                    <h4>About FinCalc Pro</h4>
+                                    <p>Learn more about the app and its features</p>
+                                </div>
+                                <div class="link-arrow">→</div>
+                            </a>
+
+                            <a href="#" class="settings-link" id="helpLink">
+                                <div class="link-icon">❓</div>
+                                <div class="link-content">
+                                    <h4>Help & Tutorials</h4>
+                                    <p>Get help with using the calculator</p>
+                                </div>
+                                <div class="link-arrow">→</div>
+                            </a>
+
+                            <a href="#" class="settings-link" id="feedbackLink">
+                                <div class="link-icon">💬</div>
+                                <div class="link-content">
+                                    <h4>Send Feedback</h4>
+                                    <p>Share your thoughts and suggestions</p>
+                                </div>
+                                <div class="link-arrow">→</div>
+                            </a>
+
+                            <a href="#" class="settings-link" id="privacyLink">
+                                <div class="link-icon">🔒</div>
+                                <div class="link-content">
+                                    <h4>Privacy Policy</h4>
+                                    <p>How we protect your data and privacy</p>
+                                </div>
+                                <div class="link-arrow">→</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- App Version -->
+                    <div class="app-version">
+                        <p>FinCalc Pro v1.0.0</p>
+                        <p>Built with ❤️ for smart financial planning</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="emi-calculator">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <span class="nav-label">EMI</span>
             </button>
-        </div>
+            <button class="nav-item" data-tab="amortization-table">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Table</span>
+            </button>
+            <button class="nav-item" data-tab="prepayment-impact">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Prepay</span>
+            </button>
+            <button class="nav-item" data-tab="loan-comparison">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
+                        <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
+                        <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Compare</span>
+            </button>
+            <button class="nav-item" data-tab="tools-extras">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Tools</span>
+            </button>
+            <button class="nav-item" data-tab="smart-features">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Smart</span>
+            </button>
+            <button class="nav-item" data-tab="settings">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82V9a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Settings</span>
+            </button>
+        </nav>
     </div>
 
-    <!-- Footer Ad Space -->
-    <div class="footer-ad">
-        <div class="ad-placeholder">
-            📢 Advertisement Space - 728x90 (Desktop) / 320x50 (Mobile)
-        </div>
-    </div>
-
-    <!-- Universal Footer -->
-    <footer class="universal-footer">
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="about.html" class="footer-link">About</a>
-                <a href="privacy.html" class="footer-link">Privacy Policy</a>
-                <a href="terms.html" class="footer-link">Terms of Service</a>
-                <a href="contact.html" class="footer-link">Contact</a>
-                <a href="blog.html" class="footer-link">Blog</a>
-            </div>
-            <div class="footer-copyright">
-                © 2025 PRATIX FINANCE by Raghav Pratap. All rights reserved. | Empowering financial decisions.
-            </div>
-        </div>
-    </footer>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
+    <script src="script.js"></script>
     <script>
-        let emiChart = null;
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
+        function goToHome() {
+            window.location.href = '/index.html';
         }
 
-        // Sync sliders with inputs
-        document.getElementById('loanAmountSlider').addEventListener('input', function() {
-            document.getElementById('loanAmount').value = this.value;
-        });
-
-        document.getElementById('loanAmount').addEventListener('input', function() {
-            document.getElementById('loanAmountSlider').value = this.value;
-        });
-
-        document.getElementById('interestRateSlider').addEventListener('input', function() {
-            document.getElementById('interestRate').value = this.value;
-        });
-
-        document.getElementById('interestRate').addEventListener('input', function() {
-            document.getElementById('interestRateSlider').value = this.value;
-        });
-
-        document.getElementById('loanTenureSlider').addEventListener('input', function() {
-            document.getElementById('loanTenure').value = this.value;
-        });
-
-        document.getElementById('loanTenure').addEventListener('input', function() {
-            document.getElementById('loanTenureSlider').value = this.value;
-        });
-
-        // EMI Calculation Function
-        function calculateEMI() {
-            const principal = parseFloat(document.getElementById('loanAmount').value);
-            const annualRate = parseFloat(document.getElementById('interestRate').value);
-            const years = parseFloat(document.getElementById('loanTenure').value);
-
-            if (!principal || !annualRate || !years) {
-                showToast('Please fill in all fields', 'error');
-                return;
-            }
-
-            const monthlyRate = annualRate / 12 / 100;
-            const totalMonths = years * 12;
-
-            // EMI Formula: EMI = P * r * (1+r)^n / ((1+r)^n - 1)
-            const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
-                       (Math.pow(1 + monthlyRate, totalMonths) - 1);
-
-            const totalAmount = emi * totalMonths;
-            const totalInterest = totalAmount - principal;
-
-            // Update results
-            document.getElementById('monthlyEMI').textContent = `₹${Math.round(emi).toLocaleString('en-IN')}`;
-            document.getElementById('totalInterest').textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
-            document.getElementById('totalAmount').textContent = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
-
-            // Show results
-            document.getElementById('resultsContainer').style.display = 'block';
-
-            // Create chart
-            createChart(principal, totalInterest);
-
-            showToast('EMI calculated successfully!', 'success');
+        function goToSIP() {
+            window.location.href = '/sip-calculator.html';
         }
 
-        // Create Chart
-        function createChart(principal, interest) {
-            const ctx = document.getElementById('emiChart').getContext('2d');
-
-            if (emiChart) {
-                emiChart.destroy();
-            }
-
-            emiChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Principal Amount', 'Total Interest'],
-                    datasets: [{
-                        data: [principal, interest],
-                        backgroundColor: [
-                            'rgba(0, 242, 254, 0.8)',
-                            'rgba(240, 147, 251, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(0, 242, 254, 1)',
-                            'rgba(240, 147, 251, 1)'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: 'white',
-                                padding: 20
-                            }
-                        }
-                    }
-                }
-            });
+        function goToGST() {
+            window.location.href = '/gst-calculator.html';
         }
 
-        // Share Functionality
-        async function shareCalculator() {
-            const url = window.location.href;
-            const title = 'EMI Calculator - Pratix Finance';
-            const text = 'Calculate your loan EMI with this free EMI calculator from Pratix Finance!';
-
-            if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
-                try {
-                    await navigator.share({
-                        title: title,
-                        text: text,
-                        url: url
-                    });
-                    showToast('Shared successfully!', 'success');
-                } catch (error) {
-                    copyToClipboard(url);
-                }
-            } else {
-                copyToClipboard(url);
-            }
+        function goToTax() {
+            window.location.href = '/tax-calculator.html';
         }
 
-        // Copy to Clipboard
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Link copied to clipboard!', 'success');
-            }).catch(() => {
-                showToast('Failed to copy link', 'error');
-            });
+         function goToInvestmentTracker() {
+            window.location.href = '/investment-tracker.html';
         }
 
-        // Toast Notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast show ${type}`;
 
-            setTimeout(() => {
-                toast.className = 'toast';
-            }, 3000);
+        function goBack() {
+            window.history.back();
         }
-
-        // Initialize with default values
-        document.getElementById('loanAmount').value = 1000000;
-        document.getElementById('interestRate').value = 8.5;
-        document.getElementById('loanTenure').value = 20;
     </script>
 </body>
 </html>

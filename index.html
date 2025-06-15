@@ -1,420 +1,1339 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratix Finance - Professional Financial Calculators &amp; Tools</title>
-    <meta name="description" content="Free online financial calculators for EMI, SIP, GST, Income Tax, FD calculations. Professional tools for smart financial planning and decision making.">
-    <meta name="keywords" content="financial calculator, EMI calculator, SIP calculator, GST calculator, tax calculator, FD calculator, finance tools">
-    <meta name="author" content="Pratix Finance">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Pratix Finance - Professional Financial Calculators">
-    <meta property="og:description" content="Free online financial calculators for EMI, SIP, GST, Income Tax, FD calculations. Professional tools for smart financial planning.">
-    <meta property="og:url" content="https://pratix-finance.vercel.app">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://pratix-finance.vercel.app/logo.png">
-
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Pratix Finance - Professional Financial Calculators">
-    <meta name="twitter:description" content="Free online financial calculators for EMI, SIP, GST, Income Tax, FD calculations.">
-    <meta name="twitter:image" content="https://pratix-finance.vercel.app/logo.png">
-
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Universal Responsive Navbar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-brand">
-                <img src="logo.png" alt="Pratix Finance Logo">
-                <span>Pratix Finance</span>
-            </a>
-            <div class="navbar-menu" id="navbarMenu">
-                <a href="index.html" class="navbar-link active">Home</a>
-                <a href="emi-calculator.html" class="navbar-link">EMI</a>
-                <a href="sip-calculator.html" class="navbar-link">SIP</a>
-                <a href="gst-calculator.html" class="navbar-link">GST</a>
-                <a href="tax-calculator.html" class="navbar-link">Tax</a>
-                <a href="fd-calculator.html" class="navbar-link">FD</a>
-                <a href="about.html" class="navbar-link">About</a>
-                <a href="contact.html" class="navbar-link">Contact</a>
-            </div>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Header Ad Space -->
-    <div class="header-ad">
-        <div class="ad-container">
-            <div class="ad-placeholder">
-                <span class="ad-label">Advertisement</span>
-                <div class="ad-content">
-                    <!-- Google AdSense code will go here -->
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle ad-responsive"
-                         style="display:block"
-                         data-ad-client="ca-pub-XXXXXXXXXX"
-                         data-ad-slot="XXXXXXXXXX"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">Professional Financial Calculators</h1>
-                    <p class="hero-subtitle">Make smart financial decisions with our comprehensive suite of calculators</p>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <span class="stat-number">50K+</span>
-                            <span class="stat-label">Users</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number">6</span>
-                            <span class="stat-label">Tools</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number">100%</span>
-                            <span class="stat-label">Free</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Calculator Tools Grid -->
-        <section class="tools-section">
-            <div class="container">
-                <h2 class="section-title">Financial Calculators</h2>
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search calculators..." class="search-input">
-                    <div id="searchResults" class="search-results"></div>
-                </div>
-
-                <div class="calculators-grid">
-                    <!-- EMI Calculator -->
-                    <div class="calculator" data-keywords="loan emi home car personal finance">
-                        <div class="calculator-icon">🏠</div>
-                        <h3>EMI Calculator</h3>
-                        <p>Calculate monthly EMI for loans with detailed breakdown and amortization schedule.</p>
-                        <div class="calculator-features">
-                            <span class="feature-tag">Loan Analysis</span>
-                            <span class="feature-tag">Charts</span>
-                        </div>
-                        <a href="emi-calculator.html" class="use-btn">Calculate EMI</a>
-                    </div>
-
-                    <!-- SIP Calculator -->
-                    <div class="calculator" data-keywords="sip mutual fund investment returns wealth">
-                        <div class="calculator-icon">📈</div>
-                        <h3>SIP Calculator</h3>
-                        <p>Plan your SIP investments and calculate future wealth with goal-based planning.</p>
-                        <div class="calculator-features">
-                            <span class="feature-tag">Goal Planning</span>
-                            <span class="feature-tag">Wealth Creation</span>
-                        </div>
-                        <a href="sip-calculator.html" class="use-btn">Calculate SIP</a>
-                    </div>
-
-                    <!-- GST Calculator -->
-                    <div class="calculator" data-keywords="gst tax goods services invoice hsn">
-                        <div class="calculator-icon">🧾</div>
-                        <h3>GST Calculator</h3>
-                        <p>Calculate GST amounts, generate invoices, and manage HSN codes efficiently.</p>
-                        <div class="calculator-features">
-                            <span class="feature-tag">Invoice Generator</span>
-                            <span class="feature-tag">HSN Lookup</span>
-                        </div>
-                        <a href="gst-calculator.html" class="use-btn">Calculate GST</a>
-                    </div>
-
-                    <!-- Income Tax Calculator -->
-                    <div class="calculator" data-keywords="income tax salary deduction 80c new old regime">
-                        <div class="calculator-icon">💰</div>
-                        <h3>Income Tax Calculator</h3>
-                        <p>Compare old vs new tax regimes and optimize your tax planning effectively.</p>
-                        <div class="calculator-features">
-                            <span class="feature-tag">Tax Comparison</span>
-                            <span class="feature-tag">Salary Breakdown</span>
-                        </div>
-                        <a href="tax-calculator.html" class="use-btn">Calculate Tax</a>
-                    </div>
-
-                    <!-- FD Calculator -->
-                    <div class="calculator" data-keywords="fixed deposit fd interest maturity bank">
-                        <div class="calculator-icon">🏦</div>
-                        <h3>FD Calculator</h3>
-                        <p>Calculate fixed deposit returns with bank comparison and laddering strategies.</p>
-                        <div class="calculator-features">
-                            <span class="feature-tag">Bank Comparison</span>
-                            <span class="feature-tag">Tax Impact</span>
-                        </div>
-                        <a href="fd-calculator.html" class="use-btn">Calculate FD</a>
-                    </div>
-
-                    <!-- RD Calculator -->
-                    <div class="calculator" data-keywords="recurring deposit rd savings monthly">
-                        <div class="calculator-icon">💳</div>
-                        <h3>RD Calculator</h3>
-                        <p>Plan your recurring deposits and track monthly savings growth effectively.</p>
-                        <div class="calculator-features">
-                            <span class="feature-tag">Monthly Savings</span>
-                            <span class="feature-tag">Growth Tracking</span>
-                        </div>
-                        <a href="#" class="use-btn" onclick="showNotification('RD Calculator coming soon!', 'info')">Coming Soon</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features-section">
-            <div class="container">
-                <h2 class="section-title">Why Choose Pratix Finance?</h2>
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon">🎯</div>
-                        <h3 class="feature-title">Accurate Calculations</h3>
-                        <p class="feature-description">Precise mathematical formulas ensure accurate results for all your financial planning needs.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📱</div>
-                        <h3 class="feature-title">Mobile Responsive</h3>
-                        <p class="feature-description">Works seamlessly across all devices - desktop, tablet, and mobile for calculations on the go.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🔒</div>
-                        <h3 class="feature-title">Secure &amp; Private</h3>
-                        <p class="feature-description">All calculations are performed locally in your browser. No data is stored or transmitted to servers.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">💼</div>
-                        <h3 class="feature-title">Professional Tools</h3>
-                        <p class="feature-description">Comprehensive suite of financial calculators designed for personal and professional use.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Share Section -->
-        <section class="share-section">
-            <div class="container">
-                <div class="share-content">
-                    <h3>📤 Share Pratix Finance</h3>
-                    <p>Help others make better financial decisions</p>
-                    <button id="shareToolButton" class="share-btn">Share This Tool</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer Ad Space -->
-    <div class="footer-ad">
-        <div class="ad-container">
-            <div class="ad-placeholder">
-                <span class="ad-label">Advertisement</span>
-                <div class="ad-content">
-                    <!-- Google AdSense code will go here -->
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle ad-responsive"
-                         style="display:block"
-                         data-ad-client="ca-pub-XXXXXXXXXX"
-                         data-ad-slot="XXXXXXXXXX"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Universal Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-brand">
-                        <img src="logo.png" alt="Pratix Finance Logo" class="footer-logo">
-                        <h4>Pratix Finance</h4>
-                        <p>Professional financial calculators for smart decisions.</p>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Calculators</h4>
-                    <ul class="footer-links">
-                        <li><a href="emi-calculator.html">EMI Calculator</a></li>
-                        <li><a href="sip-calculator.html">SIP Calculator</a></li>
-                        <li><a href="gst-calculator.html">GST Calculator</a></li>
-                        <li><a href="tax-calculator.html">Tax Calculator</a></li>
-                        <li><a href="fd-calculator.html">FD Calculator</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul class="footer-links">
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="feedback.html">Feedback</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Legal</h4>
-                    <ul class="footer-links">
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Pratix Finance. All rights reserved. | Made with ❤️ for smart financial planning</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
-    <script>
-        // Navigation highlight
-        function highlightActiveNav() {
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.navbar-link');
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentPath.split('/').pop() || 
-                    (currentPath === '/' && link.getAttribute('href') === 'index.html')) {
-                    link.classList.add('active');
-                }
-            });
+    <meta name="description" content="PRATIX FINANCE - Your comprehensive financial calculator suite for EMI, SIP, Tax calculations and more." />
+    <meta name="keywords" content="PRATIX FINANCE, EMI calculator, SIP calculator, financial tools, loan calculator, investment calculator" />
+    <meta name="author" content="Pratix Finance" />
+    <title>PRATIX FINANCE - Financial Calculators & Tools</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+    <meta name="msapplication-TileColor" content="#31417F">
+    <meta name="msapplication-TileImage" content="/favicon.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        // Mobile menu toggle
-        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
-            const navbarMenu = document.getElementById('navbarMenu');
-            navbarMenu.classList.toggle('active');
-        });
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --gold-gradient: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --shadow-glow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.4);
+        }
 
-        // Share functionality
-        document.getElementById('shareToolButton').addEventListener('click', function() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Pratix Finance - Professional Financial Calculators',
-                    text: 'Check out these amazing financial calculators for EMI, SIP, GST, Tax, and FD calculations!',
-                    url: window.location.href
-                });
-            } else {
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    showNotification('Link copied to clipboard!', 'success');
-                });
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 35%, #f093fb 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 0;
+        }
+
+        /* Clean Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 35%, #f093fb 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.15),
+                0 1px 0 rgba(255, 255, 255, 0.1) inset;
+            -webkit-backdrop-filter: blur(25px);
+        }
+        
+        /* Main content wrapper to account for fixed header */
+        .main-wrapper {
+            padding-top: 280px;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(102, 126, 234, 0.3),
+                0 0 0 2px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            object-fit: cover;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 32px rgba(0, 0, 0, 0.25),
+                0 6px 16px rgba(102, 126, 234, 0.4),
+                0 0 0 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .main-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Download App Button */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 
+                0 4px 16px rgba(79, 172, 254, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 24px rgba(79, 172, 254, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .download-notification {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 0.625rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .notification-icon {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .download-section-hidden {
+            display: none !important;
+        }
+
+        .download-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1.5rem 2rem 1.5rem 4rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-bar:focus {
+            border-color: rgba(79, 172, 254, 0.6);
+            box-shadow: 
+                0 0 0 4px rgba(79, 172, 254, 0.1),
+                var(--shadow-hover);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Calculators Grid */
+        .calculators-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            background: var(--primary-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .calculators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .calculator-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--primary-gradient);
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .calculator-card:hover::before {
+            opacity: 0.3;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .calculator-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .calculator-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .calculator-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .calculator-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .calculator-features li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .calculator-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00f2fe;
+            font-weight: bold;
+        }
+
+        .use-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .use-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 4rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+        }
+
+        .footer-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Enhanced Responsive Design */
+        
+        /* Large Desktop (1200px+) */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1400px;
+                padding: 0 3rem;
             }
-        });
 
+            .calculators-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .main-title {
+                font-size: 2.75rem;
+            }
+
+            .header {
+                padding: 2.5rem 0;
+            }
+
+            .main-wrapper {
+                padding-top: 320px;
+            }
+        }
+
+        /* Medium Desktop (992px - 1199px) */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .calculators-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .container {
+                padding: 0 2rem;
+            }
+
+            .main-wrapper {
+                padding-top: 300px;
+            }
+        }
+
+        /* Tablet (768px - 991px) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .calculators-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .header {
+                padding: 2rem 0;
+            }
+
+            .main-wrapper {
+                padding-top: 280px;
+            }
+
+            .search-bar {
+                font-size: 1rem;
+                padding: 1.25rem 2rem 1.25rem 3.5rem;
+            }
+        }
+
+        /* Mobile (max-width: 767px) */
+        @media (max-width: 767px) {
+            .main-wrapper {
+                padding-top: 260px;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-title {
+                font-size: 1.875rem;
+                line-height: 1.1;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .header {
+                padding: 1.5rem 0;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .download-notification {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .calculators-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .download-btn {
+                font-size: 0.9rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .search-bar {
+                font-size: 0.95rem;
+                padding: 1rem 1.5rem 1rem 3rem;
+            }
+
+            .search-icon {
+                left: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .calculator-card {
+                padding: 1.5rem;
+            }
+
+            .calculator-icon {
+                font-size: 2.5rem;
+            }
+
+            .calculator-title {
+                font-size: 1.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .feature-icon {
+                font-size: 2rem;
+            }
+
+            .feature-title {
+                font-size: 1.125rem;
+            }
+        }
+
+        /* Small Mobile (max-width: 480px) */
+        @media (max-width: 480px) {
+            .main-wrapper {
+                padding-top: 240px;
+            }
+
+            .container {
+                padding: 0 0.75rem;
+            }
+
+            .main-title {
+                font-size: 1.625rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .logo {
+                width: 55px;
+                height: 55px;
+            }
+
+            .header {
+                padding: 1.25rem 0;
+            }
+
+            .download-btn {
+                font-size: 0.85rem;
+                padding: 0.625rem 1.25rem;
+            }
+
+            .download-notification {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.875rem;
+            }
+
+            .search-bar {
+                font-size: 0.9rem;
+                padding: 0.875rem 1.25rem 0.875rem 2.75rem;
+            }
+
+            .search-icon {
+                left: 0.875rem;
+                font-size: 1rem;
+            }
+
+            .calculator-card {
+                padding: 1.25rem;
+            }
+
+            .calculator-icon {
+                font-size: 2.25rem;
+            }
+
+            .calculator-title {
+                font-size: 1.125rem;
+            }
+
+            .calculator-description {
+                font-size: 0.875rem;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .calculators-section,
+            .features-section {
+                padding: 3rem 0;
+            }
+
+            .search-section {
+                padding: 2rem 0;
+            }
+        }
+
+        /* Very Small Mobile (max-width: 360px) */
+        @media (max-width: 360px) {
+            .main-wrapper {
+                padding-top: 220px;
+            }
+
+            .main-title {
+                font-size: 1.5rem;
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .calculator-card {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* PWA Notification Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -100%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        
+        @keyframes slideOutUp {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -100%);
+            }
+        }
+
+        /* Search Results */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 50;
+            box-shadow: var(--shadow-glow);
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .search-result-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo.png" alt="PRATIX FINANCE Logo" class="logo">
+                <h1 class="main-title">PRATIX FINANCE</h1>
+                <p class="subtitle">Your Complete Financial Calculator Suite</p>
+                <div id="downloadSection">
+                    <a href="#" class="download-btn" id="downloadApp">
+                        <span class="download-icon">📱</span>
+                        <span>Download App</span>
+                    </a>
+                    <div class="download-notification" id="downloadNotification">
+                        <span class="notification-icon">⚡</span>
+                        <span>Download for better performance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-container">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-bar" placeholder="Search for calculators (EMI, SIP, Tax, etc.)" id="searchInput">
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculators Section -->
+        <section class="calculators-section">
+        <div class="container">
+            <h2 class="section-title">Financial Calculators & Tools</h2>
+            <div class="calculators-grid" id="calculatorsGrid">
+                <!-- EMI Calculator -->
+                <div class="calculator-card" data-name="EMI Calculator" data-keywords="emi loan mortgage home car personal finance interest">
+                    <div class="calculator-icon">🏠</div>
+                    <h3 class="calculator-title">EMI Calculator</h3>
+                    <p class="calculator-description">Calculate your monthly loan payments with detailed amortization schedule and prepayment impact analysis.</p>
+                    <ul class="calculator-features">
+                        <li>Monthly EMI calculation</li>
+                        <li>Amortization table</li>
+                        <li>Prepayment impact</li>
+                        <li>Loan comparison</li>
+                    </ul>
+                    <a href="emi-calculator.html" class="use-btn">Use Calculator</a>
+                </div>
+
+                <!-- SIP Calculator -->
+                <div class="calculator-card" data-name="SIP Calculator" data-keywords="sip mutual fund investment systematic plan returns">
+                    <div class="calculator-icon">📈</div>
+                    <h3 class="calculator-title">SIP Calculator</h3>
+                    <p class="calculator-description">Plan your systematic investment with detailed projections and wealth creation analysis.</p>
+                    <ul class="calculator-features">
+                        <li>Future value calculation</li>
+                        <li>Step-up SIP planning</li>
+                        <li>Goal-based investing</li>
+                        <li>Returns comparison</li>
+                    </ul>
+                    <a href="sip-calculator.html" class="use-btn">Use Calculator</a>
+                </div>
+
+                <!-- Tax Calculator -->
+                <div class="calculator-card" data-name="Income Tax Calculator" data-keywords="tax income tax calculator old new regime">
+                    <div class="calculator-icon">💼</div>
+                    <h3 class="calculator-title">Income Tax Calculator</h3>
+                    <p class="calculator-description">Calculate your income tax liability under both old and new tax regimes with deduction optimization.</p>
+                    <ul class="calculator-features">
+                        <li>Old vs New regime</li>
+                        <li>Deduction planning</li>
+                        <li>Tax saving tips</li>
+                        <li>Salary breakdown</li>
+                    </ul>
+                    <a href="tax-calculator.html" class="use-btn">Use Calculator</a>
+                </div>
+
+                <!-- Fixed Deposit Calculator -->
+                <div class="calculator-card" data-name="Fixed Deposit Calculator" data-keywords="fd fixed deposit bank interest maturity">
+                    <div class="calculator-icon">🏦</div>
+                    <h3 class="calculator-title">FD Calculator</h3>
+                    <p class="calculator-description">Calculate fixed deposit returns with compound interest and compare different bank rates.</p>
+                    <ul class="calculator-features">
+                        <li>Maturity amount</li>
+                        <li>Interest comparison</li>
+                        <li>Tax on interest</li>
+                        <li>Quarterly compounding</li>
+                    </ul>
+                    <a href="fd-calculator.html" class="use-btn">Use Calculator</a>
+                </div>
+
+                <!-- PPF Calculator -->
+                <div class="calculator-card" data-name="PPF Calculator" data-keywords="ppf public provident fund retirement tax saving">
+                    <div class="calculator-icon">🛡️</div>
+                    <h3 class="calculator-title">PPF Calculator</h3>
+                    <p class="calculator-description">Plan your Public Provident Fund investments with 15-year projection and extension scenarios.</p>
+                    <ul class="calculator-features">
+                        <li>15-year maturity</li>
+                        <li>Extension planning</li>
+                        <li>Partial withdrawal</li>
+                        <li>Loan against PPF</li>
+                    </ul>
+                    <a href="#" class="use-btn">Coming Soon</a>
+                </div>
+
+                <!-- GST Calculator -->
+                <div class="calculator-card" data-name="GST Calculator" data-keywords="gst goods services tax business invoice">
+                    <div class="calculator-icon">📊</div>
+                    <h3 class="calculator-title">GST Calculator</h3>
+                    <p class="calculator-description">Calculate GST amounts for your business transactions with different tax slabs and HSN codes.</p>
+                    <ul class="calculator-features">
+                        <li>Multiple GST rates</li>
+                        <li>Inclusive/Exclusive</li>
+                        <li>HSN code lookup</li>
+                        <li>Invoice generation</li>
+                    </ul>
+                    <a href="gst-calculator.html" class="use-btn">Use Calculator</a>
+                </div>
+
+                <!-- Retirement Calculator -->
+                <div class="calculator-card" data-name="Retirement Calculator" data-keywords="retirement pension planning corpus future">
+                    <div class="calculator-icon">👴</div>
+                    <h3 class="calculator-title">Retirement Planner</h3>
+                    <p class="calculator-description">Plan your retirement corpus with inflation-adjusted calculations and withdrawal strategies.</p>
+                    <ul class="calculator-features">
+                        <li>Corpus calculation</li>
+                        <li>Inflation adjustment</li>
+                        <li>Withdrawal planning</li>
+                        <li>Asset allocation</li>
+                    </ul>
+                    <a href="#" class="use-btn">Coming Soon</a>
+                </div>
+
+                <!-- Car Loan Calculator -->
+                <div class="calculator-card" data-name="Car Loan Calculator" data-keywords="car auto vehicle loan finance down payment">
+                    <div class="calculator-icon">🚗</div>
+                    <h3 class="calculator-title">Car Loan Calculator</h3>
+                    <p class="calculator-description">Calculate your car loan EMI with down payment optimization and insurance cost analysis.</p>
+                    <ul class="calculator-features">
+                        <li>Down payment planning</li>
+                        <li>Insurance calculation</li>
+                        <li>Total cost analysis</li>
+                        <li>Loan vs cash</li>
+                    </ul>
+                    <a href="#" class="use-btn">Coming Soon</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose PRATIX FINANCE?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-description">Get instant calculations with real-time updates and interactive charts.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">100% Secure</h3>
+                    <p class="feature-description">Your financial data stays private. All calculations happen locally in your browser.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Mobile Friendly</h3>
+                    <p class="feature-description">Access all calculators on any device with our responsive design.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💡</div>
+                    <h3 class="feature-title">Smart Insights</h3>
+                    <p class="feature-description">Get AI-powered recommendations and financial planning insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact</a>
+                    <a href="#" class="footer-link">Help</a>
+                </div>
+                <div class="footer-content">
+                    <p>&copy; 2024 PRATIX FINANCE. All rights reserved.</p>
+                    <p>Empowering your financial decisions with intelligent calculators.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
-        const calculators = document.querySelectorAll('.calculator');
+        const calculatorCards = document.querySelectorAll('.calculator-card');
+
+        // Search data
+        const searchData = Array.from(calculatorCards).map(card => ({
+            element: card,
+            name: card.dataset.name,
+            keywords: card.dataset.keywords,
+            title: card.querySelector('.calculator-title').textContent,
+            description: card.querySelector('.calculator-description').textContent
+        }));
 
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
-
+            
             if (query.length === 0) {
                 searchResults.style.display = 'none';
-                calculators.forEach(calc => calc.style.display = 'block');
+                showAllCalculators();
                 return;
             }
 
-            // Filter calculators
-            const filtered = Array.from(calculators).filter(calc => {
-                const title = calc.querySelector('h3').textContent.toLowerCase();
-                const description = calc.querySelector('p').textContent.toLowerCase();
-                const keywords = calc.getAttribute('data-keywords').toLowerCase();
-
-                return title.includes(query) || description.includes(query) || keywords.includes(query);
-            });
-
-            // Show/hide calculators
-            calculators.forEach(calc => {
-                calc.style.display = filtered.includes(calc) ? 'block' : 'none';
-            });
+            // Filter results
+            const filtered = searchData.filter(item => 
+                item.name.toLowerCase().includes(query) ||
+                item.keywords.toLowerCase().includes(query) ||
+                item.title.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query)
+            );
 
             // Show search results dropdown
             if (filtered.length > 0) {
-                searchResults.innerHTML = filtered.map(calc => {
-                    const title = calc.querySelector('h3').textContent;
-                    const link = calc.querySelector('.use-btn').getAttribute('href');
-                    return `<div class="search-result-item" onclick="window.location.href='${link}'">${title}</div>`;
-                }).join('');
+                searchResults.innerHTML = filtered.map(item => `
+                    <div class="search-result-item" data-name="${item.name}">
+                        <div class="search-result-title">${item.title}</div>
+                        <div class="search-result-description">${item.description}</div>
+                    </div>
+                `).join('');
                 searchResults.style.display = 'block';
+
+                // Add click listeners to search results
+                searchResults.querySelectorAll('.search-result-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const cardName = this.dataset.name;
+                        const targetCard = Array.from(calculatorCards).find(card => 
+                            card.dataset.name === cardName
+                        );
+                        if (targetCard) {
+                            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            targetCard.style.transform = 'scale(1.05)';
+                            setTimeout(() => {
+                                targetCard.style.transform = '';
+                            }, 1000);
+                        }
+                        searchResults.style.display = 'none';
+                        searchInput.value = '';
+                    });
+                });
             } else {
                 searchResults.innerHTML = '<div class="search-result-item">No calculators found</div>';
                 searchResults.style.display = 'block';
             }
+
+            // Filter visible calculators
+            filterCalculators(query);
         });
 
-        // Notification system
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <span class="notification-message">${message}</span>
-                    <button class="notification-close">&times;</button>
-                </div>
-            `;
-
-            notification.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background: rgba(0, 0, 0, 0.9);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 12px;
-                padding: 1rem 1.5rem;
-                color: white;
-                z-index: 10000;
-                max-width: 300px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-                animation: slideInRight 0.3s ease;
-            `;
-
-            if (type === 'success') {
-                notification.style.borderColor = '#00ff88';
-            } else if (type === 'error') {
-                notification.style.borderColor = '#ff4757';
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
             }
+        });
 
-            document.body.appendChild(notification);
+        function filterCalculators(query) {
+            calculatorCards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const keywords = card.dataset.keywords.toLowerCase();
+                const title = card.querySelector('.calculator-title').textContent.toLowerCase();
+                const description = card.querySelector('.calculator-description').textContent.toLowerCase();
 
-            setTimeout(() => {
-                notification.remove();
-            }, 4000);
-
-            notification.querySelector('.notification-close').addEventListener('click', () => {
-                notification.remove();
+                if (name.includes(query) || keywords.includes(query) || 
+                    title.includes(query) || description.includes(query)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            highlightActiveNav();
+        function showAllCalculators() {
+            calculatorCards.forEach(card => {
+                card.style.display = 'block';
+                card.style.animation = 'fadeIn 0.5s ease';
+            });
+        }
+
+        // PWA Install Functionality
+        let deferredPrompt;
+        let isAppInstalled = false;
+
+        // Check if app is already installed
+        function checkIfAppInstalled() {
+            // Check if running as PWA
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                isAppInstalled = true;
+                hideDownloadSection();
+                return;
+            }
+
+            // Check localStorage flag
+            const isAppDownloaded = localStorage.getItem('appDownloaded');
+            if (isAppDownloaded === 'true') {
+                hideDownloadSection();
+                return;
+            }
+        }
+
+        function hideDownloadSection() {
+            const downloadSection = document.getElementById('downloadSection');
+            if (downloadSection) {
+                downloadSection.classList.add('download-section-hidden');
+            }
+        }
+
+        function showInstallNotification(message, type = 'success') {
+            // Create notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? 'linear-gradient(135deg, #00ff88, #00d4ff)' : 'linear-gradient(135deg, #ff4757, #ff6b7a)'};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+                backdrop-filter: blur(20px);
+                animation: slideInDown 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutUp 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Listen for beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('PWA: beforeinstallprompt event fired');
+            
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            
+            // Save the event so we can trigger it later
+            deferredPrompt = e;
+            
+            // Show the download button
+            const downloadSection = document.getElementById('downloadSection');
+            if (downloadSection) {
+                downloadSection.classList.remove('download-section-hidden');
+            }
         });
+
+        // Listen for app installed event
+        window.addEventListener('appinstalled', (e) => {
+            console.log('PWA: App installed successfully');
+            
+            // Mark as installed
+            isAppInstalled = true;
+            localStorage.setItem('appDownloaded', 'true');
+            
+            // Hide download section
+            hideDownloadSection();
+            
+            // Show success notification
+            showInstallNotification('🎉 App installed successfully! You can now find Pratix Finance on your home screen.');
+            
+            // Clear the saved prompt
+            deferredPrompt = null;
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then((registration) => {
+                        console.log('PWA: Service Worker registered successfully', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showInstallNotification('🔄 App updated! Refresh to see the latest version.');
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.log('PWA: Service Worker registration failed', error);
+                        showInstallNotification('Service Worker registration failed', 'error');
+                    });
+            });
+        } else {
+            console.log('PWA: Service Workers not supported');
+        }
+
+        // Check install status on page load
+        checkIfAppInstalled();
+
+        // Download app button click handler
+        document.getElementById('downloadApp').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            if (isAppInstalled) {
+                showInstallNotification('App is already installed!', 'info');
+                return;
+            }
+
+            if (!deferredPrompt) {
+                // Fallback for browsers that don't support beforeinstallprompt
+                showInstallNotification('To install: Open browser menu → "Add to Home Screen" or "Install App"', 'info');
+                return;
+            }
+
+            // Update button state
+            this.style.opacity = '0.7';
+            this.style.pointerEvents = 'none';
+            this.innerHTML = '<span class="download-icon">⏳</span><span>Installing...</span>';
+            
+            try {
+                // Show the install prompt
+                const { outcome } = await deferredPrompt.prompt();
+                console.log('PWA: Install prompt result:', outcome);
+                
+                if (outcome === 'accepted') {
+                    console.log('PWA: User accepted the install prompt');
+                    
+                    // Update UI
+                    this.innerHTML = '<span class="download-icon">✅</span><span>Installing...</span>';
+                    this.style.background = 'linear-gradient(135deg, #00ff88 0%, #00d4ff 100%)';
+                    
+                    // The appinstalled event will handle the rest
+                } else {
+                    console.log('PWA: User dismissed the install prompt');
+                    
+                    // Reset button
+                    this.style.opacity = '1';
+                    this.style.pointerEvents = 'auto';
+                    this.innerHTML = '<span class="download-icon">📱</span><span>Download App</span>';
+                    
+                    showInstallNotification('Installation cancelled. You can try again anytime!', 'info');
+                }
+                
+                // Clear the prompt
+                deferredPrompt = null;
+                
+            } catch (error) {
+                console.error('PWA: Error during install:', error);
+                
+                // Reset button
+                this.style.opacity = '1';
+                this.style.pointerEvents = 'auto';
+                this.innerHTML = '<span class="download-icon">📱</span><span>Download App</span>';
+                
+                showInstallNotification('Installation failed. Please try again.', 'error');
+            }
+        });
+
+        // Header is now always visible and fixed
+
+        // Add fade-in animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add loading states for calculator links
+        document.querySelectorAll('.use-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.textContent === 'Coming Soon') {
+                    e.preventDefault();
+                    this.textContent = 'Coming Soon...';
+                    this.style.opacity = '0.7';
+                    setTimeout(() => {
+                        this.textContent = 'Coming Soon';
+                        this.style.opacity = '1';
+                    }, 1000);
+                } else {
+                    this.textContent = 'Loading...';
+                    this.classList.add('loading');
+                }
+            });
+        });
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href && href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Add scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.8s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all calculator cards and feature items
+        document.querySelectorAll('.calculator-card, .feature-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        console.log('PRATIX FINANCE Homepage loaded successfully!');
     </script>
 </body>
 </html>
