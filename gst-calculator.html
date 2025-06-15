@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE - Advanced GST Calculator with tax computation, invoice generation, and comprehensive analysis." />
+    <meta name="keywords" content="GST calculator, tax calculator, invoice generator, GST analysis, PRATIX FINANCE" />
+    <meta name="author" content="Pratix Finance" />
+    <title>GST Calculator - PRATIX FINANCE</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <button class="icon-btn" onclick="goBack()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">GST Calculator</h1>
+                <button class="icon-btn" onclick="goToHome()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- GST Calculator Tab -->
+            <section id="gst-calculator" class="tab-content active">
+                <div class="glass-card">
+                    <h2 class="section-title">GST Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Original Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="originalAmount" placeholder="10,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>GST Rate (%)</label>
+                            <div class="gst-rate-options">
+                                <button class="gst-rate-btn" data-rate="0">0%</button>
+                                <button class="gst-rate-btn" data-rate="5">5%</button>
+                                <button class="gst-rate-btn" data-rate="12">12%</button>
+                                <button class="gst-rate-btn active" data-rate="18">18%</button>
+                                <button class="gst-rate-btn" data-rate="28">28%</button>
+                            </div>
+                            <input type="number" id="gstRate" placeholder="18" class="calc-input" step="0.01">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Calculation Type</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="exclusive" name="calculationType" value="exclusive" checked>
+                                    <label for="exclusive">Add GST (Exclusive)</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="inclusive" name="calculationType" value="inclusive">
+                                    <label for="inclusive">Remove GST (Inclusive)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateGST">
+                            <span class="btn-text">Calculate GST</span>
+                        </button>
+                        <button class="refresh-btn" id="refreshGST">
+                            <span class="btn-text">Refresh</span>
+                        </button>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="result-label">Base Amount</span>
+                            <span class="result-value" id="baseAmount">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">CGST (9%)</span>
+                            <span class="result-value" id="cgstAmount">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">SGST (9%)</span>
+                            <span class="result-value" id="sgstAmount">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total GST</span>
+                            <span class="result-value" id="totalGST">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Final Amount</span>
+                            <span class="result-value" id="finalAmount">₹0</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container glow-chart">
+                        <div class="chart-title">GST Breakdown</div>
+                        <div class="chart-wrapper">
+                            <canvas id="gstChart" width="300" height="300"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color base"></div>
+                                <span class="legend-text">Base Amount</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color cgst"></div>
+                                <span class="legend-text">CGST</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color sgst"></div>
+                                <span class="legend-text">SGST</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Invoice Generator Tab -->
+            <section id="invoice-generator" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Invoice Generator</h2>
+                    <div class="invoice-form">
+                        <div class="invoice-header-section">
+                            <h3>Business Details</h3>
+                            <div class="input-group">
+                                <label>Business Name</label>
+                                <input type="text" id="businessName" placeholder="Your Business Name" class="calc-input">
+                            </div>
+                            <div class="input-group">
+                                <label>GSTIN</label>
+                                <input type="text" id="gstin" placeholder="22AAAAA0000A1Z5" class="calc-input">
+                            </div>
+                            <div class="input-group">
+                                <label>Address</label>
+                                <textarea id="businessAddress" placeholder="Business Address" class="calc-input" rows="2"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="invoice-items-section">
+                            <h3>Invoice Items</h3>
+                            <div id="invoiceItems">
+                                <div class="invoice-item">
+                                    <div class="item-inputs">
+                                        <input type="text" placeholder="Item Description" class="item-desc calc-input">
+                                        <input type="number" placeholder="Quantity" class="item-qty calc-input">
+                                        <input type="number" placeholder="Rate" class="item-rate calc-input">
+                                        <select class="item-gst calc-input">
+                                            <option value="0">0% GST</option>
+                                            <option value="5">5% GST</option>
+                                            <option value="12">12% GST</option>
+                                            <option value="18" selected>18% GST</option>
+                                            <option value="28">28% GST</option>
+                                        </select>
+                                        <button class="remove-item-btn" onclick="removeInvoiceItem(this)">×</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="feature-btn" id="addInvoiceItem">Add Item</button>
+                        </div>
+
+                        <button class="calculate-btn" id="generateInvoice">Generate Invoice</button>
+                        <button class="refresh-btn" id="refreshInvoice">Refresh</button>
+                    </div>
+
+                    <div class="invoice-preview" id="invoicePreview" style="display: none;">
+                        <div class="invoice-document">
+                            <div class="invoice-header">
+                                <h2>TAX INVOICE</h2>
+                                <div class="invoice-details">
+                                    <div>Invoice No: <span id="invoiceNumber">INV-001</span></div>
+                                    <div>Date: <span id="invoiceDate"></span></div>
+                                </div>
+                            </div>
+
+                            <div class="invoice-body">
+                                <div class="business-info">
+                                    <div><strong id="displayBusinessName">Business Name</strong></div>
+                                    <div>GSTIN: <span id="displayGSTIN">GSTIN</span></div>
+                                    <div id="displayAddress">Address</div>
+                                </div>
+
+                                <table class="invoice-table" id="invoiceTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th>Qty</th>
+                                            <th>Rate</th>
+                                            <th>Amount</th>
+                                            <th>GST%</th>
+                                            <th>GST Amt</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invoiceTableBody">
+                                    </tbody>
+                                </table>
+
+                                <div class="invoice-totals">
+                                    <div class="total-row">
+                                        <span>Subtotal:</span>
+                                        <span id="invoiceSubtotal">₹0</span>
+                                    </div>
+                                    <div class="total-row">
+                                        <span>Total GST:</span>
+                                        <span id="invoiceTotalGST">₹0</span>
+                                    </div>
+                                    <div class="total-row final-total">
+                                        <span>Grand Total:</span>
+                                        <span id="invoiceGrandTotal">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="invoice-actions">
+                            <button class="feature-btn" id="downloadInvoicePDF">Download PDF</button>
+                            <button class="feature-btn" id="shareInvoice">Share Invoice</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HSN Code Lookup Tab -->
+            <section id="hsn-lookup" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">HSN Code Lookup</h2>
+                    <div class="hsn-search">
+                        <div class="input-group">
+                            <label>Search HSN Code or Product</label>
+                            <input type="text" id="hsnSearch" placeholder="Enter HSN code or product name" class="calc-input">
+                        </div>
+                        <button class="calculate-btn" id="searchHSN">Search HSN Code</button>
+                    </div>
+
+                    <div class="hsn-results" id="hsnResults">
+                        <div class="hsn-categories">
+                            <h3>Popular HSN Codes</h3>
+                            <div class="hsn-grid">
+                                <div class="hsn-card" data-hsn="1001" data-rate="0">
+                                    <div class="hsn-code">1001</div>
+                                    <div class="hsn-desc">Wheat</div>
+                                    <div class="hsn-rate">0% GST</div>
+                                </div>
+                                <div class="hsn-card" data-hsn="1006" data-rate="0">
+                                    <div class="hsn-code">1006</div>
+                                    <div class="hsn-desc">Rice</div>
+                                    <div class="hsn-rate">0% GST</div>
+                                </div>
+                                <div class="hsn-card" data-hsn="6403" data-rate="18">
+                                    <div class="hsn-code">6403</div>
+                                    <div class="hsn-desc">Footwear</div>
+                                    <div class="hsn-rate">18% GST</div>
+                                </div>
+                                <div class="hsn-card" data-hsn="8517" data-rate="18">
+                                    <div class="hsn-code">8517</div>
+                                    <div class="hsn-desc">Mobile Phones</div>
+                                    <div class="hsn-rate">18% GST</div>
+                                </div>
+                                <div class="hsn-card" data-hsn="8703" data-rate="28">
+                                    <div class="hsn-code">8703</div>
+                                    <div class="hsn-desc">Motor Cars</div>
+                                    <div class="hsn-rate">28% GST</div>
+                                </div>
+                                <div class="hsn-card" data-hsn="6204" data-rate="12">
+                                    <div class="hsn-code">6204</div>
+                                    <div class="hsn-desc">Women's Garments</div>
+                                    <div class="hsn-rate">12% GST</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Access to Other Calculators -->
+                <div class="tools-grid" style="margin-top: 2rem;">
+                    <div class="tool-card" onclick="goToEMI()">
+                        <div class="tool-icon">🏠</div>
+                        <h3>EMI Calculator</h3>
+                        <p>Calculate loan EMI payments</p>
+                    </div>
+                    <div class="tool-card" onclick="goToSIP()">
+                        <div class="tool-icon">📈</div>
+                        <h3>SIP Calculator</h3>
+                        <p>Plan systematic investments</p>
+                    </div>
+                    <div class="tool-card" onclick="goToTax()">
+                        <div class="tool-icon">💼</div>
+                        <h3>Tax Calculator</h3>
+                        <p>Calculate income tax liability</p>
+                    </div>
+                    <div class="tool-card" onclick="goToFD()">
+                        <div class="tool-icon">🏦</div>
+                        <h3>FD Calculator</h3>
+                        <p>Calculate fixed deposit returns</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+            <!-- GST Analysis Tab -->
+            <section id="gst-analysis" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">GST Analysis & Reports</h2>
+
+                    <div class="analysis-form">
+                        <div class="input-group">
+                            <label>Monthly Sales (Excluding GST)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="monthlySales" placeholder="5,00,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Average GST Rate (%)</label>
+                            <input type="number" id="avgGSTRate" placeholder="18" class="calc-input" step="0.01">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Business Type</label>
+                            <select id="businessType" class="calc-input">
+                                <option value="regular">Regular Business</option>
+                                <option value="composition">Composition Scheme</option>
+                                <option value="export">Export Business</option>
+                            </select>
+                        </div>
+
+                        <button class="calculate-btn" id="analyzeGST">Analyze GST Impact</button>
+                        <button class="refresh-btn" id="refreshAnalysis">Refresh</button>
+                    </div>
+
+                    <div class="analysis-results" id="analysisResults" style="display: none;">
+                        <div class="analysis-cards">
+                            <div class="analysis-card">
+                                <h4>Monthly GST Liability</h4>
+                                <div class="analysis-value" id="monthlyGSTLiability">₹90,000</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>Annual GST Liability</h4>
+                                <div class="analysis-value" id="annualGSTLiability">₹10,80,000</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>Effective Tax Rate</h4>
+                                <div class="analysis-value" id="effectiveTaxRate">18%</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>Compliance Status</h4>
+                                <div class="analysis-value" id="complianceStatus">Regular Filing</div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Monthly GST Projection</div>
+                            <div class="chart-wrapper">
+                                <canvas id="gstAnalysisChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="gst-breakdown-table">
+                            <h4>GST Rate Wise Breakdown</h4>
+                            <table class="analysis-table">
+                                <thead>
+                                    <tr>
+                                        <th>GST Rate</th>
+                                        <th>Sales Amount</th>
+                                        <th>GST Amount</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gstBreakdownTableBody">
+                                    <tr>
+                                        <td>18%</td>
+                                        <td>₹5,00,000</td>
+                                        <td>₹90,000</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GST Returns Tab -->
+            <section id="gst-returns" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">GST Returns Calculator</h2>
+
+                    <div class="returns-form">
+                        <div class="input-group">
+                            <label>Return Period</label>
+                            <select id="returnPeriod" class="calc-input">
+                                <option value="monthly">Monthly (GSTR-1, GSTR-3B)</option>
+                                <option value="quarterly">Quarterly (GSTR-1 for small taxpayers)</option>
+                                <option value="annual">Annual (GSTR-9)</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Total Sales (Including GST)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="totalSalesGST" placeholder="5,90,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Total Purchases (Including GST)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="totalPurchasesGST" placeholder="2,36,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Previous Balance (If any)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="previousBalance" placeholder="0" class="calc-input">
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateReturns">Calculate GST Returns</button>
+                        <button class="refresh-btn" id="refreshReturns">Refresh</button>
+                    </div>
+
+                    <div class="returns-results" id="returnsResults" style="display: none;">
+                        <div class="returns-summary">
+                            <div class="return-item">
+                                <span class="return-label">Output GST (Sales)</span>
+                                <span class="return-value" id="outputGST">₹90,000</span>
+                            </div>
+                            <div class="return-item">
+                                <span class="return-label">Input GST (Purchases)</span>
+                                <span class="return-value" id="inputGST">₹36,000</span>
+                            </div>
+                            <div class="return-item">
+                                <span class="return-label">Net GST Liability</span>
+                                <span class="return-value" id="netGSTLiability">₹54,000</span>
+                            </div>
+                            <div class="return-item">
+                                <span class="return-label">Interest (If Late)</span>
+                                <span class="return-value" id="interestAmount">₹0</span>
+                            </div>
+                            <div class="return-item total-payable">
+                                <span class="return-label">Total Payable</span>
+                                <span class="return-value" id="totalPayable">₹54,000</span>
+                            </div>
+                        </div>
+
+                        <div class="filing-reminders">
+                            <h4>Filing Reminders</h4>
+                            <div class="reminder-list">
+                                <div class="reminder-item">
+                                    <span class="reminder-type">GSTR-1:</span>
+                                    <span class="reminder-date">11th of next month</span>
+                                </div>
+                                <div class="reminder-item">
+                                    <span class="reminder-type">GSTR-3B:</span>
+                                    <span class="reminder-date">20th of next month</span>
+                                </div>
+                                <div class="reminder-item">
+                                    <span class="reminder-type">Payment:</span>
+                                    <span class="reminder-date">20th of next month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="gst-calculator">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <span class="nav-label">GST Calc</span>
+            </button>
+            <button class="nav-item" data-tab="invoice-generator">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Invoice</span>
+            </button>
+            <button class="nav-item" data-tab="hsn-lookup">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </div>
+                <span class="nav-label">HSN</span>
+            </button>
+            <button class="nav-item" data-tab="gst-analysis">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Analysis</span>
+            </button>
+            <button class="nav-item" data-tab="gst-returns">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="8" rx="1"/>
+                        <path d="m22 4-10 7L2 4"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Returns</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="gst-script.js"></script>
+</body>
+</html>

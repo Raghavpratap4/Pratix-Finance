@@ -2227,6 +2227,511 @@ select:focus {
     font-style: italic;
 }
 
+/* GST Calculator Specific Styles */
+.gst-rate-options {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.gst-rate-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.gst-rate-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+}
+
+.gst-rate-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+/* Invoice Generator Styles */
+.invoice-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.invoice-header-section,
+.invoice-items-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.invoice-header-section h3,
+.invoice-items-section h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.invoice-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.item-inputs {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.remove-item-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--error-color);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.remove-item-btn:hover {
+    background: rgba(255, 71, 87, 0.8);
+    transform: scale(1.1);
+}
+
+.invoice-preview {
+    margin-top: 2rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid var(--glass-border);
+}
+
+.invoice-document {
+    background: white;
+    color: #000;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #000;
+}
+
+.invoice-header h2 {
+    color: #000;
+    margin: 0;
+}
+
+.invoice-details {
+    text-align: right;
+}
+
+.invoice-details div {
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+.business-info {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.business-info div {
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid #ddd;
+    color: #000;
+}
+
+.invoice-table th {
+    background: #f8f9fa;
+    font-weight: 700;
+}
+
+.invoice-totals {
+    text-align: right;
+    margin-top: 2rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+.total-row.final-total {
+    font-weight: 700;
+    font-size: 1.125rem;
+    border-top: 2px solid #000;
+    padding-top: 1rem;
+}
+
+.invoice-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* HSN Code Lookup Styles */
+.hsn-search {
+    margin-bottom: 2rem;
+}
+
+.hsn-results {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.hsn-categories h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.hsn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.hsn-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.hsn-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.hsn-code {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.hsn-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.hsn-rate {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--success-color);
+    background: rgba(0, 255, 136, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* GST Analysis Styles */
+.analysis-form {
+    margin-bottom: 2rem;
+}
+
+.analysis-results {
+    margin-top: 2rem;
+}
+
+.analysis-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.analysis-card {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.analysis-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.analysis-card h4 {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.analysis-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--success-color);
+    margin: 0;
+}
+
+.gst-breakdown-table {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    margin-top: 2rem;
+}
+
+.gst-breakdown-table h4 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.analysis-table th,
+.analysis-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.analysis-table td {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* GST Returns Styles */
+.returns-form {
+    margin-bottom: 2rem;
+}
+
+.returns-results {
+    margin-top: 2rem;
+}
+
+.returns-summary {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    margin-bottom: 2rem;
+}
+
+.return-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.return-item:last-child {
+    border-bottom: none;
+}
+
+.return-item.total-payable {
+    border-top: 2px solid var(--accent-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+    font-weight: 700;
+}
+
+.return-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.return-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.total-payable .return-value {
+    font-size: 1.25rem;
+    color: var(--accent-color);
+}
+
+.filing-reminders {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.filing-reminders h4 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.reminder-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.reminder-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reminder-type {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.reminder-date {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: rgba(0, 255, 136, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+}
+
+/* Chart Legend Colors for GST */
+.legend-color.base {
+    background: rgba(0, 212, 255, 0.8);
+    color: rgba(0, 212, 255, 1);
+}
+
+.legend-color.cgst {
+    background: rgba(240, 147, 251, 0.8);
+    color: rgba(240, 147, 251, 1);
+}
+
+.legend-color.sgst {
+    background: rgba(102, 126, 234, 0.8);
+    color: rgba(102, 126, 234, 1);
+}
+
+/* Responsive adjustments for GST calculator */
+@media (max-width: 768px) {
+    .item-inputs {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .gst-rate-options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .analysis-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hsn-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .invoice-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .gst-rate-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .analysis-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .hsn-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .invoice-document {
+        padding: 1rem;
+    }
+    
+    .invoice-table {
+        font-size: 0.75rem;
+    }
+    
+    .invoice-table th,
+    .invoice-table td {
+        padding: 0.5rem 0.25rem;
+    }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     * {

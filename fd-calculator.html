@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE - Advanced FD Calculator with compound interest, maturity calculation, and comprehensive analysis." />
+    <meta name="keywords" content="FD calculator, fixed deposit, bank interest, maturity amount, PRATIX FINANCE" />
+    <meta name="author" content="Pratix Finance" />
+    <title>FD Calculator - PRATIX FINANCE</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <button class="icon-btn" onclick="goBack()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">FD Calculator</h1>
+                <button class="icon-btn" onclick="goToHome()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- FD Calculator Tab -->
+            <section id="fd-calculator" class="tab-content active">
+                <div class="glass-card">
+                    <h2 class="section-title">FD Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Principal Amount</label>
+                            <div class="slider-display" id="principalAmountDisplay">Enter deposit amount</div>
+                            <input type="range" id="principalAmountSlider" min="10000" max="5000000" step="10000" value="100000" class="slider">
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="principalAmountInput" placeholder="1,00,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Annual Interest Rate (%)</label>
+                            <div class="slider-display" id="interestRateDisplay">Enter interest rate</div>
+                            <input type="range" id="interestRateSlider" min="1" max="15" step="0.1" value="7.5" class="slider">
+                            <input type="number" id="interestRateInput" placeholder="7.5" class="calc-input" step="0.1">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Tenure (Years)</label>
+                            <div class="slider-display" id="tenureDisplay">Enter FD tenure</div>
+                            <input type="range" id="tenureSlider" min="1" max="10" step="1" value="3" class="slider">
+                            <input type="number" id="tenureInput" placeholder="3" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Compounding Frequency</label>
+                            <select id="compoundingFrequency" class="calc-input">
+                                <option value="1">Annually</option>
+                                <option value="2">Half-Yearly</option>
+                                <option value="4" selected>Quarterly</option>
+                                <option value="12">Monthly</option>
+                                <option value="365">Daily</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>FD Type</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="regularFD" name="fdType" value="regular" checked>
+                                    <label for="regularFD">Regular FD</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="taxSaverFD" name="fdType" value="taxsaver">
+                                    <label for="taxSaverFD">Tax Saver FD (5 years)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateFD">
+                            <span class="btn-text">Calculate FD</span>
+                        </button>
+                        <button class="refresh-btn" id="refreshFD">
+                            <span class="btn-text">Refresh</span>
+                        </button>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="result-label">Principal Amount</span>
+                            <span class="result-value" id="principalAmount">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Interest Earned</span>
+                            <span class="result-value" id="totalInterest">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Maturity Amount</span>
+                            <span class="result-value" id="maturityAmount">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Effective Yield (%)</span>
+                            <span class="result-value" id="effectiveYield">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container glow-chart">
+                        <div class="chart-title">FD Growth Breakdown</div>
+                        <div class="chart-wrapper">
+                            <canvas id="fdChart" width="300" height="300"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color principal"></div>
+                                <span class="legend-text">Principal Amount</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color interest"></div>
+                                <span class="legend-text">Interest Earned</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bank Comparison Tab -->
+            <section id="bank-comparison" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Bank Rate Comparison</h2>
+                    
+                    <div class="bank-rates-grid">
+                        <div class="bank-card">
+                            <h3>SBI</h3>
+                            <div class="rate-details">
+                                <div class="rate-item">
+                                    <span>1-2 Years:</span>
+                                    <span>6.8%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>2-3 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>3-5 Years:</span>
+                                    <span>6.5%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>5+ Years:</span>
+                                    <span>6.5%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-card">
+                            <h3>HDFC Bank</h3>
+                            <div class="rate-details">
+                                <div class="rate-item">
+                                    <span>1-2 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>2-3 Years:</span>
+                                    <span>7.25%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>3-5 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>5+ Years:</span>
+                                    <span>6.5%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-card">
+                            <h3>ICICI Bank</h3>
+                            <div class="rate-details">
+                                <div class="rate-item">
+                                    <span>1-2 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>2-3 Years:</span>
+                                    <span>7.25%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>3-5 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>5+ Years:</span>
+                                    <span>6.75%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-card">
+                            <h3>Axis Bank</h3>
+                            <div class="rate-details">
+                                <div class="rate-item">
+                                    <span>1-2 Years:</span>
+                                    <span>7.25%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>2-3 Years:</span>
+                                    <span>7.5%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>3-5 Years:</span>
+                                    <span>7.25%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>5+ Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-card">
+                            <h3>Kotak Bank</h3>
+                            <div class="rate-details">
+                                <div class="rate-item">
+                                    <span>1-2 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>2-3 Years:</span>
+                                    <span>7.25%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>3-5 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>5+ Years:</span>
+                                    <span>6.75%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-card">
+                            <h3>PNB</h3>
+                            <div class="rate-details">
+                                <div class="rate-item">
+                                    <span>1-2 Years:</span>
+                                    <span>6.75%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>2-3 Years:</span>
+                                    <span>7.0%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>3-5 Years:</span>
+                                    <span>6.5%</span>
+                                </div>
+                                <div class="rate-item">
+                                    <span>5+ Years:</span>
+                                    <span>6.5%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-form">
+                        <h3>Compare Multiple Banks</h3>
+                        <div class="input-group">
+                            <label>Deposit Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="comparisonAmount" placeholder="1,00,000" class="calc-input">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Tenure (Years)</label>
+                            <input type="number" id="comparisonTenure" placeholder="3" class="calc-input">
+                        </div>
+                        <button class="calculate-btn" id="compareBanks">Compare Banks</button>
+                        <button class="refresh-btn" id="refreshComparison">Refresh</button>
+                    </div>
+
+                    <div class="comparison-results" id="comparisonResults" style="display: none;">
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Bank Comparison Results</div>
+                            <div class="chart-wrapper">
+                                <canvas id="bankComparisonChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FD vs Alternative Tab -->
+            <section id="fd-alternatives" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">FD vs Alternative Investments</h2>
+
+                    <div class="alternatives-form">
+                        <div class="input-group">
+                            <label>Investment Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="altInvestmentAmount" placeholder="1,00,000" class="calc-input">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Investment Period (Years)</label>
+                            <input type="number" id="altInvestmentPeriod" placeholder="5" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>FD Interest Rate (%)</label>
+                            <input type="number" id="altFDRate" placeholder="7.5" class="calc-input" step="0.1">
+                        </div>
+
+                        <button class="calculate-btn" id="compareAlternatives">Compare Investments</button>
+                        <button class="refresh-btn" id="refreshAlternatives">Refresh</button>
+                    </div>
+
+                    <div class="alternatives-results" id="alternativesResults" style="display: none;">
+                        <div class="alternatives-grid">
+                            <div class="alternative-card fd-card">
+                                <h4>Fixed Deposit</h4>
+                                <div class="alt-details">
+                                    <div class="alt-item">
+                                        <span>Returns:</span>
+                                        <span id="fdReturns">₹0</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Risk Level:</span>
+                                        <span class="risk-low">Very Low</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Liquidity:</span>
+                                        <span>Moderate</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Tax:</span>
+                                        <span>Taxable</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alternative-card sip-card">
+                                <h4>SIP Mutual Funds</h4>
+                                <div class="alt-details">
+                                    <div class="alt-item">
+                                        <span>Returns (12%):</span>
+                                        <span id="sipReturns">₹0</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Risk Level:</span>
+                                        <span class="risk-medium">Medium</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Liquidity:</span>
+                                        <span>High</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Tax:</span>
+                                        <span>LTCG</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alternative-card ppf-card">
+                                <h4>PPF</h4>
+                                <div class="alt-details">
+                                    <div class="alt-item">
+                                        <span>Returns (7.1%):</span>
+                                        <span id="ppfReturns">₹0</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Risk Level:</span>
+                                        <span class="risk-low">Very Low</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Liquidity:</span>
+                                        <span>Low (15 years)</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Tax:</span>
+                                        <span>Tax Free</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alternative-card nsc-card">
+                                <h4>NSC</h4>
+                                <div class="alt-details">
+                                    <div class="alt-item">
+                                        <span>Returns (6.8%):</span>
+                                        <span id="nscReturns">₹0</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Risk Level:</span>
+                                        <span class="risk-low">Very Low</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Liquidity:</span>
+                                        <span>Low (5 years)</span>
+                                    </div>
+                                    <div class="alt-item">
+                                        <span>Tax:</span>
+                                        <span>80C Benefit</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Investment Comparison</div>
+                            <div class="chart-wrapper">
+                                <canvas id="alternativesChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-card">
+                            <h4>💡 Investment Recommendation</h4>
+                            <p id="investmentRecommendation">Calculate to see personalized recommendations</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Laddering Strategy Tab -->
+            <section id="fd-laddering" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">FD Laddering Strategy</h2>
+
+                    <div class="laddering-explanation">
+                        <h3>What is FD Laddering?</h3>
+                        <p>FD Laddering is an investment strategy where you split your investment across multiple FDs with different maturity periods. This provides regular liquidity and helps you take advantage of changing interest rates.</p>
+                    </div>
+
+                    <div class="laddering-form">
+                        <div class="input-group">
+                            <label>Total Investment Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="ladderingAmount" placeholder="5,00,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Number of FDs</label>
+                            <select id="numberOfFDs" class="calc-input">
+                                <option value="3">3 FDs</option>
+                                <option value="4" selected>4 FDs</option>
+                                <option value="5">5 FDs</option>
+                                <option value="6">6 FDs</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Average Interest Rate (%)</label>
+                            <input type="number" id="ladderingRate" placeholder="7.5" class="calc-input" step="0.1">
+                        </div>
+
+                        <button class="calculate-btn" id="calculateLaddering">Create Laddering Plan</button>
+                        <button class="refresh-btn" id="refreshLaddering">Refresh</button>
+                    </div>
+
+                    <div class="laddering-results" id="ladderingResults" style="display: none;">
+                        <div class="laddering-plan">
+                            <h3>Your FD Laddering Plan</h3>
+                            <div class="ladder-grid" id="ladderGrid">
+                                <!-- Ladder items will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="laddering-benefits">
+                            <h3>Benefits of This Strategy</h3>
+                            <div class="benefits-grid">
+                                <div class="benefit-item">
+                                    <div class="benefit-icon">💰</div>
+                                    <h4>Regular Liquidity</h4>
+                                    <p>Get access to your money at regular intervals</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <div class="benefit-icon">📈</div>
+                                    <h4>Rate Flexibility</h4>
+                                    <p>Reinvest at better rates when they become available</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <div class="benefit-icon">🛡️</div>
+                                    <h4>Risk Mitigation</h4>
+                                    <p>Protect against interest rate volatility</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <div class="benefit-icon">⚖️</div>
+                                    <h4>Balanced Approach</h4>
+                                    <p>Mix of short and long-term investments</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Laddering Timeline</div>
+                            <div class="chart-wrapper">
+                                <canvas id="ladderingChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tax Implications Tab -->
+            <section id="tax-implications" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Tax Implications</h2>
+
+                    <div class="tax-form">
+                        <div class="input-group">
+                            <label>Annual FD Interest Income</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="annualInterest" placeholder="50,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Income Tax Slab</label>
+                            <select id="taxSlab" class="calc-input">
+                                <option value="0">No Tax (Income below ₹2.5L)</option>
+                                <option value="5">5% (₹2.5L - ₹5L)</option>
+                                <option value="20" selected>20% (₹5L - ₹10L)</option>
+                                <option value="30">30% (Above ₹10L)</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Senior Citizen</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="notSenior" name="seniorCitizen" value="no" checked>
+                                    <label for="notSenior">No</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="isSenior" name="seniorCitizen" value="yes">
+                                    <label for="isSenior">Yes (60+ years)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateTax">Calculate Tax Impact</button>
+                        <button class="refresh-btn" id="refreshTax">Refresh</button>
+                    </div>
+
+                    <div class="tax-results" id="taxResults" style="display: none;">
+                        <div class="tax-summary">
+                            <div class="tax-item">
+                                <span class="tax-label">Annual Interest Income</span>
+                                <span class="tax-value" id="grossInterest">₹50,000</span>
+                            </div>
+                            <div class="tax-item">
+                                <span class="tax-label">TDS Deducted</span>
+                                <span class="tax-value" id="tdsAmount">₹5,000</span>
+                            </div>
+                            <div class="tax-item">
+                                <span class="tax-label">Additional Tax Liability</span>
+                                <span class="tax-value" id="additionalTax">₹5,000</span>
+                            </div>
+                            <div class="tax-item total-tax">
+                                <span class="tax-label">Total Tax on FD</span>
+                                <span class="tax-value" id="totalTaxOnFD">₹10,000</span>
+                            </div>
+                            <div class="tax-item">
+                                <span class="tax-label">Post-Tax Returns</span>
+                                <span class="tax-value" id="postTaxReturns">₹40,000</span>
+                            </div>
+                        </div>
+
+                        <div class="tax-tips">
+                            <h3>Tax Saving Tips</h3>
+                            <div class="tips-list">
+                                <div class="tip-item">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Form 15G/15H:</strong> Submit if your total income is below taxable limit to avoid TDS</p>
+                                </div>
+                                <div class="tip-item">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Tax Saver FD:</strong> Get 80C deduction up to ₹1.5L with 5-year lock-in</p>
+                                </div>
+                                <div class="tip-item">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Senior Citizen:</strong> Higher TDS threshold of ₹50,000 vs ₹40,000 for others</p>
+                                </div>
+                                <div class="tip-item">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Split FDs:</strong> Distribute across family members to utilize multiple exemptions</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Tax Impact Analysis</div>
+                            <div class="chart-wrapper">
+                                <canvas id="taxChart" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Access to Other Calculators -->
+                <div class="tools-grid" style="margin-top: 2rem;">
+                    <div class="tool-card" onclick="goToEMI()">
+                        <div class="tool-icon">🏠</div>
+                        <h3>EMI Calculator</h3>
+                        <p>Calculate loan EMI payments</p>
+                    </div>
+                    <div class="tool-card" onclick="goToSIP()">
+                        <div class="tool-icon">📈</div>
+                        <h3>SIP Calculator</h3>
+                        <p>Plan systematic investments</p>
+                    </div>
+                    <div class="tool-card" onclick="goToGST()">
+                        <div class="tool-icon">📊</div>
+                        <h3>GST Calculator</h3>
+                        <p>Calculate GST amounts</p>
+                    </div>
+                    <div class="tool-card" onclick="goToTax()">
+                        <div class="tool-icon">💼</div>
+                        <h3>Tax Calculator</h3>
+                        <p>Calculate income tax liability</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="fd-calculator">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <span class="nav-label">FD Calc</span>
+            </button>
+            <button class="nav-item" data-tab="bank-comparison">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
+                        <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
+                        <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Banks</span>
+            </button>
+            <button class="nav-item" data-tab="fd-alternatives">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Compare</span>
+            </button>
+            <button class="nav-item" data-tab="fd-laddering">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Strategy</span>
+            </button>
+            <button class="nav-item" data-tab="tax-implications">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Tax</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="fd-script.js"></script>
+</body>
+</html>

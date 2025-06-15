@@ -1,34 +1,33 @@
-
 // Tab switching functionality
 document.addEventListener('DOMContentLoaded', function() {
     const navItems = document.querySelectorAll('.nav-item');
     const tabContents = document.querySelectorAll('.tab-content');
-    
+
     // Function to switch tabs
     function switchTab(targetTab) {
         // Remove active class from all nav items and tab contents
         navItems.forEach(item => item.classList.remove('active'));
         tabContents.forEach(content => content.classList.remove('active'));
-        
+
         // Add active class to clicked nav item
         const activeNavItem = document.querySelector(`[data-tab="${targetTab}"]`);
         if (activeNavItem) {
             activeNavItem.classList.add('active');
         }
-        
+
         // Show corresponding tab content
         const activeTabContent = document.getElementById(targetTab);
         if (activeTabContent) {
             activeTabContent.classList.add('active');
         }
-        
+
         // Store current tab in localStorage
         localStorage.setItem('activeTab', targetTab);
-        
+
         // Scroll to top of main content
         document.querySelector('.main-content').scrollTop = 0;
     }
-    
+
     // Add click event listeners to nav items
     navItems.forEach(item => {
         item.addEventListener('click', function() {
@@ -36,86 +35,121 @@ document.addEventListener('DOMContentLoaded', function() {
             switchTab(targetTab);
         });
     });
-    
+
     // Restore last active tab from localStorage
     const savedTab = localStorage.getItem('activeTab');
     if (savedTab && document.getElementById(savedTab)) {
         switchTab(savedTab);
     }
-    
+
     // EMI Calculator functionality
     let emiChart = null;
-    
+
     // Initialize EMI Calculator
     function initEMICalculator() {
         const loanAmountSlider = document.getElementById('loanAmountSlider');
         const loanAmountInput = document.getElementById('loanAmountInput');
         const loanAmountDisplay = document.getElementById('loanAmountDisplay');
-        
+
         const interestRateSlider = document.getElementById('interestRateSlider');
         const interestRateInput = document.getElementById('interestRateInput');
         const interestRateDisplay = document.getElementById('interestRateDisplay');
-        
+
         const loanTenureSlider = document.getElementById('loanTenureSlider');
         const loanTenureInput = document.getElementById('loanTenureInput');
         const loanTenureDisplay = document.getElementById('loanTenureDisplay');
-        
+
         const calculateBtn = document.getElementById('calculateEMI');
-        
+
+        // Initialize with empty values
+        initializeEmptyValues();
+
         // Sync sliders with inputs
         if (loanAmountSlider && loanAmountInput) {
             loanAmountSlider.addEventListener('input', function() {
                 const value = parseInt(this.value);
                 loanAmountInput.value = value;
                 loanAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
-                calculateEMI();
+                if (validateEMIInputs()) {
+                    calculateEMI();
+                }
             });
-            
+
             loanAmountInput.addEventListener('input', function() {
-                const value = parseInt(this.value) || 1000000;
-                loanAmountSlider.value = value;
-                loanAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
-                calculateEMI();
+                if (this.value) {
+                    const value = parseInt(this.value);
+                    if (value >= 100000 && value <= 10000000) {
+                        loanAmountSlider.value = value;
+                        loanAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
+                    } else {
+                        loanAmountDisplay.textContent = 'Enter valid amount (₹1L - ₹1Cr)';
+                    }
+                } else {
+                    loanAmountDisplay.textContent = 'Enter loan amount';
+                }
             });
         }
-        
+
         if (interestRateSlider && interestRateInput) {
             interestRateSlider.addEventListener('input', function() {
                 const value = parseFloat(this.value);
                 interestRateInput.value = value;
                 interestRateDisplay.textContent = `${value}%`;
-                calculateEMI();
+                if (validateEMIInputs()) {
+                    calculateEMI();
+                }
             });
-            
+
             interestRateInput.addEventListener('input', function() {
-                const value = parseFloat(this.value) || 8.5;
-                interestRateSlider.value = value;
-                interestRateDisplay.textContent = `${value}%`;
-                calculateEMI();
+                if (this.value) {
+                    const value = parseFloat(this.value);
+                    if (value >= 1 && value <= 20) {
+                        interestRateSlider.value = value;
+                        interestRateDisplay.textContent = `${value}%`;
+                    } else {
+                        interestRateDisplay.textContent = 'Enter valid rate (1% - 20%)';
+                    }
+                } else {
+                    interestRateDisplay.textContent = 'Enter interest rate';
+                }
             });
         }
-        
+
         if (loanTenureSlider && loanTenureInput) {
             loanTenureSlider.addEventListener('input', function() {
                 const value = parseInt(this.value);
                 loanTenureInput.value = value;
                 loanTenureDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
-                calculateEMI();
+                if (validateEMIInputs()) {
+                    calculateEMI();
+                }
             });
-            
+
             loanTenureInput.addEventListener('input', function() {
-                const value = parseInt(this.value) || 20;
-                loanTenureSlider.value = value;
-                loanTenureDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
-                calculateEMI();
+                if (this.value) {
+                    const value = parseInt(this.value);
+                    if (value >= 1 && value <= 40) {
+                        loanTenureSlider.value = value;
+                        loanTenureDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
+                    } else {
+                        loanTenureDisplay.textContent = 'Enter valid tenure (1-40 years)';
+                    }
+                } else {
+                    loanTenureDisplay.textContent = 'Enter tenure';
+                }
             });
         }
-        
+
         if (calculateBtn) {
             calculateBtn.addEventListener('click', function() {
+                // Validate inputs before calculating
+                if (!validateEMIInputs()) {
+                    return;
+                }
+
                 this.classList.add('loading');
                 this.querySelector('.btn-text').textContent = 'Calculating...';
-                
+
                 setTimeout(() => {
                     this.classList.remove('loading');
                     this.querySelector('.btn-text').textContent = 'Calculate EMI';
@@ -124,45 +158,79 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 800);
             });
         }
-        
+
         // Refresh button functionality
         const refreshEMIBtn = document.getElementById('refreshEMI');
         if (refreshEMIBtn) {
             refreshEMIBtn.addEventListener('click', function() {
-                // Clear all input fields
-                if (document.getElementById('loanAmountInput')) document.getElementById('loanAmountInput').value = '';
-                if (document.getElementById('interestRateInput')) document.getElementById('interestRateInput').value = '';
-                if (document.getElementById('loanTenureInput')) document.getElementById('loanTenureInput').value = '';
-                
-                // Reset sliders to default values
-                if (document.getElementById('loanAmountSlider')) document.getElementById('loanAmountSlider').value = '1000000';
-                if (document.getElementById('interestRateSlider')) document.getElementById('interestRateSlider').value = '8.5';
-                if (document.getElementById('loanTenureSlider')) document.getElementById('loanTenureSlider').value = '20';
-                
-                // Update displays
-                if (document.getElementById('loanAmountDisplay')) document.getElementById('loanAmountDisplay').textContent = '₹10,00,000';
-                if (document.getElementById('interestRateDisplay')) document.getElementById('interestRateDisplay').textContent = '8.5%';
-                if (document.getElementById('loanTenureDisplay')) document.getElementById('loanTenureDisplay').textContent = '20 Years';
-                
-                // Clear results
-                if (document.getElementById('monthlyEMI')) document.getElementById('monthlyEMI').textContent = '₹0';
-                if (document.getElementById('totalInterest')) document.getElementById('totalInterest').textContent = '₹0';
-                if (document.getElementById('totalAmount')) document.getElementById('totalAmount').textContent = '₹0';
-                
+                // Reset everything to empty state
+                initializeEmptyValues();
                 showNotification('EMI calculator refreshed!', 'info');
             });
         }
-        
-        // Initial calculation
-        calculateEMI();
+
+        // Initialize chart only
         initChart();
     }
-    
+
+    // Function to initialize empty values
+    function initializeEmptyValues() {
+        // Clear all input fields
+        if (document.getElementById('loanAmountInput')) document.getElementById('loanAmountInput').value = '';
+        if (document.getElementById('interestRateInput')) document.getElementById('interestRateInput').value = '';
+        if (document.getElementById('loanTenureInput')) document.getElementById('loanTenureInput').value = '';
+
+        // Reset sliders to minimum values
+        if (document.getElementById('loanAmountSlider')) document.getElementById('loanAmountSlider').value = '100000';
+        if (document.getElementById('interestRateSlider')) document.getElementById('interestRateSlider').value = '1';
+        if (document.getElementById('loanTenureSlider')) document.getElementById('loanTenureSlider').value = '1';
+
+        // Update displays to show placeholder text
+        if (document.getElementById('loanAmountDisplay')) document.getElementById('loanAmountDisplay').textContent = 'Enter loan amount';
+        if (document.getElementById('interestRateDisplay')) document.getElementById('interestRateDisplay').textContent = 'Enter interest rate';
+        if (document.getElementById('loanTenureDisplay')) document.getElementById('loanTenureDisplay').textContent = 'Enter tenure';
+
+        // Clear results
+        if (document.getElementById('monthlyEMI')) document.getElementById('monthlyEMI').textContent = '₹0';
+        if (document.getElementById('totalInterest')) document.getElementById('totalInterest').textContent = '₹0';
+        if (document.getElementById('totalAmount')) document.getElementById('totalAmount').textContent = '₹0';
+
+        // Reset chart to empty state
+        if (emiChart) {
+            emiChart.data.datasets[0].data = [0, 0];
+            emiChart.update();
+        }
+    }
+
+    // Function to validate EMI inputs
+    function validateEMIInputs() {
+        const principal = document.getElementById('loanAmountInput')?.value;
+        const annualRate = document.getElementById('interestRateInput')?.value;
+        const years = document.getElementById('loanTenureInput')?.value;
+
+        if (!principal || principal <= 0) {
+            showNotification('Please enter a valid loan amount', 'error');
+            return false;
+        }
+
+        if (!annualRate || annualRate <= 0) {
+            showNotification('Please enter a valid interest rate', 'error');
+            return false;
+        }
+
+        if (!years || years <= 0) {
+            showNotification('Please enter a valid loan tenure', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
     function calculateEMI() {
         const principal = parseInt(document.getElementById('loanAmountInput')?.value) || 0;
         const annualRate = parseFloat(document.getElementById('interestRateInput')?.value) || 0;
         const years = parseInt(document.getElementById('loanTenureInput')?.value) || 0;
-        
+
         if (principal <= 0 || annualRate <= 0 || years <= 0) {
             // Clear results if any input is empty or invalid
             document.getElementById('monthlyEMI').textContent = '₹0';
@@ -170,22 +238,22 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('totalAmount').textContent = '₹0';
             return;
         }
-        
+
         const monthlyRate = annualRate / 12 / 100;
         const totalMonths = years * 12;
-        
+
         // EMI Calculation using formula: EMI = P * r * (1+r)^n / ((1+r)^n - 1)
         const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
                    (Math.pow(1 + monthlyRate, totalMonths) - 1);
-        
+
         const totalAmount = emi * totalMonths;
         const totalInterest = totalAmount - principal;
-        
+
         // Update display - check if elements exist
         const monthlyEMIElement = document.getElementById('monthlyEMI');
         const totalInterestElement = document.getElementById('totalInterest');
         const totalAmountElement = document.getElementById('totalAmount');
-        
+
         if (monthlyEMIElement) {
             monthlyEMIElement.textContent = `₹${Math.round(emi).toLocaleString('en-IN')}`;
         }
@@ -195,15 +263,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (totalAmountElement) {
             totalAmountElement.textContent = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
         }
-        
+
         // Update chart
         updateChart(principal, totalInterest);
     }
-    
+
     function initChart() {
         const ctx = document.getElementById('emiChart');
         if (!ctx) return;
-        
+
         emiChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -254,66 +322,66 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     function updateChart(principal, interest) {
         if (emiChart) {
             emiChart.data.datasets[0].data = [principal, Math.round(interest)];
             emiChart.update('active');
         }
     }
-    
+
     // Initialize EMI Calculator when DOM is loaded
     if (document.getElementById('emi-calculator')) {
         initEMICalculator();
     }
-    
+
     // Settings functionality
     function initSettings() {
         // Load saved settings
         loadSettings();
-        
+
         // Dark mode toggle
         const darkModeToggle = document.getElementById('darkMode');
         if (darkModeToggle) {
             darkModeToggle.addEventListener('change', function() {
                 const isDarkMode = this.checked;
                 localStorage.setItem('darkMode', isDarkMode);
-                
+
                 // Apply theme changes
                 applyTheme(isDarkMode);
-                
+
                 showNotification(isDarkMode ? 'Dark mode enabled' : 'Light mode enabled', 'info');
             });
         }
-        
+
         // Currency selector
         const currencySelect = document.getElementById('currencySelect');
         if (currencySelect) {
             currencySelect.addEventListener('change', function() {
                 const selectedCurrency = this.value;
                 localStorage.setItem('preferredCurrency', selectedCurrency);
-                
+
                 // Update currency symbols throughout the app
                 updateCurrencyDisplay(selectedCurrency);
-                
+
                 showNotification(`Currency changed to ${this.options[this.selectedIndex].text}`, 'success');
             });
         }
-        
+
         // Language selector
         const languageSelect = document.getElementById('languageSelect');
         if (languageSelect) {
             languageSelect.addEventListener('change', function() {
                 const selectedLanguage = this.value;
                 localStorage.setItem('preferredLanguage', selectedLanguage);
-                
+
                 // Apply language changes
                 applyLanguage(selectedLanguage);
-                
+
                 showNotification(selectedLanguage === 'hi' ? 'भाषा हिंदी में बदली गई' : 'Language changed to English', 'success');
             });
         }
-        
+
         // App settings buttons
         const configureNotificationsBtn = document.getElementById('configureNotifications');
         if (configureNotificationsBtn) {
@@ -321,21 +389,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 openNotificationSettings();
             });
         }
-        
+
         const exportDataBtn = document.getElementById('exportData');
         if (exportDataBtn) {
             exportDataBtn.addEventListener('click', function() {
                 exportAppData();
             });
         }
-        
+
         const resetAppBtn = document.getElementById('resetApp');
         if (resetAppBtn) {
             resetAppBtn.addEventListener('click', function() {
                 resetAppData();
             });
         }
-        
+
         // Support links
         const aboutLink = document.getElementById('aboutLink');
         if (aboutLink) {
@@ -344,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showAboutModal();
             });
         }
-        
+
         const helpLink = document.getElementById('helpLink');
         if (helpLink) {
             helpLink.addEventListener('click', function(e) {
@@ -352,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showHelpModal();
             });
         }
-        
+
         const feedbackLink = document.getElementById('feedbackLink');
         if (feedbackLink) {
             feedbackLink.addEventListener('click', function(e) {
@@ -360,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 openFeedbackForm();
             });
         }
-        
+
         const privacyLink = document.getElementById('privacyLink');
         if (privacyLink) {
             privacyLink.addEventListener('click', function(e) {
@@ -369,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    
+
     function loadSettings() {
         // Load dark mode setting
         const savedDarkMode = localStorage.getItem('darkMode');
@@ -380,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 applyTheme(savedDarkMode === 'true');
             }
         }
-        
+
         // Load currency setting
         const savedCurrency = localStorage.getItem('preferredCurrency');
         if (savedCurrency) {
@@ -390,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateCurrencyDisplay(savedCurrency);
             }
         }
-        
+
         // Load language setting
         const savedLanguage = localStorage.getItem('preferredLanguage');
         if (savedLanguage) {
@@ -401,11 +469,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
+
     function applyTheme(isDarkMode) {
         // This would apply theme changes to CSS variables
         const root = document.documentElement;
-        
+
         if (!isDarkMode) {
             // Light mode colors
             root.style.setProperty('--dark-gradient', 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)');
@@ -422,22 +490,22 @@ document.addEventListener('DOMContentLoaded', function() {
             root.style.setProperty('--glass-border', 'rgba(255, 255, 255, 0.2)');
         }
     }
-    
+
     function updateCurrencyDisplay(currency) {
         const currencySymbols = {
             'INR': '₹',
             'USD': '$',
             'EUR': '€'
         };
-        
+
         const symbol = currencySymbols[currency] || '₹';
-        
+
         // Update all currency symbols in the app
         const currencyElements = document.querySelectorAll('.currency');
         currencyElements.forEach(element => {
             element.textContent = symbol;
         });
-        
+
         // Also update any displayed values with currency formatting
         const resultValues = document.querySelectorAll('.result-value');
         resultValues.forEach(element => {
@@ -448,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     function applyLanguage(language) {
         if (language === 'hi') {
             // Apply Hindi translations (basic implementation)
@@ -463,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Total Interest': 'कुल ब्याज',
                 'Total Amount': 'कुल राशि'
             };
-            
+
             // Apply translations to specific elements
             Object.keys(translations).forEach(english => {
                 const elements = document.querySelectorAll(`[data-translate="${english}"]`);
@@ -476,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // For now, just reload to reset
         }
     }
-    
+
     function openNotificationSettings() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
@@ -522,21 +590,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         const closeBtn = modal.querySelector('.modal-close');
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 document.body.removeChild(modal);
             }
         });
     }
-    
+
     function exportAppData() {
         const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
         const settings = {
@@ -544,14 +612,14 @@ document.addEventListener('DOMContentLoaded', function() {
             currency: localStorage.getItem('preferredCurrency'),
             language: localStorage.getItem('preferredLanguage')
         };
-        
+
         const exportData = {
             savedPlans,
             settings,
             exportDate: new Date().toISOString(),
             version: '1.0.0'
         };
-        
+
         const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -561,10 +629,10 @@ document.addEventListener('DOMContentLoaded', function() {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         showNotification('App data exported successfully!', 'success');
     }
-    
+
     function resetAppData() {
         if (confirm('Are you sure you want to reset all app data? This action cannot be undone.')) {
             localStorage.clear();
@@ -574,7 +642,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 2000);
         }
     }
-    
+
     function showAboutModal() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
@@ -589,7 +657,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="app-logo">💰</div>
                         <h4>FinCalc Pro v1.0.0</h4>
                         <p>Your comprehensive financial calculator and planning companion.</p>
-                        
+
                         <div class="features-list">
                             <h5>Key Features:</h5>
                             <ul>
@@ -601,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <li>💾 Smart plan saving & sharing</li>
                             </ul>
                         </div>
-                        
+
                         <div class="developer-info">
                             <p><strong>Developed with ❤️ for smart financial planning</strong></p>
                             <p>Built using modern web technologies for optimal performance.</p>
@@ -610,21 +678,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         const closeBtn = modal.querySelector('.modal-close');
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 document.body.removeChild(modal);
             }
         });
     }
-    
+
     function showHelpModal() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
@@ -640,22 +708,22 @@ document.addEventListener('DOMContentLoaded', function() {
                             <h4>🧮 EMI Calculator</h4>
                             <p>Enter your loan amount, interest rate, and tenure to calculate your monthly EMI. The breakdown shows principal vs interest components.</p>
                         </div>
-                        
+
                         <div class="help-section">
                             <h4>📋 Prepayment Impact</h4>
                             <p>See how prepaying your loan affects your tenure or EMI. Choose between reducing loan tenure or monthly payments.</p>
                         </div>
-                        
+
                         <div class="help-section">
                             <h4>⚖️ Loan Comparison</h4>
                             <p>Compare up to 3 different loan options side by side. The best option (lowest total cost) is highlighted in green.</p>
                         </div>
-                        
+
                         <div class="help-section">
                             <h4>💾 Saving Plans</h4>
                             <p>Save your calculations for future reference. Plans are stored locally and can be shared with others.</p>
                         </div>
-                        
+
                         <div class="help-section">
                             <h4>🔧 Advanced Tools</h4>
                             <p>Use specialized calculators for loan eligibility, reverse EMI calculation, and investment comparisons.</p>
@@ -664,21 +732,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         const closeBtn = modal.querySelector('.modal-close');
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 document.body.removeChild(modal);
             }
         });
     }
-    
+
     function openFeedbackForm() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
@@ -699,37 +767,37 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <option>Suggestion</option>
                             </select>
                         </div>
-                        
+
                         <div class="input-group">
                             <label>Your Message</label>
                             <textarea class="calc-input" rows="5" placeholder="Tell us what you think..."></textarea>
                         </div>
-                        
+
                         <div class="input-group">
                             <label>Email (Optional)</label>
                             <input type="email" class="calc-input" placeholder="your@email.com">
                         </div>
-                        
+
                         <button class="calculate-btn" onclick="submitFeedback()">Send Feedback</button>
                     </div>
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         const closeBtn = modal.querySelector('.modal-close');
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 document.body.removeChild(modal);
             }
         });
     }
-    
+
     function submitFeedback() {
         showNotification('Thank you for your feedback! We appreciate your input.', 'success');
         const modal = document.querySelector('.modal-overlay');
@@ -737,7 +805,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.removeChild(modal);
         }
     }
-    
+
     function showPrivacyPolicy() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
@@ -751,45 +819,74 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="privacy-content">
                         <h4>Data Collection</h4>
                         <p>FinCalc Pro stores your calculation data locally on your device using browser localStorage. We do not collect or transmit any personal financial information to external servers.</p>
-                        
+
                         <h4>Local Storage</h4>
                         <p>Your saved loan plans, preferences, and settings are stored locally in your browser. This data remains on your device and is not shared with third parties.</p>
-                        
+
                         <h4>No Third-Party Tracking</h4>
                         <p>We do not use cookies for tracking purposes or share data with advertising networks. Your privacy is our priority.</p>
-                        
+
                         <h4>Data Security</h4>
                         <p>All calculations are performed locally in your browser. No financial data is transmitted over the internet during normal usage.</p>
-                        
+
                         <h4>Data Export</h4>
                         <p>You can export your data at any time from the Settings page. You have full control over your information.</p>
-                        
+
                         <p><small>Last updated: ${new Date().toLocaleDateString()}</small></p>
                     </div>
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         const closeBtn = modal.querySelector('.modal-close');
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 document.body.removeChild(modal);
             }
         });
     }
-    
+
+    // Navigation functions
+    window.goToGST = function() {
+        window.location.href = 'gst-calculator.html';
+    };
+
+    window.goToSIP = function() {
+        window.location.href = 'sip-calculator.html';
+    };
+
+    window.goToEMI = function() {
+        window.location.href = 'emi-calculator.html';
+    };
+
+    window.goToTax = function() {
+        window.location.href = 'tax-calculator.html';
+    }
+
+        function goToFD() {
+            window.location.href = '/fd-calculator.html';
+        }
+
+    window.goToHome = function() {
+        window.location.href = 'index.html';
+    };
+
+    window.goBack = function() {
+        window.history.back();
+    };
+
     // Make submitFeedback globally available
     window.submitFeedback = submitFeedback;
-    
+
     // Initialize settings when DOM is loaded
     initSettings();
-    
+
     // Feature buttons
     const featureBtns = document.querySelectorAll('.feature-btn');
     featureBtns.forEach(btn => {
@@ -798,7 +895,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`${featureName} coming soon!`, 'info');
         });
     });
-    
+
     // Setting buttons
     const settingBtns = document.querySelectorAll('.setting-btn');
     settingBtns.forEach(btn => {
@@ -807,7 +904,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`${action} functionality coming soon!`, 'info');
         });
     });
-    
+
     // Tool cards
     const toolCards = document.querySelectorAll('.tool-card');
     toolCards.forEach(card => {
@@ -816,11 +913,11 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`${toolName} opening soon!`, 'info');
         });
     });
-    
+
     // Form inputs - Add real-time formatting and validation
     function formatNumberInput(input) {
         if (!input) return;
-        
+
         input.addEventListener('input', function() {
             let value = this.value.replace(/,/g, '');
             if (!isNaN(value) && value !== '') {
@@ -828,7 +925,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Validate min/max values
                 const min = parseInt(this.getAttribute('min')) || 0;
                 const max = parseInt(this.getAttribute('max')) || Infinity;
-                
+
                 if (numValue < min) {
                     this.value = min;
                 } else if (numValue > max) {
@@ -838,13 +935,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-        
+
         input.addEventListener('blur', function() {
             // Ensure value is within range on blur
             const value = parseInt(this.value) || parseInt(this.getAttribute('min')) || 0;
             const min = parseInt(this.getAttribute('min')) || 0;
             const max = parseInt(this.getAttribute('max')) || Infinity;
-            
+
             if (value < min) {
                 this.value = min;
             } else if (value > max) {
@@ -855,18 +952,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Apply formatting to all number inputs
     document.querySelectorAll('input[type="number"]').forEach(formatNumberInput);
-    
+
     // Prepayment Calculator functionality
     let prepaymentChart = null;
-    
+
     function initPrepaymentCalculator() {
         const calculateBtn = document.getElementById('calculatePrepayment');
-        
+
         if (calculateBtn) {
             calculateBtn.addEventListener('click', function() {
                 this.classList.add('loading');
                 this.textContent = 'Analyzing...';
-                
+
                 setTimeout(() => {
                     this.classList.remove('loading');
                     this.textContent = 'Calculate Impact';
@@ -876,25 +973,25 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    
+
     function calculatePrepaymentImpact() {
         // Get current loan details from EMI calculator
         const principal = parseInt(document.getElementById('loanAmountInput')?.value) || 1000000;
         const annualRate = parseFloat(document.getElementById('interestRateInput')?.value) || 8.5;
         const years = parseInt(document.getElementById('loanTenureInput')?.value) || 20;
-        
+
         // Get prepayment details
         const prepaymentAmount = parseInt(document.getElementById('prepaymentAmount')?.value) || 200000;
         const prepayAfterMonths = parseInt(document.getElementById('prepayAfterMonths')?.value) || 12;
         const prepayOption = document.querySelector('input[name="prepayOption"]:checked')?.value || 'tenure';
-        
+
         const monthlyRate = annualRate / 12 / 100;
         const totalMonths = years * 12;
-        
+
         // Calculate original EMI
         const originalEMI = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
                            (Math.pow(1 + monthlyRate, totalMonths) - 1);
-        
+
         // Calculate remaining balance after prepayAfterMonths
         let balance = principal;
         for (let i = 0; i < prepayAfterMonths; i++) {
@@ -902,21 +999,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const principalPayment = originalEMI - interestPayment;
             balance -= principalPayment;
         }
-        
+
         // Apply prepayment
         const newBalance = balance - prepaymentAmount;
         const remainingMonths = totalMonths - prepayAfterMonths;
-        
+
         let newEMI, newTenure;
         let originalTotalInterest = (originalEMI * totalMonths) - principal;
         let newTotalInterest;
-        
+
         if (prepayOption === 'tenure') {
             // Keep EMI same, reduce tenure
             newEMI = originalEMI;
             newTenure = Math.log(1 + (newBalance * monthlyRate) / originalEMI) / Math.log(1 + monthlyRate);
             newTenure = Math.ceil(newTenure);
-            
+
             // Calculate interest paid before prepayment
             let interestPaidSoFar = 0;
             let tempBalance = principal;
@@ -926,14 +1023,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const principalPayment = originalEMI - interestPayment;
                 tempBalance -= principalPayment;
             }
-            
+
             newTotalInterest = interestPaidSoFar + prepaymentAmount + (newEMI * newTenure) - principal;
         } else {
             // Keep tenure same, reduce EMI
             newTenure = remainingMonths;
             newEMI = (newBalance * monthlyRate * Math.pow(1 + monthlyRate, newTenure)) / 
                      (Math.pow(1 + monthlyRate, newTenure) - 1);
-            
+
             // Calculate interest paid before prepayment
             let interestPaidSoFar = 0;
             let tempBalance = principal;
@@ -943,20 +1040,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 const principalPayment = originalEMI - interestPayment;
                 tempBalance -= principalPayment;
             }
-            
+
             newTotalInterest = interestPaidSoFar + prepaymentAmount + (newEMI * newTenure) - principal;
         }
-        
+
         const interestSaved = originalTotalInterest - newTotalInterest;
-        
+
         // Update UI
         document.getElementById('originalEMI').textContent = `₹${Math.round(originalEMI).toLocaleString('en-IN')}`;
         document.getElementById('originalInterest').textContent = `₹${Math.round(originalTotalInterest).toLocaleString('en-IN')}`;
         document.getElementById('originalTenure').textContent = `${years} Years`;
-        
+
         document.getElementById('newEMI').textContent = `₹${Math.round(newEMI).toLocaleString('en-IN')}`;
         document.getElementById('newInterest').textContent = `₹${Math.round(newTotalInterest).toLocaleString('en-IN')}`;
-        
+
         if (prepayOption === 'tenure') {
             const newYears = Math.floor((prepayAfterMonths + newTenure) / 12);
             const newMonths = (prepayAfterMonths + newTenure) % 12;
@@ -973,24 +1070,24 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('benefitLabel').textContent = 'EMI Saved';
             document.getElementById('benefitValue').textContent = `₹${Math.round(originalEMI - newEMI).toLocaleString('en-IN')}`;
         }
-        
+
         document.getElementById('interestSaved').textContent = `₹${Math.round(interestSaved).toLocaleString('en-IN')}`;
-        
+
         // Show results
         document.getElementById('prepaymentResults').style.display = 'block';
-        
+
         // Update chart
         updatePrepaymentChart(originalTotalInterest, newTotalInterest, principal);
     }
-    
+
     function updatePrepaymentChart(originalInterest, newInterest, principal) {
         const ctx = document.getElementById('prepaymentChart');
         if (!ctx) return;
-        
+
         if (prepaymentChart) {
             prepaymentChart.destroy();
         }
-        
+
         prepaymentChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -1064,7 +1161,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Add refresh functionality for prepayment calculator
     function addPrepaymentRefresh() {
         const refreshPrepaymentBtn = document.getElementById('refreshPrepayment');
@@ -1073,36 +1170,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Clear prepayment inputs
                 if (document.getElementById('prepaymentAmount')) document.getElementById('prepaymentAmount').value = '';
                 if (document.getElementById('prepayAfterMonths')) document.getElementById('prepayAfterMonths').value = '';
-                
+
                 // Reset radio buttons to default
                 if (document.getElementById('reduceTenure')) document.getElementById('reduceTenure').checked = true;
-                
+
                 // Hide results
                 const resultsSection = document.getElementById('prepaymentResults');
                 if (resultsSection) resultsSection.style.display = 'none';
-                
+
                 showNotification('Prepayment calculator refreshed!', 'info');
             });
         }
     }
-    
+
     // Initialize prepayment calculator
     if (document.getElementById('prepayment-impact')) {
         initPrepaymentCalculator();
         addPrepaymentRefresh();
     }
-    
+
     // Loan Comparison functionality
     let loanComparisonChart = null;
-    
+
     function initLoanComparison() {
         const compareBtn = document.getElementById('compareLoans');
-        
+
         if (compareBtn) {
             compareBtn.addEventListener('click', function() {
                 this.classList.add('loading');
                 this.textContent = 'Comparing...';
-                
+
                 setTimeout(() => {
                     this.classList.remove('loading');
                     this.textContent = 'Compare Loans';
@@ -1111,14 +1208,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 1000);
             });
         }
-        
+
         // Add real-time calculation on input change
         const loanInputs = [
             'loan1Amount', 'loan1Rate', 'loan1Tenure',
             'loan2Amount', 'loan2Rate', 'loan2Tenure',
             'loan3Amount', 'loan3Rate', 'loan3Tenure'
         ];
-        
+
         loanInputs.forEach(inputId => {
             const input = document.getElementById(inputId);
             if (input) {
@@ -1126,27 +1223,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     function calculateLoanComparison() {
         const loans = [];
-        
+
         // Collect loan data
         for (let i = 1; i <= 3; i++) {
             const amount = parseFloat(document.getElementById(`loan${i}Amount`)?.value) || 0;
             const rate = parseFloat(document.getElementById(`loan${i}Rate`)?.value) || 0;
             const tenure = parseFloat(document.getElementById(`loan${i}Tenure`)?.value) || 0;
-            
+
             if (amount > 0 && rate > 0 && tenure > 0) {
                 const monthlyRate = rate / 12 / 100;
                 const totalMonths = tenure * 12;
-                
+
                 // EMI Calculation
                 const emi = (amount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
                            (Math.pow(1 + monthlyRate, totalMonths) - 1);
-                
+
                 const totalRepayment = emi * totalMonths;
                 const totalInterest = totalRepayment - amount;
-                
+
                 loans.push({
                     id: i,
                     name: `Loan Option ${i}`,
@@ -1159,41 +1256,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-        
+
         if (loans.length === 0) {
             document.getElementById('comparisonResults').style.display = 'none';
             return;
         }
-        
+
         // Find best loan (lowest total repayment)
         const bestLoan = loans.reduce((best, current) => 
             current.totalRepayment < best.totalRepayment ? current : best
         );
-        
+
         // Update table
         updateComparisonTable(loans, bestLoan.id);
-        
+
         // Update chart
         updateLoanComparisonChart(loans, bestLoan.id);
-        
+
         // Show results
         document.getElementById('comparisonResults').style.display = 'block';
     }
-    
+
     function updateComparisonTable(loans, bestLoanId) {
         const tableBody = document.getElementById('comparisonTableBody');
         if (!tableBody) return;
-        
+
         tableBody.innerHTML = '';
-        
+
         loans.forEach(loan => {
             const row = document.createElement('tr');
             const isBest = loan.id === bestLoanId;
-            
+
             if (isBest) {
                 row.classList.add('best-loan');
             }
-            
+
             row.innerHTML = `
                 <td>
                     ${loan.name}
@@ -1203,24 +1300,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>₹${Math.round(loan.totalInterest).toLocaleString('en-IN')}</td>
                 <td>₹${Math.round(loan.totalRepayment).toLocaleString('en-IN')}</td>
             `;
-            
+
             tableBody.appendChild(row);
         });
     }
-    
+
     function updateLoanComparisonChart(loans, bestLoanId) {
         const ctx = document.getElementById('loanComparisonChart');
         if (!ctx) return;
-        
+
         if (loanComparisonChart) {
             loanComparisonChart.destroy();
         }
-        
+
         const labels = loans.map(loan => loan.name);
         const emiData = loans.map(loan => Math.round(loan.emi));
         const interestData = loans.map(loan => Math.round(loan.totalInterest));
         const totalData = loans.map(loan => Math.round(loan.totalRepayment));
-        
+
         // Create background colors - highlight best loan
         const backgroundColors = loans.map(loan => 
             loan.id === bestLoanId ? 'rgba(0, 255, 136, 0.8)' : 'rgba(0, 212, 255, 0.8)'
@@ -1228,7 +1325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const borderColors = loans.map(loan => 
             loan.id === bestLoanId ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 212, 255, 1)'
         );
-        
+
         loanComparisonChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -1312,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Utility function for debouncing
     function debounce(func, wait) {
         let timeout;
@@ -1325,7 +1422,7 @@ document.addEventListener('DOMContentLoaded', function() {
             timeout = setTimeout(later, wait);
         };
     }
-    
+
     // Add refresh functionality for loan comparison
     function addLoanComparisonRefresh() {
         const refreshComparisonBtn = document.getElementById('refreshComparison');
@@ -1337,46 +1434,46 @@ document.addEventListener('DOMContentLoaded', function() {
                     'loan2Amount', 'loan2Rate', 'loan2Tenure',
                     'loan3Amount', 'loan3Rate', 'loan3Tenure'
                 ];
-                
+
                 loanInputs.forEach(inputId => {
                     const input = document.getElementById(inputId);
                     if (input) input.value = '';
                 });
-                
+
                 // Hide results
                 const resultsSection = document.getElementById('comparisonResults');
                 if (resultsSection) resultsSection.style.display = 'none';
-                
+
                 showNotification('Loan comparison refreshed!', 'info');
             });
         }
     }
-    
+
     // Initialize loan comparison
     if (document.getElementById('loan-comparison')) {
         initLoanComparison();
         addLoanComparisonRefresh();
     }
-    
+
     // Smooth scrolling for better UX
     function smoothScrollTo(element, duration = 300) {
         const start = element.scrollTop;
         const startTime = performance.now();
-        
+
         function scrollAnimation(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            
+
             element.scrollTop = start * (1 - progress);
-            
+
             if (progress < 1) {
                 requestAnimationFrame(scrollAnimation);
             }
         }
-        
+
         requestAnimationFrame(scrollAnimation);
     }
-    
+
     // Notification system
     function showNotification(message, type = 'info') {
         // Remove existing notification
@@ -1384,7 +1481,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (existingNotification) {
             existingNotification.remove();
         }
-        
+
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
@@ -1394,7 +1491,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button class="notification-close">&times;</button>
             </div>
         `;
-        
+
         // Add notification styles
         notification.style.cssText = `
             position: fixed;
@@ -1413,7 +1510,7 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             animation: slideInDown 0.3s ease;
         `;
-        
+
         // Add type-specific styling
         if (type === 'success') {
             notification.style.borderColor = '#00ff88';
@@ -1425,10 +1522,10 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.style.borderColor = '#00d4ff';
             notification.style.boxShadow = '0 8px 32px rgba(0, 212, 255, 0.2)';
         }
-        
+
         // Add to DOM
         document.body.appendChild(notification);
-        
+
         // Auto remove after 3 seconds
         setTimeout(() => {
             if (notification.parentNode) {
@@ -1440,7 +1537,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 300);
             }
         }, 3000);
-        
+
         // Manual close button
         const closeBtn = notification.querySelector('.notification-close');
         closeBtn.addEventListener('click', () => {
@@ -1452,7 +1549,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         });
     }
-    
+
     // Add CSS animations for notifications
     const style = document.createElement('style');
     style.textContent = `
@@ -1466,7 +1563,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 transform: translate(-50%, 0);
             }
         }
-        
+
         @keyframes slideOutUp {
             from {
                 opacity: 1;
@@ -1477,19 +1574,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 transform: translate(-50%, -100%);
             }
         }
-        
+
         .notification-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
         }
-        
+
         .notification-message {
             font-weight: 500;
             font-size: 0.875rem;
         }
-        
+
         .notification-close {
             background: none;
             border: none;
@@ -1500,13 +1597,13 @@ document.addEventListener('DOMContentLoaded', function() {
             line-height: 1;
             transition: color 0.2s ease;
         }
-        
+
         .notification-close:hover {
             color: white;
         }
     `;
     document.head.appendChild(style);
-    
+
     // Add haptic feedback for mobile devices
     function addHapticFeedback(element) {
         element.addEventListener('click', function() {
@@ -1515,24 +1612,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Add haptic feedback to interactive elements
     navItems.forEach(addHapticFeedback);
     document.querySelectorAll('.calculate-btn, .feature-btn, .setting-btn, .tool-card').forEach(addHapticFeedback);
-    
+
     // Swipe navigation disabled - only footer navigation allowed
-    
+
     // Tools & Extras functionality
     function initToolsExtras() {
         // Collapsible tool sections
         const toolHeaders = document.querySelectorAll('.tool-header');
-        
+
         toolHeaders.forEach(header => {
             header.addEventListener('click', function() {
                 const toolName = this.getAttribute('data-tool');
                 const content = document.getElementById(`${toolName}-content`);
                 const expandIcon = this.querySelector('.expand-icon');
-                
+
                 if (content.classList.contains('expanded')) {
                     content.classList.remove('expanded');
                     this.classList.remove('expanded');
@@ -1540,14 +1637,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Close all other expanded sections
                     document.querySelectorAll('.tool-content').forEach(c => c.classList.remove('expanded'));
                     document.querySelectorAll('.tool-header').forEach(h => h.classList.remove('expanded'));
-                    
+
                     // Open this section
                     content.classList.add('expanded');
                     this.classList.add('expanded');
                 }
             });
         });
-        
+
         // Loan Eligibility Checker
         const checkEligibilityBtn = document.getElementById('checkEligibility');
         if (checkEligibilityBtn) {
@@ -1555,33 +1652,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 const income = parseFloat(document.getElementById('monthlyIncome')?.value) || 50000;
                 const age = parseInt(document.getElementById('applicantAge')?.value) || 30;
                 const currentEMIs = parseFloat(document.getElementById('currentEMIs')?.value) || 0;
-                
+
                 // FOIR calculation (typically 40-50% of income)
                 const maxEMI = (income * 0.4) - currentEMIs;
                 const interestRate = 8.5 / 12 / 100; // Monthly rate
                 const tenure = (65 - age) * 12; // Till retirement age
-                
+
                 // Calculate eligible loan amount
                 const eligibleAmount = maxEMI * (Math.pow(1 + interestRate, tenure) - 1) / 
                                      (interestRate * Math.pow(1 + interestRate, tenure));
-                
+
                 const foir = ((currentEMIs + maxEMI) / income * 100);
-                
+
                 const eligibleAmountEl = document.getElementById('eligibleAmount');
                 const foirRatioEl = document.getElementById('foirRatio');
-                
+
                 if (eligibleAmountEl) {
                     eligibleAmountEl.textContent = `₹${Math.round(eligibleAmount).toLocaleString('en-IN')}`;
                 }
                 if (foirRatioEl) {
                     foirRatioEl.textContent = `${foir.toFixed(1)}%`;
                 }
-                
+
                 document.getElementById('eligibilityResult').style.display = 'block';
                 showNotification('Eligibility calculated!', 'success');
             });
         }
-        
+
         // Reverse EMI Calculator
         const calculateReverseLoanBtn = document.getElementById('calculateReverseLoan');
         if (calculateReverseLoanBtn) {
@@ -1589,32 +1686,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 const emi = parseFloat(document.getElementById('desiredEMI')?.value) || 50000;
                 const rate = parseFloat(document.getElementById('reverseInterestRate')?.value) || 8.5;
                 const tenure = parseInt(document.getElementById('reverseTenure')?.value) || 20;
-                
+
                 const monthlyRate = rate / 12 / 100;
                 const totalMonths = tenure * 12;
-                
+
                 // Calculate loan amount from EMI
                 const loanAmount = emi * (Math.pow(1 + monthlyRate, totalMonths) - 1) / 
                                  (monthlyRate * Math.pow(1 + monthlyRate, totalMonths));
-                
+
                 const totalAmount = emi * totalMonths;
                 const totalInterest = totalAmount - loanAmount;
-                
+
                 const maxLoanAmountEl = document.getElementById('maxLoanAmount');
                 const reverseTotalInterestEl = document.getElementById('reverseTotalInterest');
-                
+
                 if (maxLoanAmountEl) {
                     maxLoanAmountEl.textContent = `₹${Math.round(loanAmount).toLocaleString('en-IN')}`;
                 }
                 if (reverseTotalInterestEl) {
                     reverseTotalInterestEl.textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
                 }
-                
+
                 document.getElementById('reverseLoanResult').style.display = 'block';
                 showNotification('Loan amount calculated!', 'success');
             });
         }
-        
+
         // GST + Processing Fee Calculator
         const calculateGSTImpactBtn = document.getElementById('calculateGSTImpact');
         if (calculateGSTImpactBtn) {
@@ -1622,15 +1719,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 const loanAmount = parseFloat(document.getElementById('gstLoanAmount')?.value) || 1000000;
                 const processingFeeRate = parseFloat(document.getElementById('processingFee')?.value) || 1;
                 const gstRate = parseFloat(document.getElementById('gstRate')?.value) || 18;
-                
+
                 const processingFeeAmount = loanAmount * (processingFeeRate / 100);
                 const gstAmount = processingFeeAmount * (gstRate / 100);
                 const totalUpfront = processingFeeAmount + gstAmount;
-                
+
                 const processingFeeAmountEl = document.getElementById('processingFeeAmount');
                 const gstAmountEl = document.getElementById('gstAmount');
                 const totalUpfrontCostEl = document.getElementById('totalUpfrontCost');
-                
+
                 if (processingFeeAmountEl) {
                     processingFeeAmountEl.textContent = `₹${Math.round(processingFeeAmount).toLocaleString('en-IN')}`;
                 }
@@ -1640,12 +1737,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (totalUpfrontCostEl) {
                     totalUpfrontCostEl.textContent = `₹${Math.round(totalUpfront).toLocaleString('en-IN')}`;
                 }
-                
+
                 document.getElementById('gstImpactResult').style.display = 'block';
                 showNotification('Fee impact calculated!', 'success');
             });
         }
-        
+
         // SIP vs EMI Comparison
         const compareSIPEMIBtn = document.getElementById('compareSIPEMI');
         if (compareSIPEMIBtn) {
@@ -1654,44 +1751,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 const sipReturns = parseFloat(document.getElementById('sipReturns')?.value) || 12;
                 const loanRate = parseFloat(document.getElementById('loanRate')?.value) || 8.5;
                 const years = parseInt(document.getElementById('timePeriod')?.value) || 20;
-                
+
                 const months = years * 12;
                 const sipMonthlyRate = sipReturns / 12 / 100;
-                
+
                 // SIP Calculation
                 const sipMaturityValue = monthlyAmount * (Math.pow(1 + sipMonthlyRate, months) - 1) / sipMonthlyRate;
                 const sipInvested = monthlyAmount * months;
                 const sipWealth = sipMaturityValue - sipInvested;
-                
+
                 // EMI Calculation (reverse calculation to find loan amount)
                 const loanMonthlyRate = loanRate / 12 / 100;
                 const principalAmount = monthlyAmount * (Math.pow(1 + loanMonthlyRate, months) - 1) / 
                                       (loanMonthlyRate * Math.pow(1 + loanMonthlyRate, months));
                 const totalEMI = monthlyAmount * months;
                 const totalInterest = totalEMI - principalAmount;
-                
+
                 // Update SIP results
                 const sipInvestedEl = document.getElementById('sipInvested');
                 const sipMaturityEl = document.getElementById('sipMaturity');
                 const sipWealthEl = document.getElementById('sipWealth');
-                
+
                 if (sipInvestedEl) sipInvestedEl.textContent = `₹${Math.round(sipInvested).toLocaleString('en-IN')}`;
                 if (sipMaturityEl) sipMaturityEl.textContent = `₹${Math.round(sipMaturityValue).toLocaleString('en-IN')}`;
                 if (sipWealthEl) sipWealthEl.textContent = `₹${Math.round(sipWealth).toLocaleString('en-IN')}`;
-                
+
                 // Update EMI results
                 const totalEMIPaidEl = document.getElementById('totalEMIPaid');
                 const principalPaidEl = document.getElementById('principalPaid');
                 const interestPaidEl = document.getElementById('interestPaid');
-                
+
                 if (totalEMIPaidEl) totalEMIPaidEl.textContent = `₹${Math.round(totalEMI).toLocaleString('en-IN')}`;
                 if (principalPaidEl) principalPaidEl.textContent = `₹${Math.round(principalAmount).toLocaleString('en-IN')}`;
                 if (interestPaidEl) interestPaidEl.textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
-                
+
                 // Comparison verdict
                 const difference = sipWealth - totalInterest;
                 const comparisonVerdictEl = document.getElementById('comparisonVerdict');
-                
+
                 if (comparisonVerdictEl) {
                     if (difference > 0) {
                         comparisonVerdictEl.textContent = `SIP investment creates ₹${Math.round(difference).toLocaleString('en-IN')} more wealth than loan payment`;
@@ -1701,18 +1798,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         comparisonVerdictEl.style.color = 'var(--accent-color)';
                     }
                 }
-                
+
                 document.getElementById('sipEmiResult').style.display = 'block';
                 showNotification('SIP vs EMI comparison completed!', 'success');
             });
         }
     }
-    
+
     // Initialize Tools & Extras
     if (document.getElementById('tools-extras')) {
         initToolsExtras();
     }
-    
+
     // Smart Features functionality
     function initSmartFeatures() {
         // Save Loan Plan
@@ -1750,7 +1847,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Share Modal functionality
         const closeShareModalBtn = document.getElementById('closeShareModal');
         const shareModal = document.getElementById('shareModal');
-        
+
         if (closeShareModalBtn && shareModal) {
             closeShareModalBtn.addEventListener('click', function() {
                 shareModal.style.display = 'none';
@@ -1787,13 +1884,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const loanAmount = parseInt(document.getElementById('loanAmountInput')?.value) || 1000000;
         const interestRate = parseFloat(document.getElementById('interestRateInput')?.value) || 8.5;
         const loanTenure = parseInt(document.getElementById('loanTenureInput')?.value) || 20;
-        
+
         const monthlyRate = interestRate / 12 / 100;
         const totalMonths = loanTenure * 12;
-        
+
         const emi = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
                    (Math.pow(1 + monthlyRate, totalMonths) - 1);
-        
+
         const totalAmount = emi * totalMonths;
         const totalInterest = totalAmount - loanAmount;
 
@@ -1812,23 +1909,23 @@ document.addEventListener('DOMContentLoaded', function() {
     function saveLoanPlan() {
         const loanData = getCurrentLoanData();
         const planName = prompt('Enter a name for this loan plan:') || `Loan Plan ${new Date().toLocaleDateString()}`;
-        
+
         loanData.name = planName;
-        
+
         // Get existing saved plans
         const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
-        
+
         // Add new plan
         savedPlans.unshift(loanData);
-        
+
         // Keep only last 10 plans
         if (savedPlans.length > 10) {
             savedPlans.splice(10);
         }
-        
+
         // Save to localStorage
         localStorage.setItem('savedLoanPlans', JSON.stringify(savedPlans));
-        
+
         showNotification('Loan plan saved successfully!', 'success');
         loadSavedPlans();
     }
@@ -1836,9 +1933,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadSavedPlans() {
         const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
         const container = document.getElementById('savedPlansContainer');
-        
+
         if (!container) return;
-        
+
         if (savedPlans.length === 0) {
             container.innerHTML = `
                 <div class="no-plans-message">
@@ -1847,7 +1944,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             return;
         }
-        
+
         container.innerHTML = savedPlans.map(plan => `
             <div class="saved-plan-item">
                 <div class="saved-plan-header">
@@ -1880,27 +1977,27 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadLoanPlan(planId) {
         const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
         const plan = savedPlans.find(p => p.id === planId);
-        
+
         if (!plan) {
             showNotification('Plan not found!', 'error');
             return;
         }
-        
+
         // Load plan data into form
         const loanAmountInput = document.getElementById('loanAmountInput');
         const interestRateInput = document.getElementById('interestRateInput');
         const loanTenureInput = document.getElementById('loanTenureInput');
-        
+
         if (loanAmountInput) loanAmountInput.value = plan.loanAmount;
         if (interestRateInput) interestRateInput.value = plan.interestRate;
         if (loanTenureInput) loanTenureInput.value = plan.loanTenure;
-        
+
         // Switch to EMI Calculator tab
         switchTab('emi-calculator');
-        
+
         // Trigger calculation
         calculateEMI();
-        
+
         showNotification('Loan plan loaded successfully!', 'success');
     }
 
@@ -1908,10 +2005,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!confirm('Are you sure you want to delete this loan plan?')) {
             return;
         }
-        
+
         const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
         const filteredPlans = savedPlans.filter(p => p.id !== planId);
-        
+
         localStorage.setItem('savedLoanPlans', JSON.stringify(filteredPlans));
         loadSavedPlans();
         showNotification('Loan plan deleted!', 'info');
@@ -1919,19 +2016,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openShareModal() {
         const loanData = getCurrentLoanData();
-        
+
         // Generate shareable link (encode data in URL)
         const encodedData = btoa(JSON.stringify({
             amount: loanData.loanAmount,
             rate: loanData.interestRate,
             tenure: loanData.loanTenure
         }));
-        
+
         const shareableLink = `${window.location.origin}${window.location.pathname}?loan=${encodedData}`;
-        
+
         // Generate share text
         const shareText = `Check out my loan calculation:
-        
+
 💰 Loan Amount: ₹${loanData.loanAmount.toLocaleString('en-IN')}
 📊 Interest Rate: ${loanData.interestRate}%
 ⏱️ Tenure: ${loanData.loanTenure} years
@@ -1952,20 +2049,20 @@ ${shareableLink}`;
     function shareSavedPlan(planId) {
         const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
         const plan = savedPlans.find(p => p.id === planId);
-        
+
         if (!plan) return;
-        
+
         // Set current values to plan values temporarily for sharing
         const currentAmount = document.getElementById('loanAmountInput')?.value;
         const currentRate = document.getElementById('interestRateInput')?.value;
         const currentTenure = document.getElementById('loanTenureInput')?.value;
-        
+
         if (document.getElementById('loanAmountInput')) document.getElementById('loanAmountInput').value = plan.loanAmount;
         if (document.getElementById('interestRateInput')) document.getElementById('interestRateInput').value = plan.interestRate;
         if (document.getElementById('loanTenureInput')) document.getElementById('loanTenureInput').value = plan.loanTenure;
-        
+
         openShareModal();
-        
+
         // Restore original values
         setTimeout(() => {
             if (document.getElementById('loanAmountInput')) document.getElementById('loanAmountInput').value = currentAmount;
@@ -1977,20 +2074,20 @@ ${shareableLink}`;
     function copyToClipboard(elementId, buttonElement) {
         const element = document.getElementById(elementId);
         if (!element) return;
-        
+
         element.select();
         element.setSelectionRange(0, 99999);
-        
+
         try {
             document.execCommand('copy');
             buttonElement.textContent = 'Copied!';
             buttonElement.classList.add('copied');
-            
+
             setTimeout(() => {
                 buttonElement.textContent = elementId === 'shareableLink' ? 'Copy' : 'Copy Text';
                 buttonElement.classList.remove('copied');
             }, 2000);
-            
+
             showNotification('Copied to clipboard!', 'success');
         } catch (err) {
             showNotification('Failed to copy', 'error');
@@ -1999,7 +2096,7 @@ ${shareableLink}`;
 
     function downloadLoanPlanPDF() {
         const loanData = getCurrentLoanData();
-        
+
         // Create a simple text-based PDF content
         const pdfContent = `
 LOAN CALCULATION REPORT
@@ -2033,7 +2130,7 @@ n = Number of monthly installments
 Report generated by FinCalc Pro
 Financial Calculator & Planner
         `.trim();
-        
+
         // Create and download text file (simplified PDF alternative)
         const blob = new Blob([pdfContent], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);
@@ -2044,28 +2141,28 @@ Financial Calculator & Planner
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         showNotification('Loan plan downloaded!', 'success');
     }
 
     function addEMIReminder() {
         const loanData = getCurrentLoanData();
-        
+
         // Create calendar event details
         const eventTitle = `EMI Payment - ₹${loanData.monthlyEMI.toLocaleString('en-IN')}`;
         const eventDetails = `Monthly EMI payment for your loan of ₹${loanData.loanAmount.toLocaleString('en-IN')} at ${loanData.interestRate}% interest rate.`;
-        
+
         // Calculate next EMI date (assuming EMI is due on the same date every month)
         const today = new Date();
         const nextEMIDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
-        
+
         // Format date for calendar
         const startDate = nextEMIDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
         const endDate = new Date(nextEMIDate.getTime() + 60 * 60 * 1000).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-        
+
         // Create Google Calendar link
         const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(eventDetails)}&recur=RRULE:FREQ=MONTHLY;COUNT=${loanData.loanTenure * 12}`;
-        
+
         // Create reminder modal
         const reminderModal = document.createElement('div');
         reminderModal.className = 'modal-overlay';
@@ -2092,15 +2189,15 @@ Financial Calculator & Planner
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(reminderModal);
-        
+
         // Close modal functionality
         const closeBtn = reminderModal.querySelector('.modal-close');
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(reminderModal);
         });
-        
+
         reminderModal.addEventListener('click', (e) => {
             if (e.target === reminderModal) {
                 document.body.removeChild(reminderModal);
@@ -2115,9 +2212,9 @@ Financial Calculator & Planner
                     // Set reminder for the day before EMI
                     const reminderDate = new Date(nextDate);
                     reminderDate.setDate(reminderDate.getDate() - 1);
-                    
+
                     const timeUntilReminder = reminderDate.getTime() - Date.now();
-                    
+
                     if (timeUntilReminder > 0) {
                         setTimeout(() => {
                             new Notification('EMI Payment Reminder', {
@@ -2125,7 +2222,7 @@ Financial Calculator & Planner
                                 icon: '/favicon.ico'
                             });
                         }, timeUntilReminder);
-                        
+
                         showNotification('Browser reminder set successfully!', 'success');
                     } else {
                         showNotification('Next EMI date has already passed!', 'warning');
@@ -2137,7 +2234,7 @@ Financial Calculator & Planner
         } else {
             showNotification('Notifications not supported in this browser', 'error');
         }
-        
+
         // Close modal
         const modal = document.querySelector('.modal-overlay');
         if (modal) {
@@ -2149,11 +2246,11 @@ Financial Calculator & Planner
     function checkForSharedLoan() {
         const urlParams = new URLSearchParams(window.location.search);
         const loanData = urlParams.get('loan');
-        
+
         if (loanData) {
             try {
                 const decodedData = JSON.parse(atob(loanData));
-                
+
                 // Load shared data into form
                 if (document.getElementById('loanAmountInput')) {
                     document.getElementById('loanAmountInput').value = decodedData.amount;
@@ -2164,14 +2261,14 @@ Financial Calculator & Planner
                 if (document.getElementById('loanTenureInput')) {
                     document.getElementById('loanTenureInput').value = decodedData.tenure;
                 }
-                
+
                 // Switch to EMI Calculator tab and calculate
                 switchTab('emi-calculator');
                 setTimeout(() => {
                     calculateEMI();
                     showNotification('Shared loan plan loaded!', 'success');
                 }, 500);
-                
+
                 // Clean URL
                 window.history.replaceState({}, document.title, window.location.pathname);
             } catch (error) {

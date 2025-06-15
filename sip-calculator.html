@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE - Advanced SIP Calculator with investment planning, goal setting, and comprehensive analysis." />
+    <meta name="keywords" content="SIP calculator, mutual fund, investment, systematic plan, PRATIX FINANCE" />
+    <meta name="author" content="Pratix Finance" />
+    <title>SIP Calculator - PRATIX FINANCE</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <button class="icon-btn" onclick="goBack()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">SIP Calculator</h1>
+                <button class="icon-btn" onclick="goToHome()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- SIP Calculator Tab -->
+            <section id="sip-calculator" class="tab-content active">
+                <div class="glass-card">
+                    <h2 class="section-title">SIP Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Monthly Investment Amount</label>
+                            <div class="slider-display" id="monthlyAmountDisplay">Enter monthly SIP amount</div>
+                            <input type="range" id="monthlyAmountSlider" min="500" max="100000" step="500" value="5000" class="slider">
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="monthlyAmountInput" placeholder="5,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Expected Annual Return (%)</label>
+                            <div class="slider-display" id="returnRateDisplay">Enter expected returns</div>
+                            <input type="range" id="returnRateSlider" min="1" max="30" step="0.5" value="12" class="slider">
+                            <input type="number" id="returnRateInput" placeholder="12" class="calc-input" step="0.5">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Investment Period (Years)</label>
+                            <div class="slider-display" id="investmentPeriodDisplay">Enter investment tenure</div>
+                            <input type="range" id="investmentPeriodSlider" min="1" max="40" step="1" value="10" class="slider">
+                            <input type="number" id="investmentPeriodInput" placeholder="10" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>SIP Type</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="regularSIP" name="sipType" value="regular" checked>
+                                    <label for="regularSIP">Regular SIP</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="stepUpSIP" name="sipType" value="stepup">
+                                    <label for="stepUpSIP">Step-up SIP</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group" id="stepUpGroup" style="display: none;">
+                            <label>Annual Step-up Rate (%)</label>
+                            <input type="number" id="stepUpRate" placeholder="10" class="calc-input" step="0.5">
+                        </div>
+
+                        <button class="calculate-btn" id="calculateSIP">
+                            <span class="btn-text">Calculate SIP</span>
+                        </button>
+                        <button class="refresh-btn" id="refreshSIP">
+                            <span class="btn-text">Refresh</span>
+                        </button>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="result-label">Total Investment</span>
+                            <span class="result-value" id="totalInvestment">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Returns</span>
+                            <span class="result-value" id="totalReturns">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Maturity Value</span>
+                            <span class="result-value" id="maturityValue">₹0</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container glow-chart">
+                        <div class="chart-title">SIP Investment Breakdown</div>
+                        <div class="chart-wrapper">
+                            <canvas id="sipChart" width="300" height="300"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color principal"></div>
+                                <span class="legend-text">Total Investment</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color interest"></div>
+                                <span class="legend-text">Returns Generated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goal Based Planning Tab -->
+            <section id="goal-planning" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Goal Based Planning</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Financial Goal</label>
+                            <select id="goalType" class="calc-input">
+                                <option value="custom">Custom Goal</option>
+                                <option value="retirement">Retirement Planning</option>
+                                <option value="house">House Purchase</option>
+                                <option value="car">Car Purchase</option>
+                                <option value="education">Child Education</option>
+                                <option value="vacation">Dream Vacation</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Target Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="targetAmount" placeholder="10,00,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Time to Achieve Goal (Years)</label>
+                            <input type="number" id="goalYears" placeholder="10" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Expected Annual Return (%)</label>
+                            <input type="number" id="goalReturnRate" placeholder="12" class="calc-input" step="0.5">
+                        </div>
+
+                        <button class="calculate-btn" id="calculateGoal">Calculate Required SIP</button>
+                        <button class="refresh-btn" id="refreshGoal">Refresh</button>
+                    </div>
+
+                    <div class="goal-result" id="goalResult" style="display: none;">
+                        <div class="result-card">
+                            <div class="result-item">
+                                <span class="result-label">Required Monthly SIP</span>
+                                <span class="result-value" id="requiredSIP">₹0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Total Investment</span>
+                                <span class="result-value" id="goalTotalInvestment">₹0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Total Returns</span>
+                                <span class="result-value" id="goalTotalReturns">₹0</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Goal Achievement Progress</div>
+                            <div class="chart-wrapper">
+                                <canvas id="goalChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SIP Comparison Tab -->
+            <section id="sip-comparison" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">SIP Comparison</h2>
+
+                    <div class="comparison-form">
+                        <div class="comparison-cards">
+                            <div class="comparison-card">
+                                <h3>SIP Option 1</h3>
+                                <div class="input-group">
+                                    <label>Monthly Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="sip1Amount" placeholder="5,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Expected Return (%)</label>
+                                    <input type="number" id="sip1Return" placeholder="12" class="calc-input" step="0.5">
+                                </div>
+                                <div class="input-group">
+                                    <label>Period (Years)</label>
+                                    <input type="number" id="sip1Period" placeholder="10" class="calc-input">
+                                </div>
+                            </div>
+
+                            <div class="comparison-card">
+                                <h3>SIP Option 2</h3>
+                                <div class="input-group">
+                                    <label>Monthly Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="sip2Amount" placeholder="7,500" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Expected Return (%)</label>
+                                    <input type="number" id="sip2Return" placeholder="10" class="calc-input" step="0.5">
+                                </div>
+                                <div class="input-group">
+                                    <label>Period (Years)</label>
+                                    <input type="number" id="sip2Period" placeholder="10" class="calc-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="compareSIPs">Compare SIPs</button>
+                        <button class="refresh-btn" id="refreshComparison">Refresh</button>
+                    </div>
+
+                    <div class="comparison-results" id="comparisonResults" style="display: none;">
+                        <div class="results-table-container">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>SIP Option</th>
+                                        <th>Monthly SIP</th>
+                                        <th>Total Investment</th>
+                                        <th>Maturity Value</th>
+                                        <th>Total Returns</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparisonTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">SIP Comparison Analysis</div>
+                            <div class="chart-wrapper">
+                                <canvas id="sipComparisonChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Investment Analysis Tab -->
+            <section id="investment-analysis" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Investment Analysis</h2>
+
+                    <div class="analysis-form">
+                        <div class="input-group">
+                            <label>Current Age</label>
+                            <input type="number" id="currentAge" placeholder="30" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Retirement Age</label>
+                            <input type="number" id="retirementAge" placeholder="60" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Monthly SIP Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="analysisAmount" placeholder="10,000" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Expected Return (%)</label>
+                            <input type="number" id="analysisReturn" placeholder="12" class="calc-input" step="0.5">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Inflation Rate (%)</label>
+                            <input type="number" id="inflationRate" placeholder="6" class="calc-input" step="0.5">
+                        </div>
+
+                        <button class="calculate-btn" id="analyzeInvestment">Analyze Investment</button>
+                        <button class="refresh-btn" id="refreshAnalysis">Refresh</button>
+                    </div>
+
+                    <div class="analysis-results" id="analysisResults" style="display: none;">
+                        <div class="analysis-cards">
+                            <div class="analysis-card">
+                                <h4>Maturity Value (Nominal)</h4>
+                                <div class="analysis-value" id="nominalValue">₹0</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>Real Value (Inflation Adjusted)</h4>
+                                <div class="analysis-value" id="realValue">₹0</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>Total Investment</h4>
+                                <div class="analysis-value" id="analysisInvestment">₹0</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>Wealth Multiple</h4>
+                                <div class="analysis-value" id="wealthMultiple">0x</div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Investment Growth Over Time</div>
+                            <div class="chart-wrapper">
+                                <canvas id="analysisChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Access to Other Calculators -->
+            <div class="tools-grid" style="margin-top: 2rem;">
+                <div class="tool-card" onclick="goToEMI()">
+                    <div class="tool-icon">🏠</div>
+                    <h3>EMI Calculator</h3>
+                    <p>Calculate loan EMI payments</p>
+                </div>
+                <div class="tool-card" onclick="goToGST()">
+                    <div class="tool-icon">📊</div>
+                    <h3>GST Calculator</h3>
+                    <p>Calculate GST amounts</p>
+                </div>
+                <div class="tool-card" onclick="goToTax()">
+                    <div class="tool-icon">💼</div>
+                    <h3>Tax Calculator</h3>
+                    <p>Calculate income tax liability</p>
+                </div>
+                <div class="tool-card" onclick="goToFD()">
+                    <div class="tool-icon">🏦</div>
+                    <h3>FD Calculator</h3>
+                    <p>Calculate fixed deposit returns</p>
+                </div>
+            </div>
+
+            <!-- Lumpsum vs SIP Tab -->
+            <section id="lumpsum-vs-sip" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Lumpsum vs SIP Comparison</h2>
+
+                    <div class="lumpsum-form">
+                        <div class="comparison-cards">
+                            <div class="comparison-card">
+                                <h3>Lumpsum Investment</h3>
+                                <div class="input-group">
+                                    <label>Investment Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="lumpsumAmount" placeholder="5,00,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Expected Return (%)</label>
+                                    <input type="number" id="lumpsumReturn" placeholder="12" class="calc-input" step="0.5">
+                                </div>
+                            </div>
+
+                            <div class="comparison-card">
+                                <h3>SIP Investment</h3>
+                                <div class="input-group">
+                                    <label>Monthly Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="currency">₹</span>
+                                        <input type="number" id="sipVsAmount" placeholder="10,000" class="calc-input">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Expected Return (%)</label>
+                                    <input type="number" id="sipVsReturn" placeholder="12" class="calc-input" step="0.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Investment Period (Years)</label>
+                            <input type="number" id="comparisonPeriod" placeholder="10" class="calc-input">
+                        </div>
+
+                        <button class="calculate-btn" id="compareLumpsumSIP">Compare Investments</button>
+                        <button class="refresh-btn" id="refreshLumpsumComparison">Refresh</button>
+                    </div>
+
+                    <div class="lumpsum-results" id="lumpsumResults" style="display: none;">
+                        <div class="scenario-comparison">
+                            <div class="scenario-card">
+                                <h3>Lumpsum Investment</h3>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Initial Investment:</span>
+                                        <span id="lumpsumInitial">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Maturity Value:</span>
+                                        <span id="lumpsumMaturity">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Total Returns:</span>
+                                        <span id="lumpsumTotalReturns">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-card">
+                                <h3>SIP Investment</h3>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Total Investment:</span>
+                                        <span id="sipVsTotalInvestment">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Maturity Value:</span>
+                                        <span id="sipVsMaturity">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Total Returns:</span>
+                                        <span id="sipVsTotalReturns">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comparison-summary">
+                            <h4>Verdict</h4>
+                            <p id="comparisonVerdict">Analysis result will appear here</p>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-title">Lumpsum vs SIP Growth</div>
+                            <div class="chart-wrapper">
+                                <canvas id="lumpsumChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="sip-calculator">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <span class="nav-label">SIP Calc</span>
+            </button>
+            <button class="nav-item" data-tab="goal-planning">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Goals</span>
+            </button>
+            <button class="nav-item" data-tab="sip-comparison">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
+                        <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
+                        <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Compare</span>
+            </button>
+            <button class="nav-item" data-tab="investment-analysis">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Analysis</span>
+            </button>
+            <button class="nav-item" data-tab="lumpsum-vs-sip">
+                <div class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Lumpsum</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="sip-script.js"></script>
+</body>
+</html>
+```
