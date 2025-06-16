@@ -514,6 +514,12 @@ function switchToTab(tabId) {
             // Force visibility with important styles
             targetTab.style.visibility = 'visible';
             targetTab.style.opacity = '1';
+            
+            // Ensure content is properly visible
+            setTimeout(() => {
+                targetTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+            
             console.log('Tab activated:', tabId);
             
             // Initialize tab-specific content
@@ -541,23 +547,43 @@ function switchToTab(tabId) {
 
 // Initialize tab-specific content
 function initializeTabContent(tabId) {
+    console.log('Initializing content for tab:', tabId);
+    
     switch(tabId) {
+        case 'emi-calculator':
+            // EMI calculator is already initialized
+            break;
         case 'amortization-table':
             if (currentEMIData) {
                 generateAmortizationTable(currentEMIData);
+                const tableContainer = document.getElementById('amortizationTableContainer');
+                if (tableContainer) {
+                    tableContainer.style.display = 'block';
+                }
+            } else {
+                // Show the note about calculating EMI first
+                const tableContainer = document.getElementById('amortizationTableContainer');
+                if (tableContainer) {
+                    tableContainer.style.display = 'none';
+                }
             }
             break;
         case 'prepayment-impact':
-            // Show prepayment form
+            // Initialize prepayment form - no additional setup needed
+            // Content is already in HTML
             break;
         case 'loan-comparison':
-            // Initialize loan comparison
-            if (!document.querySelector('#loanInputsGrid .loan-input-card')) {
+            // Initialize loan comparison with default inputs
+            const loanCountSelect = document.getElementById('loanCountSelect');
+            if (loanCountSelect && !loanCountSelect.value) {
+                loanCountSelect.value = '2'; // Set default to 2 loans
+                generateLoanInputs(); // Generate default loan input forms
+            } else if (!document.querySelector('#loanInputsGrid .loan-input-card')) {
                 generateLoanInputs();
             }
             break;
         case 'tools-extras':
-            // Show tools grid
+            // Tools grid is already in HTML - no additional setup needed
             break;
         case 'smart-features':
             // Initialize smart features
@@ -568,6 +594,8 @@ function initializeTabContent(tabId) {
 
 // Initialize Smart Features
 function initializeSmartFeatures() {
+    console.log('Initializing smart features...');
+    
     // Save Plan functionality
     const savePlanBtn = document.getElementById('saveLoanPlan');
     if (savePlanBtn) {
@@ -596,8 +624,27 @@ function initializeSmartFeatures() {
         };
     }
 
+    // Initialize other smart feature buttons
+    const buttons = [
+        'addEMIReminder',
+        'aiAssistance', 
+        'smartNotifications',
+        'analyticsBoard'
+    ];
+    
+    buttons.forEach(buttonId => {
+        const btn = document.getElementById(buttonId);
+        if (btn) {
+            btn.onclick = function() {
+                showNotification(`${this.textContent} feature coming soon!`, 'info');
+            };
+        }
+    });
+
     // Load saved plans
     loadSavedPlans();
+    
+    console.log('Smart features initialized');
 }
 
 // Save loan plan to localStorage
@@ -967,9 +1014,17 @@ function initLoanComparison() {
     const downloadBtn = document.getElementById('downloadComparisonPDF');
     
     if (loanCountSelect) {
+        // Set default value if none is set
+        if (!loanCountSelect.value) {
+            loanCountSelect.value = '2';
+        }
+        
         loanCountSelect.addEventListener('change', function() {
             generateLoanInputs();
         });
+        
+        // Generate initial loan inputs
+        generateLoanInputs();
     }
 
     if (compareBtn) {
@@ -1008,10 +1063,16 @@ function initLoanComparison() {
 
 // Generate loan input forms
 function generateLoanInputs() {
-    const loanCount = parseInt(document.getElementById('loanCountSelect').value);
+    const loanCountSelect = document.getElementById('loanCountSelect');
     const container = document.getElementById('loanInputsGrid');
 
-    if (!container) return;
+    if (!container || !loanCountSelect) {
+        console.error('Loan inputs container or select not found');
+        return;
+    }
+
+    const loanCount = parseInt(loanCountSelect.value) || 2;
+    console.log('Generating loan inputs for', loanCount, 'loans');
 
     container.innerHTML = '';
 
@@ -1024,20 +1085,22 @@ function generateLoanInputs() {
                 <label>Loan Amount</label>
                 <div class="input-wrapper">
                     <span class="currency">₹</span>
-                    <input type="number" id="loan${i}Amount" placeholder="Enter loan amount" class="calc-input">
+                    <input type="number" id="loan${i}Amount" placeholder="Enter loan amount" class="calc-input" min="1000" step="1000">
                 </div>
             </div>
             <div class="input-group">
                 <label>Interest Rate (%)</label>
-                <input type="number" id="loan${i}Rate" placeholder="Enter interest rate" class="calc-input" step="0.01">
+                <input type="number" id="loan${i}Rate" placeholder="Enter interest rate" class="calc-input" step="0.01" min="0.1" max="50">
             </div>
             <div class="input-group">
                 <label>Loan Tenure (Years)</label>
-                <input type="number" id="loan${i}Tenure" placeholder="Enter tenure" class="calc-input">
+                <input type="number" id="loan${i}Tenure" placeholder="Enter tenure" class="calc-input" min="1" max="50" step="1">
             </div>
         `;
         container.appendChild(loanCard);
     }
+    
+    console.log('Generated', container.children.length, 'loan input cards');
 }
 
 // Compare loan options
