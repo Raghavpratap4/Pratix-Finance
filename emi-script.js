@@ -162,8 +162,8 @@ function calculateEMI() {
         return;
     }
     
-    if (principal <= 0 || principal > 100000000) {
-        showNotification('Loan amount should be between ₹1,000 and ₹10 crores!', 'error');
+    if (principal <= 0) {
+        showNotification('Loan amount should be greater than ₹0!', 'error');
         return;
     }
     
@@ -1354,22 +1354,105 @@ function initializeSmartFeatures() {
         };
     }
     
-    // Initialize other smart feature buttons
-    const buttons = [
-        'addEMIReminder',
-        'aiAssistance', 
-        'smartNotifications',
-        'analyticsBoard'
-    ];
+    // Initialize other smart feature buttons with actual functionality
+    const addReminderBtn = document.getElementById('addEMIReminder');
+    if (addReminderBtn) {
+        addReminderBtn.onclick = function() {
+            if (currentEMIData) {
+                const reminderDate = prompt('Enter reminder date (YYYY-MM-DD):');
+                if (reminderDate) {
+                    const reminder = {
+                        id: Date.now(),
+                        date: reminderDate,
+                        amount: currentEMIData.emi,
+                        created: new Date().toLocaleDateString()
+                    };
+                    const reminders = JSON.parse(localStorage.getItem('emiReminders') || '[]');
+                    reminders.push(reminder);
+                    localStorage.setItem('emiReminders', JSON.stringify(reminders));
+                    showNotification('EMI reminder set successfully!', 'success');
+                }
+            } else {
+                showNotification('Please calculate EMI first to set reminder!', 'error');
+            }
+        };
+    }
     
-    buttons.forEach(buttonId => {
-        const btn = document.getElementById(buttonId);
-        if (btn) {
-            btn.onclick = function() {
-                showNotification(`${this.textContent} feature coming soon!`, 'info');
-            };
-        }
-    });
+    const aiAssistanceBtn = document.getElementById('aiAssistance');
+    if (aiAssistanceBtn) {
+        aiAssistanceBtn.onclick = function() {
+            if (currentEMIData) {
+                const tips = [
+                    `💡 Consider making a prepayment of ₹${Math.round(currentEMIData.emi * 2).toLocaleString('en-IN')} to save significant interest`,
+                    `💡 Your EMI-to-income ratio should be below 40%. Ensure your monthly income is at least ₹${Math.round(currentEMIData.emi * 2.5).toLocaleString('en-IN')}`,
+                    `💡 Consider refinancing if you can get a rate 0.5% lower than ${currentEMIData.annualRate}%`,
+                    `💡 Build an emergency fund of ₹${Math.round(currentEMIData.emi * 6).toLocaleString('en-IN')} (6 months EMI) before taking this loan`
+                ];
+                const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                alert(`AI Loan Assistant:\n\n${randomTip}`);
+                showNotification('AI tips generated successfully!', 'success');
+            } else {
+                showNotification('Please calculate EMI first to get AI tips!', 'error');
+            }
+        };
+    }
+    
+    const smartNotificationsBtn = document.getElementById('smartNotifications');
+    if (smartNotificationsBtn) {
+        smartNotificationsBtn.onclick = function() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        localStorage.setItem('smartNotificationsEnabled', 'true');
+                        showNotification('Smart notifications enabled successfully!', 'success');
+                        // Send a test notification
+                        setTimeout(() => {
+                            new Notification('Pratix Finance', {
+                                body: 'Smart notifications are now active!',
+                                icon: '/logo.png'
+                            });
+                        }, 2000);
+                    } else {
+                        showNotification('Notification permission denied!', 'error');
+                    }
+                });
+            } else {
+                showNotification('Notifications not supported in this browser!', 'error');
+            }
+        };
+    }
+    
+    const analyticsBoardBtn = document.getElementById('analyticsBoard');
+    if (analyticsBoardBtn) {
+        analyticsBoardBtn.onclick = function() {
+            const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
+            const reminders = JSON.parse(localStorage.getItem('emiReminders') || '[]');
+            
+            if (savedPlans.length === 0 && reminders.length === 0) {
+                showNotification('No data available for analytics. Save some loan plans first!', 'info');
+                return;
+            }
+            
+            let analyticsText = '📊 ANALYTICS DASHBOARD\n\n';
+            
+            if (savedPlans.length > 0) {
+                analyticsText += `📋 Saved Plans: ${savedPlans.length}\n`;
+                const totalLoanAmount = savedPlans.reduce((sum, plan) => sum + plan.data.principal, 0);
+                const avgEMI = savedPlans.reduce((sum, plan) => sum + plan.data.emi, 0) / savedPlans.length;
+                analyticsText += `💰 Total Loan Amount: ₹${Math.round(totalLoanAmount).toLocaleString('en-IN')}\n`;
+                analyticsText += `📈 Average EMI: ₹${Math.round(avgEMI).toLocaleString('en-IN')}\n\n`;
+            }
+            
+            if (reminders.length > 0) {
+                analyticsText += `⏰ Active Reminders: ${reminders.length}\n`;
+            }
+            
+            analyticsText += `📅 Last Activity: ${new Date().toLocaleDateString()}`;
+            
+            alert(analyticsText);
+            showNotification('Analytics dashboard opened!', 'success');
+        };
+    }
     
     // Load saved plans
     loadSavedPlans();
