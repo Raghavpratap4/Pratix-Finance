@@ -593,11 +593,15 @@ body::after {
 /* Tab content animation */
 .tab-content {
     display: none;
+    opacity: 0;
+    visibility: hidden;
     animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-content.active {
     display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 /* Tab navigation wrapper for desktop */

@@ -510,7 +510,12 @@ function switchToTab(tabId) {
         if (targetTab) {
             targetTab.classList.add('active');
             targetTab.style.display = 'block';
+            // Force visibility with important styles
+            targetTab.style.visibility = 'visible';
+            targetTab.style.opacity = '1';
             console.log('Tab activated:', tabId);
+        } else {
+            console.error('Target tab not found:', tabId);
         }
         
         targetNavs.forEach(nav => {
