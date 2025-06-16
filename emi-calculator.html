@@ -115,65 +115,62 @@
                     <h2 class="section-title">EMI Calculator</h2>
                     <div class="calculator-layout">
                         <div class="calculator-form">
-                        <div class="input-group">
-                            <label>Loan Amount</label>
-                            <div class="input-wrapper">
-                                <span class="currency">₹</span>
-                                <input type="number" id="loanAmountInput" placeholder="Enter loan amount" class="calc-input" min="1000" max="100000000" step="1000">
+                            <div class="input-group">
+                                <label>Loan Amount</label>
+                                <div class="input-wrapper">
+                                    <span class="currency">₹</span>
+                                    <input type="number" id="loanAmountInput" placeholder="Enter loan amount" class="calc-input" min="1000" max="100000000" step="1000">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Interest Rate (%)</label>
+                                <input type="number" id="interestRateInput" placeholder="Enter interest rate" class="calc-input" min="0.1" max="50" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label>Loan Tenure (Years)</label>
+                                <input type="number" id="loanTenureInput" placeholder="Enter tenure in years" class="calc-input" min="1" max="50" step="1">
+                            </div>
+                            <div class="button-group">
+                                <button class="calculate-btn" id="calculateEMI">
+                                    <span class="btn-text">Calculate EMI</span>
+                                </button>
+                                <button class="refresh-btn" id="refreshEMI">
+                                    <span class="btn-text">Reset</span>
+                                </button>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Interest Rate (%)</label>
-                            <input type="number" id="interestRateInput" placeholder="Enter interest rate" class="calc-input" min="0.1" max="50" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label>Loan Tenure (Years)</label>
-                            <input type="number" id="loanTenureInput" placeholder="Enter tenure in years" class="calc-input" min="1" max="50" step="1">
-                        </div>
-                        <button class="calculate-btn" id="calculateEMI">
-                            <span class="btn-text">Calculate EMI</span>
-                        </button>
-                        <button class="refresh-btn" id="refreshEMI">
-                            <span class="btn-text">Reset</span>
-                        </button>
-                    </div>
-                    <div class="result-card" id="resultCard" style="display: none;">
-                        <div class="result-item">
-                            <span class="result-label">Monthly EMI</span>
-                            <span class="result-value" id="monthlyEMI">₹0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Total Interest</span>
-                            <span class="result-value" id="totalInterest">₹0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Total Amount</span>
-                            <span class="result-value" id="totalAmount">₹0</span>
-                        </div>
-                    </div>
-
-                    <div class="chart-controls" id="chartControls" style="display: none;">
-                        <div class="input-group">
-                            <label>Chart Type</label>
-                            <select id="chartTypeSelect" class="calc-input">
-                                <option value="pie">Pie Chart</option>
-                                <option value="bar">Bar Chart</option>
-                                <option value="line">Line Chart</option>
-                            </select>
-                        </div>
-                        <button class="feature-btn" id="downloadPDF">
-                            <span class="btn-text">Download PDF Report</span>
-                        </button>
-                    </div>
-
-                    </div>
+                        
                         <div class="result-section">
-                            <div class="chart-container glow-chart" id="chartContainer" style="display: none;">
-                                <div class="chart-title">EMI Breakdown</div>
-                                <div class="chart-wrapper">
-                                    <canvas id="emiChart" width="300" height="300"></canvas>
+                            <div class="result-card" id="resultCard" style="display: none;">
+                                <div class="result-item">
+                                    <span class="result-label">Monthly EMI</span>
+                                    <span class="result-value" id="monthlyEMI">₹0</span>
                                 </div>
-                                <div class="chart-legend" id="chartLegend">
+                                <div class="result-item">
+                                    <span class="result-label">Total Interest</span>
+                                    <span class="result-value" id="totalInterest">₹0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">Total Amount</span>
+                                    <span class="result-value" id="totalAmount">₹0</span>
+                                </div>
+                            </div>
+
+                            <div class="chart-container" id="chartContainer" style="display: none;">
+                                <div class="chart-header">
+                                    <div class="chart-title">EMI Breakdown</div>
+                                    <div class="chart-selector">
+                                        <select id="chartTypeSelect" class="calc-input">
+                                            <option value="pie">Pie Chart</option>
+                                            <option value="bar">Bar Chart</option>
+                                            <option value="line">Line Chart</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="emiChart"></canvas>
+                                </div>
+                                <div class="chart-legend">
                                     <div class="legend-item">
                                         <div class="legend-color principal"></div>
                                         <span class="legend-text">Principal Amount</span>
@@ -183,6 +180,12 @@
                                         <span class="legend-text">Interest Amount</span>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="chart-controls" id="chartControls" style="display: none;">
+                                <button class="feature-btn" id="downloadPDF">
+                                    <span class="btn-text">Download PDF Report</span>
+                                </button>
                             </div>
                         </div>
                     </div>

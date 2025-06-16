@@ -148,7 +148,7 @@ function calculateEMI() {
     const loanTenureValue = loanTenureInput.value.trim();
     
     if (!loanAmountValue || !interestRateValue || !loanTenureValue) {
-        showNotification('Please fill all fields!', 'error');
+        showNotification('Please fill all fields to calculate EMI!', 'error');
         return;
     }
     
@@ -158,12 +158,12 @@ function calculateEMI() {
     
     // Enhanced validation
     if (isNaN(principal) || isNaN(annualRate) || isNaN(years)) {
-        showNotification('Please enter valid numbers!', 'error');
+        showNotification('Please enter valid numbers only!', 'error');
         return;
     }
     
     if (principal <= 0 || principal > 100000000) {
-        showNotification('Loan amount should be between ₹1 and ₹10 crores!', 'error');
+        showNotification('Loan amount should be between ₹1,000 and ₹10 crores!', 'error');
         return;
     }
     
@@ -177,54 +177,75 @@ function calculateEMI() {
         return;
     }
     
-    const monthlyRate = annualRate / 12 / 100;
-    const totalMonths = years * 12;
-    
-    // EMI Calculation using the standard formula
-    const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
-               (Math.pow(1 + monthlyRate, totalMonths) - 1);
-    
-    const totalAmount = emi * totalMonths;
-    const totalInterest = totalAmount - principal;
-    
-    currentEMIData = {
-        principal: principal,
-        emi: emi,
-        totalInterest: totalInterest,
-        totalAmount: totalAmount,
-        annualRate: annualRate,
-        years: years
-    };
-    
-    // Update display with proper formatting
-    const monthlyEMIElement = document.getElementById('monthlyEMI');
-    const totalInterestElement = document.getElementById('totalInterest');
-    const totalAmountElement = document.getElementById('totalAmount');
-    
-    if (monthlyEMIElement) {
-        monthlyEMIElement.textContent = `₹${Math.round(emi).toLocaleString('en-IN')}`;
+    try {
+        const monthlyRate = annualRate / 12 / 100;
+        const totalMonths = years * 12;
+        
+        // EMI Calculation using the standard formula
+        let emi;
+        if (monthlyRate === 0) {
+            emi = principal / totalMonths;
+        } else {
+            emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
+                  (Math.pow(1 + monthlyRate, totalMonths) - 1);
+        }
+        
+        const totalAmount = emi * totalMonths;
+        const totalInterest = totalAmount - principal;
+        
+        if (!isFinite(emi) || !isFinite(totalAmount) || !isFinite(totalInterest)) {
+            showNotification('Error in calculation. Please check your inputs!', 'error');
+            return;
+        }
+        
+        currentEMIData = {
+            principal: principal,
+            emi: emi,
+            totalInterest: totalInterest,
+            totalAmount: totalAmount,
+            annualRate: annualRate,
+            years: years
+        };
+        
+        // Update display with proper formatting
+        const monthlyEMIElement = document.getElementById('monthlyEMI');
+        const totalInterestElement = document.getElementById('totalInterest');
+        const totalAmountElement = document.getElementById('totalAmount');
+        
+        if (monthlyEMIElement) {
+            monthlyEMIElement.textContent = `₹${Math.round(emi).toLocaleString('en-IN')}`;
+        }
+        if (totalInterestElement) {
+            totalInterestElement.textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
+        }
+        if (totalAmountElement) {
+            totalAmountElement.textContent = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
+        }
+        
+        // Show results and chart with smooth animation
+        const resultCard = document.getElementById('resultCard');
+        const chartContainer = document.getElementById('chartContainer');
+        const chartControls = document.getElementById('chartControls');
+        
+        if (resultCard) {
+            resultCard.style.display = 'block';
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        if (chartContainer) chartContainer.style.display = 'block';
+        if (chartControls) chartControls.style.display = 'block';
+        
+        // Update chart
+        updateChart(currentEMIData);
+        
+        // Update amortization table
+        generateAmortizationTable(currentEMIData);
+        
+        showNotification('EMI calculated successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error in EMI calculation:', error);
+        showNotification('Calculation error. Please verify your inputs!', 'error');
     }
-    if (totalInterestElement) {
-        totalInterestElement.textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
-    }
-    if (totalAmountElement) {
-        totalAmountElement.textContent = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
-    }
-    
-    // Show results and chart
-    const resultCard = document.getElementById('resultCard');
-    const chartContainer = document.getElementById('chartContainer');
-    const chartControls = document.getElementById('chartControls');
-    
-    if (resultCard) resultCard.style.display = 'block';
-    if (chartContainer) chartContainer.style.display = 'block';
-    if (chartControls) chartControls.style.display = 'block';
-    
-    // Update chart
-    updateChart(currentEMIData);
-    
-    // Update amortization table
-    generateAmortizationTable(currentEMIData);
 }
 
 // Reset EMI Calculator function
