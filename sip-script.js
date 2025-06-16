@@ -1,3 +1,4 @@
+
 // SIP Calculator JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Tab switching functionality
@@ -35,30 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'index.html';
     };
 
-    window.goToEMI = function() {
-        window.location.href = 'emi-calculator.html';
-    };
-
-    window.goToGST = function() {
-        window.location.href = 'gst-calculator.html';
-    };
-
-    window.goToTax = function() {
-        window.location.href = '/tax-calculator.html';
-    }
-
-    function goToFD() {
-        window.location.href = '/fd-calculator.html';
-    }
-
     // SIP Calculator functionality
     let sipChart = null;
     let goalChart = null;
     let sipComparisonChart = null;
-    let analysisChart = null;
-    let lumpsumChart = null;
 
-    // Initialize SIP Calculator
+    // Initialize SIP Calculator with empty inputs
     function initSIPCalculator() {
         const monthlyAmountSlider = document.getElementById('monthlyAmountSlider');
         const monthlyAmountInput = document.getElementById('monthlyAmountInput');
@@ -74,28 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const calculateBtn = document.getElementById('calculateSIP');
         const refreshBtn = document.getElementById('refreshSIP');
+        const chartTypeSelector = document.getElementById('sipChartType');
 
-        // Initialize with default values
-        if (monthlyAmountSlider && monthlyAmountInput && monthlyAmountDisplay) {
-            monthlyAmountSlider.value = '5000';
-            monthlyAmountInput.value = '5000';
-            monthlyAmountDisplay.textContent = '₹5,000';
-        }
-
-        if (returnRateSlider && returnRateInput && returnRateDisplay) {
-            returnRateSlider.value = '12';
-            returnRateInput.value = '12';
-            returnRateDisplay.textContent = '12%';
-        }
-
-        if (investmentPeriodSlider && investmentPeriodInput && investmentPeriodDisplay) {
-            investmentPeriodSlider.value = '10';
-            investmentPeriodInput.value = '10';
-            investmentPeriodDisplay.textContent = '10 Years';
-        }
-
-        // Calculate initial SIP
-        calculateSIP();
+        // Keep inputs empty on load
+        resetSIPInputs();
 
         // SIP Type radio buttons
         const sipTypeRadios = document.querySelectorAll('input[name="sipType"]');
@@ -108,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     stepUpGroup.style.display = 'none';
                 }
-                calculateSIP();
+                if (hasValidInputs()) calculateSIP();
             });
         });
 
@@ -118,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const value = parseInt(this.value);
                 monthlyAmountInput.value = value;
                 monthlyAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
-                calculateSIP();
+                if (hasValidInputs()) calculateSIP();
             });
 
             monthlyAmountInput.addEventListener('input', function() {
@@ -127,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (value >= 500 && value <= 100000) {
                         monthlyAmountSlider.value = value;
                         monthlyAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
-                        calculateSIP();
+                        if (hasValidInputs()) calculateSIP();
                     }
                 }
             });
@@ -138,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const value = parseFloat(this.value);
                 returnRateInput.value = value;
                 returnRateDisplay.textContent = `${value}%`;
-                calculateSIP();
+                if (hasValidInputs()) calculateSIP();
             });
 
             returnRateInput.addEventListener('input', function() {
@@ -147,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (value >= 1 && value <= 30) {
                         returnRateSlider.value = value;
                         returnRateDisplay.textContent = `${value}%`;
-                        calculateSIP();
+                        if (hasValidInputs()) calculateSIP();
                     }
                 }
             });
@@ -158,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const value = parseInt(this.value);
                 investmentPeriodInput.value = value;
                 investmentPeriodDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
-                calculateSIP();
+                if (hasValidInputs()) calculateSIP();
             });
 
             investmentPeriodInput.addEventListener('input', function() {
@@ -167,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (value >= 1 && value <= 40) {
                         investmentPeriodSlider.value = value;
                         investmentPeriodDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
-                        calculateSIP();
+                        if (hasValidInputs()) calculateSIP();
                     }
                 }
             });
@@ -182,40 +147,91 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (refreshBtn) {
             refreshBtn.addEventListener('click', function() {
-                // Reset to default values
-                if (monthlyAmountSlider && monthlyAmountInput && monthlyAmountDisplay) {
-                    monthlyAmountSlider.value = '5000';
-                    monthlyAmountInput.value = '5000';
-                    monthlyAmountDisplay.textContent = '₹5,000';
-                }
-
-                if (returnRateSlider && returnRateInput && returnRateDisplay) {
-                    returnRateSlider.value = '12';
-                    returnRateInput.value = '12';
-                    returnRateDisplay.textContent = '12%';
-                }
-
-                if (investmentPeriodSlider && investmentPeriodInput && investmentPeriodDisplay) {
-                    investmentPeriodSlider.value = '10';
-                    investmentPeriodInput.value = '10';
-                    investmentPeriodDisplay.textContent = '10 Years';
-                }
-
-                calculateSIP();
+                resetSIPInputs();
                 showNotification('SIP calculator refreshed!', 'info');
             });
         }
 
-        // Initialize chart
+        // Chart type selector
+        if (chartTypeSelector) {
+            chartTypeSelector.addEventListener('change', function() {
+                if (hasValidInputs()) {
+                    calculateSIP();
+                }
+            });
+        }
+
+        // PDF download
+        const downloadPDFBtn = document.getElementById('downloadSIPPDF');
+        if (downloadPDFBtn) {
+            downloadPDFBtn.addEventListener('click', generateSIPPDF);
+        }
+
+        // Initialize empty chart
         initSIPChart();
     }
 
+    function resetSIPInputs() {
+        const monthlyAmountSlider = document.getElementById('monthlyAmountSlider');
+        const monthlyAmountInput = document.getElementById('monthlyAmountInput');
+        const monthlyAmountDisplay = document.getElementById('monthlyAmountDisplay');
+        const returnRateSlider = document.getElementById('returnRateSlider');
+        const returnRateInput = document.getElementById('returnRateInput');
+        const returnRateDisplay = document.getElementById('returnRateDisplay');
+        const investmentPeriodSlider = document.getElementById('investmentPeriodSlider');
+        const investmentPeriodInput = document.getElementById('investmentPeriodInput');
+        const investmentPeriodDisplay = document.getElementById('investmentPeriodDisplay');
+
+        if (monthlyAmountSlider && monthlyAmountInput && monthlyAmountDisplay) {
+            monthlyAmountSlider.value = '';
+            monthlyAmountInput.value = '';
+            monthlyAmountDisplay.textContent = 'Enter monthly SIP amount';
+        }
+
+        if (returnRateSlider && returnRateInput && returnRateDisplay) {
+            returnRateSlider.value = '';
+            returnRateInput.value = '';
+            returnRateDisplay.textContent = 'Enter expected returns';
+        }
+
+        if (investmentPeriodSlider && investmentPeriodInput && investmentPeriodDisplay) {
+            investmentPeriodSlider.value = '';
+            investmentPeriodInput.value = '';
+            investmentPeriodDisplay.textContent = 'Enter investment tenure';
+        }
+
+        // Hide results
+        const resultsCard = document.getElementById('sipResults');
+        if (resultsCard) {
+            resultsCard.style.display = 'none';
+        }
+
+        // Reset chart
+        if (sipChart) {
+            sipChart.destroy();
+            sipChart = null;
+            initSIPChart();
+        }
+    }
+
+    function hasValidInputs() {
+        const monthlyAmount = document.getElementById('monthlyAmountInput')?.value;
+        const returnRate = document.getElementById('returnRateInput')?.value;
+        const period = document.getElementById('investmentPeriodInput')?.value;
+        
+        return monthlyAmount && returnRate && period;
+    }
+
     function calculateSIP() {
-        const monthlyAmount = parseInt(document.getElementById('monthlyAmountInput')?.value) || 5000;
-        const annualReturn = parseFloat(document.getElementById('returnRateInput')?.value) || 12;
-        const years = parseInt(document.getElementById('investmentPeriodInput')?.value) || 10;
+        const monthlyAmount = parseInt(document.getElementById('monthlyAmountInput')?.value);
+        const annualReturn = parseFloat(document.getElementById('returnRateInput')?.value);
+        const years = parseInt(document.getElementById('investmentPeriodInput')?.value);
         const sipType = document.querySelector('input[name="sipType"]:checked')?.value || 'regular';
         const stepUpRate = parseFloat(document.getElementById('stepUpRate')?.value) || 10;
+
+        if (!monthlyAmount || !annualReturn || !years) {
+            return;
+        }
 
         const monthlyReturn = annualReturn / 12 / 100;
         const totalMonths = years * 12;
@@ -224,11 +240,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let maturityValue = 0;
 
         if (sipType === 'regular') {
-            // Regular SIP calculation
             totalInvestment = monthlyAmount * totalMonths;
             maturityValue = monthlyAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
         } else {
-            // Step-up SIP calculation
             let currentAmount = monthlyAmount;
             let currentValue = 0;
 
@@ -237,12 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const yearInvestment = currentAmount * monthsInYear;
                 totalInvestment += yearInvestment;
 
-                // Calculate future value of this year's investment
                 const remainingMonths = (years - year) * 12 + 12;
                 const yearMaturityValue = currentAmount * ((Math.pow(1 + monthlyReturn, monthsInYear) - 1) / monthlyReturn) * Math.pow(1 + monthlyReturn, remainingMonths - monthsInYear);
                 currentValue += yearMaturityValue;
 
-                // Increase amount for next year
                 if (year < years) {
                     currentAmount = currentAmount * (1 + stepUpRate / 100);
                 }
@@ -256,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalInvestmentElement = document.getElementById('totalInvestment');
         const totalReturnsElement = document.getElementById('totalReturns');
         const maturityValueElement = document.getElementById('maturityValue');
+        const resultsCard = document.getElementById('sipResults');
 
         if (totalInvestmentElement) {
             totalInvestmentElement.textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
@@ -265,6 +278,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (maturityValueElement) {
             maturityValueElement.textContent = `₹${Math.round(maturityValue).toLocaleString('en-IN')}`;
+        }
+        if (resultsCard) {
+            resultsCard.style.display = 'block';
         }
 
         // Update chart
@@ -280,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 labels: ['Total Investment', 'Returns Generated'],
                 datasets: [{
-                    data: [600000, 521568],
+                    data: [1, 1],
                     backgroundColor: [
                         'rgba(49, 65, 127, 0.8)',
                         'rgba(240, 147, 251, 0.8)'
@@ -327,16 +343,166 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateSIPChart(investment, returns) {
+        const chartType = document.getElementById('sipChartType')?.value || 'doughnut';
+        
         if (sipChart) {
-            sipChart.data.datasets[0].data = [Math.round(investment), Math.round(returns)];
-            sipChart.update('active');
+            sipChart.destroy();
         }
+
+        const ctx = document.getElementById('sipChart');
+        if (!ctx) return;
+
+        if (chartType === 'doughnut') {
+            sipChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Total Investment', 'Returns Generated'],
+                    datasets: [{
+                        data: [Math.round(investment), Math.round(returns)],
+                        backgroundColor: [
+                            'rgba(49, 65, 127, 0.8)',
+                            'rgba(240, 147, 251, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(49, 65, 127, 1)',
+                            'rgba(240, 147, 251, 1)'
+                        ],
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderWidth: 1
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        } else if (chartType === 'bar') {
+            sipChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total Investment', 'Returns Generated'],
+                    datasets: [{
+                        data: [Math.round(investment), Math.round(returns)],
+                        backgroundColor: [
+                            'rgba(49, 65, 127, 0.8)',
+                            'rgba(240, 147, 251, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(49, 65, 127, 1)',
+                            'rgba(240, 147, 251, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        } else if (chartType === 'line') {
+            const years = parseInt(document.getElementById('investmentPeriodInput')?.value) || 10;
+            const monthlyAmount = parseInt(document.getElementById('monthlyAmountInput')?.value) || 5000;
+            const annualReturn = parseFloat(document.getElementById('returnRateInput')?.value) || 12;
+            
+            const yearlyData = [];
+            for (let year = 1; year <= years; year++) {
+                const yearlyInvestment = monthlyAmount * 12 * year;
+                const yearlyMaturity = calculateMaturityForYear(monthlyAmount, annualReturn, year);
+                yearlyData.push({
+                    year: year,
+                    investment: yearlyInvestment,
+                    maturity: yearlyMaturity
+                });
+            }
+
+            sipChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Total Investment',
+                            data: yearlyData.map(d => d.investment),
+                            borderColor: 'rgba(49, 65, 127, 1)',
+                            backgroundColor: 'rgba(49, 65, 127, 0.1)',
+                            fill: true
+                        },
+                        {
+                            label: 'Expected Value',
+                            data: yearlyData.map(d => d.maturity),
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function calculateMaturityForYear(monthlyAmount, annualReturn, years) {
+        const monthlyReturn = annualReturn / 12 / 100;
+        const totalMonths = years * 12;
+        return monthlyAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
     }
 
     // Goal Based Planning
     function initGoalPlanning() {
         const calculateGoalBtn = document.getElementById('calculateGoal');
         const refreshGoalBtn = document.getElementById('refreshGoal');
+        const chartTypeSelector = document.getElementById('goalChartType');
+        const downloadPDFBtn = document.getElementById('downloadGoalPDF');
 
         if (calculateGoalBtn) {
             calculateGoalBtn.addEventListener('click', function() {
@@ -347,47 +513,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (refreshGoalBtn) {
             refreshGoalBtn.addEventListener('click', function() {
-                document.getElementById('targetAmount').value = '';
-                document.getElementById('goalYears').value = '';
-                document.getElementById('goalReturnRate').value = '';
-                document.getElementById('goalResult').style.display = 'none';
+                resetGoalInputs();
                 showNotification('Goal planning refreshed!', 'info');
             });
+        }
+
+        if (chartTypeSelector) {
+            chartTypeSelector.addEventListener('change', function() {
+                if (document.getElementById('goalResult').style.display !== 'none') {
+                    calculateGoalBasedSIP();
+                }
+            });
+        }
+
+        if (downloadPDFBtn) {
+            downloadPDFBtn.addEventListener('click', generateGoalPDF);
+        }
+    }
+
+    function resetGoalInputs() {
+        document.getElementById('goalType').value = '';
+        document.getElementById('targetAmount').value = '';
+        document.getElementById('goalYears').value = '';
+        document.getElementById('goalReturnRate').value = '';
+        document.getElementById('goalResult').style.display = 'none';
+        
+        if (goalChart) {
+            goalChart.destroy();
+            goalChart = null;
         }
     }
 
     function calculateGoalBasedSIP() {
-        const targetAmount = parseInt(document.getElementById('targetAmount')?.value) || 1000000;
-        const years = parseInt(document.getElementById('goalYears')?.value) || 10;
-        const annualReturn = parseFloat(document.getElementById('goalReturnRate')?.value) || 12;
+        const targetAmount = parseInt(document.getElementById('targetAmount')?.value);
+        const years = parseInt(document.getElementById('goalYears')?.value);
+        const annualReturn = parseFloat(document.getElementById('goalReturnRate')?.value);
+
+        if (!targetAmount || !years || !annualReturn) {
+            showNotification('Please fill all goal details', 'error');
+            return;
+        }
 
         const monthlyReturn = annualReturn / 12 / 100;
         const totalMonths = years * 12;
 
-        // Calculate required monthly SIP
         const requiredSIP = (targetAmount * monthlyReturn) / (Math.pow(1 + monthlyReturn, totalMonths) - 1);
         const totalInvestment = requiredSIP * totalMonths;
         const totalReturns = targetAmount - totalInvestment;
 
-        // Update display
         document.getElementById('requiredSIP').textContent = `₹${Math.round(requiredSIP).toLocaleString('en-IN')}`;
         document.getElementById('goalTotalInvestment').textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
         document.getElementById('goalTotalReturns').textContent = `₹${Math.round(totalReturns).toLocaleString('en-IN')}`;
 
-        // Show results
         document.getElementById('goalResult').style.display = 'block';
-
-        // Update goal chart
         updateGoalChart(totalInvestment, totalReturns, years);
     }
 
     function updateGoalChart(investment, returns, years) {
-        const ctx = document.getElementById('goalChart');
-        if (!ctx) return;
-
+        const chartType = document.getElementById('goalChartType')?.value || 'line';
+        
         if (goalChart) {
             goalChart.destroy();
         }
+
+        const ctx = document.getElementById('goalChart');
+        if (!ctx) return;
 
         const yearlyData = [];
         const yearlyInvestment = investment / years;
@@ -396,70 +586,155 @@ document.addEventListener('DOMContentLoaded', function() {
             yearlyData.push({
                 year: i,
                 investment: yearlyInvestment * i,
-                maturity: (investment / years) * i * Math.pow(1.12, i) // Simplified calculation
+                maturity: (investment / years) * i * Math.pow(1.12, i)
             });
         }
 
-        goalChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: yearlyData.map(d => `Year ${d.year}`),
-                datasets: [
-                    {
-                        label: 'Total Investment',
-                        data: yearlyData.map(d => d.investment),
-                        borderColor: 'rgba(49, 65, 127, 1)',
-                        backgroundColor: 'rgba(49, 65, 127, 0.1)',
-                        fill: true
-                    },
-                    {
-                        label: 'Expected Value',
-                        data: yearlyData.map(d => d.maturity),
-                        borderColor: 'rgba(240, 147, 251, 1)',
-                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
-                        fill: true
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
+        if (chartType === 'line') {
+            goalChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Total Investment',
+                            data: yearlyData.map(d => d.investment),
+                            borderColor: 'rgba(49, 65, 127, 1)',
+                            backgroundColor: 'rgba(49, 65, 127, 0.1)',
+                            fill: true
+                        },
+                        {
+                            label: 'Expected Value',
+                            data: yearlyData.map(d => d.maturity),
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                            fill: true
                         }
-                    }
+                    ]
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'white'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
                     },
-                    y: {
-                        ticks: {
-                            color: 'white',
-                            callback: function(value) {
-                                return '₹' + (value / 100000).toFixed(0) + 'L';
-                            }
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         }
                     }
                 }
-            }
-        });
+            });
+        } else if (chartType === 'bar') {
+            goalChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Total Investment',
+                            data: yearlyData.map(d => d.investment),
+                            backgroundColor: 'rgba(49, 65, 127, 0.8)',
+                            borderColor: 'rgba(49, 65, 127, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Expected Value',
+                            data: yearlyData.map(d => d.maturity),
+                            backgroundColor: 'rgba(240, 147, 251, 0.8)',
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        } else if (chartType === 'area') {
+            goalChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Investment Growth',
+                            data: yearlyData.map(d => d.maturity),
+                            borderColor: 'rgba(0, 255, 136, 1)',
+                            backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     // SIP Comparison
     function initSIPComparison() {
+        const sipCountSelector = document.getElementById('sipCount');
         const compareSIPsBtn = document.getElementById('compareSIPs');
         const refreshComparisonBtn = document.getElementById('refreshComparison');
+        const chartTypeSelector = document.getElementById('comparisonChartType');
+        const downloadPDFBtn = document.getElementById('downloadComparisonPDF');
+
+        if (sipCountSelector) {
+            sipCountSelector.addEventListener('change', function() {
+                generateComparisonInputs(parseInt(this.value));
+            });
+        }
 
         if (compareSIPsBtn) {
             compareSIPsBtn.addEventListener('click', function() {
@@ -470,257 +745,396 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (refreshComparisonBtn) {
             refreshComparisonBtn.addEventListener('click', function() {
-                document.getElementById('sip1Amount').value = '';
-                document.getElementById('sip1Return').value = '';
-                document.getElementById('sip1Period').value = '';
-                document.getElementById('sip2Amount').value = '';
-                document.getElementById('sip2Return').value = '';
-                document.getElementById('sip2Period').value = '';
-                document.getElementById('comparisonResults').style.display = 'none';
+                resetComparisonInputs();
                 showNotification('SIP comparison refreshed!', 'info');
             });
         }
+
+        if (chartTypeSelector) {
+            chartTypeSelector.addEventListener('change', function() {
+                if (document.getElementById('comparisonResults').style.display !== 'none') {
+                    // Recalculate to update chart
+                    compareSIPOptions();
+                }
+            });
+        }
+
+        if (downloadPDFBtn) {
+            downloadPDFBtn.addEventListener('click', generateComparisonPDF);
+        }
+    }
+
+    function resetComparisonInputs() {
+        document.getElementById('sipCount').value = '';
+        document.getElementById('comparisonInputs').innerHTML = '';
+        document.getElementById('comparisonResults').style.display = 'none';
+        
+        if (sipComparisonChart) {
+            sipComparisonChart.destroy();
+            sipComparisonChart = null;
+        }
+    }
+
+    function generateComparisonInputs(count) {
+        const container = document.getElementById('comparisonInputs');
+        if (!container || !count) return;
+
+        let html = '';
+        for (let i = 1; i <= count; i++) {
+            html += `
+                <div class="comparison-card">
+                    <h4>SIP Option ${i}</h4>
+                    <div class="input-group">
+                        <label>Monthly Amount</label>
+                        <div class="input-wrapper">
+                            <span class="currency">₹</span>
+                            <input type="number" id="sip${i}Amount" placeholder="5,000" class="calc-input">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Expected Return (%)</label>
+                        <input type="number" id="sip${i}Return" placeholder="12" class="calc-input" step="0.5">
+                    </div>
+                    <div class="input-group">
+                        <label>Period (Years)</label>
+                        <input type="number" id="sip${i}Period" placeholder="10" class="calc-input">
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
     }
 
     function compareSIPOptions() {
-        const sip1Amount = parseInt(document.getElementById('sip1Amount')?.value);
-        const sip1Return = parseFloat(document.getElementById('sip1Return')?.value);
-        const sip1Period = parseInt(document.getElementById('sip1Period')?.value);
+        const sipCount = parseInt(document.getElementById('sipCount')?.value);
+        if (!sipCount) {
+            showNotification('Please select number of SIPs to compare', 'error');
+            return;
+        }
 
-        const sip2Amount = parseInt(document.getElementById('sip2Amount')?.value);
-        const sip2Return = parseFloat(document.getElementById('sip2Return')?.value);
-        const sip2Period = parseInt(document.getElementById('sip2Period')?.value);
+        const sipData = [];
+        let allInputsValid = true;
 
-        if (!sip1Amount || !sip1Return || !sip1Period || !sip2Amount || !sip2Return || !sip2Period) {
+        for (let i = 1; i <= sipCount; i++) {
+            const amount = parseInt(document.getElementById(`sip${i}Amount`)?.value);
+            const returnRate = parseFloat(document.getElementById(`sip${i}Return`)?.value);
+            const period = parseInt(document.getElementById(`sip${i}Period`)?.value);
+
+            if (!amount || !returnRate || !period) {
+                allInputsValid = false;
+                break;
+            }
+
+            // Calculate SIP
+            const monthlyReturn = returnRate / 12 / 100;
+            const totalMonths = period * 12;
+            const investment = amount * totalMonths;
+            const maturity = amount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
+            const returns = maturity - investment;
+
+            sipData.push({
+                option: i,
+                monthlyAmount: amount,
+                investment: investment,
+                maturity: maturity,
+                returns: returns
+            });
+        }
+
+        if (!allInputsValid) {
             showNotification('Please fill all SIP details', 'error');
             return;
         }
 
-        // Calculate SIP 1
-        const sip1MonthlyReturn = sip1Return / 12 / 100;
-        const sip1TotalMonths = sip1Period * 12;
-        const sip1Investment = sip1Amount * sip1TotalMonths;
-        const sip1Maturity = sip1Amount * ((Math.pow(1 + sip1MonthlyReturn, sip1TotalMonths) - 1) / sip1MonthlyReturn);
-        const sip1Returns = sip1Maturity - sip1Investment;
-
-        // Calculate SIP 2
-        const sip2MonthlyReturn = sip2Return / 12 / 100;
-        const sip2TotalMonths = sip2Period * 12;
-        const sip2Investment = sip2Amount * sip2TotalMonths;
-        const sip2Maturity = sip2Amount * ((Math.pow(1 + sip2MonthlyReturn, sip2TotalMonths) - 1) / sip2MonthlyReturn);
-        const sip2Returns = sip2Maturity - sip2Investment;
-
         // Update comparison table
         const tableBody = document.getElementById('comparisonTableBody');
         if (tableBody) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td>SIP Option 1</td>
-                    <td>₹${sip1Amount.toLocaleString('en-IN')}</td>
-                    <td>₹${Math.round(sip1Investment).toLocaleString('en-IN')}</td>
-                    <td>₹${Math.round(sip1Maturity).toLocaleString('en-IN')}</td>
-                    <td>₹${Math.round(sip1Returns).toLocaleString('en-IN')}</td>
-                </tr>
-                <tr>
-                    <td>SIP Option 2</td>
-                    <td>₹${sip2Amount.toLocaleString('en-IN')}</td>
-                    <td>₹${Math.round(sip2Investment).toLocaleString('en-IN')}</td>
-                    <td>₹${Math.round(sip2Maturity).toLocaleString('en-IN')}</td>
-                    <td>₹${Math.round(sip2Returns).toLocaleString('en-IN')}</td>
-                </tr>
-            `;
+            let tableHTML = '';
+            sipData.forEach(sip => {
+                tableHTML += `
+                    <tr>
+                        <td>SIP Option ${sip.option}</td>
+                        <td>₹${sip.monthlyAmount.toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(sip.investment).toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(sip.maturity).toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(sip.returns).toLocaleString('en-IN')}</td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = tableHTML;
         }
 
-        // Show results
         document.getElementById('comparisonResults').style.display = 'block';
-
-        // Update comparison chart
-        updateSIPComparisonChart([sip1Maturity, sip2Maturity]);
+        updateSIPComparisonChart(sipData);
     }
 
-    function updateSIPComparisonChart(values) {
-        const ctx = document.getElementById('sipComparisonChart');
-        if (!ctx) return;
-
+    function updateSIPComparisonChart(sipData) {
+        const chartType = document.getElementById('comparisonChartType')?.value || 'bar';
+        
         if (sipComparisonChart) {
             sipComparisonChart.destroy();
         }
 
-        sipComparisonChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['SIP Option 1', 'SIP Option 2'],
-                datasets: [{
-                    label: 'Maturity Value',
-                    data: values,
-                    backgroundColor: [
-                        'rgba(49, 65, 127, 0.8)',
-                        'rgba(240, 147, 251, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(49, 65, 127, 1)',
-                        'rgba(240, 147, 251, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
-                    }
+        const ctx = document.getElementById('sipComparisonChart');
+        if (!ctx) return;
+
+        const labels = sipData.map(sip => `SIP ${sip.option}`);
+        const maturityValues = sipData.map(sip => sip.maturity);
+        const colors = ['rgba(49, 65, 127, 0.8)', 'rgba(240, 147, 251, 0.8)', 'rgba(0, 255, 136, 0.8)', 'rgba(255, 0, 128, 0.8)'];
+
+        if (chartType === 'bar') {
+            sipComparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Maturity Value',
+                        data: maturityValues,
+                        backgroundColor: colors.slice(0, sipData.length),
+                        borderColor: colors.slice(0, sipData.length).map(color => color.replace('0.8', '1')),
+                        borderWidth: 2
+                    }]
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'white'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
                     },
-                    y: {
-                        ticks: {
-                            color: 'white',
-                            callback: function(value) {
-                                return '₹' + (value / 100000).toFixed(0) + 'L';
-                            }
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         }
                     }
                 }
-            }
-        });
-    }
-
-    // Investment Analysis
-    function initInvestmentAnalysis() {
-        const analyzeBtn = document.getElementById('analyzeInvestment');
-        const refreshAnalysisBtn = document.getElementById('refreshAnalysis');
-
-        if (analyzeBtn) {
-            analyzeBtn.addEventListener('click', function() {
-                analyzeInvestment();
-                showNotification('Investment analysis completed!', 'success');
             });
-        }
-
-        if (refreshAnalysisBtn) {
-            refreshAnalysisBtn.addEventListener('click', function() {
-                document.getElementById('currentAge').value = '';
-                document.getElementById('retirementAge').value = '';
-                document.getElementById('analysisAmount').value = '';
-                document.getElementById('analysisReturn').value = '';
-                document.getElementById('inflationRate').value = '';
-                document.getElementById('analysisResults').style.display = 'none';
-                showNotification('Investment analysis refreshed!', 'info');
+        } else if (chartType === 'line') {
+            sipComparisonChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Maturity Value',
+                        data: maturityValues,
+                        borderColor: 'rgba(0, 255, 136, 1)',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
             });
-        }
-    }
+        } else if (chartType === 'radar') {
+            // Normalize data for radar chart
+            const maxValue = Math.max(...maturityValues);
+            const normalizedData = maturityValues.map(value => (value / maxValue) * 100);
 
-    function analyzeInvestment() {
-        const currentAge = parseInt(document.getElementById('currentAge')?.value) || 30;
-        const retirementAge = parseInt(document.getElementById('retirementAge')?.value) || 60;
-        const monthlyAmount = parseInt(document.getElementById('analysisAmount')?.value) || 10000;
-        const annualReturn = parseFloat(document.getElementById('analysisReturn')?.value) || 12;
-        const inflationRate = parseFloat(document.getElementById('inflationRate')?.value) || 6;
-
-        const investmentYears = retirementAge - currentAge;
-        const monthlyReturn = annualReturn / 12 / 100;
-        const totalMonths = investmentYears * 12;
-
-        // Calculate nominal value
-        const totalInvestment = monthlyAmount * totalMonths;
-        const nominalValue = monthlyAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
-
-        // Calculate real value (inflation adjusted)
-        const realValue = nominalValue / Math.pow(1 + inflationRate / 100, investmentYears);
-
-        // Calculate wealth multiple
-        const wealthMultiple = nominalValue / totalInvestment;
-
-        // Update display
-        document.getElementById('nominalValue').textContent = `₹${Math.round(nominalValue).toLocaleString('en-IN')}`;
-        document.getElementById('realValue').textContent = `₹${Math.round(realValue).toLocaleString('en-IN')}`;
-        document.getElementById('analysisInvestment').textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
-        document.getElementById('wealthMultiple').textContent = `${wealthMultiple.toFixed(1)}x`;
-
-        // Show results
-        document.getElementById('analysisResults').style.display = 'block';
-    }
-
-    // Lumpsum vs SIP
-    function initLumpsumComparison() {
-        const compareLumpsumSIPBtn = document.getElementById('compareLumpsumSIP');
-        const refreshLumpsumBtn = document.getElementById('refreshLumpsumComparison');
-
-        if (compareLumpsumSIPBtn) {
-            compareLumpsumSIPBtn.addEventListener('click', function() {
-                compareLumpsumVsSIP();
-                showNotification('Lumpsum vs SIP comparison completed!', 'success');
-            });
-        }
-
-        if (refreshLumpsumBtn) {
-            refreshLumpsumBtn.addEventListener('click', function() {
-                document.getElementById('lumpsumAmount').value = '';
-                document.getElementById('lumpsumReturn').value = '';
-                document.getElementById('sipVsAmount').value = '';
-                document.getElementById('sipVsReturn').value = '';
-                document.getElementById('comparisonPeriod').value = '';
-                document.getElementById('lumpsumResults').style.display = 'none';
-                showNotification('Lumpsum comparison refreshed!', 'info');
+            sipComparisonChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Performance',
+                        data: normalizedData,
+                        borderColor: 'rgba(0, 255, 136, 1)',
+                        backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                        pointBackgroundColor: 'rgba(0, 255, 136, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 255, 136, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: 'white' },
+                            ticks: { color: 'white', backdropColor: 'transparent' }
+                        }
+                    }
+                }
             });
         }
     }
 
-    function compareLumpsumVsSIP() {
-        const lumpsumAmount = parseInt(document.getElementById('lumpsumAmount')?.value);
-        const lumpsumReturn = parseFloat(document.getElementById('lumpsumReturn')?.value);
-        const sipAmount = parseInt(document.getElementById('sipVsAmount')?.value);
-        const sipReturn = parseFloat(document.getElementById('sipVsReturn')?.value);
-        const period = parseInt(document.getElementById('comparisonPeriod')?.value);
-
-        if (!lumpsumAmount || !lumpsumReturn || !sipAmount || !sipReturn || !period) {
-            showNotification('Please fill all investment details', 'error');
+    // PDF Generation Functions
+    function generateSIPPDF() {
+        if (typeof jsPDF === 'undefined') {
+            showNotification('PDF library not loaded', 'error');
             return;
         }
 
-        // Calculate Lumpsum
-        const lumpsumMaturity = lumpsumAmount * Math.pow(1 + lumpsumReturn / 100, period);
-        const lumpsumReturns = lumpsumMaturity - lumpsumAmount;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-        // Calculate SIP
-        const sipMonthlyReturn = sipReturn / 12 / 100;
-        const sipTotalMonths = period * 12;
-        const sipTotalInvestment = sipAmount * sipTotalMonths;
-        const sipMaturity = sipAmount * ((Math.pow(1 + sipMonthlyReturn, sipTotalMonths) - 1) / sipMonthlyReturn);
-        const sipTotalReturns = sipMaturity - sipTotalInvestment;
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 100, 200);
+        doc.text('PRATIX FINANCE', 20, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('SIP Calculator Report', 20, 35);
 
-        // Update display
-        document.getElementById('lumpsumInitial').textContent = `₹${lumpsumAmount.toLocaleString('en-IN')}`;
-        document.getElementById('lumpsumMaturity').textContent = `₹${Math.round(lumpsumMaturity).toLocaleString('en-IN')}`;
-        document.getElementById('lumpsumTotalReturns').textContent = `₹${Math.round(lumpsumReturns).toLocaleString('en-IN')}`;
+        // Input Data
+        doc.setFontSize(12);
+        doc.text('Input Parameters:', 20, 55);
+        
+        const monthlyAmount = document.getElementById('monthlyAmountInput')?.value || '0';
+        const returnRate = document.getElementById('returnRateInput')?.value || '0';
+        const period = document.getElementById('investmentPeriodInput')?.value || '0';
+        
+        doc.text(`Monthly Investment: ₹${parseInt(monthlyAmount).toLocaleString('en-IN')}`, 20, 70);
+        doc.text(`Expected Return: ${returnRate}%`, 20, 85);
+        doc.text(`Investment Period: ${period} years`, 20, 100);
 
-        document.getElementById('sipVsTotalInvestment').textContent = `₹${Math.round(sipTotalInvestment).toLocaleString('en-IN')}`;
-        document.getElementById('sipVsMaturity').textContent = `₹${Math.round(sipMaturity).toLocaleString('en-IN')}`;
-        document.getElementById('sipVsTotalReturns').textContent = `₹${Math.round(sipTotalReturns).toLocaleString('en-IN')}`;
+        // Results
+        doc.text('Calculated Results:', 20, 120);
+        
+        const totalInvestment = document.getElementById('totalInvestment')?.textContent || '₹0';
+        const totalReturns = document.getElementById('totalReturns')?.textContent || '₹0';
+        const maturityValue = document.getElementById('maturityValue')?.textContent || '₹0';
+        
+        doc.text(`Total Investment: ${totalInvestment}`, 20, 135);
+        doc.text(`Total Returns: ${totalReturns}`, 20, 150);
+        doc.text(`Maturity Value: ${maturityValue}`, 20, 165);
 
-        // Determine verdict
-        const verdict = sipMaturity > lumpsumMaturity ? 
-            `SIP generates ₹${Math.round(sipMaturity - lumpsumMaturity).toLocaleString('en-IN')} more than Lumpsum` :
-            `Lumpsum generates ₹${Math.round(lumpsumMaturity - sipMaturity).toLocaleString('en-IN')} more than SIP`;
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
 
-        document.getElementById('comparisonVerdict').textContent = verdict;
+        doc.save('SIP_Calculator_Report.pdf');
+        showNotification('PDF downloaded successfully!', 'success');
+    }
 
-        // Show results
-        document.getElementById('lumpsumResults').style.display = 'block';
+    function generateGoalPDF() {
+        if (typeof jsPDF === 'undefined') {
+            showNotification('PDF library not loaded', 'error');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 100, 200);
+        doc.text('PRATIX FINANCE', 20, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('SIP Calculator - Goal Based Planning', 20, 35);
+
+        // Input Data
+        doc.setFontSize(12);
+        doc.text('Goal Parameters:', 20, 55);
+        
+        const targetAmount = document.getElementById('targetAmount')?.value || '0';
+        const goalYears = document.getElementById('goalYears')?.value || '0';
+        const goalReturn = document.getElementById('goalReturnRate')?.value || '0';
+        
+        doc.text(`Target Amount: ₹${parseInt(targetAmount).toLocaleString('en-IN')}`, 20, 70);
+        doc.text(`Time Period: ${goalYears} years`, 20, 85);
+        doc.text(`Expected Return: ${goalReturn}%`, 20, 100);
+
+        // Results
+        doc.text('Required Investment:', 20, 120);
+        
+        const requiredSIP = document.getElementById('requiredSIP')?.textContent || '₹0';
+        const goalTotalInvestment = document.getElementById('goalTotalInvestment')?.textContent || '₹0';
+        const goalTotalReturns = document.getElementById('goalTotalReturns')?.textContent || '₹0';
+        
+        doc.text(`Required Monthly SIP: ${requiredSIP}`, 20, 135);
+        doc.text(`Total Investment: ${goalTotalInvestment}`, 20, 150);
+        doc.text(`Total Returns: ${goalTotalReturns}`, 20, 165);
+
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('SIP_Goal_Planning_Report.pdf');
+        showNotification('PDF downloaded successfully!', 'success');
+    }
+
+    function generateComparisonPDF() {
+        if (typeof jsPDF === 'undefined') {
+            showNotification('PDF library not loaded', 'error');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 100, 200);
+        doc.text('PRATIX FINANCE', 20, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('SIP Calculator - SIP Comparison', 20, 35);
+
+        // Comparison Results
+        doc.setFontSize(12);
+        doc.text('SIP Comparison Results:', 20, 55);
+
+        const tableRows = document.querySelectorAll('#comparisonTableBody tr');
+        let yPosition = 70;
+        
+        tableRows.forEach((row, index) => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 5) {
+                doc.text(`${cells[0].textContent}: Monthly ${cells[1].textContent}, Maturity ${cells[3].textContent}`, 20, yPosition);
+                yPosition += 15;
+            }
+        });
+
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('SIP_Comparison_Report.pdf');
+        showNotification('PDF downloaded successfully!', 'success');
     }
 
     // Notification system
@@ -731,6 +1145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const notification = document.createElement('div');
+        notification.className = 'notification';
         notification.style.cssText = `
             position: fixed;
             top: 6rem;
@@ -761,9 +1176,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         notification.innerHTML = `
-            <div class="notification-content">
-                <span class="notification-message">${message}</span>
-                <button class="notification-close">&times;</button>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; margin-left: 1rem;">&times;</button>
             </div>
         `;
 
@@ -779,16 +1194,635 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 300);
             }
         }, 3000);
+    }
 
-        const closeBtn = notification.querySelector('.notification-close');
-        closeBtn.addEventListener('click', () => {
-            notification.style.animation = 'slideOutUp 0.3s ease';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
+    // Investment Analysis
+    let analysisChart = null;
+
+    function initInvestmentAnalysis() {
+        const calculateAnalysisBtn = document.getElementById('calculateAnalysis');
+        const refreshAnalysisBtn = document.getElementById('refreshAnalysis');
+        const chartTypeSelector = document.getElementById('analysisChartType');
+        const downloadPDFBtn = document.getElementById('downloadAnalysisPDF');
+
+        if (calculateAnalysisBtn) {
+            calculateAnalysisBtn.addEventListener('click', function() {
+                calculateInvestmentAnalysis();
+                showNotification('Investment analysis calculated!', 'success');
+            });
+        }
+
+        if (refreshAnalysisBtn) {
+            refreshAnalysisBtn.addEventListener('click', function() {
+                resetAnalysisInputs();
+                showNotification('Investment analysis refreshed!', 'info');
+            });
+        }
+
+        if (chartTypeSelector) {
+            chartTypeSelector.addEventListener('change', function() {
+                if (document.getElementById('analysisResults').style.display !== 'none') {
+                    calculateInvestmentAnalysis();
                 }
-            }, 300);
-        });
+            });
+        }
+
+        if (downloadPDFBtn) {
+            downloadPDFBtn.addEventListener('click', generateAnalysisPDF);
+        }
+    }
+
+    function resetAnalysisInputs() {
+        document.getElementById('analysisMonthlyAmount').value = '';
+        document.getElementById('analysisReturnRate').value = '';
+        document.getElementById('analysisPeriod').value = '';
+        document.getElementById('inflationRate').value = '';
+        document.getElementById('analysisResults').style.display = 'none';
+        
+        if (analysisChart) {
+            analysisChart.destroy();
+            analysisChart = null;
+        }
+    }
+
+    function calculateInvestmentAnalysis() {
+        const monthlyAmount = parseInt(document.getElementById('analysisMonthlyAmount')?.value);
+        const annualReturn = parseFloat(document.getElementById('analysisReturnRate')?.value);
+        const years = parseInt(document.getElementById('analysisPeriod')?.value);
+        const inflationRate = parseFloat(document.getElementById('inflationRate')?.value) || 6;
+
+        if (!monthlyAmount || !annualReturn || !years) {
+            showNotification('Please fill all analysis details', 'error');
+            return;
+        }
+
+        const monthlyReturn = annualReturn / 12 / 100;
+        const totalMonths = years * 12;
+        const totalInvestment = monthlyAmount * totalMonths;
+        const nominalValue = monthlyAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
+        
+        // Real value calculation (inflation adjusted)
+        const realValue = nominalValue / Math.pow(1 + inflationRate / 100, years);
+        const realReturns = realValue - totalInvestment;
+
+        // Update display
+        document.getElementById('nominalValue').textContent = `₹${Math.round(nominalValue).toLocaleString('en-IN')}`;
+        document.getElementById('realValue').textContent = `₹${Math.round(realValue).toLocaleString('en-IN')}`;
+        document.getElementById('analysisTotalInvestment').textContent = `₹${Math.round(totalInvestment).toLocaleString('en-IN')}`;
+        document.getElementById('realReturns').textContent = `₹${Math.round(realReturns).toLocaleString('en-IN')}`;
+
+        document.getElementById('analysisResults').style.display = 'block';
+        updateAnalysisChart(totalInvestment, nominalValue, realValue, years);
+    }
+
+    function updateAnalysisChart(investment, nominalValue, realValue, years) {
+        const chartType = document.getElementById('analysisChartType')?.value || 'line';
+        
+        if (analysisChart) {
+            analysisChart.destroy();
+        }
+
+        const ctx = document.getElementById('analysisChart');
+        if (!ctx) return;
+
+        const yearlyData = [];
+        const monthlyAmount = parseInt(document.getElementById('analysisMonthlyAmount')?.value);
+        const annualReturn = parseFloat(document.getElementById('analysisReturnRate')?.value);
+        const inflationRate = parseFloat(document.getElementById('inflationRate')?.value) || 6;
+
+        for (let year = 1; year <= years; year++) {
+            const yearlyInvestment = monthlyAmount * 12 * year;
+            const yearlyNominal = calculateMaturityForYear(monthlyAmount, annualReturn, year);
+            const yearlyReal = yearlyNominal / Math.pow(1 + inflationRate / 100, year);
+            
+            yearlyData.push({
+                year: year,
+                investment: yearlyInvestment,
+                nominal: yearlyNominal,
+                real: yearlyReal
+            });
+        }
+
+        if (chartType === 'line') {
+            analysisChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Total Investment',
+                            data: yearlyData.map(d => d.investment),
+                            borderColor: 'rgba(49, 65, 127, 1)',
+                            backgroundColor: 'rgba(49, 65, 127, 0.1)',
+                            fill: false
+                        },
+                        {
+                            label: 'Nominal Value',
+                            data: yearlyData.map(d => d.nominal),
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                            fill: false
+                        },
+                        {
+                            label: 'Real Value (Inflation Adjusted)',
+                            data: yearlyData.map(d => d.real),
+                            borderColor: 'rgba(0, 255, 136, 1)',
+                            backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        } else if (chartType === 'bar') {
+            analysisChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Investment', 'Nominal Value', 'Real Value'],
+                    datasets: [{
+                        data: [investment, nominalValue, realValue],
+                        backgroundColor: [
+                            'rgba(49, 65, 127, 0.8)',
+                            'rgba(240, 147, 251, 0.8)',
+                            'rgba(0, 255, 136, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(49, 65, 127, 1)',
+                            'rgba(240, 147, 251, 1)',
+                            'rgba(0, 255, 136, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        } else if (chartType === 'area') {
+            analysisChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Nominal Growth',
+                            data: yearlyData.map(d => d.nominal),
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            backgroundColor: 'rgba(240, 147, 251, 0.3)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Real Growth',
+                            data: yearlyData.map(d => d.real),
+                            borderColor: 'rgba(0, 255, 136, 1)',
+                            backgroundColor: 'rgba(0, 255, 136, 0.3)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Lumpsum vs SIP Comparison
+    let lumpsumChart = null;
+
+    function initLumpsumComparison() {
+        const compareInvestmentBtn = document.getElementById('compareInvestment');
+        const refreshComparisonBtn = document.getElementById('refreshComparison2');
+        const chartTypeSelector = document.getElementById('lumpsumChartType');
+        const downloadPDFBtn = document.getElementById('downloadLumpsumPDF');
+
+        if (compareInvestmentBtn) {
+            compareInvestmentBtn.addEventListener('click', function() {
+                calculateLumpsumComparison();
+                showNotification('Investment comparison calculated!', 'success');
+            });
+        }
+
+        if (refreshComparisonBtn) {
+            refreshComparisonBtn.addEventListener('click', function() {
+                resetLumpsumInputs();
+                showNotification('Comparison refreshed!', 'info');
+            });
+        }
+
+        if (chartTypeSelector) {
+            chartTypeSelector.addEventListener('change', function() {
+                if (document.getElementById('lumpsumResults').style.display !== 'none') {
+                    calculateLumpsumComparison();
+                }
+            });
+        }
+
+        if (downloadPDFBtn) {
+            downloadPDFBtn.addEventListener('click', generateLumpsumPDF);
+        }
+    }
+
+    function resetLumpsumInputs() {
+        document.getElementById('investmentAmount').value = '';
+        document.getElementById('alternativeSIP').value = '';
+        document.getElementById('comparisonReturnRate').value = '';
+        document.getElementById('comparisonPeriod').value = '';
+        document.getElementById('lumpsumResults').style.display = 'none';
+        
+        if (lumpsumChart) {
+            lumpsumChart.destroy();
+            lumpsumChart = null;
+        }
+    }
+
+    function calculateLumpsumComparison() {
+        const lumpsumAmount = parseInt(document.getElementById('investmentAmount')?.value);
+        const sipAmount = parseInt(document.getElementById('alternativeSIP')?.value);
+        const annualReturn = parseFloat(document.getElementById('comparisonReturnRate')?.value);
+        const years = parseInt(document.getElementById('comparisonPeriod')?.value);
+
+        if (!lumpsumAmount || !sipAmount || !annualReturn || !years) {
+            showNotification('Please fill all comparison details', 'error');
+            return;
+        }
+
+        // Lumpsum calculation
+        const lumpsumFinal = lumpsumAmount * Math.pow(1 + annualReturn / 100, years);
+        const lumpsumReturns = lumpsumFinal - lumpsumAmount;
+
+        // SIP calculation
+        const monthlyReturn = annualReturn / 12 / 100;
+        const totalMonths = years * 12;
+        const sipTotalInvested = sipAmount * totalMonths;
+        const sipFinalValue = sipAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
+        const sipTotalReturns = sipFinalValue - sipTotalInvested;
+
+        // Update display
+        document.getElementById('lumpsumInitial').textContent = `₹${lumpsumAmount.toLocaleString('en-IN')}`;
+        document.getElementById('lumpsumFinal').textContent = `₹${Math.round(lumpsumFinal).toLocaleString('en-IN')}`;
+        document.getElementById('lumpsumReturns').textContent = `₹${Math.round(lumpsumReturns).toLocaleString('en-IN')}`;
+        
+        document.getElementById('sipTotalInvested').textContent = `₹${sipTotalInvested.toLocaleString('en-IN')}`;
+        document.getElementById('sipFinalValue').textContent = `₹${Math.round(sipFinalValue).toLocaleString('en-IN')}`;
+        document.getElementById('sipTotalReturns').textContent = `₹${Math.round(sipTotalReturns).toLocaleString('en-IN')}`;
+
+        // Recommendation
+        const recommendation = lumpsumFinal > sipFinalValue 
+            ? `Lumpsum investment generates ₹${Math.round(lumpsumFinal - sipFinalValue).toLocaleString('en-IN')} more wealth`
+            : `SIP investment generates ₹${Math.round(sipFinalValue - lumpsumFinal).toLocaleString('en-IN')} more wealth`;
+        
+        document.getElementById('investmentRecommendation').textContent = recommendation;
+
+        document.getElementById('lumpsumResults').style.display = 'block';
+        updateLumpsumChart(lumpsumAmount, lumpsumFinal, sipTotalInvested, sipFinalValue, years);
+    }
+
+    function updateLumpsumChart(lumpsumInitial, lumpsumFinal, sipInvested, sipFinal, years) {
+        const chartType = document.getElementById('lumpsumChartType')?.value || 'line';
+        
+        if (lumpsumChart) {
+            lumpsumChart.destroy();
+        }
+
+        const ctx = document.getElementById('lumpsumChart');
+        if (!ctx) return;
+
+        if (chartType === 'line') {
+            const yearlyData = [];
+            const annualReturn = parseFloat(document.getElementById('comparisonReturnRate')?.value);
+            const sipAmount = parseInt(document.getElementById('alternativeSIP')?.value);
+
+            for (let year = 1; year <= years; year++) {
+                const lumpsumValue = lumpsumInitial * Math.pow(1 + annualReturn / 100, year);
+                const sipValue = calculateMaturityForYear(sipAmount, annualReturn, year);
+                
+                yearlyData.push({
+                    year: year,
+                    lumpsum: lumpsumValue,
+                    sip: sipValue
+                });
+            }
+
+            lumpsumChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Lumpsum Growth',
+                            data: yearlyData.map(d => d.lumpsum),
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                            fill: false
+                        },
+                        {
+                            label: 'SIP Growth',
+                            data: yearlyData.map(d => d.sip),
+                            borderColor: 'rgba(0, 255, 136, 1)',
+                            backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        } else if (chartType === 'bar') {
+            lumpsumChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Lumpsum Investment', 'SIP Investment'],
+                    datasets: [
+                        {
+                            label: 'Final Value',
+                            data: [lumpsumFinal, sipFinal],
+                            backgroundColor: [
+                                'rgba(240, 147, 251, 0.8)',
+                                'rgba(0, 255, 136, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(240, 147, 251, 1)',
+                                'rgba(0, 255, 136, 1)'
+                            ],
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        } else if (chartType === 'area') {
+            lumpsumChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Initial', 'Final Value'],
+                    datasets: [
+                        {
+                            label: 'Lumpsum',
+                            data: [lumpsumInitial, lumpsumFinal],
+                            borderColor: 'rgba(240, 147, 251, 1)',
+                            backgroundColor: 'rgba(240, 147, 251, 0.3)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'SIP',
+                            data: [0, sipFinal],
+                            borderColor: 'rgba(0, 255, 136, 1)',
+                            backgroundColor: 'rgba(0, 255, 136, 0.3)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(0) + 'L';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Navigation functions for Tools tab
+    window.goToEmiCalculator = function() {
+        window.location.href = 'emi-calculator.html';
+    };
+
+    window.goToGstCalculator = function() {
+        window.location.href = 'gst-calculator.html';
+    };
+
+    window.goToFdCalculator = function() {
+        window.location.href = 'fd-calculator.html';
+    };
+
+    window.goToTaxCalculator = function() {
+        window.location.href = 'tax-calculator.html';
+    };
+
+    // PDF Generation Functions
+    function generateAnalysisPDF() {
+        if (typeof jsPDF === 'undefined') {
+            showNotification('PDF library not loaded', 'error');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 100, 200);
+        doc.text('PRATIX FINANCE', 20, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('SIP Calculator - Investment Analysis', 20, 35);
+
+        // Input Data
+        doc.setFontSize(12);
+        doc.text('Analysis Parameters:', 20, 55);
+        
+        const monthlyAmount = document.getElementById('analysisMonthlyAmount')?.value || '0';
+        const returnRate = document.getElementById('analysisReturnRate')?.value || '0';
+        const period = document.getElementById('analysisPeriod')?.value || '0';
+        const inflationRate = document.getElementById('inflationRate')?.value || '0';
+        
+        doc.text(`Monthly Investment: ₹${parseInt(monthlyAmount).toLocaleString('en-IN')}`, 20, 70);
+        doc.text(`Expected Return: ${returnRate}%`, 20, 85);
+        doc.text(`Investment Period: ${period} years`, 20, 100);
+        doc.text(`Inflation Rate: ${inflationRate}%`, 20, 115);
+
+        // Results
+        doc.text('Analysis Results:', 20, 135);
+        
+        const nominalValue = document.getElementById('nominalValue')?.textContent || '₹0';
+        const realValue = document.getElementById('realValue')?.textContent || '₹0';
+        const totalInvestment = document.getElementById('analysisTotalInvestment')?.textContent || '₹0';
+        const realReturns = document.getElementById('realReturns')?.textContent || '₹0';
+        
+        doc.text(`Nominal Value: ${nominalValue}`, 20, 150);
+        doc.text(`Real Value: ${realValue}`, 20, 165);
+        doc.text(`Total Investment: ${totalInvestment}`, 20, 180);
+        doc.text(`Real Returns: ${realReturns}`, 20, 195);
+
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('SIP_Investment_Analysis_Report.pdf');
+        showNotification('PDF downloaded successfully!', 'success');
+    }
+
+    function generateLumpsumPDF() {
+        if (typeof jsPDF === 'undefined') {
+            showNotification('PDF library not loaded', 'error');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 100, 200);
+        doc.text('PRATIX FINANCE', 20, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('SIP Calculator - Lumpsum vs SIP Comparison', 20, 35);
+
+        // Input Data
+        doc.setFontSize(12);
+        doc.text('Comparison Parameters:', 20, 55);
+        
+        const lumpsumAmount = document.getElementById('investmentAmount')?.value || '0';
+        const sipAmount = document.getElementById('alternativeSIP')?.value || '0';
+        const returnRate = document.getElementById('comparisonReturnRate')?.value || '0';
+        const period = document.getElementById('comparisonPeriod')?.value || '0';
+        
+        doc.text(`Lumpsum Amount: ₹${parseInt(lumpsumAmount).toLocaleString('en-IN')}`, 20, 70);
+        doc.text(`Monthly SIP: ₹${parseInt(sipAmount).toLocaleString('en-IN')}`, 20, 85);
+        doc.text(`Expected Return: ${returnRate}%`, 20, 100);
+        doc.text(`Investment Period: ${period} years`, 20, 115);
+
+        // Results
+        doc.text('Comparison Results:', 20, 135);
+        
+        const lumpsumFinal = document.getElementById('lumpsumFinal')?.textContent || '₹0';
+        const sipFinalValue = document.getElementById('sipFinalValue')?.textContent || '₹0';
+        const recommendation = document.getElementById('investmentRecommendation')?.textContent || '';
+        
+        doc.text(`Lumpsum Final Value: ${lumpsumFinal}`, 20, 150);
+        doc.text(`SIP Final Value: ${sipFinalValue}`, 20, 165);
+        doc.text(`Recommendation: ${recommendation}`, 20, 180);
+
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('SIP_Lumpsum_Comparison_Report.pdf');
+        showNotification('PDF downloaded successfully!', 'success');
     }
 
     // Initialize all components
@@ -796,7 +1830,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initGoalPlanning();
     initSIPComparison();
     initInvestmentAnalysis();
-    initLumpsumVsSIP();
+    initLumpsumComparison();
 
     console.log('SIP Calculator initialized successfully!');
     showNotification('Welcome to SIP Calculator!', 'info');
