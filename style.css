@@ -2650,8 +2650,28 @@ select:focus {
 .amortization-table td, .comparison-table td {
     color: #ffffff;
 }
-
 /* Loan Comparison Styles */
+.loan-input-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.loan-input-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.loan-input-card h4 {
+    color: #00d4ff;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    text-align: center;
+}
+
 .loan-inputs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -2659,19 +2679,37 @@ select:focus {
     margin: 2rem 0;
 }
 
-.loan-input-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 1.5rem;
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-.loan-input-card h3 {
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.comparison-table th {
+    background: rgba(0, 212, 255, 0.2);
+    font-weight: 600;
     color: #00d4ff;
-    margin-bottom: 1rem;
-    text-align: center;
 }
 
+.comparison-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.results-table-container {
+    overflow-x: auto;
+    margin: 1rem 0;
+}
 /* Prepayment Styles */
 .prepayment-note {
     background: rgba(0, 255, 136, 0.1);
@@ -2855,8 +2893,7 @@ select:focus {
 
 .tip-card {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid```python
-rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 1.5rem;
 }
