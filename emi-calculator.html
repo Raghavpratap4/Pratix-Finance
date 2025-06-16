@@ -277,68 +277,81 @@
                     </div>
 
                     <div id="prepaymentResults" style="display: none;">
-                        <h3>Prepayment Impact</h3>
+                        <div class="prepayment-results-container">
+                            <h3 class="section-title">Prepayment Impact Analysis</h3>
 
-                        <div class="results-grid">
-                            <div class="impact-summary">
-                                <div class="impact-card">
-                                    <h3>Interest Saved</h3>
-                                    <p class="impact-value" id="interestSaved">₹0</p>
+                            <!-- Key Benefits Summary -->
+                            <div class="benefits-summary">
+                                <div class="benefit-card primary-benefit">
+                                    <div class="benefit-icon">💰</div>
+                                    <h4>Interest Saved</h4>
+                                    <p class="benefit-amount" id="interestSaved">₹0</p>
                                 </div>
-                                <div class="impact-card">
-                                    <h3 id="benefitLabel">Time Saved</h3>
-                                    <p class="impact-value" id="benefitValue">0 Years 0 Months</p>
+                                <div class="benefit-card secondary-benefit">
+                                    <div class="benefit-icon">⏰</div>
+                                    <h4 id="benefitLabel">Time Saved</h4>
+                                    <p class="benefit-amount" id="benefitValue">0 Years 0 Months</p>
                                 </div>
                             </div>
 
-                            <div class="scenario-comparison">
-                                <div class="scenario-card">
-                                    <h3>Original Loan</h3>
-                                    <div class="scenario-details">
-                                        <div class="detail-item">
-                                            <span>Monthly EMI:</span>
-                                            <span id="originalEMI">₹0</span>
-                                        </div>
-                                        <div class="detail-item">
-                                            <span>Total Interest:</span>
-                                            <span id="originalInterest">₹0</span>
-                                        </div>
-                                        <div class="detail-item">
-                                            <span>Loan Tenure:</span>
-                                            <span id="originalTenure">0 Years</span>
-                                        </div>
+                            <!-- Detailed Comparison Table -->
+                            <div class="comparison-table-wrapper">
+                                <h4>Loan Comparison Details</h4>
+                                <div class="table-responsive">
+                                    <table class="prepayment-comparison-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Original Loan</th>
+                                                <th>With Prepayment</th>
+                                                <th>Difference</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Monthly EMI</strong></td>
+                                                <td id="originalEMI">₹0</td>
+                                                <td id="newEMI">₹0</td>
+                                                <td id="emiDifference">₹0</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Interest</strong></td>
+                                                <td id="originalInterest">₹0</td>
+                                                <td id="newInterest">₹0</td>
+                                                <td id="interestDifference" class="positive-diff">₹0</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Loan Tenure</strong></td>
+                                                <td id="originalTenure">0 Years</td>
+                                                <td id="newTenure">0 Years 0 Months</td>
+                                                <td id="tenureDifference" class="positive-diff">0 Months</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Chart Section -->
+                            <div class="chart-section">
+                                <div class="chart-container">
+                                    <div class="chart-header">
+                                        <h4 class="chart-title">Interest Comparison</h4>
+                                    </div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="prepaymentChart" width="400" height="300"></canvas>
                                     </div>
                                 </div>
-
-                                <div class="scenario-card prepay-scenario">
-                                    <h3>With Prepayment</h3>
-                                    <div class="scenario-details">
-                                        <div class="detail-item">
-                                            <span>Monthly EMI:</span>
-                                            <span id="newEMI">₹0</span>
-                                        </div>
-                                        <div class="detail-item">
-                                            <span>Total Interest:</span>
-                                            <span id="newInterest">₹0</span>
-                                        </div>
-                                        <div class="detail-item">
-                                            <span>Loan Tenure:</span>
-                                            <span id="newTenure">0 Years 0 Months</span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div class="chart-container glow-chart">
-                                <div class="chart-title">Loan Comparison</div>
-                                <div class="chart-wrapper">
-                                    <canvas id="prepaymentChart" width="400" height="300"></canvas>
-                                </div>
-                            </div>
-
-                            <div class="download-section">
+                            <!-- Actions -->
+                            <div class="prepayment-actions">
                                 <button class="feature-btn" id="downloadPrepaymentPDF">
-                                    <span class="btn-text">Download Prepayment PDF</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    <span class="btn-text">Download Prepayment Report</span>
                                 </button>
                             </div>
                         </div>
@@ -495,23 +508,7 @@
                         </div>
                     </div>
 
-                    <div class="quick-actions">
-                        <h3>Quick Actions</h3>
-                        <div class="action-buttons">
-                            <button class="btn btn-secondary" onclick="goToHome()">
-                                <span class="btn-icon">🏠</span>
-                                <span class="btn-text">Back to Home</span>
-                            </button>
-                            <button class="btn btn-secondary" onclick="window.print()">
-                                <span class="btn-icon">🖨️</span>
-                                <span class="btn-text">Print Results</span>
-                            </button>
-                            <button class="btn btn-secondary" onclick="location.reload()">
-                                <span class="btn-icon">🔄</span>
-                                <span class="btn-text">Refresh Calculator</span>
-                            </button>
-                        </div>
-                    </div>
+                    
                 </div>
             </section>
 

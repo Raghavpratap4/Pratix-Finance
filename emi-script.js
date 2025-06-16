@@ -695,7 +695,7 @@ function initPrepaymentCalculator() {
 // Calculate Prepayment Impact
 function calculatePrepaymentImpact() {
     if (!currentEMIData) {
-        showNotification('Please calculate EMI first!', 'error');
+        showNotification('Please calculate EMI first in the main calculator!', 'error');
         return;
     }
     
@@ -704,32 +704,50 @@ function calculatePrepaymentImpact() {
     const prepayOptionRadio = document.querySelector('input[name="prepayOption"]:checked');
     
     if (!prepaymentAmountInput || !prepayAfterMonthsInput || !prepayOptionRadio) {
-        showNotification('Please fill all prepayment fields!', 'error');
+        showNotification('Input fields not found!', 'error');
         return;
     }
     
-    const prepaymentAmount = parseInt(prepaymentAmountInput.value);
-    const prepayAfterMonths = parseInt(prepayAfterMonthsInput.value);
+    const prepaymentAmountValue = prepaymentAmountInput.value.trim();
+    const prepayAfterMonthsValue = prepayAfterMonthsInput.value.trim();
+    
+    if (!prepaymentAmountValue || !prepayAfterMonthsValue) {
+        showNotification('Please fill all required fields: Prepayment Amount and Prepay After Months!', 'error');
+        return;
+    }
+    
+    const prepaymentAmount = parseInt(prepaymentAmountValue);
+    const prepayAfterMonths = parseInt(prepayAfterMonthsValue);
     const prepayOption = prepayOptionRadio.value;
     
-    if (!prepaymentAmount || !prepayAfterMonths) {
-        showNotification('Please fill all prepayment fields!', 'error');
+    if (isNaN(prepaymentAmount) || isNaN(prepayAfterMonths)) {
+        showNotification('Please enter valid numbers only!', 'error');
         return;
     }
     
-    if (prepaymentAmount <= 0 || prepayAfterMonths <= 0) {
-        showNotification('Please enter valid positive values!', 'error');
+    if (prepaymentAmount <= 0) {
+        showNotification('Prepayment amount must be greater than ₹0!', 'error');
+        return;
+    }
+    
+    if (prepayAfterMonths <= 0) {
+        showNotification('Prepay after months must be greater than 0!', 'error');
+        return;
+    }
+    
+    if (prepaymentAmount >= currentEMIData.principal) {
+        showNotification('Prepayment amount cannot be greater than or equal to loan amount!', 'error');
         return;
     }
     
     if (prepayAfterMonths >= (currentEMIData.years * 12)) {
-        showNotification('Prepayment month should be less than loan tenure!', 'error');
+        showNotification(`Prepayment month should be less than loan tenure (${currentEMIData.years * 12} months)!`, 'error');
         return;
     }
     
     const result = calculatePrepaymentScenario(currentEMIData, prepaymentAmount, prepayAfterMonths, prepayOption);
     
-    // Update display
+    // Update main displays
     document.getElementById('interestSaved').textContent = `₹${Math.round(result.interestSaved).toLocaleString('en-IN')}`;
     document.getElementById('originalEMI').textContent = `₹${Math.round(currentEMIData.emi).toLocaleString('en-IN')}`;
     document.getElementById('originalInterest').textContent = `₹${Math.round(currentEMIData.totalInterest).toLocaleString('en-IN')}`;
@@ -738,18 +756,50 @@ function calculatePrepaymentImpact() {
     document.getElementById('newInterest').textContent = `₹${Math.round(result.newTotalInterest).toLocaleString('en-IN')}`;
     document.getElementById('newTenure').textContent = result.newTenureText;
     
+    // Update difference columns
+    const emiDiff = currentEMIData.emi - result.newEMI;
+    const interestDiff = currentEMIData.totalInterest - result.newTotalInterest;
+    const totalMonthsOriginal = currentEMIData.years * 12;
+    const totalMonthsNew = calculateNewTotalMonths(result.newTenureText);
+    const tenureDiffMonths = totalMonthsOriginal - totalMonthsNew;
+    
+    document.getElementById('emiDifference').textContent = `₹${Math.round(Math.abs(emiDiff)).toLocaleString('en-IN')}`;
+    document.getElementById('interestDifference').textContent = `₹${Math.round(interestDiff).toLocaleString('en-IN')}`;
+    document.getElementById('tenureDifference').textContent = `${tenureDiffMonths} Months`;
+    
     if (prepayOption === 'tenure') {
         document.getElementById('benefitLabel').textContent = 'Time Saved';
         document.getElementById('benefitValue').textContent = result.timeSaved;
     } else {
         document.getElementById('benefitLabel').textContent = 'EMI Reduction';
-        document.getElementById('benefitValue').textContent = `₹${Math.round(currentEMIData.emi - result.newEMI).toLocaleString('en-IN')}`;
+        document.getElementById('benefitValue').textContent = `₹${Math.round(emiDiff).toLocaleString('en-IN')}`;
     }
     
     document.getElementById('prepaymentResults').style.display = 'block';
+    document.getElementById('prepaymentResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     
     // Update prepayment chart
     updatePrepaymentChart(currentEMIData, result);
+    
+    // Store prepayment data for PDF generation
+    window.currentPrepaymentData = {
+        original: currentEMIData,
+        prepayment: result,
+        prepaymentAmount: prepaymentAmount,
+        prepayAfterMonths: prepayAfterMonths,
+        prepayOption: prepayOption
+    };
+}
+
+// Helper function to calculate total months from tenure text
+function calculateNewTotalMonths(tenureText) {
+    const yearMatch = tenureText.match(/(\d+)\s*Years?/);
+    const monthMatch = tenureText.match(/(\d+)\s*Months?/);
+    
+    const years = yearMatch ? parseInt(yearMatch[1]) : 0;
+    const months = monthMatch ? parseInt(monthMatch[1]) : 0;
+    
+    return (years * 12) + months;
 }
 
 // Calculate prepayment scenario
@@ -971,12 +1021,13 @@ function generateLoanInputs() {
 
 // Compare loan options
 function compareLoanOptions() {
-    const loanCount = parseInt(document.getElementById('loanCountSelect').value);
-    if (!loanCount) {
+    const loanCountSelect = document.getElementById('loanCountSelect');
+    if (!loanCountSelect || !loanCountSelect.value) {
         showNotification('Please select number of loans to compare!', 'error');
         return;
     }
     
+    const loanCount = parseInt(loanCountSelect.value);
     const loans = [];
     
     for (let i = 1; i <= loanCount; i++) {
@@ -989,26 +1040,57 @@ function compareLoanOptions() {
             return;
         }
         
-        const amount = parseInt(amountElement.value);
-        const rate = parseFloat(rateElement.value);
-        const tenure = parseInt(tenureElement.value);
+        const amountValue = amountElement.value.trim();
+        const rateValue = rateElement.value.trim();
+        const tenureValue = tenureElement.value.trim();
         
-        if (!amount || !rate || !tenure) {
-            showNotification(`Please fill all fields for Loan ${i}!`, 'error');
+        if (!amountValue || !rateValue || !tenureValue) {
+            showNotification(`Please fill all fields for Loan ${i}: Amount, Interest Rate, and Tenure!`, 'error');
             return;
         }
         
-        if (amount <= 0 || rate <= 0 || tenure <= 0) {
-            showNotification(`Please enter valid positive values for Loan ${i}!`, 'error');
+        const amount = parseInt(amountValue);
+        const rate = parseFloat(rateValue);
+        const tenure = parseInt(tenureValue);
+        
+        if (isNaN(amount) || isNaN(rate) || isNaN(tenure)) {
+            showNotification(`Please enter valid numbers for Loan ${i}!`, 'error');
+            return;
+        }
+        
+        if (amount <= 0 || amount > 100000000) {
+            showNotification(`Loan ${i} amount should be between ₹1,000 and ₹10 crores!`, 'error');
+            return;
+        }
+        
+        if (rate <= 0 || rate > 50) {
+            showNotification(`Loan ${i} interest rate should be between 0.1% and 50%!`, 'error');
+            return;
+        }
+        
+        if (tenure <= 0 || tenure > 50) {
+            showNotification(`Loan ${i} tenure should be between 1 and 50 years!`, 'error');
             return;
         }
         
         const monthlyRate = rate / 12 / 100;
         const totalMonths = tenure * 12;
-        const emi = (amount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
-                   (Math.pow(1 + monthlyRate, totalMonths) - 1);
+        
+        let emi;
+        if (monthlyRate === 0) {
+            emi = amount / totalMonths;
+        } else {
+            emi = (amount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
+                  (Math.pow(1 + monthlyRate, totalMonths) - 1);
+        }
+        
         const totalAmount = emi * totalMonths;
         const totalInterest = totalAmount - amount;
+        
+        if (!isFinite(emi) || !isFinite(totalAmount) || !isFinite(totalInterest)) {
+            showNotification(`Error in calculation for Loan ${i}. Please check your inputs!`, 'error');
+            return;
+        }
         
         loans.push({
             name: `Loan ${i}`,
@@ -1039,7 +1121,13 @@ function compareLoanOptions() {
     }
     
     const comparisonResults = document.getElementById('comparisonResults');
-    if (comparisonResults) comparisonResults.style.display = 'block';
+    if (comparisonResults) {
+        comparisonResults.style.display = 'block';
+        comparisonResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    // Store comparison data for PDF generation
+    window.currentComparisonData = loans;
     
     // Update comparison chart
     updateComparisonChart(loans);
@@ -1571,13 +1659,16 @@ function generateAmortizationPDF() {
 }
 
 function generatePrepaymentPDF() {
-    showNotification('Prepayment PDF generation feature coming soon!', 'info');
-}
-
-function generateComparisonPDF() {
+    if (!window.currentPrepaymentData) {
+        showNotification('Please calculate prepayment impact first!', 'error');
+        return;
+    }
+    
     try {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
+        
+        const data = window.currentPrepaymentData;
         
         // Header
         doc.setFontSize(20);
@@ -1586,50 +1677,163 @@ function generateComparisonPDF() {
         
         doc.setFontSize(16);
         doc.setTextColor(0, 0, 0);
-        doc.text('EMI Calculator', 20, 35);
+        doc.text('Prepayment Impact Analysis Report', 20, 35);
         
-        doc.setFontSize(14);
-        doc.text('Loan Comparison Analysis', 20, 50);
+        // Original Loan Details
+        doc.setFontSize(12);
+        doc.setTextColor(0, 100, 0);
+        doc.text('Original Loan Details:', 20, 55);
         
-        // Table data
-        doc.setFontSize(10);
-        doc.text('Loan', 20, 70);
-        doc.text('Monthly EMI', 60, 70);
-        doc.text('Total Interest', 110, 70);
-        doc.text('Total Amount', 160, 70);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Loan Amount: ₹${data.original.principal.toLocaleString('en-IN')}`, 20, 70);
+        doc.text(`Interest Rate: ${data.original.annualRate}%`, 20, 80);
+        doc.text(`Loan Tenure: ${data.original.years} years`, 20, 90);
+        doc.text(`Monthly EMI: ₹${Math.round(data.original.emi).toLocaleString('en-IN')}`, 20, 100);
+        doc.text(`Total Interest: ₹${Math.round(data.original.totalInterest).toLocaleString('en-IN')}`, 20, 110);
         
-        const tbody = document.getElementById('comparisonTableBody');
-        if (tbody) {
-            const rows = tbody.querySelectorAll('tr');
-            let yPosition = 80;
-            
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                if (cells.length >= 4 && yPosition < 250) {
-                    doc.text(cells[0].textContent, 20, yPosition);
-                    doc.text(cells[1].textContent, 60, yPosition);
-                    doc.text(cells[2].textContent, 110, yPosition);
-                    doc.text(cells[3].textContent, 160, yPosition);
-                    yPosition += 10;
-                }
-            });
+        // Prepayment Details
+        doc.setTextColor(0, 100, 0);
+        doc.text('Prepayment Details:', 20, 130);
+        
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Prepayment Amount: ₹${data.prepaymentAmount.toLocaleString('en-IN')}`, 20, 145);
+        doc.text(`Prepayment After: ${data.prepayAfterMonths} months`, 20, 155);
+        doc.text(`Prepayment Option: ${data.prepayOption === 'tenure' ? 'Reduce Tenure' : 'Reduce EMI'}`, 20, 165);
+        
+        // Impact Analysis
+        doc.setTextColor(0, 100, 0);
+        doc.text('Impact Analysis:', 20, 185);
+        
+        doc.setTextColor(0, 0, 0);
+        doc.text(`New Monthly EMI: ₹${Math.round(data.prepayment.newEMI).toLocaleString('en-IN')}`, 20, 200);
+        doc.text(`New Total Interest: ₹${Math.round(data.prepayment.newTotalInterest).toLocaleString('en-IN')}`, 20, 210);
+        doc.text(`New Tenure: ${data.prepayment.newTenureText}`, 20, 220);
+        doc.text(`Interest Saved: ₹${Math.round(data.prepayment.interestSaved).toLocaleString('en-IN')}`, 20, 230);
+        
+        if (data.prepayOption === 'tenure') {
+            doc.text(`Time Saved: ${data.prepayment.timeSaved}`, 20, 240);
+        } else {
+            const emiReduction = data.original.emi - data.prepayment.newEMI;
+            doc.text(`EMI Reduction: ₹${Math.round(emiReduction).toLocaleString('en-IN')}`, 20, 240);
         }
         
         // Chart
-        const canvas = document.getElementById('loanComparisonChart');
+        const canvas = document.getElementById('prepaymentChart');
         if (canvas) {
-            const imgData = canvas.toDataURL('image/png');
-            doc.addImage(imgData, 'PNG', 20, yPosition + 20, 160, 80);
+            try {
+                const imgData = canvas.toDataURL('image/png');
+                doc.addImage(imgData, 'PNG', 20, 250, 160, 80);
+            } catch (chartError) {
+                console.warn('Could not add chart to PDF:', chartError);
+            }
         }
         
         // Footer
         doc.setFontSize(10);
         doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
         
+        doc.save('Prepayment_Impact_Analysis.pdf');
+        showNotification('Prepayment PDF downloaded successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error generating prepayment PDF:', error);
+        showNotification('Error generating PDF. Please try again.', 'error');
+    }
+}
+
+function generateComparisonPDF() {
+    if (!window.currentComparisonData || window.currentComparisonData.length === 0) {
+        showNotification('Please compare loans first!', 'error');
+        return;
+    }
+    
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const loans = window.currentComparisonData;
+        
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 212, 255);
+        doc.text('PRATIX FINANCE', 20, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Loan Comparison Analysis Report', 20, 35);
+        
+        doc.setFontSize(12);
+        doc.text(`Comparison of ${loans.length} Loan Options`, 20, 50);
+        
+        // Table header
+        doc.setFontSize(10);
+        doc.setTextColor(0, 100, 0);
+        doc.text('Loan Option', 20, 70);
+        doc.text('Loan Amount', 60, 70);
+        doc.text('Rate (%)', 100, 70);
+        doc.text('Tenure (Y)', 130, 70);
+        doc.text('Monthly EMI', 160, 70);
+        
+        // Table data
+        doc.setTextColor(0, 0, 0);
+        let yPosition = 80;
+        
+        loans.forEach((loan, index) => {
+            if (yPosition < 220) {
+                doc.text(loan.name, 20, yPosition);
+                doc.text(`₹${Math.round(loan.amount).toLocaleString('en-IN')}`, 60, yPosition);
+                doc.text(`${loan.rate}%`, 100, yPosition);
+                doc.text(`${loan.tenure}`, 130, yPosition);
+                doc.text(`₹${Math.round(loan.emi).toLocaleString('en-IN')}`, 160, yPosition);
+                yPosition += 10;
+            }
+        });
+        
+        // Summary section
+        yPosition += 10;
+        doc.setTextColor(0, 100, 0);
+        doc.text('Total Interest Comparison:', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setTextColor(0, 0, 0);
+        loans.forEach((loan, index) => {
+            if (yPosition < 240) {
+                doc.text(`${loan.name}: ₹${Math.round(loan.totalInterest).toLocaleString('en-IN')}`, 20, yPosition);
+                yPosition += 8;
+            }
+        });
+        
+        // Find best option
+        const bestLoan = loans.reduce((best, current) => 
+            current.totalInterest < best.totalInterest ? current : best
+        );
+        
+        yPosition += 5;
+        doc.setTextColor(0, 150, 0);
+        doc.setFontSize(11);
+        doc.text(`Best Option: ${bestLoan.name} with lowest total interest of ₹${Math.round(bestLoan.totalInterest).toLocaleString('en-IN')}`, 20, yPosition);
+        
+        // Chart
+        const canvas = document.getElementById('loanComparisonChart');
+        if (canvas && yPosition < 200) {
+            try {
+                const imgData = canvas.toDataURL('image/png');
+                doc.addImage(imgData, 'PNG', 20, Math.min(yPosition + 15, 160), 160, 80);
+            } catch (chartError) {
+                console.warn('Could not add chart to PDF:', chartError);
+            }
+        }
+        
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+        
         doc.save('Loan_Comparison_Analysis.pdf');
         showNotification('Comparison PDF downloaded successfully!', 'success');
+        
     } catch (error) {
-        console.error('Error generating PDF:', error);
+        console.error('Error generating comparison PDF:', error);
         showNotification('Error generating PDF. Please try again.', 'error');
     }
 }

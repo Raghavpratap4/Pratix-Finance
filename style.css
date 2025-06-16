@@ -1336,7 +1336,8 @@ body::after {
     .comparison-cards,
     .analysis-cards,
     .impact-summary,
-    .scenario-comparison {
+    .scenario-comparison,
+    .benefits-summary {
         grid-template-columns: 1fr;
         gap: 0.75rem;
     }
@@ -1391,7 +1392,8 @@ body::after {
         padding: 1rem 0.75rem;
     }
 
-    .table-container {
+    .table-container,
+    .table-responsive {
         font-size: 0.85rem;
         overflow-x: auto;
     }
@@ -1465,6 +1467,40 @@ body::after {
     .saved-plans-container {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    /* Prepayment specific mobile styles */
+    .comparison-table-wrapper {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .prepayment-comparison-table {
+        font-size: 0.8rem;
+        min-width: 300px;
+    }
+
+    .prepayment-comparison-table th,
+    .prepayment-comparison-table td {
+        padding: 0.5rem 0.25rem;
+        white-space: nowrap;
+    }
+
+    .benefit-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .benefit-icon {
+        font-size: 2.5rem;
+    }
+
+    .benefit-amount {
+        font-size: 1.5rem;
+    }
+
+    .prepayment-actions .feature-btn {
+        min-width: auto;
+        width: 100%;
     }
 }
 
@@ -1692,6 +1728,188 @@ html {
     font-weight: 800;
     color: var(--neon-green);
     text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+/* Prepayment Results Container */
+.prepayment-results-container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Benefits Summary */
+.benefits-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.benefit-card {
+    background: var(--card-gradient);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-neon);
+}
+
+.benefit-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--neon-cyan);
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.4),
+        0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.primary-benefit {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+}
+
+.secondary-benefit {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+}
+
+.benefit-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
+}
+
+.benefit-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.benefit-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+    margin: 0;
+}
+
+.secondary-benefit .benefit-amount {
+    color: var(--neon-blue);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+}
+
+/* Comparison Table Wrapper */
+.comparison-table-wrapper {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.comparison-table-wrapper h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--neon-blue);
+    text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.prepayment-comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+}
+
+.prepayment-comparison-table th,
+.prepayment-comparison-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    vertical-align: middle;
+}
+
+.prepayment-comparison-table th {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--neon-blue);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+.prepayment-comparison-table td {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.prepayment-comparison-table td:first-child {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.positive-diff {
+    color: var(--neon-green) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+/* Chart Section */
+.chart-section {
+    margin-bottom: 2rem;
+}
+
+.chart-section .chart-container {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 136, 0.2),
+        0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.chart-section .chart-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--neon-green);
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Prepayment Actions */
+.prepayment-actions {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.prepayment-actions .feature-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 250px;
+    justify-content: center;
+}
+
+.prepayment-actions .feature-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.prepayment-actions .feature-btn:hover svg {
+    transform: translateY(-2px);
 }
 
 /* Scenario comparison */
