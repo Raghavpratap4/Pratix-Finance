@@ -19,9 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoanComparison();
     initToolExpansion();
     
-    // Clear inputs and show default tab
-    clearAllInputs();
-    
     // Show first tab by default
     setTimeout(() => {
         switchToTab('emi-calculator');
@@ -70,11 +67,6 @@ function initEMICalculator() {
     const interestRateInput = document.getElementById('interestRateInput');
     const loanTenureInput = document.getElementById('loanTenureInput');
 
-    // Clear inputs on initialization
-    if (loanAmountInput) loanAmountInput.value = '';
-    if (interestRateInput) interestRateInput.value = '';
-    if (loanTenureInput) loanTenureInput.value = '';
-
     // Input validation and real-time updates
     if (loanAmountInput) {
         loanAmountInput.addEventListener('input', function() {
@@ -97,23 +89,24 @@ function initEMICalculator() {
         });
     }
 
-    function hasValidInputs() {
-        const amount = parseFloat(loanAmountInput?.value);
-        const rate = parseFloat(interestRateInput?.value);
-        const tenure = parseInt(loanTenureInput?.value);
-        return amount > 0 && rate > 0 && tenure > 0;
-    }
-
     // Calculate EMI button
     const calculateButton = document.getElementById('calculateEMI');
     if (calculateButton) {
         console.log('Calculate button found, adding event listener');
-        
-        // Remove any existing listeners
-        calculateButton.removeEventListener('click', handleCalculateClick);
-        
-        // Add new listener
-        calculateButton.addEventListener('click', handleCalculateClick);
+        calculateButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('Calculate button clicked');
+            
+            try {
+                calculateEMI();
+                showNotification('EMI calculated successfully!', 'success');
+            } catch (error) {
+                console.error('Error calculating EMI:', error);
+                showNotification('Error calculating EMI. Please check your inputs.', 'error');
+            }
+        });
     } else {
         console.error('Calculate button not found!');
     }
@@ -122,45 +115,23 @@ function initEMICalculator() {
     const refreshButton = document.getElementById('refreshEMI');
     if (refreshButton) {
         console.log('Refresh button found, adding event listener');
-        
-        // Remove any existing listeners
-        refreshButton.removeEventListener('click', handleRefreshClick);
-        
-        // Add new listener
-        refreshButton.addEventListener('click', handleRefreshClick);
+        refreshButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('Refresh button clicked');
+            
+            try {
+                resetEMICalculator();
+                showNotification('Calculator refreshed!', 'info');
+            } catch (error) {
+                console.error('Error refreshing calculator:', error);
+                showNotification('Error refreshing calculator.', 'error');
+            }
+        });
     } else {
         console.error('Refresh button not found!');
     }
-
-function handleCalculateClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    console.log('Calculate button clicked');
-    
-    try {
-        calculateEMI();
-        showNotification('EMI calculated successfully!', 'success');
-    } catch (error) {
-        console.error('Error calculating EMI:', error);
-        showNotification('Error calculating EMI. Please check your inputs.', 'error');
-    }
-}
-
-function handleRefreshClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    console.log('Refresh button clicked');
-    
-    try {
-        resetEMICalculator();
-        showNotification('Calculator refreshed!', 'info');
-    } catch (error) {
-        console.error('Error refreshing calculator:', error);
-        showNotification('Error refreshing calculator.', 'error');
-    }
-}
 
     // Chart type selector
     document.getElementById('chartTypeSelect').addEventListener('change', function() {
@@ -907,26 +878,20 @@ function initTabSwitching() {
     navItems.forEach((item, index) => {
         console.log(`Adding click listener to nav item ${index}:`, item.getAttribute('data-tab'));
         
-        // Remove any existing listeners
-        item.removeEventListener('click', handleTabClick);
-        
-        // Add new listener
-        item.addEventListener('click', handleTabClick);
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Tab clicked:', targetTab);
+            
+            if (targetTab) {
+                switchToTab(targetTab);
+            } else {
+                console.error('No data-tab attribute found on:', this);
+            }
+        });
     });
-}
-
-function handleTabClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const targetTab = this.getAttribute('data-tab');
-    console.log('Tab clicked:', targetTab);
-    
-    if (targetTab) {
-        switchToTab(targetTab);
-    } else {
-        console.error('No data-tab attribute found on:', this);
-    }
 }
 
 // Initialize bottom navigation
@@ -939,11 +904,19 @@ function initBottomNavigation() {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Bottom nav item ${index}:`, targetTab);
         
-        // Remove any existing listeners
-        item.removeEventListener('click', handleTabClick);
-        
-        // Add new listener
-        item.addEventListener('click', handleTabClick);
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Bottom nav tab clicked:', targetTab);
+            
+            if (targetTab) {
+                switchToTab(targetTab);
+            } else {
+                console.error('No data-tab attribute found on:', this);
+            }
+        });
     });
 }
 
