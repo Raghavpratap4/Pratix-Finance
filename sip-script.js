@@ -948,9 +948,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // PDF Generation Functions
     function generateSIPPDF() {
-        // Check if jsPDF is available and load if needed
-        if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
-            loadJSPDFAndGenerate();
+        if (typeof jsPDF === 'undefined') {
+            showNotification('PDF library not loaded', 'error');
             return;
         }
 
@@ -999,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generateGoalPDF() {
-        if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        if (typeof jsPDF === 'undefined') {
             showNotification('PDF library not loaded', 'error');
             return;
         }
@@ -1049,7 +1048,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generateComparisonPDF() {
-        if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        if (typeof jsPDF === 'undefined') {
             showNotification('PDF library not loaded', 'error');
             return;
         }
@@ -1787,39 +1786,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('SIP Calculator initialized successfully!');
     showNotification('Welcome to SIP Calculator!', 'info');
-    
-    // Load jsPDF library
-    loadJSPDFLibrary();
 });
-
-// Function to load jsPDF library
-function loadJSPDFLibrary() {
-    if (typeof window.jspdf === 'undefined') {
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        script.onload = function() {
-            console.log('jsPDF library loaded successfully');
-        };
-        script.onerror = function() {
-            console.error('Failed to load jsPDF library');
-        };
-        document.head.appendChild(script);
-    }
-}
-
-// Function to load jsPDF and then generate PDF
-function loadJSPDFAndGenerate() {
-    if (typeof window.jspdf === 'undefined') {
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        script.onload = function() {
-            generateSIPPDF();
-        };
-        script.onerror = function() {
-            showNotification('Failed to load PDF library', 'error');
-        };
-        document.head.appendChild(script);
-    } else {
-        generateSIPPDF();
-    }
-}
