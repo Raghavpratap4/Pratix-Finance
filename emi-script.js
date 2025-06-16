@@ -69,15 +69,6 @@ function initEMICalculator() {
         loanAmountInput.addEventListener('input', function() {
             // Remove any non-numeric characters except decimal point
             this.value = this.value.replace(/[^0-9.]/g, '');
-            if (this.value && hasValidInputs()) {
-                calculateEMI();
-            }
-        });
-        
-        loanAmountInput.addEventListener('keyup', function() {
-            if (this.value && hasValidInputs()) {
-                calculateEMI();
-            }
         });
     }
 
@@ -85,15 +76,6 @@ function initEMICalculator() {
         interestRateInput.addEventListener('input', function() {
             // Remove any non-numeric characters except decimal point
             this.value = this.value.replace(/[^0-9.]/g, '');
-            if (this.value && hasValidInputs()) {
-                calculateEMI();
-            }
-        });
-        
-        interestRateInput.addEventListener('keyup', function() {
-            if (this.value && hasValidInputs()) {
-                calculateEMI();
-            }
         });
     }
 
@@ -101,15 +83,6 @@ function initEMICalculator() {
         loanTenureInput.addEventListener('input', function() {
             // Remove any non-numeric characters
             this.value = this.value.replace(/[^0-9]/g, '');
-            if (this.value && hasValidInputs()) {
-                calculateEMI();
-            }
-        });
-        
-        loanTenureInput.addEventListener('keyup', function() {
-            if (this.value && hasValidInputs()) {
-                calculateEMI();
-            }
         });
     }
 
@@ -126,9 +99,18 @@ function initEMICalculator() {
         calculateButton.addEventListener('click', function(e) {
             e.preventDefault();
             
-            const loanAmount = document.getElementById('loanAmountInput')?.value;
-            const interestRate = document.getElementById('interestRateInput')?.value;
-            const loanTenure = document.getElementById('loanTenureInput')?.value;
+            const loanAmountInput = document.getElementById('loanAmountInput');
+            const interestRateInput = document.getElementById('interestRateInput');
+            const loanTenureInput = document.getElementById('loanTenureInput');
+            
+            if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
+                showNotification('Input fields not found!', 'error');
+                return;
+            }
+            
+            const loanAmount = loanAmountInput.value;
+            const interestRate = interestRateInput.value;
+            const loanTenure = loanTenureInput.value;
             
             if (!loanAmount || !interestRate || !loanTenure) {
                 showNotification('Please fill all fields!', 'error');
@@ -1245,6 +1227,8 @@ function switchToTab(tabId) {
     // Save active tab
     localStorage.setItem('activeTab', tabId);
 }
+
+window.switchToTab = switchToTab;
 
 // Make functions globally available
 window.goToSipCalculator = goToSipCalculator;
