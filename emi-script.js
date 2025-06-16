@@ -50,21 +50,26 @@ function clearAllInputs() {
 
 // Initialize EMI Calculator
 function initEMICalculator() {
-    const loanAmountSlider = document.getElementById('loanAmountSlider');
     const loanAmountInput = document.getElementById('loanAmountInput');
-    const loanAmountDisplay = document.getElementById('loanAmountDisplay');
-
-    const interestRateSlider = document.getElementById('interestRateSlider');
     const interestRateInput = document.getElementById('interestRateInput');
-    const interestRateDisplay = document.getElementById('interestRateDisplay');
-
-    const loanTenureSlider = document.getElementById('loanTenureSlider');
     const loanTenureInput = document.getElementById('loanTenureInput');
-    const loanTenureDisplay = document.getElementById('loanTenureDisplay');
+
+    // Clear inputs on initialization
+    if (loanAmountInput) loanAmountInput.value = '';
+    if (interestRateInput) interestRateInput.value = '';
+    if (loanTenureInput) loanTenureInput.value = '';
 
     // Input validation and real-time updates
     if (loanAmountInput) {
         loanAmountInput.addEventListener('input', function() {
+            // Remove any non-numeric characters except decimal point
+            this.value = this.value.replace(/[^0-9.]/g, '');
+            if (this.value && hasValidInputs()) {
+                calculateEMI();
+            }
+        });
+        
+        loanAmountInput.addEventListener('keyup', function() {
             if (this.value && hasValidInputs()) {
                 calculateEMI();
             }
@@ -73,6 +78,14 @@ function initEMICalculator() {
 
     if (interestRateInput) {
         interestRateInput.addEventListener('input', function() {
+            // Remove any non-numeric characters except decimal point
+            this.value = this.value.replace(/[^0-9.]/g, '');
+            if (this.value && hasValidInputs()) {
+                calculateEMI();
+            }
+        });
+        
+        interestRateInput.addEventListener('keyup', function() {
             if (this.value && hasValidInputs()) {
                 calculateEMI();
             }
@@ -81,6 +94,14 @@ function initEMICalculator() {
 
     if (loanTenureInput) {
         loanTenureInput.addEventListener('input', function() {
+            // Remove any non-numeric characters
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value && hasValidInputs()) {
+                calculateEMI();
+            }
+        });
+        
+        loanTenureInput.addEventListener('keyup', function() {
             if (this.value && hasValidInputs()) {
                 calculateEMI();
             }
@@ -88,7 +109,7 @@ function initEMICalculator() {
     }
 
     function hasValidInputs() {
-        const amount = parseInt(loanAmountInput?.value);
+        const amount = parseFloat(loanAmountInput?.value);
         const rate = parseFloat(interestRateInput?.value);
         const tenure = parseInt(loanTenureInput?.value);
         return amount > 0 && rate > 0 && tenure > 0;
@@ -1129,40 +1150,51 @@ function showNotification(message, type = 'info') {
 }
 
 // Navigation functions for tool cards
-    function goToSipCalculator() {
-        window.location.href = 'sip-calculator.html';
-    }
+function goToSipCalculator() {
+    window.location.href = 'sip-calculator.html';
+}
 
-    function goToEmiCalculator() {
-        // Already on EMI calculator, switch to main tab
-        switchToTab('emi-calculator');
-    }
+function goToEmiCalculator() {
+    // Already on EMI calculator, switch to main tab
+    switchToTab('emi-calculator');
+}
 
-    function goToGstCalculator() {
-        window.location.href = 'gst-calculator.html';
-    }
+function goToGstCalculator() {
+    window.location.href = 'gst-calculator.html';
+}
 
-    function goToTaxCalculator() {
-        window.location.href = 'tax-calculator.html';
-    }
+function goToTaxCalculator() {
+    window.location.href = 'tax-calculator.html';
+}
 
-    function goToFdCalculator() {
-        window.location.href = 'fd-calculator.html';
-    }
+function goToFdCalculator() {
+    window.location.href = 'fd-calculator.html';
+}
 
-    function goToHome() {
-        window.location.href = 'index.html';
-    }
+function goToHome() {
+    window.location.href = 'index.html';
+}
 
-    function switchToTab(tabId) {
-        // Remove active class from all nav items and tab contents
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+function switchToTab(tabId) {
+    // Remove active class from all nav items and tab contents
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
 
-        // Add active class to target tab and nav item
-        document.getElementById(tabId).classList.add('active');
-        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-    }
+    // Add active class to target tab and nav item
+    const targetTab = document.getElementById(tabId);
+    const targetNav = document.querySelector(`[data-tab="${tabId}"]`);
+    
+    if (targetTab) targetTab.classList.add('active');
+    if (targetNav) targetNav.classList.add('active');
+}
+
+// Make functions globally available
+window.goToSipCalculator = goToSipCalculator;
+window.goToEmiCalculator = goToEmiCalculator;
+window.goToGstCalculator = goToGstCalculator;
+window.goToTaxCalculator = goToTaxCalculator;
+window.goToFdCalculator = goToFdCalculator;
+window.goToHome = goToHome;
 
     // Initialize all components
     if (document.getElementById('emi-calculator')) {
