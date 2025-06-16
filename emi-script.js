@@ -953,28 +953,31 @@ function initLoanComparison() {
         loanCountSelect.addEventListener('change', function() {
             generateLoanInputs();
         });
-        
-        // Generate initial loan inputs
-        generateLoanInputs();
     }
     
     if (compareLoansBtn) {
-        compareLoansBtn.addEventListener('click', function() {
-            compareLoanOptions();
-            showNotification('Loans compared successfully!', 'success');
+        compareLoansBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Compare loans button clicked');
+            try {
+                compareLoanOptions();
+                showNotification('Loans compared successfully!', 'success');
+            } catch (error) {
+                console.error('Error comparing loans:', error);
+                showNotification('Error comparing loans. Please check your inputs.', 'error');
+            }
         });
     }
     
     if (refreshComparisonBtn) {
-        refreshComparisonBtn.addEventListener('click', function() {
+        refreshComparisonBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             generateLoanInputs();
             const comparisonResults = document.getElementById('comparisonResults');
             if (comparisonResults) comparisonResults.style.display = 'none';
             showNotification('Comparison refreshed!', 'info');
         });
     }
-    
-    generateLoanInputs();
 }
 
 // Generate loan input forms
@@ -1001,7 +1004,7 @@ function generateLoanInputs() {
                 <label>Loan Amount</label>
                 <div class="input-wrapper">
                     <span class="currency">₹</span>
-                    <input type="number" id="loan${i}Amount" placeholder="Enter loan amount" class="calc-input" min="1000" step="1000">
+                    <input type="number" id="loan${i}Amount" placeholder="Enter loan amount" class="calc-input" step="1000">
                 </div>
             </div>
             <div class="input-group">
@@ -1014,6 +1017,25 @@ function generateLoanInputs() {
             </div>
         `;
         container.appendChild(loanCard);
+        
+        // Add input validation for amount field (allow any positive number)
+        const amountInput = document.getElementById(`loan${i}Amount`);
+        if (amountInput) {
+            amountInput.addEventListener('input', function() {
+                // Remove any non-numeric characters except decimal point
+                this.value = this.value.replace(/[^0-9.]/g, '');
+                
+                // Ensure only one decimal point
+                if (this.value.split('.').length > 2) {
+                    this.value = this.value.substring(0, this.value.lastIndexOf('.'));
+                }
+                
+                // Remove any leading zeros except for decimal numbers
+                if (this.value.length > 1 && this.value[0] === '0' && this.value[1] !== '.') {
+                    this.value = this.value.substring(1);
+                }
+            });
+        }
     }
     
     console.log('Generated', container.children.length, 'loan input cards');
@@ -1058,8 +1080,8 @@ function compareLoanOptions() {
             return;
         }
         
-        if (amount <= 0 || amount > 100000000) {
-            showNotification(`Loan ${i} amount should be between ₹1,000 and ₹10 crores!`, 'error');
+        if (amount <= 0) {
+            showNotification(`Loan ${i} amount should be greater than ₹0!`, 'error');
             return;
         }
         
