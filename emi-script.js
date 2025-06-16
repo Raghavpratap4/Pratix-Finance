@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoanComparison();
     initBottomNavigation();
     initTabSwitching();
+    initToolExpansion();
     clearAllInputs();
+    
+    // Show first tab by default
+    switchToTab('emi-calculator');
 });
 
 // Clear all inputs on page load
@@ -131,6 +135,11 @@ function initEMICalculator() {
                 return;
             }
             
+            if (parseFloat(loanAmount) <= 0 || parseFloat(interestRate) <= 0 || parseInt(loanTenure) <= 0) {
+                showNotification('Please enter valid positive values!', 'error');
+                return;
+            }
+            
             calculateEMI();
             showNotification('EMI calculated successfully!', 'success');
         });
@@ -141,7 +150,7 @@ function initEMICalculator() {
     if (refreshButton) {
         refreshButton.addEventListener('click', function(e) {
             e.preventDefault();
-            clearAllInputs();
+            resetEMICalculator();
             showNotification('Calculator refreshed!', 'info');
         });
     }
@@ -161,12 +170,21 @@ function initEMICalculator() {
 
 // Calculate EMI
 function calculateEMI() {
-    const principal = parseInt(document.getElementById('loanAmountInput').value);
-    const annualRate = parseFloat(document.getElementById('interestRateInput').value);
-    const years = parseInt(document.getElementById('loanTenureInput').value);
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const loanTenureInput = document.getElementById('loanTenureInput');
+    
+    if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
+        showNotification('Input fields not found!', 'error');
+        return;
+    }
+    
+    const principal = parseInt(loanAmountInput.value);
+    const annualRate = parseFloat(interestRateInput.value);
+    const years = parseInt(loanTenureInput.value);
 
-    if (!principal || !annualRate || !years) {
-        showNotification('Please fill all fields!', 'error');
+    if (!principal || !annualRate || !years || principal <= 0 || annualRate <= 0 || years <= 0) {
+        showNotification('Please fill all fields with valid values!', 'error');
         return;
     }
 
@@ -872,7 +890,9 @@ function initTabSwitching() {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const targetTab = this.getAttribute('data-tab');
-            switchToTab(targetTab);
+            if (targetTab) {
+                switchToTab(targetTab);
+            }
         });
     });
 }
@@ -1198,30 +1218,32 @@ function goToHome() {
 
 function switchToTab(tabId) {
     // Remove active class from all nav items and tab contents
-    const navItems = document.querySelectorAll('.nav-item');
+    const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
     const tabContents = document.querySelectorAll('.tab-content');
     
     navItems.forEach(nav => nav.classList.remove('active'));
-    tabContents.forEach(tab => tab.classList.remove('active'));
+    tabContents.forEach(tab => {
+        tab.classList.remove('active');
+        tab.style.display = 'none';
+    });
 
     // Add active class to target tab and nav item
     const targetTab = document.getElementById(tabId);
-    const targetNav = document.querySelector(`[data-tab="${tabId}"]`);
+    const targetNavs = document.querySelectorAll(`[data-tab="${tabId}"]`);
     
     if (targetTab) {
         targetTab.classList.add('active');
         targetTab.style.display = 'block';
     }
-    if (targetNav) {
-        targetNav.classList.add('active');
-    }
     
-    // Hide all other tabs
-    tabContents.forEach(tab => {
-        if (tab.id !== tabId) {
-            tab.style.display = 'none';
+    targetNavs.forEach(nav => {
+        if (nav) {
+            nav.classList.add('active');
         }
     });
+    
+    // Save active tab
+    localStorage.setItem('activeTab', tabId);
 }
 
 // Make functions globally available
@@ -1232,22 +1254,80 @@ window.goToTaxCalculator = goToTaxCalculator;
 window.goToFdCalculator = goToFdCalculator;
 window.goToHome = goToHome;
 
-    // Initialize all components
-    if (document.getElementById('emi-calculator')) {
-        initEMICalculator();
-        initPrepaymentCalculator();
-        initLoanComparison();
-        initTools();
-        initSmartFeatures();
-        initSettings();
+    // Reset EMI Calculator function
+function resetEMICalculator() {
+    // Clear inputs
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const loanTenureInput = document.getElementById('loanTenureInput');
+    
+    if (loanAmountInput) loanAmountInput.value = '';
+    if (interestRateInput) interestRateInput.value = '';
+    if (loanTenureInput) loanTenureInput.value = '';
+
+    // Clear prepayment inputs
+    const prepaymentAmount = document.getElementById('prepaymentAmount');
+    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
+    
+    if (prepaymentAmount) prepaymentAmount.value = '';
+    if (prepayAfterMonths) prepayAfterMonths.value = '';
+
+    // Hide results and charts
+    const resultCard = document.getElementById('resultCard');
+    const chartContainer = document.getElementById('chartContainer');
+    const chartControls = document.getElementById('chartControls');
+    const prepaymentResults = document.getElementById('prepaymentResults');
+    const comparisonResults = document.getElementById('comparisonResults');
+    
+    if (resultCard) resultCard.style.display = 'none';
+    if (chartContainer) chartContainer.style.display = 'none';
+    if (chartControls) chartControls.style.display = 'none';
+    if (prepaymentResults) prepaymentResults.style.display = 'none';
+    if (comparisonResults) comparisonResults.style.display = 'none';
+
+    // Reset charts
+    if (emiChart) {
+        emiChart.destroy();
+        emiChart = null;
+    }
+    if (prepaymentChart) {
+        prepaymentChart.destroy();
+        prepaymentChart = null;
+    }
+    if (comparisonChart) {
+        comparisonChart.destroy();
+        comparisonChart = null;
     }
 
-    // Make functions globally available
-    window.goToSipCalculator = goToSipCalculator;
-    window.goToEmiCalculator = goToEmiCalculator;
-    window.goToGstCalculator = goToGstCalculator;
-    window.goToTaxCalculator = goToTaxCalculator;
-    window.goToFdCalculator = goToFdCalculator;
+    // Reset global data
+    currentEMIData = null;
+    
+    // Regenerate loan inputs
+    generateLoanInputs();
+}
+
+// Tool expansion functionality
+function initToolExpansion() {
+    const toolHeaders = document.querySelectorAll('.tool-header');
+    
+    toolHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const toolId = this.getAttribute('data-tool');
+            const content = document.getElementById(`${toolId}-content`);
+            const expandIcon = this.querySelector('.expand-icon');
+            
+            if (content) {
+                if (content.style.display === 'none' || content.style.display === '') {
+                    content.style.display = 'block';
+                    if (expandIcon) expandIcon.textContent = '▲';
+                } else {
+                    content.style.display = 'none';
+                    if (expandIcon) expandIcon.textContent = '▼';
+                }
+            }
+        });
+    });
+}
 // Tools tab initialization
 function initTools() {
     // Add any initialization code for the Tools tab here
