@@ -9,7 +9,7 @@
     <meta name="description" content="Pratix Finance offers powerful EMI and income tax calculators with advanced features and PDF support." />
     <meta name="keywords" content="EMI calculator, income tax calculator, Pratix Finance, loan interest, gst, sip calculator, raghav pratap" />
     <meta name="author" content="Raghav Pratap" content="width=device-width, initial-scale=1.0">
-    <title>FinCalc Pro - Financial Calculator</title>
+    <title>EMI Calculator - Pratix Finance</title>
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#31417F">
@@ -27,11 +27,11 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <meta name="robots" content="index, follow" />
-    <!-- Make sure this matches the correct file -->
-     <link rel="canonical" href="https://pratix-finance.vercel.app/emi-calculator.html" />
+    <link rel="canonical" href="https://pratix-finance.vercel.app/emi-calculator.html" />
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NSSQW00JS"></script>
     <script>
@@ -46,12 +46,10 @@
         <!-- Header -->
         <header class="app-header">
             <div class="header-content">
-                <button class="icon-btn" onclick="goBack()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="m15 18-6-6 6-6"/>
-                    </svg>
-                </button>
-                <h1 class="app-title">EMI Calculator</h1>
+                <div class="logo-section">
+                    <img src="logo.png" alt="Pratix Finance" class="app-logo">
+                    <h1 class="app-title">PRATIX FINANCE</h1>
+                </div>
                 <button class="icon-btn" onclick="goToHome()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -70,53 +68,67 @@
                     <div class="calculator-form">
                         <div class="input-group">
                             <label>Loan Amount</label>
-                            <div class="slider-display" id="loanAmountDisplay">₹10,00,000</div>
-                            <input type="range" id="loanAmountSlider" min="100000" max="10000000" step="100000" value="1000000" class="slider">
+                            <div class="slider-display" id="loanAmountDisplay">₹0</div>
+                            <input type="range" id="loanAmountSlider" min="100000" max="10000000" step="100000" value="" class="slider">
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="loanAmountInput" placeholder="10,00,000" class="calc-input">
+                                <input type="number" id="loanAmountInput" placeholder="Enter loan amount" class="calc-input">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Interest Rate (%)</label>
-                            <div class="slider-display" id="interestRateDisplay">8.5%</div>
-                            <input type="range" id="interestRateSlider" min="1" max="20" step="0.1" value="8.5" class="slider">
-                            <input type="number" id="interestRateInput" placeholder="8.5" class="calc-input" step="0.01">
+                            <div class="slider-display" id="interestRateDisplay">0%</div>
+                            <input type="range" id="interestRateSlider" min="1" max="20" step="0.1" value="" class="slider">
+                            <input type="number" id="interestRateInput" placeholder="Enter interest rate" class="calc-input" step="0.01">
                         </div>
                         <div class="input-group">
                             <label>Loan Tenure (Years)</label>
-                            <div class="slider-display" id="loanTenureDisplay">20 Years</div>
-                            <input type="range" id="loanTenureSlider" min="1" max="40" step="1" value="20" class="slider">
-                            <input type="number" id="loanTenureInput" placeholder="20" class="calc-input">
+                            <div class="slider-display" id="loanTenureDisplay">0 Years</div>
+                            <input type="range" id="loanTenureSlider" min="1" max="40" step="1" value="" class="slider">
+                            <input type="number" id="loanTenureInput" placeholder="Enter tenure in years" class="calc-input">
                         </div>
                         <button class="calculate-btn" id="calculateEMI">
                             <span class="btn-text">Calculate EMI</span>
                         </button>
                         <button class="refresh-btn" id="refreshEMI">
-                            <span class="btn-text">Refresh</span>
+                            <span class="btn-text">Reset</span>
                         </button>
                     </div>
-                    <div class="result-card">
+                    <div class="result-card" id="resultCard" style="display: none;">
                         <div class="result-item">
                             <span class="result-label">Monthly EMI</span>
-                            <span class="result-value" id="monthlyEMI">₹83,676</span>
+                            <span class="result-value" id="monthlyEMI">₹0</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">Total Interest</span>
-                            <span class="result-value" id="totalInterest">₹80,82,240</span>
+                            <span class="result-value" id="totalInterest">₹0</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">Total Amount</span>
-                            <span class="result-value" id="totalAmount">₹2,00,82,240</span>
+                            <span class="result-value" id="totalAmount">₹0</span>
                         </div>
                     </div>
 
-                    <div class="chart-container glow-chart">
+                    <div class="chart-controls" id="chartControls" style="display: none;">
+                        <div class="input-group">
+                            <label>Chart Type</label>
+                            <select id="chartTypeSelect" class="calc-input">
+                                <option value="pie">Pie Chart</option>
+                                <option value="bar">Bar Chart</option>
+                                <option value="line">Line Chart</option>
+                            </select>
+                        </div>
+                        <button class="feature-btn" id="downloadPDF">
+                            <span class="btn-text">Download PDF Report</span>
+                        </button>
+                    </div>
+
+                    <div class="chart-container glow-chart" id="chartContainer" style="display: none;">
                         <div class="chart-title">EMI Breakdown</div>
                         <div class="chart-wrapper">
                             <canvas id="emiChart" width="300" height="300"></canvas>
                         </div>
-                        <div class="chart-legend">
+                        <div class="chart-legend" id="chartLegend">
                             <div class="legend-item">
                                 <div class="legend-color principal"></div>
                                 <span class="legend-text">Principal Amount</span>
@@ -133,7 +145,8 @@
             <!-- Amortization Table Tab -->
             <section id="amortization-table" class="tab-content">
                 <div class="glass-card">
-                    <h2 class="section-title">Amortization Schedule</h2>
+                    <h2 class="section-title">EMI Calculator</h2>
+                    <h3 class="sub-title">Amortization Schedule</h3>
                     <div class="table-container">
                         <table class="amortization-table">
                             <thead>
@@ -144,46 +157,33 @@
                                     <th>Balance</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>₹20,440</td>
-                                    <td>₹80,240</td>
-                                    <td>₹19,79,560</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>₹22,080</td>
-                                    <td>₹78,600</td>
-                                    <td>₹19,57,480</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>₹23,846</td>
-                                    <td>₹76,834</td>
-                                    <td>₹19,33,634</td>
-                                </tr>
+                            <tbody id="amortizationTableBody">
+                                <!-- Dynamic content will be inserted here -->
                             </tbody>
                         </table>
                     </div>
+                    <button class="feature-btn" id="downloadAmortizationPDF">
+                        <span class="btn-text">Download Amortization PDF</span>
+                    </button>
                 </div>
             </section>
 
             <!-- Prepayment Impact Tab -->
             <section id="prepayment-impact" class="tab-content">
                 <div class="glass-card">
-                    <h2 class="section-title">Prepayment Impact</h2>
+                    <h2 class="section-title">EMI Calculator</h2>
+                    <h3 class="sub-title">Prepayment Impact</h3>
                     <div class="prepayment-form">
                         <div class="input-group">
                             <label>Prepayment Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="prepaymentAmount" placeholder="2,00,000" class="calc-input">
+                                <input type="number" id="prepaymentAmount" placeholder="Enter prepayment amount" class="calc-input">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Prepay After (Months)</label>
-                            <input type="number" id="prepayAfterMonths" placeholder="12" class="calc-input">
+                            <input type="number" id="prepayAfterMonths" placeholder="Enter number of months" class="calc-input">
                         </div>
                         <div class="input-group">
                             <label>Prepayment Option</label>
@@ -200,7 +200,7 @@
                         </div>
                         <button class="calculate-btn" id="calculatePrepayment">Calculate Impact</button>
                         <button class="refresh-btn" id="refreshPrepayment">
-                            <span class="btn-text">Refresh</span>
+                            <span class="btn-text">Reset</span>
                         </button>
                     </div>
 
@@ -208,11 +208,11 @@
                         <div class="impact-summary">
                             <div class="impact-card">
                                 <h3>Interest Saved</h3>
-                                <p class="impact-value" id="interestSaved">₹15,42,000</p>
+                                <p class="impact-value" id="interestSaved">₹0</p>
                             </div>
                             <div class="impact-card">
                                 <h3 id="benefitLabel">Time Saved</h3>
-                                <p class="impact-value" id="benefitValue">3 Years 2 Months</p>
+                                <p class="impact-value" id="benefitValue">0 Years 0 Months</p>
                             </div>
                         </div>
 
@@ -222,15 +222,15 @@
                                 <div class="scenario-details">
                                     <div class="detail-item">
                                         <span>Monthly EMI:</span>
-                                        <span id="originalEMI">₹83,676</span>
+                                        <span id="originalEMI">₹0</span>
                                     </div>
                                     <div class="detail-item">
                                         <span>Total Interest:</span>
-                                        <span id="originalInterest">₹80,82,240</span>
+                                        <span id="originalInterest">₹0</span>
                                     </div>
                                     <div class="detail-item">
                                         <span>Loan Tenure:</span>
-                                        <span id="originalTenure">20 Years</span>
+                                        <span id="originalTenure">0 Years</span>
                                     </div>
                                 </div>
                             </div>
@@ -240,15 +240,15 @@
                                 <div class="scenario-details">
                                     <div class="detail-item">
                                         <span>Monthly EMI:</span>
-                                        <span id="newEMI">₹83,676</span>
+                                        <span id="newEMI">₹0</span>
                                     </div>
                                     <div class="detail-item">
                                         <span>Total Interest:</span>
-                                        <span id="newInterest">₹65,40,240</span>
+                                        <span id="newInterest">₹0</span>
                                     </div>
                                     <div class="detail-item">
                                         <span>Loan Tenure:</span>
-                                        <span id="newTenure">16 Years 10 Months</span>
+                                        <span id="newTenure">0 Years 0 Months</span>
                                     </div>
                                 </div>
                             </div>
@@ -260,6 +260,10 @@
                                 <canvas id="prepaymentChart" width="400" height="300"></canvas>
                             </div>
                         </div>
+
+                        <button class="feature-btn" id="downloadPrepaymentPDF">
+                            <span class="btn-text">Download Prepayment PDF</span>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -267,74 +271,26 @@
             <!-- Loan Comparison Tab -->
             <section id="loan-comparison" class="tab-content">
                 <div class="glass-card">
-                    <h2 class="section-title">Loan Comparison</h2>
+                    <h2 class="section-title">EMI Calculator</h2>
+                    <h3 class="sub-title">Loan Comparison</h3>
+
+                    <div class="input-group">
+                        <label>Number of Loans to Compare</label>
+                        <select id="loanCountSelect" class="calc-input">
+                            <option value="2">2 Loans</option>
+                            <option value="3">3 Loans</option>
+                            <option value="4">4 Loans</option>
+                        </select>
+                    </div>
 
                     <!-- Loan Input Forms -->
-                    <div class="loan-inputs-grid">
-                        <!-- Loan 1 -->
-                        <div class="loan-input-card">
-                            <h3>Loan Option 1</h3>
-                            <div class="input-group">
-                                <label>Loan Amount</label>
-                                <div class="input-wrapper">
-                                    <span class="currency">₹</span>
-                                    <input type="number" id="loan1Amount" placeholder="10,00,000" class="calc-input">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label>Interest Rate (%)</label>
-                                <input type="number" id="loan1Rate" placeholder="8.5" class="calc-input" step="0.01">
-                            </div>
-                            <div class="input-group">
-                                <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loan1Tenure" placeholder="20" class="calc-input">
-                            </div>
-                        </div>
-
-                        <!-- Loan 2 -->
-                        <div class="loan-input-card">
-                            <h3>Loan Option 2</h3>
-                            <div class="input-group">
-                                <label>Loan Amount</label>
-                                <div class="input-wrapper">
-                                    <span class="currency">₹</span>
-                                    <input type="number" id="loan2Amount" placeholder="10,00,000" class="calc-input">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label>Interest Rate (%)</label>
-                                <input type="number" id="loan2Rate" placeholder="8.75" class="calc-input" step="0.01">
-                            </div>
-                            <div class="input-group">
-                                <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loan2Tenure" placeholder="20" class="calc-input">
-                            </div>
-                        </div>
-
-                        <!-- Loan 3 -->
-                        <div class="loan-input-card">
-                            <h3>Loan Option 3</h3>
-                            <div class="input-group">
-                                <label>Loan Amount</label>
-                                <div class="input-wrapper">
-                                    <span class="currency">₹</span>
-                                    <input type="number" id="loan3Amount" placeholder="10,00,000" class="calc-input">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label>Interest Rate (%)</label>
-                                <input type="number" id="loan3Rate" placeholder="8.25" class="calc-input" step="0.01">
-                            </div>
-                            <div class="input-group">
-                                <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loan3Tenure" placeholder="20" class="calc-input">
-                            </div>
-                        </div>
+                    <div class="loan-inputs-grid" id="loanInputsGrid">
+                        <!-- Dynamic loan input cards will be generated here -->
                     </div>
 
                     <button class="calculate-btn" id="compareLoans">Compare Loans</button>
                     <button class="refresh-btn" id="refreshComparison">
-                        <span class="btn-text">Refresh</span>
+                        <span class="btn-text">Reset</span>
                     </button>
 
                     <!-- Comparison Results -->
@@ -356,6 +312,15 @@
                             </table>
                         </div>
 
+                        <div class="input-group">
+                            <label>Chart Type</label>
+                            <select id="comparisonChartType" class="calc-input">
+                                <option value="bar">Bar Chart</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="line">Line Chart</option>
+                            </select>
+                        </div>
+
                         <!-- Bar Chart -->
                         <div class="chart-container glow-chart">
                             <div class="chart-title">Loan Comparison Analysis</div>
@@ -363,6 +328,10 @@
                                 <canvas id="loanComparisonChart" width="400" height="300"></canvas>
                             </div>
                         </div>
+
+                        <button class="feature-btn" id="downloadComparisonPDF">
+                            <span class="btn-text">Download Comparison PDF</span>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -581,24 +550,29 @@
                         </div>
                     </div>
 
-                    <!-- Original Tools Grid -->
+                    <!-- Calculator Tools Grid -->
                     <div class="tools-grid">
-                        <div class="tool-card" onclick="goToSIP()">
+                        <div class="tool-card" onclick="goToSipCalculator()">
                             <div class="tool-icon">📊</div>
                             <h3>SIP Calculator</h3>
                             <p>Calculate your mutual fund returns</p>
                         </div>
-                        <div class="tool-card" onclick="goToGST()">
+                        <div class="tool-card" onclick="goToEmiCalculator()">
+                            <div class="tool-icon">🏠</div>
+                            <h3>EMI Calculator</h3>
+                            <p>Calculate loan EMIs and schedules</p>
+                        </div>
+                        <div class="tool-card" onclick="goToGstCalculator()">
                             <div class="tool-icon">💼</div>
                             <h3>GST Calculator</h3>
                             <p>Calculate GST for your business</p>
                         </div>
-                        <div class="tool-card" onclick="goToTax()">
+                        <div class="tool-card" onclick="goToTaxCalculator()">
                             <div class="tool-icon">💰</div>
-                            <h3>Tax Calculator</h3>
+                            <h3>Income Tax Calculator</h3>
                             <p>Calculate your tax liability</p>
                         </div>
-                        <div class="tool-card" onclick="goToFD()">
+                        <div class="tool-card" onclick="goToFdCalculator()">
                             <div class="tool-icon">🏦</div>
                             <h3>FD Calculator</h3>
                             <p>Calculate fixed deposit returns</p>
@@ -618,27 +592,39 @@
                         <div class="plan-management-grid">
                             <div class="plan-card">
                                 <div class="plan-icon">💾</div>
-                                <h4>Save Loan Plan</h4>
-                                <p>Save your current loan calculation to browser storage</p>
-                                <button class="feature-btn" id="saveLoanPlan">Save Plan</button>
+                                <h4>Save Plan</h4>
+                                <p>Save your current EMI calculation to browser storage</p>
+                                <button class="feature-btn" id="saveLoanPlan">Save Current Plan</button>
                             </div>
                             <div class="plan-card">
                                 <div class="plan-icon">📤</div>
                                 <h4>Share Plan</h4>
-                                <p>Generate a shareable link or text for your loan plan</p>
+                                <p>Share current or saved plans via link or WhatsApp</p>
                                 <button class="feature-btn" id="shareLoanPlan">Share Plan</button>
                             </div>
                             <div class="plan-card">
-                                <div class="plan-icon">📄</div>
-                                <h4>Download PDF</h4>
-                                <p>Download your loan plan as a professional PDF report</p>
-                                <button class="feature-btn" id="downloadPDF">Download PDF</button>
+                                <div class="plan-icon">⏰</div>
+                                <h4>Reminder Feature</h4>
+                                <p>Set EMI reminders with browser notifications</p>
+                                <button class="feature-btn" id="addEMIReminder">Set Reminder</button>
                             </div>
                             <div class="plan-card">
-                                <div class="plan-icon">⏰</div>
-                                <h4>EMI Reminder</h4>
-                                <p>Set up monthly EMI payment reminders</p>
-                                <button class="feature-btn" id="addEMIReminder">Add Reminder</button>
+                                <div class="plan-icon">🤖</div>
+                                <h4>AI Loan Assistance</h4>
+                                <p>Get smart loan optimization suggestions</p>
+                                <button class="feature-btn" id="aiAssistance">Get AI Tips</button>
+                            </div>
+                            <div class="plan-card">
+                                <div class="plan-icon">🔔</div>
+                                <h4>Smart Notification</h4>
+                                <p>Automatic notifications for EMI dues and savings</p>
+                                <button class="feature-btn" id="smartNotifications">Enable Alerts</button>
+                            </div>
+                            <div class="plan-card">
+                                <div class="plan-icon">📊</div>
+                                <h4>Analytics Dashboard</h4>
+                                <p>View charts and statistics of saved plans</p>
+                                <button class="feature-btn" id="analyticsBoard">View Analytics</button>
                             </div>
                         </div>
                     </div>
@@ -766,17 +752,17 @@
                         <div class="settings-list">
                             <div class="setting-item">
                                 <div class="setting-info">
-                                    <h4>Notifications</h4>
-                                    <p>Manage your notification preferences</p>
+                                    <h4>Notification Settings</h4>
+                                    <p>Toggle smart reminders and alerts on/off</p>
                                 </div>
                                 <button class="setting-btn" id="configureNotifications">Configure</button>
                             </div>
                             <div class="setting-item">
                                 <div class="setting-info">
-                                    <h4>Export Data</h4>
-                                                                   <p>Download your calculation history</p>
+                                    <h4>Export Saved Data</h4>
+                                    <p>Export saved plans in PDF or CSV format</p>
                                 </div>
-                                <button class="setting-btn" id="exportData">Export</button>
+                                <button class="setting-btn" id="exportData">Export All Plans</button>
                             </div>
                             <div class="setting-item">
                                 <div class="setting-info">
@@ -788,55 +774,18 @@
                         </div>
                     </div>
 
-                    <!-- Support & Information -->
-                    <div class="settings-section">
-                        <h3 class="settings-section-title">Support & Information</h3>
-                        <div class="settings-links">
-                            <a href="#" class="settings-link" id="aboutLink">
-                                <div class="link-icon">ℹ️</div>
-                                <div class="link-content">
-                                    <h4>About FinCalc Pro</h4>
-                                    <p>Learn more about the app and its features</p>
-                                </div>
-                                <div class="link-arrow">→</div>
-                            </a>
-
-                            <a href="#" class="settings-link" id="helpLink">
-                                <div class="link-icon">❓</div>
-                                <div class="link-content">
-                                    <h4>Help & Tutorials</h4>
-                                    <p>Get help with using the calculator</p>
-                                </div>
-                                <div class="link-arrow">→</div>
-                            </a>
-
-                            <a href="#" class="settings-link" id="feedbackLink">
-                                <div class="link-icon">💬</div>
-                                <div class="link-content">
-                                    <h4>Send Feedback</h4>
-                                    <p>Share your thoughts and suggestions</p>
-                                </div>
-                                <div class="link-arrow">→</div>
-                            </a>
-
-                            <a href="#" class="settings-link" id="privacyLink">
-                                <div class="link-icon">🔒</div>
-                                <div class="link-content">
-                                    <h4>Privacy Policy</h4>
-                                    <p>How we protect your data and privacy</p>
-                                </div>
-                                <div class="link-arrow">→</div>
-                            </a>
-                        </div>
-                    </div>
-
                     <!-- App Version -->
                     <div class="app-version">
-                        <p>FinCalc Pro v1.0.0</p>
+                        <p>Pratix Finance EMI Calculator v1.0.0</p>
                         <p>Built with ❤️ for smart financial planning</p>
                     </div>
                 </div>
             </section>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <p>© 2025 RAGHAV PRATAP | PRATIX FINANCE | <a href="https://pratix-finance.vercel.app/" target="_blank">https://pratix-finance.vercel.app/</a></p>
+            </footer>
         </main>
 
         <!-- Bottom Navigation -->
@@ -882,7 +831,8 @@
             <button class="nav-item" data-tab="tools-extras">
                 <div class="nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
                     </svg>
                 </div>
                 <span class="nav-label">Tools</span>
@@ -899,7 +849,7 @@
                 <div class="nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82V9a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
                     </svg>
                 </div>
                 <span class="nav-label">Settings</span>
@@ -907,28 +857,11 @@
         </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script src="emi-script.js"></script>
     <script>
         function goToHome() {
             window.location.href = '/index.html';
         }
-
-        function goToSIP() {
-            window.location.href = '/sip-calculator.html';
-        }
-
-        function goToGST() {
-            window.location.href = '/gst-calculator.html';
-        }
-
-        function goToTax() {
-            window.location.href = '/tax-calculator.html';
-        }
-
-         function goToInvestmentTracker() {
-            window.location.href = '/investment-tracker.html';
-        }
-
 
         function goBack() {
             window.history.back();
