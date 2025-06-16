@@ -515,6 +515,9 @@ function switchToTab(tabId) {
             targetTab.style.visibility = 'visible';
             targetTab.style.opacity = '1';
             console.log('Tab activated:', tabId);
+            
+            // Initialize tab-specific content
+            initializeTabContent(tabId);
         } else {
             console.error('Target tab not found:', tabId);
         }
@@ -536,6 +539,164 @@ function switchToTab(tabId) {
     }
 }
 
+// Initialize tab-specific content
+function initializeTabContent(tabId) {
+    switch(tabId) {
+        case 'amortization-table':
+            if (currentEMIData) {
+                generateAmortizationTable(currentEMIData);
+            }
+            break;
+        case 'prepayment-impact':
+            // Show prepayment form
+            break;
+        case 'loan-comparison':
+            // Initialize loan comparison
+            if (!document.querySelector('#loanInputsGrid .loan-input-card')) {
+                generateLoanInputs();
+            }
+            break;
+        case 'tools-extras':
+            // Show tools grid
+            break;
+        case 'smart-features':
+            // Initialize smart features
+            initializeSmartFeatures();
+            break;
+    }
+}
+
+// Initialize Smart Features
+function initializeSmartFeatures() {
+    // Save Plan functionality
+    const savePlanBtn = document.getElementById('saveLoanPlan');
+    if (savePlanBtn) {
+        savePlanBtn.onclick = function() {
+            if (currentEMIData) {
+                const planName = prompt('Enter a name for this loan plan:');
+                if (planName) {
+                    saveLoanPlan(planName, currentEMIData);
+                    showNotification('Loan plan saved successfully!', 'success');
+                }
+            } else {
+                showNotification('Please calculate an EMI first!', 'error');
+            }
+        };
+    }
+
+    // Share Plan functionality
+    const sharePlanBtn = document.getElementById('shareLoanPlan');
+    if (sharePlanBtn) {
+        sharePlanBtn.onclick = function() {
+            if (currentEMIData) {
+                showShareModal();
+            } else {
+                showNotification('Please calculate an EMI first!', 'error');
+            }
+        };
+    }
+
+    // Load saved plans
+    loadSavedPlans();
+}
+
+// Save loan plan to localStorage
+function saveLoanPlan(name, data) {
+    const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
+    const plan = {
+        id: Date.now(),
+        name: name,
+        date: new Date().toLocaleDateString(),
+        data: data
+    };
+    savedPlans.push(plan);
+    localStorage.setItem('savedLoanPlans', JSON.stringify(savedPlans));
+    loadSavedPlans();
+}
+
+// Load saved plans
+function loadSavedPlans() {
+    const container = document.getElementById('savedPlansContainer');
+    if (!container) return;
+
+    const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
+    
+    if (savedPlans.length === 0) {
+        container.innerHTML = '<div class="no-plans-message"><p>No saved loan plans yet. Calculate an EMI and save your first plan!</p></div>';
+        return;
+    }
+
+    container.innerHTML = savedPlans.map(plan => `
+        <div class="saved-plan-card">
+            <h4>${plan.name}</h4>
+            <p>Saved on: ${plan.date}</p>
+            <p>Loan Amount: ₹${Math.round(plan.data.principal).toLocaleString('en-IN')}</p>
+            <p>Monthly EMI: ₹${Math.round(plan.data.emi).toLocaleString('en-IN')}</p>
+            <p>Interest Rate: ${plan.data.annualRate}%</p>
+            <p>Tenure: ${plan.data.years} years</p>
+            <button class="delete-plan-btn" onclick="deletePlan(${plan.id})">Delete Plan</button>
+        </div>
+    `).join('');
+}
+
+// Delete plan
+function deletePlan(planId) {
+    const savedPlans = JSON.parse(localStorage.getItem('savedLoanPlans') || '[]');
+    const updatedPlans = savedPlans.filter(plan => plan.id !== planId);
+    localStorage.setItem('savedLoanPlans', JSON.stringify(updatedPlans));
+    loadSavedPlans();
+    showNotification('Plan deleted successfully!', 'success');
+}
+
+// Show share modal
+function showShareModal() {
+    const modal = document.getElementById('shareModal');
+    if (modal && currentEMIData) {
+        const shareText = `EMI Calculator Results:
+Loan Amount: ₹${Math.round(currentEMIData.principal).toLocaleString('en-IN')}
+Interest Rate: ${currentEMIData.annualRate}%
+Tenure: ${currentEMIData.years} years
+Monthly EMI: ₹${Math.round(currentEMIData.emi).toLocaleString('en-IN')}
+Total Interest: ₹${Math.round(currentEMIData.totalInterest).toLocaleString('en-IN')}
+Total Amount: ₹${Math.round(currentEMIData.totalAmount).toLocaleString('en-IN')}
+
+Calculate your EMI at: https://pratix-finance.vercel.app/emi-calculator.html`;
+
+        document.getElementById('shareText').value = shareText;
+        document.getElementById('shareableLink').value = window.location.href;
+        modal.style.display = 'flex';
+    }
+}
+
+// Close share modal
+const closeShareModal = document.getElementById('closeShareModal');
+if (closeShareModal) {
+    closeShareModal.onclick = function() {
+        document.getElementById('shareModal').style.display = 'none';
+    };
+}
+
+// Copy functionality
+const copyLinkBtn = document.getElementById('copyLink');
+if (copyLinkBtn) {
+    copyLinkBtn.onclick = function() {
+        const input = document.getElementById('shareableLink');
+        input.select();
+        document.execCommand('copy');
+        showNotification('Link copied to clipboard!', 'success');
+    };
+}
+
+const copyTextBtn = document.getElementById('copyText');
+if (copyTextBtn) {
+    copyTextBtn.onclick = function() {
+        const textarea = document.getElementById('shareText');
+        textarea.select();
+        document.execCommand('copy');
+        showNotification('Text copied to clipboard!', 'success');
+    };
+}
+
 // Initialize Amortization Table
 function initAmortizationTable() {
     const downloadBtn = document.getElementById('downloadAmortizationPDF');
@@ -544,11 +705,21 @@ function initAmortizationTable() {
             generateAmortizationPDF();
         });
     }
+    
+    // Show amortization table container when EMI is calculated
+    if (currentEMIData) {
+        const tableContainer = document.getElementById('amortizationTableContainer');
+        if (tableContainer) {
+            tableContainer.style.display = 'block';
+        }
+    }
 }
 
 // Generate Amortization Table
 function generateAmortizationTable(data) {
     const tbody = document.getElementById('amortizationTableBody');
+    const tableContainer = document.getElementById('amortizationTableContainer');
+    
     if (!tbody) return;
     
     tbody.innerHTML = '';
@@ -577,6 +748,11 @@ function generateAmortizationTable(data) {
             <td>₹${Math.round(Math.max(0, balance)).toLocaleString('en-IN')}</td>
         `;
         tbody.appendChild(row);
+    }
+    
+    // Show the table container
+    if (tableContainer) {
+        tableContainer.style.display = 'block';
     }
 }
 
