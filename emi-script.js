@@ -8,20 +8,22 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
 
-    // Initialize all functionality
-    initEMICalculator();
-    initTabSwitching();
-    initBottomNavigation();
-    initAmortizationTable();
-    initPrepaymentCalculator();
-    initLoanComparison();
-    initTaxSavingsCalculator();
-    initToolExpansion();
+    // Initialize all functionality with delays to ensure DOM is ready
+    setTimeout(() => {
+        initEMICalculator();
+        initTabSwitching();
+        initBottomNavigation();
+        initAmortizationTable();
+        initPrepaymentCalculator();
+        initLoanComparison();
+        initTaxSavingsCalculator();
+        initToolExpansion();
 
-    // Show first tab by default
-    switchToTab('emi-calculator');
+        // Show first tab by default
+        switchToTab('emi-calculator');
 
-    console.log('EMI calculator initialization complete');
+        console.log('EMI calculator initialization complete');
+    }, 100);
 });
 
 // Initialize EMI Calculator
@@ -460,6 +462,7 @@ function generateMonthlyBreakdown(data) {
 function initTabSwitching() {
     console.log('Initializing tab switching');
 
+    // Remove existing event listeners to prevent duplicates
     const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
     console.log('Found nav items:', navItems.length);
 
@@ -467,7 +470,11 @@ function initTabSwitching() {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Adding click listener to nav item ${index}:`, targetTab);
 
-        item.addEventListener('click', function(e) {
+        // Clone the element to remove all event listeners
+        const newItem = item.cloneNode(true);
+        item.parentNode.replaceChild(newItem, item);
+
+        newItem.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -491,7 +498,11 @@ function initBottomNavigation() {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Bottom nav item ${index}:`, targetTab);
 
-        item.addEventListener('click', function(e) {
+        // Clone to remove existing listeners
+        const newItem = item.cloneNode(true);
+        item.parentNode.replaceChild(newItem, item);
+
+        newItem.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -530,14 +541,8 @@ function switchToTab(tabId) {
         if (targetTab) {
             targetTab.classList.add('active');
             targetTab.style.display = 'block';
-            // Force visibility with important styles
             targetTab.style.visibility = 'visible';
             targetTab.style.opacity = '1';
-
-            // Ensure content is properly visible
-            setTimeout(() => {
-                targetTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
 
             console.log('Tab activated:', tabId);
 
@@ -579,30 +584,24 @@ function initializeTabContent(tabId) {
                 if (tableContainer) {
                     tableContainer.style.display = 'block';
                 }
-            } else {
-                // Show the note about calculating EMI first
-                const tableContainer = document.getElementById('amortizationTableContainer');
-                if (tableContainer) {
-                    tableContainer.style.display = 'none';
-                }
             }
             break;
         case 'prepayment-impact':
-            // Initialize prepayment form - no additional setup needed
-            // Content is already in HTML
+            // Initialize prepayment calculator if not already done
+            initPrepaymentCalculator();
             break;
         case 'loan-comparison':
-            // Initialize loan comparison with default inputs
+            // Initialize loan comparison
             const loanCountSelect = document.getElementById('loanCountSelect');
             if (loanCountSelect && !loanCountSelect.value) {
-                loanCountSelect.value = '2'; // Set default to 2 loans
-                generateLoanInputs(); // Generate default loan input forms
+                loanCountSelect.value = '2';
+                generateLoanInputs();
             } else if (!document.querySelector('#loanInputsGrid .loan-input-card')) {
                 generateLoanInputs();
             }
             break;
         case 'tools-extras':
-            // Tools grid is already in HTML - no additional setup needed
+            // Tools grid is already in HTML
             break;
         case 'smart-features':
             // Initialize smart features
