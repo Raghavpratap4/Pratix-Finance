@@ -762,6 +762,34 @@
             }
         }
 
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+            }
+        }
+
+        @keyframes shakeNotification {
+            0%, 100% { transform: translate(-50%, 0) rotate(0deg); }
+            25% { transform: translate(-50%, 0) rotate(1deg); }
+            75% { transform: translate(-50%, 0) rotate(-1deg); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .persistent-update {
+            border: 2px solid rgba(0, 255, 255, 0.6) !important;
+        }
+
+        .shake-notification {
+            animation: shakeNotification 0.5s ease-in-out !important;
+        }
+
         /* Search Results */
         .search-results {
             position: absolute;
@@ -1022,21 +1050,56 @@
     </div>
 
     <script>
-        // Version Management System
+        // Enhanced Version Management System
         class VersionManager {
             constructor() {
                 this.currentVersion = localStorage.getItem('app_version') || '0.0.0';
+                this.lastCheckTime = localStorage.getItem('last_version_check') || '0';
+                this.updateCheckInterval = 30000; // Check every 30 seconds
+                this.isUpdateAvailable = false;
+                
                 this.checkForUpdates();
+                this.startPeriodicCheck();
+                this.setupServiceWorkerListener();
             }
 
-            async checkForUpdates() {
+            setupServiceWorkerListener() {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.addEventListener('message', (event) => {
+                        if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+                            this.handleServiceWorkerUpdate();
+                        }
+                    });
+                }
+            }
+
+            startPeriodicCheck() {
+                // Check for updates periodically when page is visible
+                setInterval(() => {
+                    if (!document.hidden && this.isHomePage()) {
+                        this.checkForUpdates(false);
+                    }
+                }, this.updateCheckInterval);
+
+                // Check when page becomes visible
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && this.isHomePage()) {
+                        this.checkForUpdates(false);
+                    }
+                });
+            }
+
+            async checkForUpdates(showInitialCheck = true) {
                 try {
-                    // Only check for updates on the home page (index.html)
-                    if (!this.isHomePage()) {
+                    const now = Date.now();
+                    const lastCheck = parseInt(this.lastCheckTime);
+                    
+                    // Don't check too frequently (minimum 10 seconds between checks)
+                    if (now - lastCheck < 10000 && !showInitialCheck) {
                         return;
                     }
 
-                    const response = await fetch('./version.json?t=' + Date.now());
+                    const response = await fetch('./version.json?t=' + now);
                     if (!response.ok) {
                         console.warn('Could not fetch version info');
                         return;
@@ -1045,12 +1108,26 @@
                     const versionData = await response.json();
                     const serverVersion = versionData.version;
 
+                    localStorage.setItem('last_version_check', now.toString());
+
                     if (this.isNewerVersion(serverVersion, this.currentVersion)) {
-                        this.showUpdateNotification(versionData);
+                        if (!this.isUpdateAvailable) {
+                            this.isUpdateAvailable = true;
+                            this.showUpdateNotification(versionData);
+                        }
                     }
                 } catch (error) {
                     console.warn('Version check failed:', error);
                 }
+            }
+
+            handleServiceWorkerUpdate() {
+                // Service worker detected an update
+                this.isUpdateAvailable = true;
+                this.showUpdateNotification({
+                    version: 'Latest',
+                    updateMessage: 'App has been updated! Please refresh to get the latest version.'
+                });
             }
 
             isHomePage() {
@@ -1086,16 +1163,31 @@
 
                 if (!notification) return;
 
+                // Prevent showing multiple notifications
+                if (notification.classList.contains('show')) {
+                    return;
+                }
+
                 // Update notification text with version info
                 const titleElement = notification.querySelector('.update-title');
+                const descElement = notification.querySelector('.update-description');
+                
                 if (titleElement) {
-                    titleElement.textContent = `New Update Available (v${versionData.version})`;
+                    titleElement.textContent = versionData.version !== 'Latest' 
+                        ? `New Update Available (v${versionData.version})`
+                        : 'App Updated!';
+                }
+
+                if (descElement) {
+                    descElement.textContent = versionData.updateMessage || 
+                        'Click to refresh and get the latest features';
                 }
 
                 // Show notification with animation
                 notification.style.display = 'flex';
                 setTimeout(() => {
                     notification.classList.add('show');
+                    this.addNotificationGlow();
                 }, 100);
 
                 // Handle update button click
@@ -1103,59 +1195,164 @@
                     this.performUpdate(versionData.version);
                 };
 
-                // Handle dismiss button click
-                dismissBtn.onclick = () => {
-                    this.dismissNotification();
-                };
-
-                // Auto-dismiss after 30 seconds
+                // Handle dismiss button click - don't allow dismissing for 5 seconds
+                let canDismiss = false;
                 setTimeout(() => {
-                    if (notification.classList.contains('show')) {
+                    canDismiss = true;
+                    dismissBtn.style.opacity = '1';
+                    dismissBtn.style.pointerEvents = 'auto';
+                }, 5000);
+
+                dismissBtn.onclick = () => {
+                    if (canDismiss) {
                         this.dismissNotification();
                     }
-                }, 30000);
+                };
+
+                // Make notification more prominent
+                this.makeNotificationPersistent();
+            }
+
+            addNotificationGlow() {
+                const notification = document.getElementById('updateNotification');
+                if (notification) {
+                    notification.style.animation = 'pulseGlow 2s ease-in-out infinite';
+                }
+            }
+
+            makeNotificationPersistent() {
+                // Add a subtle animation to draw attention
+                const notification = document.getElementById('updateNotification');
+                if (notification) {
+                    // Add a CSS class for persistent styling
+                    notification.classList.add('persistent-update');
+                    
+                    // Shake animation every 30 seconds
+                    setInterval(() => {
+                        if (notification.classList.contains('show')) {
+                            notification.classList.add('shake-notification');
+                            setTimeout(() => {
+                                notification.classList.remove('shake-notification');
+                            }, 500);
+                        }
+                    }, 30000);
+                }
             }
 
             performUpdate(newVersion) {
-                // Update stored version
-                localStorage.setItem('app_version', newVersion);
-                
-                // Clear any cached data
-                if ('caches' in window) {
-                    caches.keys().then(names => {
-                        names.forEach(name => {
-                            caches.delete(name);
-                        });
-                    });
-                }
-
-                // Show loading state
+                // Show immediate feedback
                 const updateBtn = document.getElementById('updateButton');
+                const notification = document.getElementById('updateNotification');
+                
                 if (updateBtn) {
-                    updateBtn.textContent = 'Refreshing...';
+                    updateBtn.innerHTML = '<span style="animation: spin 1s linear infinite;">🔄</span> Updating...';
                     updateBtn.disabled = true;
+                    updateBtn.style.background = 'linear-gradient(135deg, #ffa500, #ff6b35)';
                 }
 
-                // Reload the page
-                setTimeout(() => {
-                    window.location.reload(true);
-                }, 1000);
+                // Update stored version
+                if (newVersion !== 'Latest') {
+                    localStorage.setItem('app_version', newVersion);
+                }
+                
+                // Mark that update is in progress
+                localStorage.setItem('update_in_progress', 'true');
+                
+                // Clear cached data more thoroughly
+                this.clearAllCaches().then(() => {
+                    // Add a small delay for user feedback
+                    setTimeout(() => {
+                        // Force a hard reload
+                        window.location.reload(true);
+                    }, 1500);
+                });
+            }
+
+            async clearAllCaches() {
+                try {
+                    // Clear service worker caches
+                    if ('caches' in window) {
+                        const cacheNames = await caches.keys();
+                        await Promise.all(
+                            cacheNames.map(cacheName => caches.delete(cacheName))
+                        );
+                    }
+
+                    // Clear localStorage except essential data
+                    const essentialKeys = ['app_version', 'update_in_progress'];
+                    const allKeys = Object.keys(localStorage);
+                    allKeys.forEach(key => {
+                        if (!essentialKeys.includes(key)) {
+                            localStorage.removeItem(key);
+                        }
+                    });
+
+                    // Clear sessionStorage
+                    sessionStorage.clear();
+
+                    console.log('All caches cleared successfully');
+                } catch (error) {
+                    console.warn('Cache clearing failed:', error);
+                }
             }
 
             dismissNotification() {
                 const notification = document.getElementById('updateNotification');
                 if (notification) {
-                    notification.classList.remove('show');
+                    this.isUpdateAvailable = false;
+                    notification.classList.remove('show', 'persistent-update');
+                    notification.style.animation = '';
                     setTimeout(() => {
                         notification.style.display = 'none';
                     }, 300);
                 }
             }
+
+            // Check if update was just completed
+            checkUpdateCompletion() {
+                const updateInProgress = localStorage.getItem('update_in_progress');
+                if (updateInProgress === 'true') {
+                    localStorage.removeItem('update_in_progress');
+                    this.showUpdateCompletedMessage();
+                }
+            }
+
+            showUpdateCompletedMessage() {
+                // Show a success message that the update was completed
+                const successMessage = document.createElement('div');
+                successMessage.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(135deg, #00ff88, #00d4ff);
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    z-index: 10001;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+                    animation: slideInDown 0.5s ease;
+                `;
+                successMessage.innerHTML = '✅ App updated successfully! You now have the latest version.';
+                
+                document.body.appendChild(successMessage);
+                
+                setTimeout(() => {
+                    successMessage.style.animation = 'slideOutUp 0.5s ease';
+                    setTimeout(() => {
+                        if (successMessage.parentNode) {
+                            successMessage.parentNode.removeChild(successMessage);
+                        }
+                    }, 500);
+                }, 4000);
+            }
         }
 
         // Initialize version manager when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            new VersionManager();
+            const versionManager = new VersionManager();
+            versionManager.checkUpdateCompletion();
         });
 
         // Search functionality

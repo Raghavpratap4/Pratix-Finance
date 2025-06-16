@@ -1,10 +1,11 @@
 
 {
-  "version": "1.0.0",
-  "releaseDate": "2024-01-01",
+  "version": "1.0.1",
+  "releaseDate": "2024-01-15",
   "features": [
-    "Initial release with EMI, SIP, GST, Tax, and FD calculators",
-    "PWA support with offline functionality",
-    "Responsive design for all devices"
-  ]
+    "Added automatic update notification system",
+    "Enhanced user experience with refresh prompts",
+    "Improved PWA update handling"
+  ],
+  "updateMessage": "New version available! Please refresh to get the latest features."
 }

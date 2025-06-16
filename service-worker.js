@@ -37,6 +37,8 @@ self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activating...');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
+      const hasOldCache = cacheNames.some(cacheName => cacheName !== CACHE_NAME);
+      
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
@@ -44,10 +46,23 @@ self.addEventListener('activate', (event) => {
             return caches.delete(cacheName);
           }
         })
-      );
-    }).then(() => {
-      console.log('Service Worker: Activated successfully');
-      return self.clients.claim();
+      ).then(() => {
+        console.log('Service Worker: Activated successfully');
+        
+        // Notify all clients about the update if there were old caches
+        if (hasOldCache) {
+          self.clients.matchAll().then(clients => {
+            clients.forEach(client => {
+              client.postMessage({
+                type: 'UPDATE_AVAILABLE',
+                message: 'New version installed'
+              });
+            });
+          });
+        }
+        
+        return self.clients.claim();
+      });
     })
   );
 });
@@ -167,8 +182,9 @@ self.addEventListener('message', (event) => {
 });
 
 const VERSION_FILE = 'version.json';
+let lastKnownVersion = null;
 
-// Version update detection
+// Enhanced version update detection
 self.addEventListener('fetch', (event) => {
   if (event.request.url.includes(VERSION_FILE)) {
     event.respondWith(
@@ -178,7 +194,28 @@ self.addEventListener('fetch', (event) => {
             // Clone the response to read it
             const responseClone = response.clone();
             responseClone.json().then(versionData => {
-              // Notify clients about potential version update
+              const currentVersion = versionData.version;
+              
+              // Check if this is a new version
+              if (lastKnownVersion && lastKnownVersion !== currentVersion) {
+                console.log(`Version updated from ${lastKnownVersion} to ${currentVersion}`);
+                
+                // Notify all clients about the version update
+                self.clients.matchAll().then(clients => {
+                  clients.forEach(client => {
+                    client.postMessage({
+                      type: 'UPDATE_AVAILABLE',
+                      version: currentVersion,
+                      previousVersion: lastKnownVersion,
+                      updateMessage: versionData.updateMessage || 'New version available!'
+                    });
+                  });
+                });
+              }
+              
+              lastKnownVersion = currentVersion;
+              
+              // Also send version check message
               self.clients.matchAll().then(clients => {
                 clients.forEach(client => {
                   client.postMessage({
@@ -187,6 +224,8 @@ self.addEventListener('fetch', (event) => {
                   });
                 });
               });
+            }).catch(error => {
+              console.log('Error parsing version data:', error);
             });
           }
           return response;
