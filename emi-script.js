@@ -81,9 +81,19 @@ function initEMICalculator() {
         const chartTypeSelect = document.getElementById('chartTypeSelect');
         if (chartTypeSelect) {
             chartTypeSelect.addEventListener('change', function() {
+                console.log('Chart type changed to:', this.value);
                 if (currentEMIData) {
                     updateChart(currentEMIData);
                 }
+            });
+        }
+
+        // Comparison chart type selector
+        const comparisonChartTypeSelect = document.getElementById('comparisonChartType');
+        if (comparisonChartTypeSelect) {
+            comparisonChartTypeSelect.addEventListener('change', function() {
+                console.log('Comparison chart type changed to:', this.value);
+                updateComparisonChart();
             });
         }
 
@@ -91,7 +101,17 @@ function initEMICalculator() {
         const downloadPDFButton = document.getElementById('downloadPDF');
         if (downloadPDFButton) {
             downloadPDFButton.addEventListener('click', function() {
+                console.log('Download PDF button clicked');
                 generateEMIPDF();
+            });
+        }
+
+        // Download comparison PDF
+        const downloadComparisonPDFButton = document.getElementById('downloadComparisonPDF');
+        if (downloadComparisonPDFButton) {
+            downloadComparisonPDFButton.addEventListener('click', function() {
+                console.log('Download comparison PDF button clicked');
+                generateComparisonPDF();
             });
         }
 
@@ -1616,10 +1636,14 @@ function initToolExpansion() {
 
 // Calculate Tax Savings
 function calculateTaxSavings() {
+    console.log('Calculate Tax Savings function called');
+    
     const principalRepayment = parseFloat(document.getElementById('principalRepayment')?.value) || 0;
     const interestPayment = parseFloat(document.getElementById('interestPayment')?.value) || 0;
     const taxSlab = parseFloat(document.getElementById('taxSlab')?.value) || 0;
     const propertyType = document.querySelector('input[name="propertyType"]:checked')?.value || 'selfOccupied';
+
+    console.log('Tax calculation inputs:', { principalRepayment, interestPayment, taxSlab, propertyType });
 
     if (!principalRepayment || !interestPayment || !taxSlab) {
         showNotification('Please fill all fields for tax calculation', 'error');
@@ -1642,11 +1666,17 @@ function calculateTaxSavings() {
     const totalSavings = section80CSavings + section24Savings;
 
     // Update display
-    document.getElementById('section80CSavings').textContent = `₹${Math.round(section80CSavings).toLocaleString('en-IN')}`;
-    document.getElementById('section24Savings').textContent = `₹${Math.round(section24Savings).toLocaleString('en-IN')}`;
-    document.getElementById('totalTaxSavings').textContent = `₹${Math.round(totalSavings).toLocaleString('en-IN')}`;
+    const section80CElement = document.getElementById('section80CSavings');
+    const section24Element = document.getElementById('section24Savings');
+    const totalSavingsElement = document.getElementById('totalTaxSavings');
+    const resultsElement = document.getElementById('taxSavingsResults');
 
-    document.getElementById('taxSavingsResults').style.display = 'block';
+    if (section80CElement) section80CElement.textContent = `₹${Math.round(section80CSavings).toLocaleString('en-IN')}`;
+    if (section24Element) section24Element.textContent = `₹${Math.round(section24Savings).toLocaleString('en-IN')}`;
+    if (totalSavingsElement) totalSavingsElement.textContent = `₹${Math.round(totalSavings).toLocaleString('en-IN')}`;
+    if (resultsElement) resultsElement.style.display = 'block';
+
+    showNotification('Tax savings calculated successfully!', 'success');
 }
 
 // Make functions globally available
@@ -1658,3 +1688,24 @@ window.goToTaxCalculator = goToTaxCalculator;
 window.goToFdCalculator = goToFdCalculator;
 window.goToHome = goToHome;
 window.calculateTaxSavings = calculateTaxSavings;
+window.generateComparisonPDF = generateComparisonPDF;
+window.deletePlan = deletePlan;
+
+// Additional button initialization for buttons that might be added dynamically
+function initializeAllButtons() {
+    // Reinitialize all button event listeners
+    const buttons = document.querySelectorAll('button[id]');
+    buttons.forEach(button => {
+        if (!button.hasAttribute('data-initialized')) {
+            button.setAttribute('data-initialized', 'true');
+            console.log('Initializing button:', button.id);
+        }
+    });
+}
+
+// Call this when switching tabs to ensure all buttons work
+document.addEventListener('click', function(e) {
+    if (e.target.matches('button') && !e.target.hasAttribute('data-initialized')) {
+        console.log('Uninitalized button clicked:', e.target.id || e.target.className);
+    }
+});
