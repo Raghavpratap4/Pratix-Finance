@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initAmortizationTable();
     initPrepaymentCalculator();
     initLoanComparison();
+    initTaxSavingsCalculator();
     initToolExpansion();
     
     // Show first tab by default
@@ -1408,6 +1409,53 @@ function goToHome() {
     window.location.href = 'index.html';
 }
 
+// Initialize Tax Savings Calculator
+function initTaxSavingsCalculator() {
+    const calculateTaxSavingsBtn = document.getElementById('calculateTaxSavings');
+    
+    if (calculateTaxSavingsBtn) {
+        calculateTaxSavingsBtn.addEventListener('click', function() {
+            calculateTaxSavings();
+            showNotification('Tax savings calculated!', 'success');
+        });
+    }
+}
+
+// Calculate Tax Savings
+function calculateTaxSavings() {
+    const principalRepayment = parseFloat(document.getElementById('principalRepayment')?.value) || 0;
+    const interestPayment = parseFloat(document.getElementById('interestPayment')?.value) || 0;
+    const taxSlab = parseFloat(document.getElementById('taxSlab')?.value) || 0;
+    const propertyType = document.querySelector('input[name="propertyType"]:checked')?.value || 'selfOccupied';
+    
+    if (!principalRepayment || !interestPayment || !taxSlab) {
+        showNotification('Please fill all fields for tax calculation', 'error');
+        return;
+    }
+    
+    // Section 80C calculation (max 1.5 lakh)
+    const section80CDeduction = Math.min(principalRepayment, 150000);
+    const section80CSavings = (section80CDeduction * taxSlab) / 100;
+    
+    // Section 24(b) calculation
+    let section24Deduction;
+    if (propertyType === 'selfOccupied') {
+        section24Deduction = Math.min(interestPayment, 200000); // Max 2 lakh for self-occupied
+    } else {
+        section24Deduction = interestPayment; // No limit for let-out property
+    }
+    const section24Savings = (section24Deduction * taxSlab) / 100;
+    
+    const totalSavings = section80CSavings + section24Savings;
+    
+    // Update display
+    document.getElementById('section80CSavings').textContent = `₹${Math.round(section80CSavings).toLocaleString('en-IN')}`;
+    document.getElementById('section24Savings').textContent = `₹${Math.round(section24Savings).toLocaleString('en-IN')}`;
+    document.getElementById('totalTaxSavings').textContent = `₹${Math.round(totalSavings).toLocaleString('en-IN')}`;
+    
+    document.getElementById('taxSavingsResults').style.display = 'block';
+}
+
 // Make functions globally available
 window.switchToTab = switchToTab;
 window.goToSipCalculator = goToSipCalculator;
@@ -1416,3 +1464,4 @@ window.goToGstCalculator = goToGstCalculator;
 window.goToTaxCalculator = goToTaxCalculator;
 window.goToFdCalculator = goToFdCalculator;
 window.goToHome = goToHome;
+window.calculateTaxSavings = calculateTaxSavings;

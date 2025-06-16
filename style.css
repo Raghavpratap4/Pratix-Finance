@@ -624,7 +624,7 @@ body::after {
         z-index: 50;
         grid-column: 1;
     }
-    
+
     .tab-nav-item {
         padding: 1rem 1.5rem;
         margin-bottom: 0.5rem;
@@ -640,21 +640,21 @@ body::after {
         font-weight: 600;
         cursor: pointer;
     }
-    
+
     .tab-nav-item:hover {
         background: var(--glass-hover);
         border-color: var(--neon-cyan);
         color: var(--neon-cyan);
         transform: translateX(5px);
     }
-    
+
     .tab-nav-item.active {
         background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
         border-color: var(--neon-blue);
         color: white;
         box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
     }
-    
+
     .bottom-nav {
         display: none;
     }
@@ -1009,29 +1009,29 @@ body::after {
         gap: 3rem;
         align-items: start;
     }
-    
+
     .calculator-form {
         grid-column: 1;
     }
-    
+
     .result-section {
         grid-column: 2;
         position: sticky;
         top: 2rem;
     }
-    
+
     .tools-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     .loan-inputs-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .comparison-cards {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .analysis-cards {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -1050,7 +1050,7 @@ body::after {
     .main-content {
         padding: 2rem 2rem 2rem;
     }
-    
+
     .tab-navigation {
         position: sticky;
         top: 0;
@@ -1067,29 +1067,29 @@ body::after {
         gap: 2rem;
         align-items: start;
     }
-    
+
     .calculator-form {
         grid-column: 1;
     }
-    
+
     .result-section {
         grid-column: 2;
         position: sticky;
         top: 2rem;
     }
-    
+
     .tools-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .loan-inputs-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .comparison-cards {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .analysis-cards {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -1107,7 +1107,7 @@ body::after {
     .result-section {
         width: 100%;
     }
-    
+
     .tools-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
@@ -1118,19 +1118,19 @@ body::after {
         gap: 0.25rem;
         padding: 0.75rem 0.5rem 1.75rem;
     }
-    
+
     .loan-inputs-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .comparison-cards {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .analysis-cards {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .impact-summary {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1153,7 +1153,7 @@ body::after {
     .app-container {
         max-width: 100%;
     }
-    
+
     .calculator-layout {
         display: flex;
         flex-direction: column;
@@ -1182,7 +1182,7 @@ body::after {
     .chart-controls {
         order: 4;
     }
-    
+
     .app-title {
         font-size: 1.5rem;
     }
@@ -1204,55 +1204,55 @@ body::after {
     .nav-label {
         font-size: 0.6rem;
     }
-    
+
     .tools-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .loan-inputs-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .comparison-cards {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .analysis-cards {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .impact-summary {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .scenario-comparison {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .chart-header {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
     }
-    
+
     .chart-selector {
         min-width: auto;
         width: 100%;
     }
-    
+
     .bottom-nav {
         grid-template-columns: repeat(6, 1fr);
         gap: 0.125rem;
         padding: 0.75rem 0.5rem 1.5rem;
         max-width: 100%;
     }
-    
+
     .nav-item {
         padding: 0.5rem 0.125rem;
         font-size: 0.7rem;
@@ -1261,23 +1261,23 @@ body::after {
     .nav-icon {
         transform: scale(0.8);
     }
-    
+
     .main-content {
         padding: 1.5rem 1rem 8rem;
     }
-    
+
     .table-container {
         font-size: 0.8rem;
         overflow-x: auto;
     }
-    
+
     .result-item {
         flex-direction: column;
         text-align: center;
         gap: 0.5rem;
         padding: 1rem 0;
     }
-    
+
     .calc-input {
         font-size: 1rem;
         padding: 1rem 1.25rem;
@@ -1287,7 +1287,7 @@ body::after {
     .input-wrapper .calc-input {
         padding-left: 3rem;
     }
-    
+
     .calculate-btn,
     .refresh-btn,
     .feature-btn {
@@ -1311,12 +1311,12 @@ body::after {
     .app-header {
         padding: 1rem 1rem;
     }
-    
+
     .glass-card {
         padding: 1.25rem 0.75rem;
         border-radius: 16px;
     }
-    
+
     .nav-icon {
         transform: scale(0.75);
     }
@@ -1324,11 +1324,11 @@ body::after {
     .nav-label {
         font-size: 0.55rem;
     }
-    
+
     .chart-container {
         padding: 1rem 0.75rem;
     }
-    
+
     .tool-card {
         padding: 1.5rem 1rem;
     }
@@ -1849,12 +1849,12 @@ select.calc-input option {
         grid-template-columns: 1fr;
         gap: 0.5rem;
     }
-    
+
     .hsn-grid {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 0.75rem;
     }
-    
+
     .analysis-cards {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 1rem;
@@ -1988,32 +1988,32 @@ select.calc-input option {
     .update-notification {
         padding: 0.75rem 1rem;
     }
-    
+
     .update-content {
         gap: 0.75rem;
         flex-direction: column;
         text-align: center;
     }
-    
+
     .update-text {
         text-align: center;
     }
-    
+
     .update-title {
         font-size: 1rem;
     }
-    
+
     .update-description {
         font-size: 0.8rem;
     }
-    
+
     .update-btn {
         padding: 0.625rem 1.25rem;
         font-size: 0.8rem;
         width: auto;
         min-width: 120px;
     }
-    
+
     .dismiss-btn {
         position: absolute;
         top: 0.5rem;
@@ -2028,24 +2028,24 @@ select.calc-input option {
     .update-notification {
         padding: 0.5rem 0.75rem;
     }
-    
+
     .update-content {
         gap: 0.5rem;
     }
-    
+
     .update-title {
         font-size: 0.9rem;
     }
-    
+
     .update-description {
         font-size: 0.75rem;
     }
-    
+
     .update-btn {
         padding: 0.5rem 1rem;
         font-size: 0.75rem;
     }
-    
+
     .update-icon {
         font-size: 1.2rem;
     }
@@ -2604,5 +2604,374 @@ select:focus {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+}
+
+/* Amortization Table Styles */
+.amortization-table-container {
+    margin-top: 2rem;
+}
+
+.amortization-note {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.amortization-table, .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.amortization-table th, .amortization-table td,
+.comparison-table th, .comparison-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.amortization-table th, .comparison-table th {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+    font-weight: 600;
+}
+
+.amortization-table td, .comparison-table td {
+    color: #ffffff;
+}
+
+/* Loan Comparison Styles */
+.loan-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.loan-input-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.loan-input-card h3 {
+    color: #00d4ff;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Prepayment Styles */
+.prepayment-note {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.result-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.result-card h4, .result-card h5 {
+    color: #00d4ff;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.result-value {
+    color: #00ff88;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.comparison-table-container {
+    margin: 2rem 0;
+}
+
+/* Tax Benefits Styles */
+.tax-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.tax-benefit-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.tax-benefit-card h3 {
+    color: #00d4ff;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.benefit-details p {
+    margin: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.benefit-details strong {
+    color: #ffffff;
+}
+
+.tax-calculator-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tax-calculator-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tax-tips {
+    margin: 3rem 0;
+}
+
+.tips-list {
+    list-style: none;
+    padding: 0;
+}
+
+.tips-list li {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.tips-list li:before {
+    content: "💡";
+    margin-right: 0.5rem;
+}
+
+/* Tools Grid Styles */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.tool-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tool-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    border-color: #00d4ff;
+}
+
+.tool-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.tool-card h3 {
+    color: #00d4ff;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.tool-card p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.tool-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.tool-features span {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.financial-tips {
+    margin: 3rem 0;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.tip-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid```python
+rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.tip-card h4 {
+    color: #00ff88;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.tip-card p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.quick-actions {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.download-section {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chart-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.chart-controls label {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.chart-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    height: 400px;
+    position: relative;
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    .tab-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
+    }
+
+    .nav-list {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .nav-item {
+        flex: 1;
+        min-width: 0;
+        padding: 0.5rem 0.25rem;
+        text-align: center;
+        font-size: 0.7rem;
+        border-radius: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .main-content {
+        padding-bottom: 80px;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tax-benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .loan-inputs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
     }
 }
