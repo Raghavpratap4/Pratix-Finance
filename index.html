@@ -1008,7 +1008,156 @@
         </footer>
     </div>
 
+    <!-- Update Notification Banner -->
+    <div id="updateNotification" class="update-notification" style="display: none;">
+        <div class="update-content">
+            <div class="update-icon">🔄</div>
+            <div class="update-text">
+                <span class="update-title">New Update Available</span>
+                <span class="update-description">Click to refresh and get the latest features</span>
+            </div>
+            <button id="updateButton" class="update-btn">Refresh Now</button>
+            <button id="dismissUpdate" class="dismiss-btn">×</button>
+        </div>
+    </div>
+
     <script>
+        // Version Management System
+        class VersionManager {
+            constructor() {
+                this.currentVersion = localStorage.getItem('app_version') || '0.0.0';
+                this.checkForUpdates();
+            }
+
+            async checkForUpdates() {
+                try {
+                    // Only check for updates on the home page (index.html)
+                    if (!this.isHomePage()) {
+                        return;
+                    }
+
+                    const response = await fetch('./version.json?t=' + Date.now());
+                    if (!response.ok) {
+                        console.warn('Could not fetch version info');
+                        return;
+                    }
+
+                    const versionData = await response.json();
+                    const serverVersion = versionData.version;
+
+                    if (this.isNewerVersion(serverVersion, this.currentVersion)) {
+                        this.showUpdateNotification(versionData);
+                    }
+                } catch (error) {
+                    console.warn('Version check failed:', error);
+                }
+            }
+
+            isHomePage() {
+                const path = window.location.pathname;
+                return path === '/' || path === '/index.html' || path.endsWith('/index.html') || path === '';
+            }
+
+            isNewerVersion(serverVersion, currentVersion) {
+                const parseVersion = (version) => {
+                    return version.split('.').map(num => parseInt(num, 10));
+                };
+
+                const serverParts = parseVersion(serverVersion);
+                const currentParts = parseVersion(currentVersion);
+
+                for (let i = 0; i < Math.max(serverParts.length, currentParts.length); i++) {
+                    const serverPart = serverParts[i] || 0;
+                    const currentPart = currentParts[i] || 0;
+
+                    if (serverPart > currentPart) {
+                        return true;
+                    } else if (serverPart < currentPart) {
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            showUpdateNotification(versionData) {
+                const notification = document.getElementById('updateNotification');
+                const updateBtn = document.getElementById('updateButton');
+                const dismissBtn = document.getElementById('dismissUpdate');
+
+                if (!notification) return;
+
+                // Update notification text with version info
+                const titleElement = notification.querySelector('.update-title');
+                if (titleElement) {
+                    titleElement.textContent = `New Update Available (v${versionData.version})`;
+                }
+
+                // Show notification with animation
+                notification.style.display = 'flex';
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+
+                // Handle update button click
+                updateBtn.onclick = () => {
+                    this.performUpdate(versionData.version);
+                };
+
+                // Handle dismiss button click
+                dismissBtn.onclick = () => {
+                    this.dismissNotification();
+                };
+
+                // Auto-dismiss after 30 seconds
+                setTimeout(() => {
+                    if (notification.classList.contains('show')) {
+                        this.dismissNotification();
+                    }
+                }, 30000);
+            }
+
+            performUpdate(newVersion) {
+                // Update stored version
+                localStorage.setItem('app_version', newVersion);
+                
+                // Clear any cached data
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => {
+                            caches.delete(name);
+                        });
+                    });
+                }
+
+                // Show loading state
+                const updateBtn = document.getElementById('updateButton');
+                if (updateBtn) {
+                    updateBtn.textContent = 'Refreshing...';
+                    updateBtn.disabled = true;
+                }
+
+                // Reload the page
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 1000);
+            }
+
+            dismissNotification() {
+                const notification = document.getElementById('updateNotification');
+                if (notification) {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                    }, 300);
+                }
+            }
+        }
+
+        // Initialize version manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new VersionManager();
+        });
+
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');

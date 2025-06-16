@@ -986,4 +986,30 @@ Calculated using PRATIX FINANCE - https://pratix-finance.vercel.app
             showNotification('Loan plan loaded from shared link!', 'success');
         }
     }
+
+    // Version Management Integration
+    function checkAppVersion() {
+        const currentVersion = localStorage.getItem('app_version');
+        if (!currentVersion) {
+            // First time user - set current version
+            localStorage.setItem('app_version', '1.0.0');
+        }
+    }
+
+    // Initialize version checking
+    checkAppVersion();
+
+    // Service Worker Update Handler
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data && event.data.type === 'NEW_VERSION') {
+                // Force version check when service worker detects changes
+                setTimeout(() => {
+                    new VersionManager();
+                }, 1000);
+            }
+        });
+    }
+
+    console.log('PRATIX FINANCE Homepage loaded successfully!');
 });

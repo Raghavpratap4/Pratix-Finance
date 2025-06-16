@@ -1824,6 +1824,213 @@ select.calc-input option {
     }
 }
 
+/* Update Notification Styles */
+.update-notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    backdrop-filter: blur(20px);
+    border-bottom: 2px solid var(--neon-blue);
+    padding: 1rem 2rem;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 0 30px rgba(0, 212, 255, 0.3),
+        0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.update-notification.show {
+    transform: translateY(0);
+}
+
+.update-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1200px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.update-icon {
+    font-size: 1.5rem;
+    animation: rotate 2s linear infinite;
+    filter: drop-shadow(0 0 10px var(--neon-blue));
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.update-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.update-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--neon-blue);
+    text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+}
+
+.update-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.9;
+}
+
+.update-btn {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 0 20px rgba(0, 212, 255, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.update-btn:hover {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-green));
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.6),
+        0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.update-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.dismiss-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.dismiss-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--neon-pink);
+    transform: scale(1.1);
+}
+
+/* Responsive Design for Update Notification */
+@media (max-width: 768px) {
+    .update-notification {
+        padding: 0.75rem 1rem;
+    }
+    
+    .update-content {
+        gap: 0.75rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .update-text {
+        text-align: center;
+    }
+    
+    .update-title {
+        font-size: 1rem;
+    }
+    
+    .update-description {
+        font-size: 0.8rem;
+    }
+    
+    .update-btn {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.8rem;
+        width: auto;
+        min-width: 120px;
+    }
+    
+    .dismiss-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .update-notification {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .update-content {
+        gap: 0.5rem;
+    }
+    
+    .update-title {
+        font-size: 0.9rem;
+    }
+    
+    .update-description {
+        font-size: 0.75rem;
+    }
+    
+    .update-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
+    
+    .update-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* Adjust body padding when notification is shown */
+.update-notification.show ~ .main-wrapper {
+    padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+    .update-notification.show ~ .main-wrapper {
+        padding-top: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .update-notification.show ~ .main-wrapper {
+        padding-top: 90px;
+    }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 6px;

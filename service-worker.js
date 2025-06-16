@@ -1,4 +1,3 @@
-
 const CACHE_NAME = 'pratix-finance-v1.0.0';
 const urlsToCache = [
   './',
@@ -117,7 +116,7 @@ function doBackgroundSync() {
 // Handle push notifications (for future use)
 self.addEventListener('push', (event) => {
   console.log('Service Worker: Push received', event);
-  
+
   const options = {
     body: event.data ? event.data.text() : 'New update available',
     icon: '/favicon.png',
@@ -154,6 +153,48 @@ self.addEventListener('notificationclick', (event) => {
   if (event.action === 'explore') {
     event.waitUntil(
       clients.openWindow('/')
+    );
+  }
+});
+
+// Handle service worker updates
+self.addEventListener('message', (event) => {
+  console.log('Service Worker: Message received', event.data);
+
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+const VERSION_FILE = 'version.json';
+
+// Version update detection
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes(VERSION_FILE)) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response.ok) {
+            // Clone the response to read it
+            const responseClone = response.clone();
+            responseClone.json().then(versionData => {
+              // Notify clients about potential version update
+              self.clients.matchAll().then(clients => {
+                clients.forEach(client => {
+                  client.postMessage({
+                    type: 'VERSION_CHECK',
+                    version: versionData.version
+                  });
+                });
+              });
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Return cached version if network fails
+          return caches.match(event.request);
+        })
     );
   }
 });
