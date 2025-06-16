@@ -8,6 +8,11 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
 
+    // Debug: Check if elements exist
+    console.log('Calculate button exists:', !!document.getElementById('calculateEMI'));
+    console.log('Tab nav items count:', document.querySelectorAll('.tab-nav-item').length);
+    console.log('Bottom nav items count:', document.querySelectorAll('.bottom-nav .nav-item').length);
+
     // Initialize all functionality with delays to ensure DOM is ready
     setTimeout(() => {
         initEMICalculator();
@@ -23,7 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
         switchToTab('emi-calculator');
 
         console.log('EMI calculator initialization complete');
-    }, 100);
+    }, 200);
+
+    // Add a backup click handler for buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'calculateEMI' || e.target.closest('#calculateEMI')) {
+            console.log('Backup calculate button handler triggered');
+            calculateEMI();
+        }
+    });
 });
 
 // Initialize EMI Calculator
@@ -41,6 +54,9 @@ function initEMICalculator() {
 
         // Add event listeners for calculate button
         if (calculateButton) {
+            // Remove any existing listeners
+            calculateButton.onclick = null;
+            
             calculateButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -462,7 +478,6 @@ function generateMonthlyBreakdown(data) {
 function initTabSwitching() {
     console.log('Initializing tab switching');
 
-    // Remove existing event listeners to prevent duplicates
     const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
     console.log('Found nav items:', navItems.length);
 
@@ -470,11 +485,7 @@ function initTabSwitching() {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Adding click listener to nav item ${index}:`, targetTab);
 
-        // Clone the element to remove all event listeners
-        const newItem = item.cloneNode(true);
-        item.parentNode.replaceChild(newItem, item);
-
-        newItem.addEventListener('click', function(e) {
+        item.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -498,11 +509,7 @@ function initBottomNavigation() {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Bottom nav item ${index}:`, targetTab);
 
-        // Clone to remove existing listeners
-        const newItem = item.cloneNode(true);
-        item.parentNode.replaceChild(newItem, item);
-
-        newItem.addEventListener('click', function(e) {
+        item.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
