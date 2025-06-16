@@ -2030,8 +2030,8 @@ select.calc-input option {
     padding: 0.75rem;
 }
 
-/* Modern Footer Styles */
-.modern-footer {
+/* Interactive Footer Styles */
+.interactive-footer {
     margin-top: 4rem;
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 50%, rgba(15, 23, 42, 0.95) 100%);
     backdrop-filter: blur(25px);
@@ -2040,7 +2040,7 @@ select.calc-input option {
     overflow: hidden;
 }
 
-.modern-footer::before {
+.interactive-footer::before {
     content: '';
     position: absolute;
     top: 0;
@@ -2058,11 +2058,334 @@ select.calc-input option {
 
 .footer-main {
     display: grid;
-    grid-template-columns: 1.2fr repeat(3, 1fr);
+    grid-template-columns: 1.2fr 2fr;
     gap: 3rem;
     padding: 3rem 2rem;
     max-width: 1400px;
     margin: 0 auto;
+}
+
+/* Footer Dropdowns Container */
+.footer-dropdowns {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Individual Dropdown */
+.footer-dropdown {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-dropdown:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Dropdown Header */
+.dropdown-header {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.dropdown-header:hover {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--neon-cyan);
+}
+
+.dropdown-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.title-icon {
+    font-size: 1.3rem;
+    filter: drop-shadow(0 0 10px currentColor);
+}
+
+.dropdown-arrow {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+    color: var(--neon-blue);
+}
+
+.dropdown-arrow.rotated {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-content.expanded {
+    max-height: 600px;
+    padding: 2rem;
+}
+
+/* Dropdown Grid Layout */
+.dropdown-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dropdown-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.dropdown-section {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-title {
+    color: var(--neon-green);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Enhanced Dropdown Links */
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.dropdown-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.dropdown-link:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    transform: translateX(5px);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+}
+
+.dropdown-link:hover::before {
+    left: 100%;
+}
+
+.dropdown-link.premium {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.dropdown-link.premium:hover {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+}
+
+.link-icon {
+    font-size: 1.2rem;
+    width: 30px;
+    text-align: center;
+    filter: drop-shadow(0 0 8px currentColor);
+    transition: all 0.3s ease;
+}
+
+.dropdown-link:hover .link-icon {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 12px currentColor);
+}
+
+.link-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.link-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: inherit;
+}
+
+.link-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+.link-tag {
+    font-size: 0.7rem;
+    background: var(--neon-green);
+    color: rgba(15, 23, 42, 1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+    margin-top: 0.25rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Dropdown Footer */
+.dropdown-footer {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.dropdown-subtitle {
+    color: var(--neon-green);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+/* Contact Highlight */
+.dropdown-highlight {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.contact-highlight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 10px var(--neon-blue));
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.contact-email {
+    color: var(--neon-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.contact-email:hover {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+.response-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Success Metrics in Dropdown */
+.success-metrics-dropdown {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.metric-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    border-color: var(--neon-green);
+    transform: translateY(-2px);
+}
+
+.metric-number {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--neon-green);
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Footer Brand Section */
@@ -2426,17 +2749,15 @@ select.calc-input option {
     text-shadow: 0 0 10px rgba(255, 0, 128, 0.6);
 }
 
-/* Responsive Design for Modern Footer */
+/* Responsive Design for Interactive Footer */
 @media (max-width: 1200px) {
     .footer-main {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 2.5rem;
         padding: 2.5rem 1.5rem;
     }
 
     .footer-brand {
-        grid-column: 1 / -1;
-        padding-right: 0;
         margin-bottom: 1rem;
     }
 
@@ -2448,6 +2769,15 @@ select.calc-input option {
     .feature-badge {
         flex: 1;
         min-width: 200px;
+    }
+
+    .dropdown-sections {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -2475,6 +2805,39 @@ select.calc-input option {
         justify-content: center;
     }
 
+    .footer-dropdowns {
+        gap: 1rem;
+    }
+
+    .dropdown-header {
+        padding: 1.25rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .dropdown-content.expanded {
+        padding: 1.5rem;
+    }
+
+    .dropdown-sections {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .dropdown-section {
+        padding: 1rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .contact-highlight {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+
     .footer-bottom-content {
         flex-direction: column;
         text-align: center;
@@ -2487,15 +2850,6 @@ select.calc-input option {
 
     .made-with-love {
         justify-content: center;
-    }
-
-    .success-metrics {
-        grid-template-columns: repeat(3, 1fr);
-        padding: 1rem;
-    }
-
-    .metric-number {
-        font-size: 1.25rem;
     }
 }
 
@@ -2519,11 +2873,31 @@ select.calc-input option {
         font-size: 1.25rem;
     }
 
-    .footer-link {
+    .dropdown-header {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    .dropdown-content.expanded {
+        padding: 1rem;
+    }
+
+    .dropdown-link {
+        padding: 0.75rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .link-details {
+        text-align: center;
+    }
+
+    .dropdown-section {
         padding: 0.75rem;
     }
 
-    .contact-info-footer {
+    .contact-highlight {
         padding: 1rem;
     }
 
@@ -2531,17 +2905,12 @@ select.calc-input option {
         padding: 1.5rem 0.75rem;
     }
 
-    .success-metrics {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-
-    .column-title {
-        font-size: 1.1rem;
-    }
-
     .mission-statement {
         font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 0.85rem;
     }
 }
 

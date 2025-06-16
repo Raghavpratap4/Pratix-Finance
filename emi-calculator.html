@@ -713,8 +713,8 @@
                 </div>
             </section>
 
-            <!-- Redesigned Footer Section -->
-            <footer class="modern-footer">
+            <!-- Enhanced Interactive Footer with Dropdowns -->
+            <footer class="interactive-footer">
                 <!-- Main Footer Content -->
                 <div class="footer-main">
                     <!-- Brand & Mission -->
@@ -745,140 +745,172 @@
                         </div>
                     </div>
 
-                    <!-- Financial Tools -->
-                    <div class="footer-column">
-                        <h4 class="column-title">
-                            <span class="title-icon">🧮</span>
-                            Financial Calculators
-                        </h4>
-                        <div class="footer-links">
-                            <a href="emi-calculator.html" class="footer-link">
-                                <span class="link-icon">🏠</span>
-                                <div class="link-content">
-                                    <span class="link-title">EMI Calculator</span>
-                                    <span class="link-desc">Home & Personal Loans</span>
+                    <!-- Interactive Dropdown Sections -->
+                    <div class="footer-dropdowns">
+                        <!-- Financial Tools Dropdown -->
+                        <div class="footer-dropdown">
+                            <button class="dropdown-header" onclick="toggleFooterDropdown('calculators')">
+                                <span class="dropdown-title">
+                                    <span class="title-icon">🧮</span>
+                                    Financial Calculators
+                                </span>
+                                <span class="dropdown-arrow" id="calculators-arrow">▼</span>
+                            </button>
+                            <div class="dropdown-content" id="calculators-content">
+                                <div class="dropdown-grid">
+                                    <a href="emi-calculator.html" class="dropdown-link premium">
+                                        <span class="link-icon">🏠</span>
+                                        <div class="link-details">
+                                            <span class="link-title">EMI Calculator</span>
+                                            <span class="link-desc">Home & Personal Loans</span>
+                                            <span class="link-tag">Most Popular</span>
+                                        </div>
+                                    </a>
+                                    <a href="sip-calculator.html" class="dropdown-link">
+                                        <span class="link-icon">📈</span>
+                                        <div class="link-details">
+                                            <span class="link-title">SIP Calculator</span>
+                                            <span class="link-desc">Mutual Fund Investments</span>
+                                        </div>
+                                    </a>
+                                    <a href="tax-calculator.html" class="dropdown-link">
+                                        <span class="link-icon">💼</span>
+                                        <div class="link-details">
+                                            <span class="link-title">Tax Calculator</span>
+                                            <span class="link-desc">Income Tax Planning</span>
+                                        </div>
+                                    </a>
+                                    <a href="gst-calculator.html" class="dropdown-link">
+                                        <span class="link-icon">📊</span>
+                                        <div class="link-details">
+                                            <span class="link-title">GST Calculator</span>
+                                            <span class="link-desc">Business Tax Solutions</span>
+                                        </div>
+                                    </a>
+                                    <a href="fd-calculator.html" class="dropdown-link">
+                                        <span class="link-icon">🏦</span>
+                                        <div class="link-details">
+                                            <span class="link-title">FD Calculator</span>
+                                            <span class="link-desc">Fixed Deposit Returns</span>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                            <a href="sip-calculator.html" class="footer-link">
-                                <span class="link-icon">📈</span>
-                                <div class="link-content">
-                                    <span class="link-title">SIP Calculator</span>
-                                    <span class="link-desc">Mutual Fund Investments</span>
+                                <div class="dropdown-footer">
+                                    <p class="dropdown-subtitle">🚀 More calculators coming soon!</p>
                                 </div>
-                            </a>
-                            <a href="tax-calculator.html" class="footer-link">
-                                <span class="link-icon">💼</span>
-                                <div class="link-content">
-                                    <span class="link-title">Tax Calculator</span>
-                                    <span class="link-desc">Income Tax Planning</span>
-                                </div>
-                            </a>
-                            <a href="gst-calculator.html" class="footer-link">
-                                <span class="link-icon">📊</span>
-                                <div class="link-content">
-                                    <span class="link-title">GST Calculator</span>
-                                    <span class="link-desc">Business Tax Solutions</span>
-                                </div>
-                            </a>
-                            <a href="fd-calculator.html" class="footer-link">
-                                <span class="link-icon">🏦</span>
-                                <div class="link-content">
-                                    <span class="link-title">FD Calculator</span>
-                                    <span class="link-desc">Fixed Deposit Returns</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Resources & Support -->
-                    <div class="footer-column">
-                        <h4 class="column-title">
-                            <span class="title-icon">📚</span>
-                            Resources & Support
-                        </h4>
-                        <div class="footer-links">
-                            <a href="about.html" class="footer-link">
-                                <span class="link-icon">ℹ️</span>
-                                <div class="link-content">
-                                    <span class="link-title">About Us</span>
-                                    <span class="link-desc">Our Story & Mission</span>
-                                </div>
-                            </a>
-                            <a href="blog.html" class="footer-link">
-                                <span class="link-icon">📝</span>
-                                <div class="link-content">
-                                    <span class="link-title">Financial Blog</span>
-                                    <span class="link-desc">Expert Tips & Insights</span>
-                                </div>
-                            </a>
-                            <a href="contact.html" class="footer-link">
-                                <span class="link-icon">📞</span>
-                                <div class="link-content">
-                                    <span class="link-title">Contact Support</span>
-                                    <span class="link-desc">Get Help & Guidance</span>
-                                </div>
-                            </a>
-                            <a href="feedback.html" class="footer-link">
-                                <span class="link-icon">💬</span>
-                                <div class="link-content">
-                                    <span class="link-title">Send Feedback</span>
-                                    <span class="link-desc">Share Your Experience</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Company & Legal -->
-                    <div class="footer-column">
-                        <h4 class="column-title">
-                            <span class="title-icon">🏢</span>
-                            Company & Legal
-                        </h4>
-                        <div class="footer-links">
-                            <a href="privacy.html" class="footer-link">
-                                <span class="link-icon">🛡️</span>
-                                <div class="link-content">
-                                    <span class="link-title">Privacy Policy</span>
-                                    <span class="link-desc">Data Protection</span>
-                                </div>
-                            </a>
-                            <a href="terms.html" class="footer-link">
-                                <span class="link-icon">📋</span>
-                                <div class="link-content">
-                                    <span class="link-title">Terms of Service</span>
-                                    <span class="link-desc">Usage Guidelines</span>
-                                </div>
-                            </a>
-                        </div>
-                        
-                        <!-- Success Metrics -->
-                        <div class="success-metrics">
-                            <div class="metric-item">
-                                <span class="metric-number">50,000+</span>
-                                <span class="metric-label">Happy Users</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-number">4.9⭐</span>
-                                <span class="metric-label">User Rating</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-number">1M+</span>
-                                <span class="metric-label">Calculations</span>
                             </div>
                         </div>
 
-                        <!-- Contact Info -->
-                        <div class="contact-info-footer">
-                            <div class="contact-item">
-                                <span class="contact-icon">📧</span>
-                                <a href="mailto:pratixfinance4@gmail.com" class="contact-text">pratixfinance4@gmail.com</a>
+                        <!-- Resources & Support Dropdown -->
+                        <div class="footer-dropdown">
+                            <button class="dropdown-header" onclick="toggleFooterDropdown('resources')">
+                                <span class="dropdown-title">
+                                    <span class="title-icon">📚</span>
+                                    Resources & Support
+                                </span>
+                                <span class="dropdown-arrow" id="resources-arrow">▼</span>
+                            </button>
+                            <div class="dropdown-content" id="resources-content">
+                                <div class="dropdown-sections">
+                                    <div class="dropdown-section">
+                                        <h5 class="section-title">📖 Learn & Explore</h5>
+                                        <a href="about.html" class="dropdown-link">
+                                            <span class="link-icon">ℹ️</span>
+                                            <div class="link-details">
+                                                <span class="link-title">About Us</span>
+                                                <span class="link-desc">Our Story & Mission</span>
+                                            </div>
+                                        </a>
+                                        <a href="blog.html" class="dropdown-link">
+                                            <span class="link-icon">📝</span>
+                                            <div class="link-details">
+                                                <span class="link-title">Financial Blog</span>
+                                                <span class="link-desc">Expert Tips & Insights</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h5 class="section-title">🤝 Get Help</h5>
+                                        <a href="contact.html" class="dropdown-link">
+                                            <span class="link-icon">📞</span>
+                                            <div class="link-details">
+                                                <span class="link-title">Contact Support</span>
+                                                <span class="link-desc">Get Help & Guidance</span>
+                                            </div>
+                                        </a>
+                                        <a href="feedback.html" class="dropdown-link">
+                                            <span class="link-icon">💬</span>
+                                            <div class="link-details">
+                                                <span class="link-title">Send Feedback</span>
+                                                <span class="link-desc">Share Your Experience</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="dropdown-highlight">
+                                    <div class="contact-highlight">
+                                        <span class="contact-icon">📧</span>
+                                        <div class="contact-details">
+                                            <a href="mailto:pratixfinance4@gmail.com" class="contact-email">pratixfinance4@gmail.com</a>
+                                            <span class="response-time">⚡ Response within 24-48 hours</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="response-time">Response within 24-48 hours</p>
+                        </div>
+
+                        <!-- Company & Legal Dropdown -->
+                        <div class="footer-dropdown">
+                            <button class="dropdown-header" onclick="toggleFooterDropdown('company')">
+                                <span class="dropdown-title">
+                                    <span class="title-icon">🏢</span>
+                                    Company & Legal
+                                </span>
+                                <span class="dropdown-arrow" id="company-arrow">▼</span>
+                            </button>
+                            <div class="dropdown-content" id="company-content">
+                                <div class="dropdown-sections">
+                                    <div class="dropdown-section">
+                                        <h5 class="section-title">⚖️ Legal Information</h5>
+                                        <a href="privacy.html" class="dropdown-link">
+                                            <span class="link-icon">🛡️</span>
+                                            <div class="link-details">
+                                                <span class="link-title">Privacy Policy</span>
+                                                <span class="link-desc">Data Protection & Security</span>
+                                            </div>
+                                        </a>
+                                        <a href="terms.html" class="dropdown-link">
+                                            <span class="link-icon">📋</span>
+                                            <div class="link-details">
+                                                <span class="link-title">Terms of Service</span>
+                                                <span class="link-desc">Usage Guidelines</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="success-metrics-dropdown">
+                                    <h5 class="section-title">🎯 Our Impact</h5>
+                                    <div class="metrics-grid">
+                                        <div class="metric-card">
+                                            <span class="metric-number">50,000+</span>
+                                            <span class="metric-label">Happy Users</span>
+                                        </div>
+                                        <div class="metric-card">
+                                            <span class="metric-number">4.9⭐</span>
+                                            <span class="metric-label">User Rating</span>
+                                        </div>
+                                        <div class="metric-card">
+                                            <span class="metric-number">1M+</span>
+                                            <span class="metric-label">Calculations</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer Bottom -->
+                <!-- Enhanced Footer Bottom -->
                 <div class="footer-bottom">
                     <div class="footer-bottom-content">
                         <div class="copyright">
