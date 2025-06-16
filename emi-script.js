@@ -1,3 +1,4 @@
+
 // Global variables
 let emiChart = null;
 let prepaymentChart = null;
@@ -8,106 +9,39 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
     
-    // Wait a bit for all elements to be rendered
-    setTimeout(() => {
-        // Initialize core functionality first
-        initTabSwitching();
-        initBottomNavigation();
-        
-        // Then initialize calculator components
-        initEMICalculator();
-        initAmortizationTable();
-        initPrepaymentCalculator();
-        initLoanComparison();
-        initToolExpansion();
-        
-        // Show first tab by default
-        setTimeout(() => {
-            switchToTab('emi-calculator');
-        }, 200);
-        
-        console.log('EMI calculator initialization complete');
-    }, 100);
+    // Initialize all functionality
+    initEMICalculator();
+    initTabSwitching();
+    initBottomNavigation();
+    initAmortizationTable();
+    initPrepaymentCalculator();
+    initLoanComparison();
+    initToolExpansion();
+    
+    // Show first tab by default
+    switchToTab('emi-calculator');
+    
+    console.log('EMI calculator initialization complete');
 });
-
-// Clear all inputs on page load
-function clearAllInputs() {
-    // Clear EMI calculator inputs
-    const loanAmountInput = document.getElementById('loanAmountInput');
-    const interestRateInput = document.getElementById('interestRateInput');
-    const loanTenureInput = document.getElementById('loanTenureInput');
-    
-    if (loanAmountInput) loanAmountInput.value = '';
-    if (interestRateInput) interestRateInput.value = '';
-    if (loanTenureInput) loanTenureInput.value = '';
-
-    // Clear prepayment inputs
-    const prepaymentAmount = document.getElementById('prepaymentAmount');
-    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
-    
-    if (prepaymentAmount) prepaymentAmount.value = '';
-    if (prepayAfterMonths) prepayAfterMonths.value = '';
-
-    // Hide results and charts
-    const resultCard = document.getElementById('resultCard');
-    const chartContainer = document.getElementById('chartContainer');
-    const chartControls = document.getElementById('chartControls');
-    const prepaymentResults = document.getElementById('prepaymentResults');
-    const comparisonResults = document.getElementById('comparisonResults');
-    
-    if (resultCard) resultCard.style.display = 'none';
-    if (chartContainer) chartContainer.style.display = 'none';
-    if (chartControls) chartControls.style.display = 'none';
-    if (prepaymentResults) prepaymentResults.style.display = 'none';
-    if (comparisonResults) comparisonResults.style.display = 'none';
-
-    generateLoanInputs();
-}
 
 // Initialize EMI Calculator
 function initEMICalculator() {
     console.log('Initializing EMI Calculator...');
     
-    const loanAmountInput = document.getElementById('loanAmountInput');
-    const interestRateInput = document.getElementById('interestRateInput');
-    const loanTenureInput = document.getElementById('loanTenureInput');
-
-    // Input validation and real-time updates
-    if (loanAmountInput) {
-        loanAmountInput.addEventListener('input', function() {
-            // Remove any non-numeric characters except decimal point
-            this.value = this.value.replace(/[^0-9.]/g, '');
-        });
-    }
-
-    if (interestRateInput) {
-        interestRateInput.addEventListener('input', function() {
-            // Remove any non-numeric characters except decimal point
-            this.value = this.value.replace(/[^0-9.]/g, '');
-        });
-    }
-
-    if (loanTenureInput) {
-        loanTenureInput.addEventListener('input', function() {
-            // Remove any non-numeric characters
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-    }
-
-    // Wait for DOM to be fully loaded before attaching button listeners
+    // Wait for elements to be available
     setTimeout(() => {
-        // Calculate EMI button
+        // Get button elements
         const calculateButton = document.getElementById('calculateEMI');
+        const refreshButton = document.getElementById('refreshEMI');
+        
+        console.log('Calculate button:', calculateButton);
+        console.log('Refresh button:', refreshButton);
+        
+        // Add event listeners for calculate button
         if (calculateButton) {
-            console.log('Calculate button found, adding event listener');
-            // Remove any existing listeners
-            calculateButton.replaceWith(calculateButton.cloneNode(true));
-            const newCalculateButton = document.getElementById('calculateEMI');
-            
-            newCalculateButton.addEventListener('click', function(e) {
+            calculateButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
                 console.log('Calculate button clicked');
                 
                 try {
@@ -118,22 +52,16 @@ function initEMICalculator() {
                     showNotification('Error calculating EMI. Please check your inputs.', 'error');
                 }
             });
+            console.log('Calculate button event listener added');
         } else {
             console.error('Calculate button not found!');
         }
 
-        // Refresh button
-        const refreshButton = document.getElementById('refreshEMI');
+        // Add event listeners for refresh button
         if (refreshButton) {
-            console.log('Refresh button found, adding event listener');
-            // Remove any existing listeners
-            refreshButton.replaceWith(refreshButton.cloneNode(true));
-            const newRefreshButton = document.getElementById('refreshEMI');
-            
-            newRefreshButton.addEventListener('click', function(e) {
+            refreshButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
                 console.log('Refresh button clicked');
                 
                 try {
@@ -144,28 +72,53 @@ function initEMICalculator() {
                     showNotification('Error refreshing calculator.', 'error');
                 }
             });
+            console.log('Refresh button event listener added');
         } else {
             console.error('Refresh button not found!');
         }
-    }, 500);
 
-    // Chart type selector
-    const chartTypeSelect = document.getElementById('chartTypeSelect');
-    if (chartTypeSelect) {
-        chartTypeSelect.addEventListener('change', function() {
-            if (currentEMIData) {
-                updateChart(currentEMIData);
-            }
-        });
-    }
+        // Chart type selector
+        const chartTypeSelect = document.getElementById('chartTypeSelect');
+        if (chartTypeSelect) {
+            chartTypeSelect.addEventListener('change', function() {
+                if (currentEMIData) {
+                    updateChart(currentEMIData);
+                }
+            });
+        }
 
-    // PDF download
-    const downloadPDFButton = document.getElementById('downloadPDF');
-    if (downloadPDFButton) {
-        downloadPDFButton.addEventListener('click', function() {
-            generateEMIPDF();
-        });
-    }
+        // PDF download
+        const downloadPDFButton = document.getElementById('downloadPDF');
+        if (downloadPDFButton) {
+            downloadPDFButton.addEventListener('click', function() {
+                generateEMIPDF();
+            });
+        }
+        
+        // Input validation
+        const loanAmountInput = document.getElementById('loanAmountInput');
+        const interestRateInput = document.getElementById('interestRateInput');
+        const loanTenureInput = document.getElementById('loanTenureInput');
+
+        if (loanAmountInput) {
+            loanAmountInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9.]/g, '');
+            });
+        }
+
+        if (interestRateInput) {
+            interestRateInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9.]/g, '');
+            });
+        }
+
+        if (loanTenureInput) {
+            loanTenureInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
+        
+    }, 100);
 }
 
 // Calculate EMI
@@ -266,6 +219,60 @@ function calculateEMI() {
     generateAmortizationTable(currentEMIData);
     
     console.log('EMI calculation completed successfully');
+}
+
+// Reset EMI Calculator function
+function resetEMICalculator() {
+    console.log('Resetting EMI Calculator');
+    
+    // Clear inputs
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const loanTenureInput = document.getElementById('loanTenureInput');
+    
+    if (loanAmountInput) loanAmountInput.value = '';
+    if (interestRateInput) interestRateInput.value = '';
+    if (loanTenureInput) loanTenureInput.value = '';
+
+    // Clear prepayment inputs
+    const prepaymentAmount = document.getElementById('prepaymentAmount');
+    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
+    
+    if (prepaymentAmount) prepaymentAmount.value = '';
+    if (prepayAfterMonths) prepayAfterMonths.value = '';
+
+    // Hide results and charts
+    const resultCard = document.getElementById('resultCard');
+    const chartContainer = document.getElementById('chartContainer');
+    const chartControls = document.getElementById('chartControls');
+    const prepaymentResults = document.getElementById('prepaymentResults');
+    const comparisonResults = document.getElementById('comparisonResults');
+    
+    if (resultCard) resultCard.style.display = 'none';
+    if (chartContainer) chartContainer.style.display = 'none';
+    if (chartControls) chartControls.style.display = 'none';
+    if (prepaymentResults) prepaymentResults.style.display = 'none';
+    if (comparisonResults) comparisonResults.style.display = 'none';
+
+    // Reset charts
+    if (emiChart) {
+        emiChart.destroy();
+        emiChart = null;
+    }
+    if (prepaymentChart) {
+        prepaymentChart.destroy();
+        prepaymentChart = null;
+    }
+    if (comparisonChart) {
+        comparisonChart.destroy();
+        comparisonChart = null;
+    }
+
+    // Reset global data
+    currentEMIData = null;
+    
+    // Regenerate loan inputs
+    generateLoanInputs();
 }
 
 // Update chart based on selected type
@@ -429,16 +436,115 @@ function generateMonthlyBreakdown(data) {
     return { months, balances };
 }
 
+// Initialize tab switching functionality
+function initTabSwitching() {
+    console.log('Initializing tab switching');
+    
+    const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+    console.log('Found nav items:', navItems.length);
+    
+    navItems.forEach((item, index) => {
+        const targetTab = item.getAttribute('data-tab');
+        console.log(`Adding click listener to nav item ${index}:`, targetTab);
+        
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Tab clicked:', targetTab);
+            
+            if (targetTab) {
+                switchToTab(targetTab);
+            }
+        });
+    });
+}
+
+// Initialize bottom navigation
+function initBottomNavigation() {
+    console.log('Initializing bottom navigation');
+    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+    console.log('Found bottom nav items:', navItems.length);
+    
+    navItems.forEach((item, index) => {
+        const targetTab = item.getAttribute('data-tab');
+        console.log(`Bottom nav item ${index}:`, targetTab);
+        
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Bottom nav tab clicked:', targetTab);
+            
+            if (targetTab) {
+                switchToTab(targetTab);
+            }
+        });
+    });
+}
+
+// Switch to tab function
+function switchToTab(tabId) {
+    console.log('Switching to tab:', tabId);
+    
+    try {
+        // Remove active class from all nav items and tab contents
+        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        navItems.forEach(nav => {
+            nav.classList.remove('active');
+        });
+        
+        tabContents.forEach(tab => {
+            tab.classList.remove('active');
+            tab.style.display = 'none';
+        });
+
+        // Add active class to target tab and nav item
+        const targetTab = document.getElementById(tabId);
+        const targetNavs = document.querySelectorAll(`[data-tab="${tabId}"]`);
+        
+        if (targetTab) {
+            targetTab.classList.add('active');
+            targetTab.style.display = 'block';
+            console.log('Tab activated:', tabId);
+        }
+        
+        targetNavs.forEach(nav => {
+            if (nav) {
+                nav.classList.add('active');
+            }
+        });
+        
+        // Save active tab
+        localStorage.setItem('activeTab', tabId);
+        
+        // Scroll to top when switching tabs
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+    } catch (error) {
+        console.error('Error switching tabs:', error);
+    }
+}
+
 // Initialize Amortization Table
 function initAmortizationTable() {
-    document.getElementById('downloadAmortizationPDF').addEventListener('click', function() {
-        generateAmortizationPDF();
-    });
+    const downloadBtn = document.getElementById('downloadAmortizationPDF');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            generateAmortizationPDF();
+        });
+    }
 }
 
 // Generate Amortization Table
 function generateAmortizationTable(data) {
     const tbody = document.getElementById('amortizationTableBody');
+    if (!tbody) return;
+    
     tbody.innerHTML = '';
 
     const monthlyRate = data.annualRate / 12 / 100;
@@ -470,21 +576,36 @@ function generateAmortizationTable(data) {
 
 // Initialize Prepayment Calculator
 function initPrepaymentCalculator() {
-    document.getElementById('calculatePrepayment').addEventListener('click', function() {
-        calculatePrepaymentImpact();
-        showNotification('Prepayment impact calculated!', 'success');
-    });
+    const calculateBtn = document.getElementById('calculatePrepayment');
+    const refreshBtn = document.getElementById('refreshPrepayment');
+    const downloadBtn = document.getElementById('downloadPrepaymentPDF');
+    
+    if (calculateBtn) {
+        calculateBtn.addEventListener('click', function() {
+            calculatePrepaymentImpact();
+            showNotification('Prepayment impact calculated!', 'success');
+        });
+    }
 
-    document.getElementById('refreshPrepayment').addEventListener('click', function() {
-        document.getElementById('prepaymentAmount').value = '';
-        document.getElementById('prepayAfterMonths').value = '';
-        document.getElementById('prepaymentResults').style.display = 'none';
-        showNotification('Prepayment calculator refreshed!', 'info');
-    });
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            const prepaymentAmount = document.getElementById('prepaymentAmount');
+            const prepayAfterMonths = document.getElementById('prepayAfterMonths');
+            const prepaymentResults = document.getElementById('prepaymentResults');
+            
+            if (prepaymentAmount) prepaymentAmount.value = '';
+            if (prepayAfterMonths) prepayAfterMonths.value = '';
+            if (prepaymentResults) prepaymentResults.style.display = 'none';
+            
+            showNotification('Prepayment calculator refreshed!', 'info');
+        });
+    }
 
-    document.getElementById('downloadPrepaymentPDF').addEventListener('click', function() {
-        generatePrepaymentPDF();
-    });
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            generatePrepaymentPDF();
+        });
+    }
 }
 
 // Calculate Prepayment Impact
@@ -603,13 +724,14 @@ function calculatePrepaymentScenario(originalData, prepaymentAmount, prepayAfter
 
 // Update prepayment chart
 function updatePrepaymentChart(originalData, prepaymentData) {
-    const ctx = document.getElementById('prepaymentChart').getContext('2d');
+    const ctx = document.getElementById('prepaymentChart');
+    if (!ctx) return;
 
     if (prepaymentChart) {
         prepaymentChart.destroy();
     }
 
-    prepaymentChart = new Chart(ctx, {
+    prepaymentChart = new Chart(ctx.getContext('2d'), {
         type: 'bar',
         data: {
             labels: ['Original Loan', 'With Prepayment'],
@@ -656,31 +778,48 @@ function updatePrepaymentChart(originalData, prepaymentData) {
 
 // Initialize Loan Comparison
 function initLoanComparison() {
-    document.getElementById('loanCountSelect').addEventListener('change', function() {
-        generateLoanInputs();
-    });
+    const loanCountSelect = document.getElementById('loanCountSelect');
+    const compareBtn = document.getElementById('compareLoans');
+    const refreshBtn = document.getElementById('refreshComparison');
+    const chartTypeSelect = document.getElementById('comparisonChartType');
+    const downloadBtn = document.getElementById('downloadComparisonPDF');
+    
+    if (loanCountSelect) {
+        loanCountSelect.addEventListener('change', function() {
+            generateLoanInputs();
+        });
+    }
 
-    document.getElementById('compareLoans').addEventListener('click', function() {
-        compareLoanOptions();
-        showNotification('Loans compared successfully!', 'success');
-    });
+    if (compareBtn) {
+        compareBtn.addEventListener('click', function() {
+            compareLoanOptions();
+            showNotification('Loans compared successfully!', 'success');
+        });
+    }
 
-    document.getElementById('refreshComparison').addEventListener('click', function() {
-        generateLoanInputs();
-        document.getElementById('comparisonResults').style.display = 'none';
-        showNotification('Comparison refreshed!', 'info');
-    });
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            generateLoanInputs();
+            const comparisonResults = document.getElementById('comparisonResults');
+            if (comparisonResults) comparisonResults.style.display = 'none';
+            showNotification('Comparison refreshed!', 'info');
+        });
+    }
 
-    document.getElementById('comparisonChartType').addEventListener('change', function() {
-        const tableData = document.getElementById('comparisonTableBody').innerHTML;
-        if (tableData.trim() !== '') {
-            updateComparisonChart();
-        }
-    });
+    if (chartTypeSelect) {
+        chartTypeSelect.addEventListener('change', function() {
+            const tableData = document.getElementById('comparisonTableBody').innerHTML;
+            if (tableData.trim() !== '') {
+                updateComparisonChart();
+            }
+        });
+    }
 
-    document.getElementById('downloadComparisonPDF').addEventListener('click', function() {
-        generateComparisonPDF();
-    });
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            generateComparisonPDF();
+        });
+    }
 
     generateLoanInputs();
 }
@@ -689,6 +828,8 @@ function initLoanComparison() {
 function generateLoanInputs() {
     const loanCount = parseInt(document.getElementById('loanCountSelect').value);
     const container = document.getElementById('loanInputsGrid');
+
+    if (!container) return;
 
     container.innerHTML = '';
 
@@ -752,20 +893,23 @@ function compareLoanOptions() {
 
     // Update comparison table
     const tbody = document.getElementById('comparisonTableBody');
-    tbody.innerHTML = '';
+    if (tbody) {
+        tbody.innerHTML = '';
 
-    loans.forEach(loan => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${loan.name}</td>
-            <td>₹${Math.round(loan.emi).toLocaleString('en-IN')}</td>
-            <td>₹${Math.round(loan.totalInterest).toLocaleString('en-IN')}</td>
-            <td>₹${Math.round(loan.totalAmount).toLocaleString('en-IN')}</td>
-        `;
-        tbody.appendChild(row);
-    });
+        loans.forEach(loan => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${loan.name}</td>
+                <td>₹${Math.round(loan.emi).toLocaleString('en-IN')}</td>
+                <td>₹${Math.round(loan.totalInterest).toLocaleString('en-IN')}</td>
+                <td>₹${Math.round(loan.totalAmount).toLocaleString('en-IN')}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
 
-    document.getElementById('comparisonResults').style.display = 'block';
+    const comparisonResults = document.getElementById('comparisonResults');
+    if (comparisonResults) comparisonResults.style.display = 'block';
 
     // Update comparison chart
     updateComparisonChart(loans);
@@ -776,6 +920,8 @@ function updateComparisonChart(loans = null) {
     if (!loans) {
         // Extract data from table if loans not provided
         const tbody = document.getElementById('comparisonTableBody');
+        if (!tbody) return;
+        
         const rows = tbody.querySelectorAll('tr');
         loans = [];
 
@@ -791,7 +937,8 @@ function updateComparisonChart(loans = null) {
     }
 
     const chartType = document.getElementById('comparisonChartType').value;
-    const ctx = document.getElementById('loanComparisonChart').getContext('2d');
+    const ctx = document.getElementById('loanComparisonChart');
+    if (!ctx) return;
 
     if (comparisonChart) {
         comparisonChart.destroy();
@@ -923,67 +1070,106 @@ function updateComparisonChart(loans = null) {
             break;
     }
 
-    comparisonChart = new Chart(ctx, chartConfig);
+    comparisonChart = new Chart(ctx.getContext('2d'), chartConfig);
 }
 
-// Initialize tab switching functionality
-function initTabSwitching() {
-    console.log('Initializing tab switching');
+// Tool expansion functionality
+function initToolExpansion() {
+    const toolHeaders = document.querySelectorAll('.tool-header');
     
-    // Wait for DOM to be fully loaded
-    setTimeout(() => {
-        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
-        console.log('Found nav items:', navItems.length);
-        
-        navItems.forEach((item, index) => {
-            const targetTab = item.getAttribute('data-tab');
-            console.log(`Adding click listener to nav item ${index}:`, targetTab);
+    toolHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const toolId = this.getAttribute('data-tool');
+            const content = document.getElementById(`${toolId}-content`);
+            const expandIcon = this.querySelector('.expand-icon');
             
-            // Remove existing listeners by cloning
-            const newItem = item.cloneNode(true);
-            item.parentNode.replaceChild(newItem, item);
-            
-            newItem.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const targetTab = this.getAttribute('data-tab');
-                console.log('Tab clicked:', targetTab);
-                
-                if (targetTab) {
-                    switchToTab(targetTab);
+            if (content) {
+                if (content.style.display === 'none' || content.style.display === '') {
+                    content.style.display = 'block';
+                    if (expandIcon) expandIcon.textContent = '▲';
                 } else {
-                    console.error('No data-tab attribute found on:', this);
+                    content.style.display = 'none';
+                    if (expandIcon) expandIcon.textContent = '▼';
                 }
-            });
-        });
-    }, 300);
-}
-
-// Initialize bottom navigation
-function initBottomNavigation() {
-    console.log('Initializing bottom navigation');
-    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
-    console.log('Found bottom nav items:', navItems.length);
-    
-    navItems.forEach((item, index) => {
-        const targetTab = item.getAttribute('data-tab');
-        console.log(`Bottom nav item ${index}:`, targetTab);
-        
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const targetTab = this.getAttribute('data-tab');
-            console.log('Bottom nav tab clicked:', targetTab);
-            
-            if (targetTab) {
-                switchToTab(targetTab);
-            } else {
-                console.error('No data-tab attribute found on:', this);
             }
         });
     });
+}
+
+// Notification system
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+        max-width: 300px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    `;
+
+    // Set background color based on type
+    switch (type) {
+        case 'success':
+            notification.style.background = 'linear-gradient(135deg, #00ff88, #00d4ff)';
+            break;
+        case 'error':
+            notification.style.background = 'linear-gradient(135deg, #ff0080, #ff4444)';
+            break;
+        case 'info':
+        default:
+            notification.style.background = 'linear-gradient(135deg, #00d4ff, #8b5cf6)';
+            break;
+    }
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Add to page
+    document.body.appendChild(notification);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
 }
 
 // PDF Generation Functions
@@ -1092,8 +1278,7 @@ function generateAmortizationPDF() {
     doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
 
     doc.save('Amortization_Schedule.pdf');
-    showNotification('Amortization PDF downloaded successfully!',```text
- 'success');
+    showNotification('Amortization PDF downloaded successfully!', 'success');
 }
 
 function generatePrepaymentPDF() {
@@ -1163,17 +1348,19 @@ function generateComparisonPDF() {
     doc.text('Total Amount', 160, 70);
 
     const tbody = document.getElementById('comparisonTableBody');
-    const rows = tbody.querySelectorAll('tr');
-    let yPosition = 80;
+    if (tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        let yPosition = 80;
 
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        doc.text(cells[0].textContent, 20, yPosition);
-        doc.text(cells[1].textContent, 60, yPosition);
-        doc.text(cells[2].textContent, 110, yPosition);
-        doc.text(cells[3].textContent, 160, yPosition);
-        yPosition += 10;
-    });
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            doc.text(cells[0].textContent, 20, yPosition);
+            doc.text(cells[1].textContent, 60, yPosition);
+            doc.text(cells[2].textContent, 110, yPosition);
+            doc.text(cells[3].textContent, 160, yPosition);
+            yPosition += 10;
+        });
+    }
 
     // Chart
     const canvas = document.getElementById('loanComparisonChart');
@@ -1188,82 +1375,6 @@ function generateComparisonPDF() {
 
     doc.save('Loan_Comparison_Analysis.pdf');
     showNotification('Comparison PDF downloaded successfully!', 'success');
-}
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: 600;
-        z-index: 1000;
-        animation: slideIn 0.3s ease;
-        max-width: 300px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    `;
-
-    // Set background color based on type
-    switch (type) {
-        case 'success':
-            notification.style.background = 'linear-gradient(135deg, #00ff88, #00d4ff)';
-            break;
-        case 'error':
-            notification.style.background = 'linear-gradient(135deg, #ff0080, #ff4444)';
-            break;
-        case 'info':
-        default:
-            notification.style.background = 'linear-gradient(135deg, #00d4ff, #8b5cf6)';
-            break;
-    }
-
-    // Add animation styles
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Add to page
-    document.body.appendChild(notification);
-
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
 }
 
 // Navigation functions for tool cards
@@ -1292,158 +1403,11 @@ function goToHome() {
     window.location.href = 'index.html';
 }
 
-function switchToTab(tabId) {
-    console.log('Switching to tab:', tabId);
-    
-    try {
-        // Remove active class from all nav items and tab contents
-        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        console.log('Found nav items:', navItems.length);
-        console.log('Found tab contents:', tabContents.length);
-        
-        navItems.forEach(nav => {
-            nav.classList.remove('active');
-        });
-        
-        tabContents.forEach(tab => {
-            tab.classList.remove('active');
-            tab.style.display = 'none';
-        });
-
-        // Add active class to target tab and nav item
-        const targetTab = document.getElementById(tabId);
-        const targetNavs = document.querySelectorAll(`[data-tab="${tabId}"]`);
-        
-        console.log('Target tab element:', targetTab);
-        console.log('Target nav elements:', targetNavs.length);
-        
-        if (targetTab) {
-            targetTab.classList.add('active');
-            targetTab.style.display = 'block';
-            console.log('Tab activated:', tabId);
-        } else {
-            console.error('Tab not found:', tabId);
-            return;
-        }
-        
-        targetNavs.forEach(nav => {
-            if (nav) {
-                nav.classList.add('active');
-                console.log('Nav activated:', nav);
-            }
-        });
-        
-        // Save active tab
-        localStorage.setItem('activeTab', tabId);
-        
-        // Scroll to top when switching tabs
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-    } catch (error) {
-        console.error('Error switching tabs:', error);
-    }
-}
-
-window.switchToTab = switchToTab;
-
 // Make functions globally available
+window.switchToTab = switchToTab;
 window.goToSipCalculator = goToSipCalculator;
 window.goToEmiCalculator = goToEmiCalculator;
 window.goToGstCalculator = goToGstCalculator;
 window.goToTaxCalculator = goToTaxCalculator;
 window.goToFdCalculator = goToFdCalculator;
 window.goToHome = goToHome;
-
-    // Reset EMI Calculator function
-function resetEMICalculator() {
-    // Clear inputs
-    const loanAmountInput = document.getElementById('loanAmountInput');
-    const interestRateInput = document.getElementById('interestRateInput');
-    const loanTenureInput = document.getElementById('loanTenureInput');
-    
-    if (loanAmountInput) loanAmountInput.value = '';
-    if (interestRateInput) interestRateInput.value = '';
-    if (loanTenureInput) loanTenureInput.value = '';
-
-    // Clear prepayment inputs
-    const prepaymentAmount = document.getElementById('prepaymentAmount');
-    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
-    
-    if (prepaymentAmount) prepaymentAmount.value = '';
-    if (prepayAfterMonths) prepayAfterMonths.value = '';
-
-    // Hide results and charts
-    const resultCard = document.getElementById('resultCard');
-    const chartContainer = document.getElementById('chartContainer');
-    const chartControls = document.getElementById('chartControls');
-    const prepaymentResults = document.getElementById('prepaymentResults');
-    const comparisonResults = document.getElementById('comparisonResults');
-    
-    if (resultCard) resultCard.style.display = 'none';
-    if (chartContainer) chartContainer.style.display = 'none';
-    if (chartControls) chartControls.style.display = 'none';
-    if (prepaymentResults) prepaymentResults.style.display = 'none';
-    if (comparisonResults) comparisonResults.style.display = 'none';
-
-    // Reset charts
-    if (emiChart) {
-        emiChart.destroy();
-        emiChart = null;
-    }
-    if (prepaymentChart) {
-        prepaymentChart.destroy();
-        prepaymentChart = null;
-    }
-    if (comparisonChart) {
-        comparisonChart.destroy();
-        comparisonChart = null;
-    }
-
-    // Reset global data
-    currentEMIData = null;
-    
-    // Regenerate loan inputs
-    generateLoanInputs();
-}
-
-// Tool expansion functionality
-function initToolExpansion() {
-    const toolHeaders = document.querySelectorAll('.tool-header');
-    
-    toolHeaders.forEach(header => {
-        header.addEventListener('click', function() {
-            const toolId = this.getAttribute('data-tool');
-            const content = document.getElementById(`${toolId}-content`);
-            const expandIcon = this.querySelector('.expand-icon');
-            
-            if (content) {
-                if (content.style.display === 'none' || content.style.display === '') {
-                    content.style.display = 'block';
-                    if (expandIcon) expandIcon.textContent = '▲';
-                } else {
-                    content.style.display = 'none';
-                    if (expandIcon) expandIcon.textContent = '▼';
-                }
-            }
-        });
-    });
-}
-// Tools tab initialization
-function initTools() {
-    // Add any initialization code for the Tools tab here
-    console.log('Tools tab initialized');
-}
-
-// Smart Features tab initialization
-function initSmartFeatures() {
-    // Add any initialization code for the Smart Features tab here
-    console.log('Smart Features tab initialized');
-}
-
-// Settings tab initialization
-function initSettings() {
-    // Add any initialization code for the Settings tab here
-    console.log('Settings tab initialized');
-}
