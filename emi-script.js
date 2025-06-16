@@ -8,6 +8,9 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
 
+    // Ensure proper mobile layout
+    initMobileLayout();
+    
     // Initialize all functionality
     initEMICalculator();
     initTabSwitching();
@@ -15,15 +18,42 @@ document.addEventListener('DOMContentLoaded', function() {
     initAmortizationTable();
     initPrepaymentCalculator();
     initLoanComparison();
-    initTaxSavingsCalculator();
+    initSmartFeatures();
 
     // Show first tab by default
-    setTimeout(() => {
-        switchToTab('emi-calculator');
-    }, 100);
+    switchToTab('emi-calculator');
 
     console.log('EMI calculator initialization complete');
 });
+
+// Fix mobile layout issues
+function initMobileLayout() {
+    // Ensure bottom navigation is visible on mobile
+    const bottomNav = document.querySelector('.bottom-nav');
+    if (bottomNav) {
+        bottomNav.style.display = window.innerWidth <= 1023 ? 'grid' : 'none';
+    }
+    
+    // Adjust main content padding for mobile
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent && window.innerWidth <= 1023) {
+        mainContent.style.paddingBottom = '100px';
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        const bottomNav = document.querySelector('.bottom-nav');
+        const mainContent = document.querySelector('.main-content');
+        
+        if (bottomNav) {
+            bottomNav.style.display = window.innerWidth <= 1023 ? 'grid' : 'none';
+        }
+        
+        if (mainContent) {
+            mainContent.style.paddingBottom = window.innerWidth <= 1023 ? '100px' : '2rem';
+        }
+    });
+}
 
 // Initialize EMI Calculator
 function initEMICalculator() {
@@ -426,18 +456,28 @@ function initTabSwitching() {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Adding click listener to nav item ${index}:`, targetTab);
 
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const targetTab = this.getAttribute('data-tab');
-            console.log('Tab clicked:', targetTab);
-
-            if (targetTab) {
-                switchToTab(targetTab);
-            }
-        });
+        // Remove any existing listeners first
+        item.removeEventListener('click', handleTabClick);
+        item.addEventListener('click', handleTabClick);
     });
+}
+
+// Separate function for handling tab clicks
+function handleTabClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const targetTab = this.getAttribute('data-tab');
+    console.log('Tab clicked:', targetTab);
+
+    if (targetTab) {
+        switchToTab(targetTab);
+        
+        // Scroll to top on mobile
+        if (window.innerWidth <= 1023) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
 }
 
 // Initialize bottom navigation
@@ -1583,7 +1623,7 @@ function initToolExpansion() {
 // Calculate Tax Savings
 function calculateTaxSavings() {
     console.log('Calculate Tax Savings function called');
-    
+
     const principalRepayment = parseFloat(document.getElementById('principalRepayment')?.value) || 0;
     const interestPayment = parseFloat(document.getElementById('interestPayment')?.value) || 0;
     const taxSlab = parseFloat(document.getElementById('taxSlab')?.value) || 0;
