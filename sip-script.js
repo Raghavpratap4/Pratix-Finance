@@ -77,63 +77,27 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Sync sliders with inputs
-        if (monthlyAmountSlider && monthlyAmountInput) {
-            monthlyAmountSlider.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                monthlyAmountInput.value = value;
-                monthlyAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
-                if (hasValidInputs()) calculateSIP();
-            });
-
+        // Input validation and real-time updates
+        if (monthlyAmountInput) {
             monthlyAmountInput.addEventListener('input', function() {
-                if (this.value) {
-                    const value = parseInt(this.value);
-                    if (value >= 500 && value <= 100000) {
-                        monthlyAmountSlider.value = value;
-                        monthlyAmountDisplay.textContent = `₹${value.toLocaleString('en-IN')}`;
-                        if (hasValidInputs()) calculateSIP();
-                    }
+                if (this.value && hasValidInputs()) {
+                    calculateSIP();
                 }
             });
         }
 
-        if (returnRateSlider && returnRateInput) {
-            returnRateSlider.addEventListener('input', function() {
-                const value = parseFloat(this.value);
-                returnRateInput.value = value;
-                returnRateDisplay.textContent = `${value}%`;
-                if (hasValidInputs()) calculateSIP();
-            });
-
+        if (returnRateInput) {
             returnRateInput.addEventListener('input', function() {
-                if (this.value) {
-                    const value = parseFloat(this.value);
-                    if (value >= 1 && value <= 30) {
-                        returnRateSlider.value = value;
-                        returnRateDisplay.textContent = `${value}%`;
-                        if (hasValidInputs()) calculateSIP();
-                    }
+                if (this.value && hasValidInputs()) {
+                    calculateSIP();
                 }
             });
         }
 
-        if (investmentPeriodSlider && investmentPeriodInput) {
-            investmentPeriodSlider.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                investmentPeriodInput.value = value;
-                investmentPeriodDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
-                if (hasValidInputs()) calculateSIP();
-            });
-
+        if (investmentPeriodInput) {
             investmentPeriodInput.addEventListener('input', function() {
-                if (this.value) {
-                    const value = parseInt(this.value);
-                    if (value >= 1 && value <= 40) {
-                        investmentPeriodSlider.value = value;
-                        investmentPeriodDisplay.textContent = `${value} Year${value > 1 ? 's' : ''}`;
-                        if (hasValidInputs()) calculateSIP();
-                    }
+                if (this.value && hasValidInputs()) {
+                    calculateSIP();
                 }
             });
         }
@@ -172,32 +136,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function resetSIPInputs() {
-        const monthlyAmountSlider = document.getElementById('monthlyAmountSlider');
         const monthlyAmountInput = document.getElementById('monthlyAmountInput');
-        const monthlyAmountDisplay = document.getElementById('monthlyAmountDisplay');
-        const returnRateSlider = document.getElementById('returnRateSlider');
         const returnRateInput = document.getElementById('returnRateInput');
-        const returnRateDisplay = document.getElementById('returnRateDisplay');
-        const investmentPeriodSlider = document.getElementById('investmentPeriodSlider');
         const investmentPeriodInput = document.getElementById('investmentPeriodInput');
-        const investmentPeriodDisplay = document.getElementById('investmentPeriodDisplay');
 
-        if (monthlyAmountSlider && monthlyAmountInput && monthlyAmountDisplay) {
-            monthlyAmountSlider.value = '';
+        if (monthlyAmountInput) {
             monthlyAmountInput.value = '';
-            monthlyAmountDisplay.textContent = 'Enter monthly SIP amount';
         }
 
-        if (returnRateSlider && returnRateInput && returnRateDisplay) {
-            returnRateSlider.value = '';
+        if (returnRateInput) {
             returnRateInput.value = '';
-            returnRateDisplay.textContent = 'Enter expected returns';
         }
 
-        if (investmentPeriodSlider && investmentPeriodInput && investmentPeriodDisplay) {
-            investmentPeriodSlider.value = '';
+        if (investmentPeriodInput) {
             investmentPeriodInput.value = '';
-            investmentPeriodDisplay.textContent = 'Enter investment tenure';
         }
 
         // Hide results

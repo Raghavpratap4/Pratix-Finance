@@ -17,30 +17,33 @@ document.addEventListener('DOMContentLoaded', function() {
 // Clear all inputs on page load
 function clearAllInputs() {
     // Clear EMI calculator inputs
-    document.getElementById('loanAmountInput').value = '';
-    document.getElementById('interestRateInput').value = '';
-    document.getElementById('loanTenureInput').value = '';
-
-    // Reset sliders
-    document.getElementById('loanAmountSlider').value = '';
-    document.getElementById('interestRateSlider').value = '';
-    document.getElementById('loanTenureSlider').value = '';
-
-    // Reset displays
-    document.getElementById('loanAmountDisplay').textContent = '₹0';
-    document.getElementById('interestRateDisplay').textContent = '0%';
-    document.getElementById('loanTenureDisplay').textContent = '0 Years';
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const loanTenureInput = document.getElementById('loanTenureInput');
+    
+    if (loanAmountInput) loanAmountInput.value = '';
+    if (interestRateInput) interestRateInput.value = '';
+    if (loanTenureInput) loanTenureInput.value = '';
 
     // Clear prepayment inputs
-    document.getElementById('prepaymentAmount').value = '';
-    document.getElementById('prepayAfterMonths').value = '';
+    const prepaymentAmount = document.getElementById('prepaymentAmount');
+    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
+    
+    if (prepaymentAmount) prepaymentAmount.value = '';
+    if (prepayAfterMonths) prepayAfterMonths.value = '';
 
     // Hide results and charts
-    document.getElementById('resultCard').style.display = 'none';
-    document.getElementById('chartContainer').style.display = 'none';
-    document.getElementById('chartControls').style.display = 'none';
-    document.getElementById('prepaymentResults').style.display = 'none';
-    document.getElementById('comparisonResults').style.display = 'none';
+    const resultCard = document.getElementById('resultCard');
+    const chartContainer = document.getElementById('chartContainer');
+    const chartControls = document.getElementById('chartControls');
+    const prepaymentResults = document.getElementById('prepaymentResults');
+    const comparisonResults = document.getElementById('comparisonResults');
+    
+    if (resultCard) resultCard.style.display = 'none';
+    if (chartContainer) chartContainer.style.display = 'none';
+    if (chartControls) chartControls.style.display = 'none';
+    if (prepaymentResults) prepaymentResults.style.display = 'none';
+    if (comparisonResults) comparisonResults.style.display = 'none';
 
     generateLoanInputs();
 }
@@ -59,42 +62,37 @@ function initEMICalculator() {
     const loanTenureInput = document.getElementById('loanTenureInput');
     const loanTenureDisplay = document.getElementById('loanTenureDisplay');
 
-    // Sync sliders with inputs
-    loanAmountSlider.addEventListener('input', function() {
-        loanAmountInput.value = this.value;
-        loanAmountDisplay.textContent = `₹${parseInt(this.value).toLocaleString('en-IN')}`;
-    });
+    // Input validation and real-time updates
+    if (loanAmountInput) {
+        loanAmountInput.addEventListener('input', function() {
+            if (this.value && hasValidInputs()) {
+                calculateEMI();
+            }
+        });
+    }
 
-    loanAmountInput.addEventListener('input', function() {
-        if (this.value) {
-            loanAmountSlider.value = this.value;
-            loanAmountDisplay.textContent = `₹${parseInt(this.value).toLocaleString('en-IN')}`;
-        }
-    });
+    if (interestRateInput) {
+        interestRateInput.addEventListener('input', function() {
+            if (this.value && hasValidInputs()) {
+                calculateEMI();
+            }
+        });
+    }
 
-    interestRateSlider.addEventListener('input', function() {
-        interestRateInput.value = this.value;
-        interestRateDisplay.textContent = `${this.value}%`;
-    });
+    if (loanTenureInput) {
+        loanTenureInput.addEventListener('input', function() {
+            if (this.value && hasValidInputs()) {
+                calculateEMI();
+            }
+        });
+    }
 
-    interestRateInput.addEventListener('input', function() {
-        if (this.value) {
-            interestRateSlider.value = this.value;
-            interestRateDisplay.textContent = `${this.value}%`;
-        }
-    });
-
-    loanTenureSlider.addEventListener('input', function() {
-        loanTenureInput.value = this.value;
-        loanTenureDisplay.textContent = `${this.value} Years`;
-    });
-
-    loanTenureInput.addEventListener('input', function() {
-        if (this.value) {
-            loanTenureSlider.value = this.value;
-            loanTenureDisplay.textContent = `${this.value} Years`;
-        }
-    });
+    function hasValidInputs() {
+        const amount = parseInt(loanAmountInput?.value);
+        const rate = parseFloat(interestRateInput?.value);
+        const tenure = parseInt(loanTenureInput?.value);
+        return amount > 0 && rate > 0 && tenure > 0;
+    }
 
     // Calculate EMI button
     document.getElementById('calculateEMI').addEventListener('click', function() {
@@ -832,7 +830,8 @@ function initBottomNavigation() {
     const tabContents = document.querySelectorAll('.tab-content');
 
     navItems.forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
             const targetTab = this.getAttribute('data-tab');
 
             // Remove active class from all nav items and tab contents
@@ -841,7 +840,10 @@ function initBottomNavigation() {
 
             // Add active class to clicked nav item and corresponding tab
             this.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
+            const targetTabElement = document.getElementById(targetTab);
+            if (targetTabElement) {
+                targetTabElement.classList.add('active');
+            }
         });
     });
 }
