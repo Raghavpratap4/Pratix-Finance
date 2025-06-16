@@ -6,17 +6,28 @@ let currentEMIData = null;
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing EMI calculator');
+    
+    // Initialize core functionality first
+    initTabSwitching();
+    initBottomNavigation();
+    
+    // Then initialize calculator components
     initEMICalculator();
     initAmortizationTable();
     initPrepaymentCalculator();
     initLoanComparison();
-    initBottomNavigation();
-    initTabSwitching();
     initToolExpansion();
+    
+    // Clear inputs and show default tab
     clearAllInputs();
     
     // Show first tab by default
-    switchToTab('emi-calculator');
+    setTimeout(() => {
+        switchToTab('emi-calculator');
+    }, 100);
+    
+    console.log('EMI calculator initialization complete');
 });
 
 // Clear all inputs on page load
@@ -96,46 +107,60 @@ function initEMICalculator() {
     // Calculate EMI button
     const calculateButton = document.getElementById('calculateEMI');
     if (calculateButton) {
-        calculateButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const loanAmountInput = document.getElementById('loanAmountInput');
-            const interestRateInput = document.getElementById('interestRateInput');
-            const loanTenureInput = document.getElementById('loanTenureInput');
-            
-            if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
-                showNotification('Input fields not found!', 'error');
-                return;
-            }
-            
-            const loanAmount = loanAmountInput.value;
-            const interestRate = interestRateInput.value;
-            const loanTenure = loanTenureInput.value;
-            
-            if (!loanAmount || !interestRate || !loanTenure) {
-                showNotification('Please fill all fields!', 'error');
-                return;
-            }
-            
-            if (parseFloat(loanAmount) <= 0 || parseFloat(interestRate) <= 0 || parseInt(loanTenure) <= 0) {
-                showNotification('Please enter valid positive values!', 'error');
-                return;
-            }
-            
-            calculateEMI();
-            showNotification('EMI calculated successfully!', 'success');
-        });
+        console.log('Calculate button found, adding event listener');
+        
+        // Remove any existing listeners
+        calculateButton.removeEventListener('click', handleCalculateClick);
+        
+        // Add new listener
+        calculateButton.addEventListener('click', handleCalculateClick);
+    } else {
+        console.error('Calculate button not found!');
     }
 
     // Refresh button
     const refreshButton = document.getElementById('refreshEMI');
     if (refreshButton) {
-        refreshButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            resetEMICalculator();
-            showNotification('Calculator refreshed!', 'info');
-        });
+        console.log('Refresh button found, adding event listener');
+        
+        // Remove any existing listeners
+        refreshButton.removeEventListener('click', handleRefreshClick);
+        
+        // Add new listener
+        refreshButton.addEventListener('click', handleRefreshClick);
+    } else {
+        console.error('Refresh button not found!');
     }
+
+function handleCalculateClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Calculate button clicked');
+    
+    try {
+        calculateEMI();
+        showNotification('EMI calculated successfully!', 'success');
+    } catch (error) {
+        console.error('Error calculating EMI:', error);
+        showNotification('Error calculating EMI. Please check your inputs.', 'error');
+    }
+}
+
+function handleRefreshClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Refresh button clicked');
+    
+    try {
+        resetEMICalculator();
+        showNotification('Calculator refreshed!', 'info');
+    } catch (error) {
+        console.error('Error refreshing calculator:', error);
+        showNotification('Error refreshing calculator.', 'error');
+    }
+}
 
     // Chart type selector
     document.getElementById('chartTypeSelect').addEventListener('change', function() {
@@ -161,12 +186,21 @@ function calculateEMI() {
         return;
     }
     
-    const principal = parseInt(loanAmountInput.value);
-    const annualRate = parseFloat(interestRateInput.value);
-    const years = parseInt(loanTenureInput.value);
+    const loanAmountValue = loanAmountInput.value.trim();
+    const interestRateValue = interestRateInput.value.trim();
+    const loanTenureValue = loanTenureInput.value.trim();
+    
+    if (!loanAmountValue || !interestRateValue || !loanTenureValue) {
+        showNotification('Please fill all fields!', 'error');
+        return;
+    }
+    
+    const principal = parseFloat(loanAmountValue);
+    const annualRate = parseFloat(interestRateValue);
+    const years = parseFloat(loanTenureValue);
 
-    if (!principal || !annualRate || !years || principal <= 0 || annualRate <= 0 || years <= 0) {
-        showNotification('Please fill all fields with valid values!', 'error');
+    if (isNaN(principal) || isNaN(annualRate) || isNaN(years) || principal <= 0 || annualRate <= 0 || years <= 0) {
+        showNotification('Please enter valid positive numbers!', 'error');
         return;
     }
 
@@ -866,29 +900,50 @@ function updateComparisonChart(loans = null) {
 
 // Initialize tab switching functionality
 function initTabSwitching() {
+    console.log('Initializing tab switching');
     const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+    console.log('Found nav items:', navItems.length);
     
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetTab = this.getAttribute('data-tab');
-            if (targetTab) {
-                switchToTab(targetTab);
-            }
-        });
+    navItems.forEach((item, index) => {
+        console.log(`Adding click listener to nav item ${index}:`, item.getAttribute('data-tab'));
+        
+        // Remove any existing listeners
+        item.removeEventListener('click', handleTabClick);
+        
+        // Add new listener
+        item.addEventListener('click', handleTabClick);
     });
+}
+
+function handleTabClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const targetTab = this.getAttribute('data-tab');
+    console.log('Tab clicked:', targetTab);
+    
+    if (targetTab) {
+        switchToTab(targetTab);
+    } else {
+        console.error('No data-tab attribute found on:', this);
+    }
 }
 
 // Initialize bottom navigation
 function initBottomNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
+    console.log('Initializing bottom navigation');
+    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+    console.log('Found bottom nav items:', navItems.length);
     
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetTab = this.getAttribute('data-tab');
-            switchToTab(targetTab);
-        });
+    navItems.forEach((item, index) => {
+        const targetTab = item.getAttribute('data-tab');
+        console.log(`Bottom nav item ${index}:`, targetTab);
+        
+        // Remove any existing listeners
+        item.removeEventListener('click', handleTabClick);
+        
+        // Add new listener
+        item.addEventListener('click', handleTabClick);
     });
 }
 
@@ -1199,6 +1254,8 @@ function goToHome() {
 }
 
 function switchToTab(tabId) {
+    console.log('Switching to tab:', tabId);
+    
     // Remove active class from all nav items and tab contents
     const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -1216,6 +1273,9 @@ function switchToTab(tabId) {
     if (targetTab) {
         targetTab.classList.add('active');
         targetTab.style.display = 'block';
+        console.log('Tab activated:', tabId);
+    } else {
+        console.error('Tab not found:', tabId);
     }
     
     targetNavs.forEach(nav => {

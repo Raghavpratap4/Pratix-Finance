@@ -119,16 +119,16 @@
                             <label>Loan Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="text" id="loanAmountInput" placeholder="Enter loan amount" class="calc-input">
+                                <input type="number" id="loanAmountInput" placeholder="Enter loan amount" class="calc-input" min="1000" max="100000000" step="1000">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Interest Rate (%)</label>
-                            <input type="text" id="interestRateInput" placeholder="Enter interest rate" class="calc-input">
+                            <input type="number" id="interestRateInput" placeholder="Enter interest rate" class="calc-input" min="0.1" max="50" step="0.01">
                         </div>
                         <div class="input-group">
                             <label>Loan Tenure (Years)</label>
-                            <input type="text" id="loanTenureInput" placeholder="Enter tenure in years" class="calc-input">
+                            <input type="number" id="loanTenureInput" placeholder="Enter tenure in years" class="calc-input" min="1" max="50" step="1">
                         </div>
                         <button class="calculate-btn" id="calculateEMI">
                             <span class="btn-text">Calculate EMI</span>
