@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initPrepaymentCalculator();
     initLoanComparison();
     initBottomNavigation();
+    initTabSwitching();
     clearAllInputs();
 });
 
@@ -116,16 +117,34 @@ function initEMICalculator() {
     }
 
     // Calculate EMI button
-    document.getElementById('calculateEMI').addEventListener('click', function() {
-        calculateEMI();
-        showNotification('EMI calculated successfully!', 'success');
-    });
+    const calculateButton = document.getElementById('calculateEMI');
+    if (calculateButton) {
+        calculateButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const loanAmount = document.getElementById('loanAmountInput')?.value;
+            const interestRate = document.getElementById('interestRateInput')?.value;
+            const loanTenure = document.getElementById('loanTenureInput')?.value;
+            
+            if (!loanAmount || !interestRate || !loanTenure) {
+                showNotification('Please fill all fields!', 'error');
+                return;
+            }
+            
+            calculateEMI();
+            showNotification('EMI calculated successfully!', 'success');
+        });
+    }
 
     // Refresh button
-    document.getElementById('refreshEMI').addEventListener('click', function() {
-        clearAllInputs();
-        showNotification('Calculator refreshed!', 'info');
-    });
+    const refreshButton = document.getElementById('refreshEMI');
+    if (refreshButton) {
+        refreshButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            clearAllInputs();
+            showNotification('Calculator refreshed!', 'info');
+        });
+    }
 
     // Chart type selector
     document.getElementById('chartTypeSelect').addEventListener('change', function() {
@@ -845,26 +864,28 @@ function updateComparisonChart(loans = null) {
     comparisonChart = new Chart(ctx, chartConfig);
 }
 
-// Initialize bottom navigation
-function initBottomNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
-    const tabContents = document.querySelectorAll('.tab-content');
-
+// Initialize tab switching functionality
+function initTabSwitching() {
+    const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+    
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const targetTab = this.getAttribute('data-tab');
+            switchToTab(targetTab);
+        });
+    });
+}
 
-            // Remove active class from all nav items and tab contents
-            navItems.forEach(nav => nav.classList.remove('active'));
-            tabContents.forEach(tab => tab.classList.remove('active'));
-
-            // Add active class to clicked nav item and corresponding tab
-            this.classList.add('active');
-            const targetTabElement = document.getElementById(targetTab);
-            if (targetTabElement) {
-                targetTabElement.classList.add('active');
-            }
+// Initialize bottom navigation
+function initBottomNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetTab = this.getAttribute('data-tab');
+            switchToTab(targetTab);
         });
     });
 }
@@ -1177,15 +1198,30 @@ function goToHome() {
 
 function switchToTab(tabId) {
     // Remove active class from all nav items and tab contents
-    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    navItems.forEach(nav => nav.classList.remove('active'));
+    tabContents.forEach(tab => tab.classList.remove('active'));
 
     // Add active class to target tab and nav item
     const targetTab = document.getElementById(tabId);
     const targetNav = document.querySelector(`[data-tab="${tabId}"]`);
     
-    if (targetTab) targetTab.classList.add('active');
-    if (targetNav) targetNav.classList.add('active');
+    if (targetTab) {
+        targetTab.classList.add('active');
+        targetTab.style.display = 'block';
+    }
+    if (targetNav) {
+        targetNav.classList.add('active');
+    }
+    
+    // Hide all other tabs
+    tabContents.forEach(tab => {
+        if (tab.id !== tabId) {
+            tab.style.display = 'none';
+        }
+    });
 }
 
 // Make functions globally available
