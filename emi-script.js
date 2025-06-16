@@ -8,155 +8,118 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
 
-    // Debug: Check if elements exist
-    console.log('Calculate button exists:', !!document.getElementById('calculateEMI'));
-    console.log('Tab nav items count:', document.querySelectorAll('.tab-nav-item').length);
-    console.log('Bottom nav items count:', document.querySelectorAll('.bottom-nav .nav-item').length);
+    // Initialize all functionality
+    initEMICalculator();
+    initTabSwitching();
+    initBottomNavigation();
+    initAmortizationTable();
+    initPrepaymentCalculator();
+    initLoanComparison();
+    initTaxSavingsCalculator();
 
-    // Initialize all functionality with delays to ensure DOM is ready
+    // Show first tab by default
     setTimeout(() => {
-        initEMICalculator();
-        initTabSwitching();
-        initBottomNavigation();
-        initAmortizationTable();
-        initPrepaymentCalculator();
-        initLoanComparison();
-        initTaxSavingsCalculator();
-        initToolExpansion();
-
-        // Show first tab by default
         switchToTab('emi-calculator');
+    }, 100);
 
-        console.log('EMI calculator initialization complete');
-    }, 200);
-
-    // Add a backup click handler for buttons
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'calculateEMI' || e.target.closest('#calculateEMI')) {
-            console.log('Backup calculate button handler triggered');
-            calculateEMI();
-        }
-    });
+    console.log('EMI calculator initialization complete');
 });
 
 // Initialize EMI Calculator
 function initEMICalculator() {
     console.log('Initializing EMI Calculator...');
 
-    // Wait for elements to be available
-    setTimeout(() => {
-        // Get button elements
-        const calculateButton = document.getElementById('calculateEMI');
-        const refreshButton = document.getElementById('refreshEMI');
+    // Get button elements
+    const calculateButton = document.getElementById('calculateEMI');
+    const refreshButton = document.getElementById('refreshEMI');
 
-        console.log('Calculate button:', calculateButton);
-        console.log('Refresh button:', refreshButton);
+    // Add event listeners for calculate button
+    if (calculateButton) {
+        calculateButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Calculate button clicked');
+            try {
+                calculateEMI();
+                showNotification('EMI calculated successfully!', 'success');
+            } catch (error) {
+                console.error('Error calculating EMI:', error);
+                showNotification('Error calculating EMI. Please check your inputs.', 'error');
+            }
+        });
+    }
 
-        // Add event listeners for calculate button
-        if (calculateButton) {
-            // Remove any existing listeners
-            calculateButton.onclick = null;
-            
-            calculateButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Calculate button clicked');
+    // Add event listeners for refresh button
+    if (refreshButton) {
+        refreshButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Refresh button clicked');
+            try {
+                resetEMICalculator();
+                showNotification('Calculator refreshed!', 'info');
+            } catch (error) {
+                console.error('Error refreshing calculator:', error);
+            }
+        });
+    }
 
-                try {
-                    calculateEMI();
-                    showNotification('EMI calculated successfully!', 'success');
-                } catch (error) {
-                    console.error('Error calculating EMI:', error);
-                    showNotification('Error calculating EMI. Please check your inputs.', 'error');
-                }
-            });
-            console.log('Calculate button event listener added');
-        } else {
-            console.error('Calculate button not found!');
-        }
+    // Chart type selector
+    const chartTypeSelect = document.getElementById('chartTypeSelect');
+    if (chartTypeSelect) {
+        chartTypeSelect.addEventListener('change', function() {
+            if (currentEMIData) {
+                updateChart(currentEMIData);
+            }
+        });
+    }
 
-        // Add event listeners for refresh button
-        if (refreshButton) {
-            refreshButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Refresh button clicked');
+    // Comparison chart type selector
+    const comparisonChartTypeSelect = document.getElementById('comparisonChartType');
+    if (comparisonChartTypeSelect) {
+        comparisonChartTypeSelect.addEventListener('change', function() {
+            console.log('Comparison chart type changed to:', this.value);
+            updateComparisonChart();
+        });
+    }
 
-                try {
-                    resetEMICalculator();
-                    showNotification('Calculator refreshed!', 'info');
-                } catch (error) {
-                    console.error('Error refreshing calculator:', error);
-                    showNotification('Error refreshing calculator.', 'error');
-                }
-            });
-            console.log('Refresh button event listener added');
-        } else {
-            console.error('Refresh button not found!');
-        }
+    // PDF download
+    const downloadPDFButton = document.getElementById('downloadPDF');
+    if (downloadPDFButton) {
+        downloadPDFButton.addEventListener('click', function() {
+            generateEMIPDF();
+        });
+    }
 
-        // Chart type selector
-        const chartTypeSelect = document.getElementById('chartTypeSelect');
-        if (chartTypeSelect) {
-            chartTypeSelect.addEventListener('change', function() {
-                console.log('Chart type changed to:', this.value);
-                if (currentEMIData) {
-                    updateChart(currentEMIData);
-                }
-            });
-        }
+    // Download comparison PDF
+    const downloadComparisonPDFButton = document.getElementById('downloadComparisonPDF');
+    if (downloadComparisonPDFButton) {
+        downloadComparisonPDFButton.addEventListener('click', function() {
+            console.log('Download comparison PDF button clicked');
+            generateComparisonPDF();
+        });
+    }
 
-        // Comparison chart type selector
-        const comparisonChartTypeSelect = document.getElementById('comparisonChartType');
-        if (comparisonChartTypeSelect) {
-            comparisonChartTypeSelect.addEventListener('change', function() {
-                console.log('Comparison chart type changed to:', this.value);
-                updateComparisonChart();
-            });
-        }
+    // Input validation
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const loanTenureInput = document.getElementById('loanTenureInput');
 
-        // PDF download
-        const downloadPDFButton = document.getElementById('downloadPDF');
-        if (downloadPDFButton) {
-            downloadPDFButton.addEventListener('click', function() {
-                console.log('Download PDF button clicked');
-                generateEMIPDF();
-            });
-        }
+    if (loanAmountInput) {
+        loanAmountInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9.]/g, '');
+        });
+    }
 
-        // Download comparison PDF
-        const downloadComparisonPDFButton = document.getElementById('downloadComparisonPDF');
-        if (downloadComparisonPDFButton) {
-            downloadComparisonPDFButton.addEventListener('click', function() {
-                console.log('Download comparison PDF button clicked');
-                generateComparisonPDF();
-            });
-        }
+    if (interestRateInput) {
+        interestRateInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9.]/g, '');
+        });
+    }
 
-        // Input validation
-        const loanAmountInput = document.getElementById('loanAmountInput');
-        const interestRateInput = document.getElementById('interestRateInput');
-        const loanTenureInput = document.getElementById('loanTenureInput');
-
-        if (loanAmountInput) {
-            loanAmountInput.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9.]/g, '');
-            });
-        }
-
-        if (interestRateInput) {
-            interestRateInput.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9.]/g, '');
-            });
-        }
-
-        if (loanTenureInput) {
-            loanTenureInput.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-        }
-
-    }, 100);
+    if (loanTenureInput) {
+        loanTenureInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
 }
 
 // Calculate EMI
@@ -167,12 +130,6 @@ function calculateEMI() {
     const interestRateInput = document.getElementById('interestRateInput');
     const loanTenureInput = document.getElementById('loanTenureInput');
 
-    console.log('Input elements:', {
-        loanAmount: loanAmountInput,
-        interestRate: interestRateInput,
-        loanTenure: loanTenureInput
-    });
-
     if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
         console.error('Input fields not found!');
         showNotification('Input fields not found!', 'error');
@@ -182,12 +139,6 @@ function calculateEMI() {
     const loanAmountValue = loanAmountInput.value.trim();
     const interestRateValue = interestRateInput.value.trim();
     const loanTenureValue = loanTenureInput.value.trim();
-
-    console.log('Input values:', {
-        loanAmount: loanAmountValue,
-        interestRate: interestRateValue,
-        tenure: loanTenureValue
-    });
 
     if (!loanAmountValue || !interestRateValue || !loanTenureValue) {
         showNotification('Please fill all fields!', 'error');
@@ -203,8 +154,6 @@ function calculateEMI() {
         return;
     }
 
-    console.log('Calculating EMI with:', { principal, annualRate, years });
-
     const monthlyRate = annualRate / 12 / 100;
     const totalMonths = years * 12;
 
@@ -214,8 +163,6 @@ function calculateEMI() {
 
     const totalAmount = emi * totalMonths;
     const totalInterest = totalAmount - principal;
-
-    console.log('Calculated values:', { emi, totalAmount, totalInterest });
 
     currentEMIData = {
         principal: principal,
@@ -255,8 +202,6 @@ function calculateEMI() {
 
     // Update amortization table
     generateAmortizationTable(currentEMIData);
-
-    console.log('EMI calculation completed successfully');
 }
 
 // Reset EMI Calculator function
@@ -267,15 +212,12 @@ function resetEMICalculator() {
     const loanAmountInput = document.getElementById('loanAmountInput');
     const interestRateInput = document.getElementById('interestRateInput');
     const loanTenureInput = document.getElementById('loanTenureInput');
+    const prepaymentAmount = document.getElementById('prepaymentAmount');
+    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
 
     if (loanAmountInput) loanAmountInput.value = '';
     if (interestRateInput) interestRateInput.value = '';
     if (loanTenureInput) loanTenureInput.value = '';
-
-    // Clear prepayment inputs
-    const prepaymentAmount = document.getElementById('prepaymentAmount');
-    const prepayAfterMonths = document.getElementById('prepayAfterMonths');
-
     if (prepaymentAmount) prepaymentAmount.value = '';
     if (prepayAfterMonths) prepayAfterMonths.value = '';
 
@@ -344,8 +286,7 @@ function getChartConfig(type, data) {
                         data: [data.principal, data.totalInterest],
                         backgroundColor: [colors.primary, colors.secondary],
                         borderColor: [colors.primary, colors.secondary],
-                        borderWidth: 2,
-                        hoverBorderWidth: 4
+                        borderWidth: 2
                     }]
                 },
                 options: {
@@ -1015,7 +956,6 @@ function updatePrepaymentChart(originalData, prepaymentData) {
                     },
                     grid: {
                         color: 'rgba(255, 255, 255, 0.1)'
-                    ```text
                     }
                 },
                 x: {
