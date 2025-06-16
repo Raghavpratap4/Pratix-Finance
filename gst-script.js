@@ -1,3 +1,4 @@
+
 // GST Calculator JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Tab switching functionality
@@ -27,14 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Navigation functions
-    window.goBack = function() {
-        window.history.back();
-    };
-
-    window.goToHome = function() {
-        window.location.href = 'index.html';
-    };
-
     window.goToEMI = function() {
         window.location.href = 'emi-calculator.html';
     };
@@ -47,70 +40,26 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'tax-calculator.html';
     }
 
-    function goToFD() {
-        window.location.href = '/fd-calculator.html';
+    window.goToFD = function() {
+        window.location.href = 'fd-calculator.html';
     }
 
-    // GST Calculator functionality
+    // Chart variables
     let gstChart = null;
-    let gstAnalysisChart = null;
+    let analysisChart = null;
+    let returnsChart = null;
 
+    // GST Calculator functionality
     function initGSTCalculator() {
-        // GST rate buttons
-        const gstRateButtons = document.querySelectorAll('.gst-rate-btn');
-        const gstRateInput = document.getElementById('gstRate');
-
-        gstRateButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                gstRateButtons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const rate = this.getAttribute('data-rate');
-                gstRateInput.value = rate;
-                if (validateGSTInputs()) {
-                    calculateGST();
-                }
-            });
-        });
-
-        // Input listeners
-        const originalAmountInput = document.getElementById('originalAmount');
-        const calculationTypeRadios = document.querySelectorAll('input[name="calculationType"]');
-
-        if (originalAmountInput) {
-            originalAmountInput.addEventListener('input', function() {
-                if (validateGSTInputs()) {
-                    calculateGST();
-                }
-            });
-        }
-
-        if (gstRateInput) {
-            gstRateInput.addEventListener('input', function() {
-                // Update active button
-                gstRateButtons.forEach(btn => btn.classList.remove('active'));
-                const matchingBtn = document.querySelector(`[data-rate="${this.value}"]`);
-                if (matchingBtn) {
-                    matchingBtn.classList.add('active');
-                }
-                if (validateGSTInputs()) {
-                    calculateGST();
-                }
-            });
-        }
-
-        calculationTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (validateGSTInputs()) {
-                    calculateGST();
-                }
-            });
-        });
-
-        // Calculate button
         const calculateBtn = document.getElementById('calculateGST');
+        const refreshBtn = document.getElementById('refreshGST');
+        const chartSelector = document.getElementById('chartTypeSelector');
+        const downloadBtn = document.getElementById('downloadGSTPDF');
+
         if (calculateBtn) {
             calculateBtn.addEventListener('click', function() {
                 if (!validateGSTInputs()) {
+                    showNotification('Please fill all required fields!', 'warning');
                     return;
                 }
 
@@ -126,82 +75,61 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Refresh button
-        const refreshBtn = document.getElementById('refreshGST');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', function() {
                 resetGSTCalculator();
-                showNotification('GST calculator refreshed!', 'info');
+                showNotification('Calculator refreshed!', 'info');
             });
         }
 
-        // Initialize chart
-        initGSTChart();
+        if (chartSelector) {
+            chartSelector.addEventListener('change', function() {
+                if (gstChart) {
+                    updateGSTChart();
+                }
+            });
+        }
 
-        // Initialize with empty state
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', downloadGSTPDF);
+        }
+
         resetGSTCalculator();
     }
 
     function validateGSTInputs() {
         const originalAmount = document.getElementById('originalAmount')?.value;
         const gstRate = document.getElementById('gstRate')?.value;
+        const calculationType = document.getElementById('calculationType')?.value;
 
-        if (!originalAmount || originalAmount <= 0) {
-            return false;
-        }
-
-        if (!gstRate || gstRate < 0) {
-            return false;
-        }
-
-        return true;
+        return originalAmount && originalAmount > 0 && gstRate !== '' && calculationType;
     }
 
     function resetGSTCalculator() {
-        // Clear inputs
-        if (document.getElementById('originalAmount')) document.getElementById('originalAmount').value = '';
-        if (document.getElementById('gstRate')) document.getElementById('gstRate').value = '18';
-
-        // Reset radio buttons
-        if (document.getElementById('exclusive')) document.getElementById('exclusive').checked = true;
-
-        // Reset GST rate buttons
-        document.querySelectorAll('.gst-rate-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector('[data-rate="18"]')?.classList.add('active');
-
-        // Clear results
-        if (document.getElementById('baseAmount')) document.getElementById('baseAmount').textContent = '₹0';
-        if (document.getElementById('cgstAmount')) document.getElementById('cgstAmount').textContent = '₹0';
-        if (document.getElementById('sgstAmount')) document.getElementById('sgstAmount').textContent = '₹0';
-        if (document.getElementById('totalGST')) document.getElementById('totalGST').textContent = '₹0';
-        if (document.getElementById('finalAmount')) document.getElementById('finalAmount').textContent = '₹0';
-
-        // Reset chart
+        document.getElementById('originalAmount').value = '';
+        document.getElementById('gstRate').value = '';
+        document.getElementById('calculationType').value = '';
+        document.getElementById('gstResults').style.display = 'none';
+        document.getElementById('chartContainer').style.display = 'none';
+        
         if (gstChart) {
-            gstChart.data.datasets[0].data = [0, 0, 0];
-            gstChart.update();
+            gstChart.destroy();
+            gstChart = null;
         }
     }
 
     function calculateGST() {
-        const originalAmount = parseFloat(document.getElementById('originalAmount')?.value) || 0;
-        const gstRate = parseFloat(document.getElementById('gstRate')?.value) || 18;
-        const calculationType = document.querySelector('input[name="calculationType"]:checked')?.value || 'exclusive';
-
-        if (originalAmount <= 0) {
-            resetResultsToZero();
-            return;
-        }
+        const originalAmount = parseFloat(document.getElementById('originalAmount').value) || 0;
+        const gstRate = parseFloat(document.getElementById('gstRate').value) || 0;
+        const calculationType = document.getElementById('calculationType').value;
 
         let baseAmount, gstAmount, finalAmount;
 
         if (calculationType === 'exclusive') {
-            // Add GST to the amount
             baseAmount = originalAmount;
             gstAmount = (baseAmount * gstRate) / 100;
             finalAmount = baseAmount + gstAmount;
         } else {
-            // Remove GST from the amount
             finalAmount = originalAmount;
             baseAmount = finalAmount / (1 + (gstRate / 100));
             gstAmount = finalAmount - baseAmount;
@@ -211,69 +139,60 @@ document.addEventListener('DOMContentLoaded', function() {
         const sgstAmount = gstAmount / 2;
 
         // Update results
-        if (document.getElementById('baseAmount')) {
-            document.getElementById('baseAmount').textContent = `₹${Math.round(baseAmount).toLocaleString('en-IN')}`;
-        }
-        if (document.getElementById('cgstAmount')) {
-            document.getElementById('cgstAmount').textContent = `₹${Math.round(cgstAmount).toLocaleString('en-IN')}`;
-        }
-        if (document.getElementById('sgstAmount')) {
-            document.getElementById('sgstAmount').textContent = `₹${Math.round(sgstAmount).toLocaleString('en-IN')}`;
-        }
-        if (document.getElementById('totalGST')) {
-            document.getElementById('totalGST').textContent = `₹${Math.round(gstAmount).toLocaleString('en-IN')}`;
-        }
-        if (document.getElementById('finalAmount')) {
-            document.getElementById('finalAmount').textContent = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
-        }
+        document.getElementById('baseAmount').textContent = `₹${Math.round(baseAmount).toLocaleString('en-IN')}`;
+        document.getElementById('cgstAmount').textContent = `₹${Math.round(cgstAmount).toLocaleString('en-IN')}`;
+        document.getElementById('sgstAmount').textContent = `₹${Math.round(sgstAmount).toLocaleString('en-IN')}`;
+        document.getElementById('totalGST').textContent = `₹${Math.round(gstAmount).toLocaleString('en-IN')}`;
+        document.getElementById('finalAmount').textContent = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
 
-        // Update chart
-        updateGSTChart(baseAmount, cgstAmount, sgstAmount);
+        document.getElementById('gstResults').style.display = 'block';
+        document.getElementById('chartContainer').style.display = 'block';
+
+        // Create chart
+        createGSTChart(baseAmount, cgstAmount, sgstAmount);
     }
 
-    function resetResultsToZero() {
-        if (document.getElementById('baseAmount')) document.getElementById('baseAmount').textContent = '₹0';
-        if (document.getElementById('cgstAmount')) document.getElementById('cgstAmount').textContent = '₹0';
-        if (document.getElementById('sgstAmount')) document.getElementById('sgstAmount').textContent = '₹0';
-        if (document.getElementById('totalGST')) document.getElementById('totalGST').textContent = '₹0';
-        if (document.getElementById('finalAmount')) document.getElementById('finalAmount').textContent = '₹0';
+    function createGSTChart(baseAmount, cgstAmount, sgstAmount) {
+        const ctx = document.getElementById('gstChart');
+        const chartType = document.getElementById('chartTypeSelector').value;
 
         if (gstChart) {
-            gstChart.data.datasets[0].data = [0, 0, 0];
-            gstChart.update();
+            gstChart.destroy();
         }
-    }
 
-    function initGSTChart() {
-        const ctx = document.getElementById('gstChart');
-        if (!ctx) return;
+        const data = {
+            labels: ['Base Amount', 'CGST', 'SGST'],
+            datasets: [{
+                data: [Math.round(baseAmount), Math.round(cgstAmount), Math.round(sgstAmount)],
+                backgroundColor: [
+                    'rgba(0, 212, 255, 0.8)',
+                    'rgba(0, 255, 136, 0.8)',
+                    'rgba(139, 92, 246, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(0, 212, 255, 1)',
+                    'rgba(0, 255, 136, 1)',
+                    'rgba(139, 92, 246, 1)'
+                ],
+                borderWidth: 2
+            }]
+        };
 
-        gstChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Base Amount', 'CGST', 'SGST'],
-                datasets: [{
-                    data: [10000, 900, 900],
-                    backgroundColor: [
-                        'rgba(0, 212, 255, 0.8)',
-                        'rgba(240, 147, 251, 0.8)',
-                        'rgba(102, 126, 234, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(0, 212, 255, 1)',
-                        'rgba(240, 147, 251, 1)',
-                        'rgba(102, 126, 234, 1)'
-                    ],
-                    borderWidth: 2,
-                    hoverOffset: 10
-                }]
-            },
+        const config = {
+            type: chartType,
+            data: data,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#ffffff',
+                            usePointStyle: true,
+                            padding: 20
+                        }
                     },
                     tooltip: {
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -283,35 +202,83 @@ document.addEventListener('DOMContentLoaded', function() {
                         borderWidth: 1,
                         callbacks: {
                             label: function(context) {
-                                const value = context.parsed;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return `${context.label}: ₹${value.toLocaleString('en-IN')} (${percentage}%)`;
+                                const value = context.parsed.y || context.parsed;
+                                return `${context.label}: ₹${value.toLocaleString('en-IN')}`;
                             }
                         }
                     }
                 },
-                elements: {
-                    arc: {
-                        borderRadius: 8
+                scales: chartType !== 'doughnut' ? {
+                    x: {
+                        ticks: { color: '#ffffff' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    y: {
+                        ticks: { 
+                            color: '#ffffff',
+                            callback: function(value) {
+                                return '₹' + value.toLocaleString('en-IN');
+                            }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
-                },
-                cutout: '60%'
+                } : {}
             }
-        });
+        };
+
+        gstChart = new Chart(ctx, config);
     }
 
-    function updateGSTChart(baseAmount, cgstAmount, sgstAmount) {
+    function updateGSTChart() {
         if (gstChart) {
-            gstChart.data.datasets[0].data = [Math.round(baseAmount), Math.round(cgstAmount), Math.round(sgstAmount)];
-            gstChart.update('active');
+            const baseAmount = parseFloat(document.getElementById('baseAmount').textContent.replace(/[₹,]/g, ''));
+            const cgstAmount = parseFloat(document.getElementById('cgstAmount').textContent.replace(/[₹,]/g, ''));
+            const sgstAmount = parseFloat(document.getElementById('sgstAmount').textContent.replace(/[₹,]/g, ''));
+            
+            createGSTChart(baseAmount, cgstAmount, sgstAmount);
         }
+    }
+
+    function downloadGSTPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add logo and header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 212, 255);
+        doc.text('PRATIX FINANCE', 20, 30);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('GST Calculator Report', 20, 50);
+
+        // Add input data
+        doc.setFontSize(12);
+        doc.text('Input Data:', 20, 70);
+        doc.text(`Original Amount: ${document.getElementById('originalAmount').value}`, 20, 85);
+        doc.text(`GST Rate: ${document.getElementById('gstRate').value}%`, 20, 100);
+        doc.text(`Calculation Type: ${document.getElementById('calculationType').value}`, 20, 115);
+
+        // Add results
+        doc.text('Results:', 20, 140);
+        doc.text(`Base Amount: ${document.getElementById('baseAmount').textContent}`, 20, 155);
+        doc.text(`CGST: ${document.getElementById('cgstAmount').textContent}`, 20, 170);
+        doc.text(`SGST: ${document.getElementById('sgstAmount').textContent}`, 20, 185);
+        doc.text(`Total GST: ${document.getElementById('totalGST').textContent}`, 20, 200);
+        doc.text(`Final Amount: ${document.getElementById('finalAmount').textContent}`, 20, 215);
+
+        // Add footer
+        doc.setFontSize(10);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('gst-calculator-report.pdf');
+        showNotification('PDF downloaded successfully!', 'success');
     }
 
     // Invoice Generator functionality
     function initInvoiceGenerator() {
         const addItemBtn = document.getElementById('addInvoiceItem');
-        const generateBtn = document.getElementById('generateInvoice');
+        const generateBtn = document.getElementById('generateInvoicePDF');
         const refreshBtn = document.getElementById('refreshInvoice');
 
         if (addItemBtn) {
@@ -319,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (generateBtn) {
-            generateBtn.addEventListener('click', generateInvoice);
+            generateBtn.addEventListener('click', generateInvoicePDF);
         }
 
         if (refreshBtn) {
@@ -328,9 +295,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotification('Invoice generator refreshed!', 'info');
             });
         }
-
-        // Set default invoice date
-        document.getElementById('invoiceDate').textContent = new Date().toLocaleDateString();
     }
 
     function addInvoiceItem() {
@@ -343,10 +307,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="number" placeholder="Quantity" class="item-qty calc-input">
                 <input type="number" placeholder="Rate" class="item-rate calc-input">
                 <select class="item-gst calc-input">
+                    <option value="">Select GST</option>
                     <option value="0">0% GST</option>
                     <option value="5">5% GST</option>
                     <option value="12">12% GST</option>
-                    <option value="18" selected>18% GST</option>
+                    <option value="18">18% GST</option>
                     <option value="28">28% GST</option>
                 </select>
                 <button class="remove-item-btn" onclick="removeInvoiceItem(this)">×</button>
@@ -365,28 +330,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    function generateInvoice() {
-        const businessName = document.getElementById('businessName').value || 'Your Business Name';
-        const gstin = document.getElementById('gstin').value || 'GSTIN Number';
-        const address = document.getElementById('businessAddress').value || 'Business Address';
+    function generateInvoicePDF() {
+        const businessName = document.getElementById('businessName').value;
+        const gstin = document.getElementById('gstin').value;
+        const address = document.getElementById('businessAddress').value;
 
-        // Update business info in preview
-        document.getElementById('displayBusinessName').textContent = businessName;
-        document.getElementById('displayGSTIN').textContent = gstin;
-        document.getElementById('displayAddress').textContent = address;
+        if (!businessName || !gstin || !address) {
+            showNotification('Please fill all business details!', 'warning');
+            return;
+        }
 
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add logo and header
+        doc.setFontSize(20);
+        doc.setTextColor(0, 212, 255);
+        doc.text('PRATIX FINANCE', 20, 30);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('TAX INVOICE', 20, 50);
+
+        // Business details
+        doc.setFontSize(12);
+        doc.text(`Business: ${businessName}`, 20, 70);
+        doc.text(`GSTIN: ${gstin}`, 20, 85);
+        doc.text(`Address: ${address}`, 20, 100);
+
+        // Invoice items
         const items = document.querySelectorAll('.invoice-item');
-        const tableBody = document.getElementById('invoiceTableBody');
-        tableBody.innerHTML = '';
-
+        let yPos = 120;
         let subtotal = 0;
         let totalGST = 0;
 
-        items.forEach(item => {
+        doc.text('Items:', 20, yPos);
+        yPos += 20;
+
+        items.forEach((item, index) => {
             const desc = item.querySelector('.item-desc').value || 'Item';
             const qty = parseFloat(item.querySelector('.item-qty').value) || 1;
             const rate = parseFloat(item.querySelector('.item-rate').value) || 0;
-            const gstRate = parseFloat(item.querySelector('.item-gst').value) || 18;
+            const gstRate = parseFloat(item.querySelector('.item-gst').value) || 0;
 
             const amount = qty * rate;
             const gstAmount = (amount * gstRate) / 100;
@@ -395,27 +380,25 @@ document.addEventListener('DOMContentLoaded', function() {
             subtotal += amount;
             totalGST += gstAmount;
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${desc}</td>
-                <td>${qty}</td>
-                <td>₹${rate.toLocaleString('en-IN')}</td>
-                <td>₹${amount.toLocaleString('en-IN')}</td>
-                <td>${gstRate}%</td>
-                <td>₹${gstAmount.toLocaleString('en-IN')}</td>
-                <td>₹${total.toLocaleString('en-IN')}</td>
-            `;
-            tableBody.appendChild(row);
+            doc.text(`${index + 1}. ${desc} (Qty: ${qty}, Rate: ₹${rate}, GST: ${gstRate}%) = ₹${total.toFixed(2)}`, 20, yPos);
+            yPos += 15;
         });
 
-        const grandTotal = subtotal + totalGST;
+        // Totals
+        yPos += 10;
+        doc.text(`Subtotal: ₹${subtotal.toFixed(2)}`, 20, yPos);
+        yPos += 15;
+        doc.text(`Total GST: ₹${totalGST.toFixed(2)}`, 20, yPos);
+        yPos += 15;
+        doc.setFontSize(14);
+        doc.text(`Grand Total: ₹${(subtotal + totalGST).toFixed(2)}`, 20, yPos);
 
-        document.getElementById('invoiceSubtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
-        document.getElementById('invoiceTotalGST').textContent = `₹${totalGST.toLocaleString('en-IN')}`;
-        document.getElementById('invoiceGrandTotal').textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+        // Footer
+        doc.setFontSize(10);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
 
-        document.getElementById('invoicePreview').style.display = 'block';
-        showNotification('Invoice generated successfully!', 'success');
+        doc.save('invoice.pdf');
+        showNotification('Invoice PDF generated successfully!', 'success');
     }
 
     function resetInvoiceGenerator() {
@@ -431,18 +414,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="number" placeholder="Quantity" class="item-qty calc-input">
                     <input type="number" placeholder="Rate" class="item-rate calc-input">
                     <select class="item-gst calc-input">
+                        <option value="">Select GST</option>
                         <option value="0">0% GST</option>
                         <option value="5">5% GST</option>
                         <option value="12">12% GST</option>
-                        <option value="18" selected>18% GST</option>
+                        <option value="18">18% GST</option>
                         <option value="28">28% GST</option>
                     </select>
                     <button class="remove-item-btn" onclick="removeInvoiceItem(this)">×</button>
                 </div>
             </div>
         `;
-
-        document.getElementById('invoicePreview').style.display = 'none';
     }
 
     // HSN Code Lookup functionality
@@ -458,17 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
             card.addEventListener('click', function() {
                 const hsnCode = this.getAttribute('data-hsn');
                 const gstRate = this.getAttribute('data-rate');
-
-                // Copy HSN details for use
-                showNotification(`HSN Code: ${hsnCode}, GST Rate: ${gstRate}% copied!`, 'success');
-
-                // Optional: Switch to main calculator with this rate
-                switchTab('gst-calculator');
-                setTimeout(() => {
-                    document.getElementById('gstRate').value = gstRate;
-                    document.querySelectorAll('.gst-rate-btn').forEach(btn => btn.classList.remove('active'));
-                    document.querySelector(`[data-rate="${gstRate}"]`)?.classList.add('active');
-                }, 100);
+                showNotification(`HSN Code: ${hsnCode}, GST Rate: ${gstRate}% selected!`, 'success');
             });
         });
     }
@@ -499,9 +471,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function initGSTAnalysis() {
         const analyzeBtn = document.getElementById('analyzeGST');
         const refreshBtn = document.getElementById('refreshAnalysis');
+        const chartSelector = document.getElementById('analysisChartSelector');
+        const downloadBtn = document.getElementById('downloadAnalysisPDF');
 
         if (analyzeBtn) {
             analyzeBtn.addEventListener('click', function() {
+                if (!validateAnalysisInputs()) {
+                    showNotification('Please fill all required fields!', 'warning');
+                    return;
+                }
+
                 this.classList.add('loading');
                 this.textContent = 'Analyzing...';
 
@@ -517,15 +496,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (refreshBtn) {
             refreshBtn.addEventListener('click', function() {
                 resetGSTAnalysis();
-                showNotification('GST analysis refreshed!', 'info');
+                showNotification('Analysis refreshed!', 'info');
             });
+        }
+
+        if (chartSelector) {
+            chartSelector.addEventListener('change', updateAnalysisChart);
+        }
+
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', downloadAnalysisPDF);
         }
     }
 
+    function validateAnalysisInputs() {
+        const monthlySales = document.getElementById('monthlySales')?.value;
+        const avgGSTRate = document.getElementById('avgGSTRate')?.value;
+        const businessType = document.getElementById('businessType')?.value;
+
+        return monthlySales && monthlySales > 0 && avgGSTRate && avgGSTRate >= 0 && businessType;
+    }
+
     function analyzeGSTImpact() {
-        const monthlySales = parseFloat(document.getElementById('monthlySales').value) || 500000;
-        const avgGSTRate = parseFloat(document.getElementById('avgGSTRate').value) || 18;
-        const businessType = document.getElementById('businessType').value || 'regular';
+        const monthlySales = parseFloat(document.getElementById('monthlySales').value) || 0;
+        const avgGSTRate = parseFloat(document.getElementById('avgGSTRate').value) || 0;
+        const businessType = document.getElementById('businessType').value;
 
         const monthlyGST = (monthlySales * avgGSTRate) / 100;
         const annualGST = monthlyGST * 12;
@@ -535,45 +530,61 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('effectiveTaxRate').textContent = `${avgGSTRate}%`;
         document.getElementById('complianceStatus').textContent = businessType === 'composition' ? 'Composition Scheme' : 'Regular Filing';
 
-        document.getElementById('analysisResults').style.display = 'block';
+        // Update breakdown table
+        const tableBody = document.getElementById('gstBreakdownTableBody');
+        tableBody.innerHTML = `
+            <tr>
+                <td>${avgGSTRate}%</td>
+                <td>₹${monthlySales.toLocaleString('en-IN')}</td>
+                <td>₹${monthlyGST.toLocaleString('en-IN')}</td>
+                <td>100%</td>
+            </tr>
+        `;
 
-        // Update analysis chart
-        updateGSTAnalysisChart(monthlySales, monthlyGST);
+        document.getElementById('analysisResults').style.display = 'block';
+        createAnalysisChart(monthlySales, monthlyGST);
     }
 
-    function updateGSTAnalysisChart(sales, gst) {
+    function createAnalysisChart(sales, gst) {
         const ctx = document.getElementById('gstAnalysisChart');
-        if (!ctx) return;
+        const chartType = document.getElementById('analysisChartSelector').value;
 
-        if (gstAnalysisChart) {
-            gstAnalysisChart.destroy();
+        if (analysisChart) {
+            analysisChart.destroy();
         }
 
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const salesData = Array(12).fill(sales);
         const gstData = Array(12).fill(gst);
 
-        gstAnalysisChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: 'Sales',
-                        data: salesData,
-                        backgroundColor: 'rgba(0, 212, 255, 0.8)',
-                        borderColor: 'rgba(0, 212, 255, 1)',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'GST',
-                        data: gstData,
-                        backgroundColor: 'rgba(240, 147, 251, 0.8)',
-                        borderColor: 'rgba(240, 147, 251, 1)',
-                        borderWidth: 2
-                    }
-                ]
-            },
+        const data = {
+            labels: chartType === 'doughnut' ? ['Sales', 'GST'] : months,
+            datasets: chartType === 'doughnut' ? [{
+                data: [sales, gst],
+                backgroundColor: ['rgba(0, 212, 255, 0.8)', 'rgba(0, 255, 136, 0.8)'],
+                borderColor: ['rgba(0, 212, 255, 1)', 'rgba(0, 255, 136, 1)'],
+                borderWidth: 2
+            }] : [
+                {
+                    label: 'Sales',
+                    data: salesData,
+                    backgroundColor: 'rgba(0, 212, 255, 0.8)',
+                    borderColor: 'rgba(0, 212, 255, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'GST',
+                    data: gstData,
+                    backgroundColor: 'rgba(0, 255, 136, 0.8)',
+                    borderColor: 'rgba(0, 255, 136, 1)',
+                    borderWidth: 2
+                }
+            ]
+        };
+
+        const config = {
+            type: chartType,
+            data: data,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -595,51 +606,98 @@ document.addEventListener('DOMContentLoaded', function() {
                         borderWidth: 1,
                         callbacks: {
                             label: function(context) {
-                                const value = context.parsed.y;
-                                return `${context.dataset.label}: ₹${value.toLocaleString('en-IN')}`;
+                                const value = context.parsed.y || context.parsed;
+                                return `${context.dataset.label || context.label}: ₹${value.toLocaleString('en-IN')}`;
                             }
                         }
                     }
                 },
-                scales: {
+                scales: chartType !== 'doughnut' ? {
                     x: {
-                        ticks: {
-                            color: '#ffffff'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                        ticks: { color: '#ffffff' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
                     y: {
-                        ticks: {
+                        ticks: { 
                             color: '#ffffff',
                             callback: function(value) {
                                 return '₹' + (value / 100000).toFixed(0) + 'L';
                             }
                         },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
-                }
+                } : {}
             }
-        });
+        };
+
+        analysisChart = new Chart(ctx, config);
+    }
+
+    function updateAnalysisChart() {
+        if (analysisChart) {
+            const monthlySales = parseFloat(document.getElementById('monthlySales').value) || 0;
+            const avgGSTRate = parseFloat(document.getElementById('avgGSTRate').value) || 0;
+            const monthlyGST = (monthlySales * avgGSTRate) / 100;
+            
+            createAnalysisChart(monthlySales, monthlyGST);
+        }
     }
 
     function resetGSTAnalysis() {
         document.getElementById('monthlySales').value = '';
         document.getElementById('avgGSTRate').value = '';
-        document.getElementById('businessType').value = 'regular';
+        document.getElementById('businessType').value = '';
         document.getElementById('analysisResults').style.display = 'none';
+        
+        if (analysisChart) {
+            analysisChart.destroy();
+            analysisChart = null;
+        }
+    }
+
+    function downloadAnalysisPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add content similar to other PDF functions
+        doc.setFontSize(20);
+        doc.setTextColor(0, 212, 255);
+        doc.text('PRATIX FINANCE', 20, 30);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('GST Analysis Report', 20, 50);
+
+        // Add analysis data
+        doc.setFontSize(12);
+        doc.text('Analysis Results:', 20, 70);
+        doc.text(`Monthly GST Liability: ${document.getElementById('monthlyGSTLiability').textContent}`, 20, 85);
+        doc.text(`Annual GST Liability: ${document.getElementById('annualGSTLiability').textContent}`, 20, 100);
+        doc.text(`Effective Tax Rate: ${document.getElementById('effectiveTaxRate').textContent}`, 20, 115);
+        doc.text(`Compliance Status: ${document.getElementById('complianceStatus').textContent}`, 20, 130);
+
+        // Footer
+        doc.setFontSize(10);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('gst-analysis-report.pdf');
+        showNotification('Analysis PDF downloaded successfully!', 'success');
     }
 
     // GST Returns functionality
     function initGSTReturns() {
         const calculateBtn = document.getElementById('calculateReturns');
         const refreshBtn = document.getElementById('refreshReturns');
+        const chartSelector = document.getElementById('returnsChartSelector');
+        const downloadBtn = document.getElementById('downloadReturnsPDF');
 
         if (calculateBtn) {
             calculateBtn.addEventListener('click', function() {
+                if (!validateReturnsInputs()) {
+                    showNotification('Please fill all required fields!', 'warning');
+                    return;
+                }
+
                 this.classList.add('loading');
                 this.textContent = 'Calculating...';
 
@@ -655,14 +713,30 @@ document.addEventListener('DOMContentLoaded', function() {
         if (refreshBtn) {
             refreshBtn.addEventListener('click', function() {
                 resetGSTReturns();
-                showNotification('GST returns refreshed!', 'info');
+                showNotification('Returns calculator refreshed!', 'info');
             });
+        }
+
+        if (chartSelector) {
+            chartSelector.addEventListener('change', updateReturnsChart);
+        }
+
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', downloadReturnsPDF);
         }
     }
 
+    function validateReturnsInputs() {
+        const totalSales = document.getElementById('totalSalesGST')?.value;
+        const totalPurchases = document.getElementById('totalPurchasesGST')?.value;
+        const returnPeriod = document.getElementById('returnPeriod')?.value;
+
+        return totalSales && totalSales > 0 && totalPurchases && totalPurchases >= 0 && returnPeriod;
+    }
+
     function calculateGSTReturns() {
-        const totalSales = parseFloat(document.getElementById('totalSalesGST').value) || 590000;
-        const totalPurchases = parseFloat(document.getElementById('totalPurchasesGST').value) || 236000;
+        const totalSales = parseFloat(document.getElementById('totalSalesGST').value) || 0;
+        const totalPurchases = parseFloat(document.getElementById('totalPurchasesGST').value) || 0;
         const previousBalance = parseFloat(document.getElementById('previousBalance').value) || 0;
 
         // Assuming 18% average GST rate for calculation
@@ -679,14 +753,136 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('totalPayable').textContent = `₹${Math.round(totalPayable).toLocaleString('en-IN')}`;
 
         document.getElementById('returnsResults').style.display = 'block';
+        createReturnsChart(outputGST, inputGST, netGST);
+    }
+
+    function createReturnsChart(outputGST, inputGST, netGST) {
+        const ctx = document.getElementById('returnsChart');
+        const chartType = document.getElementById('returnsChartSelector').value;
+
+        if (returnsChart) {
+            returnsChart.destroy();
+        }
+
+        const data = {
+            labels: ['Output GST', 'Input GST', 'Net Liability'],
+            datasets: [{
+                data: [Math.round(outputGST), Math.round(inputGST), Math.round(netGST)],
+                backgroundColor: [
+                    'rgba(0, 212, 255, 0.8)',
+                    'rgba(0, 255, 136, 0.8)',
+                    'rgba(255, 0, 128, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(0, 212, 255, 1)',
+                    'rgba(0, 255, 136, 1)',
+                    'rgba(255, 0, 128, 1)'
+                ],
+                borderWidth: 2
+            }]
+        };
+
+        const config = {
+            type: chartType,
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#ffffff',
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed.y || context.parsed;
+                                return `${context.label}: ₹${value.toLocaleString('en-IN')}`;
+                            }
+                        }
+                    }
+                },
+                scales: chartType !== 'doughnut' ? {
+                    x: {
+                        ticks: { color: '#ffffff' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    y: {
+                        ticks: { 
+                            color: '#ffffff',
+                            callback: function(value) {
+                                return '₹' + value.toLocaleString('en-IN');
+                            }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                } : {}
+            }
+        };
+
+        returnsChart = new Chart(ctx, config);
+    }
+
+    function updateReturnsChart() {
+        if (returnsChart) {
+            const outputGST = parseFloat(document.getElementById('outputGST').textContent.replace(/[₹,]/g, ''));
+            const inputGST = parseFloat(document.getElementById('inputGST').textContent.replace(/[₹,]/g, ''));
+            const netGST = parseFloat(document.getElementById('netGSTLiability').textContent.replace(/[₹,]/g, ''));
+            
+            createReturnsChart(outputGST, inputGST, netGST);
+        }
     }
 
     function resetGSTReturns() {
-        document.getElementById('returnPeriod').value = 'monthly';
+        document.getElementById('returnPeriod').value = '';
         document.getElementById('totalSalesGST').value = '';
         document.getElementById('totalPurchasesGST').value = '';
         document.getElementById('previousBalance').value = '';
         document.getElementById('returnsResults').style.display = 'none';
+        
+        if (returnsChart) {
+            returnsChart.destroy();
+            returnsChart = null;
+        }
+    }
+
+    function downloadReturnsPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add content
+        doc.setFontSize(20);
+        doc.setTextColor(0, 212, 255);
+        doc.text('PRATIX FINANCE', 20, 30);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('GST Returns Report', 20, 50);
+
+        // Add returns data
+        doc.setFontSize(12);
+        doc.text('Returns Summary:', 20, 70);
+        doc.text(`Output GST: ${document.getElementById('outputGST').textContent}`, 20, 85);
+        doc.text(`Input GST: ${document.getElementById('inputGST').textContent}`, 20, 100);
+        doc.text(`Net GST Liability: ${document.getElementById('netGSTLiability').textContent}`, 20, 115);
+        doc.text(`Total Payable: ${document.getElementById('totalPayable').textContent}`, 20, 130);
+
+        // Footer
+        doc.setFontSize(10);
+        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+
+        doc.save('gst-returns-report.pdf');
+        showNotification('Returns PDF downloaded successfully!', 'success');
     }
 
     // Notification system

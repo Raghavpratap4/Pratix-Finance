@@ -1258,6 +1258,199 @@ select.calc-input option {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* HSN Grid */
+.hsn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.hsn-card {
+    background: var(--card-gradient);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-neon);
+}
+
+.hsn-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--neon-green);
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+}
+
+.hsn-code {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--neon-blue);
+    margin-bottom: 0.5rem;
+}
+
+.hsn-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.hsn-rate {
+    font-size: 0.8rem;
+    color: var(--neon-green);
+    font-weight: 600;
+}
+
+/* Analysis Cards */
+.analysis-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.analysis-card {
+    background: rgba(0, 255, 136, 0.1);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.analysis-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.analysis-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--neon-green);
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+/* Returns Summary */
+.returns-summary {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.return-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.return-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.return-item.total-payable {
+    border-top: 2px solid var(--neon-green);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.return-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.return-value {
+    color: var(--neon-green);
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+.total-payable .return-value {
+    font-size: 1.3rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+/* GST Breakdown Table */
+.gst-breakdown-table {
+    margin-top: 2rem;
+}
+
+.gst-breakdown-table h4 {
+    color: var(--neon-blue);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+/* Invoice Items */
+.invoice-items-section h3 {
+    color: var(--neon-green);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+.invoice-item {
+    margin-bottom: 1rem;
+}
+
+.item-inputs {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.remove-item-btn {
+    background: linear-gradient(135deg, var(--neon-pink), #ff4444);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-item-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 0, 128, 0.6);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .item-inputs {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .hsn-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .analysis-cards {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
