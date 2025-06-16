@@ -8,23 +8,26 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
     
-    // Initialize core functionality first
-    initTabSwitching();
-    initBottomNavigation();
-    
-    // Then initialize calculator components
-    initEMICalculator();
-    initAmortizationTable();
-    initPrepaymentCalculator();
-    initLoanComparison();
-    initToolExpansion();
-    
-    // Show first tab by default
+    // Wait a bit for all elements to be rendered
     setTimeout(() => {
-        switchToTab('emi-calculator');
+        // Initialize core functionality first
+        initTabSwitching();
+        initBottomNavigation();
+        
+        // Then initialize calculator components
+        initEMICalculator();
+        initAmortizationTable();
+        initPrepaymentCalculator();
+        initLoanComparison();
+        initToolExpansion();
+        
+        // Show first tab by default
+        setTimeout(() => {
+            switchToTab('emi-calculator');
+        }, 200);
+        
+        console.log('EMI calculator initialization complete');
     }, 100);
-    
-    console.log('EMI calculator initialization complete');
 });
 
 // Clear all inputs on page load
@@ -63,6 +66,8 @@ function clearAllInputs() {
 
 // Initialize EMI Calculator
 function initEMICalculator() {
+    console.log('Initializing EMI Calculator...');
+    
     const loanAmountInput = document.getElementById('loanAmountInput');
     const interestRateInput = document.getElementById('interestRateInput');
     const loanTenureInput = document.getElementById('loanTenureInput');
@@ -89,70 +94,96 @@ function initEMICalculator() {
         });
     }
 
-    // Calculate EMI button
-    const calculateButton = document.getElementById('calculateEMI');
-    if (calculateButton) {
-        console.log('Calculate button found, adding event listener');
-        calculateButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    // Wait for DOM to be fully loaded before attaching button listeners
+    setTimeout(() => {
+        // Calculate EMI button
+        const calculateButton = document.getElementById('calculateEMI');
+        if (calculateButton) {
+            console.log('Calculate button found, adding event listener');
+            // Remove any existing listeners
+            calculateButton.replaceWith(calculateButton.cloneNode(true));
+            const newCalculateButton = document.getElementById('calculateEMI');
             
-            console.log('Calculate button clicked');
-            
-            try {
-                calculateEMI();
-                showNotification('EMI calculated successfully!', 'success');
-            } catch (error) {
-                console.error('Error calculating EMI:', error);
-                showNotification('Error calculating EMI. Please check your inputs.', 'error');
-            }
-        });
-    } else {
-        console.error('Calculate button not found!');
-    }
+            newCalculateButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('Calculate button clicked');
+                
+                try {
+                    calculateEMI();
+                    showNotification('EMI calculated successfully!', 'success');
+                } catch (error) {
+                    console.error('Error calculating EMI:', error);
+                    showNotification('Error calculating EMI. Please check your inputs.', 'error');
+                }
+            });
+        } else {
+            console.error('Calculate button not found!');
+        }
 
-    // Refresh button
-    const refreshButton = document.getElementById('refreshEMI');
-    if (refreshButton) {
-        console.log('Refresh button found, adding event listener');
-        refreshButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        // Refresh button
+        const refreshButton = document.getElementById('refreshEMI');
+        if (refreshButton) {
+            console.log('Refresh button found, adding event listener');
+            // Remove any existing listeners
+            refreshButton.replaceWith(refreshButton.cloneNode(true));
+            const newRefreshButton = document.getElementById('refreshEMI');
             
-            console.log('Refresh button clicked');
-            
-            try {
-                resetEMICalculator();
-                showNotification('Calculator refreshed!', 'info');
-            } catch (error) {
-                console.error('Error refreshing calculator:', error);
-                showNotification('Error refreshing calculator.', 'error');
-            }
-        });
-    } else {
-        console.error('Refresh button not found!');
-    }
+            newRefreshButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('Refresh button clicked');
+                
+                try {
+                    resetEMICalculator();
+                    showNotification('Calculator refreshed!', 'info');
+                } catch (error) {
+                    console.error('Error refreshing calculator:', error);
+                    showNotification('Error refreshing calculator.', 'error');
+                }
+            });
+        } else {
+            console.error('Refresh button not found!');
+        }
+    }, 500);
 
     // Chart type selector
-    document.getElementById('chartTypeSelect').addEventListener('change', function() {
-        if (currentEMIData) {
-            updateChart(currentEMIData);
-        }
-    });
+    const chartTypeSelect = document.getElementById('chartTypeSelect');
+    if (chartTypeSelect) {
+        chartTypeSelect.addEventListener('change', function() {
+            if (currentEMIData) {
+                updateChart(currentEMIData);
+            }
+        });
+    }
 
     // PDF download
-    document.getElementById('downloadPDF').addEventListener('click', function() {
-        generateEMIPDF();
-    });
+    const downloadPDFButton = document.getElementById('downloadPDF');
+    if (downloadPDFButton) {
+        downloadPDFButton.addEventListener('click', function() {
+            generateEMIPDF();
+        });
+    }
 }
 
 // Calculate EMI
 function calculateEMI() {
+    console.log('calculateEMI function called');
+    
     const loanAmountInput = document.getElementById('loanAmountInput');
     const interestRateInput = document.getElementById('interestRateInput');
     const loanTenureInput = document.getElementById('loanTenureInput');
     
+    console.log('Input elements:', {
+        loanAmount: loanAmountInput,
+        interestRate: interestRateInput,
+        loanTenure: loanTenureInput
+    });
+    
     if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
+        console.error('Input fields not found!');
         showNotification('Input fields not found!', 'error');
         return;
     }
@@ -160,6 +191,12 @@ function calculateEMI() {
     const loanAmountValue = loanAmountInput.value.trim();
     const interestRateValue = interestRateInput.value.trim();
     const loanTenureValue = loanTenureInput.value.trim();
+    
+    console.log('Input values:', {
+        loanAmount: loanAmountValue,
+        interestRate: interestRateValue,
+        tenure: loanTenureValue
+    });
     
     if (!loanAmountValue || !interestRateValue || !loanTenureValue) {
         showNotification('Please fill all fields!', 'error');
@@ -175,6 +212,8 @@ function calculateEMI() {
         return;
     }
 
+    console.log('Calculating EMI with:', { principal, annualRate, years });
+
     const monthlyRate = annualRate / 12 / 100;
     const totalMonths = years * 12;
 
@@ -184,6 +223,8 @@ function calculateEMI() {
 
     const totalAmount = emi * totalMonths;
     const totalInterest = totalAmount - principal;
+
+    console.log('Calculated values:', { emi, totalAmount, totalInterest });
 
     currentEMIData = {
         principal: principal,
@@ -195,20 +236,36 @@ function calculateEMI() {
     };
 
     // Update display
-    document.getElementById('monthlyEMI').textContent = `₹${Math.round(emi).toLocaleString('en-IN')}`;
-    document.getElementById('totalInterest').textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
-    document.getElementById('totalAmount').textContent = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
+    const monthlyEMIElement = document.getElementById('monthlyEMI');
+    const totalInterestElement = document.getElementById('totalInterest');
+    const totalAmountElement = document.getElementById('totalAmount');
+    
+    if (monthlyEMIElement) {
+        monthlyEMIElement.textContent = `₹${Math.round(emi).toLocaleString('en-IN')}`;
+    }
+    if (totalInterestElement) {
+        totalInterestElement.textContent = `₹${Math.round(totalInterest).toLocaleString('en-IN')}`;
+    }
+    if (totalAmountElement) {
+        totalAmountElement.textContent = `₹${Math.round(totalAmount).toLocaleString('en-IN')}`;
+    }
 
     // Show results and chart
-    document.getElementById('resultCard').style.display = 'block';
-    document.getElementById('chartContainer').style.display = 'block';
-    document.getElementById('chartControls').style.display = 'block';
+    const resultCard = document.getElementById('resultCard');
+    const chartContainer = document.getElementById('chartContainer');
+    const chartControls = document.getElementById('chartControls');
+    
+    if (resultCard) resultCard.style.display = 'block';
+    if (chartContainer) chartContainer.style.display = 'block';
+    if (chartControls) chartControls.style.display = 'block';
 
     // Update chart
     updateChart(currentEMIData);
 
     // Update amortization table
     generateAmortizationTable(currentEMIData);
+    
+    console.log('EMI calculation completed successfully');
 }
 
 // Update chart based on selected type
@@ -872,26 +929,35 @@ function updateComparisonChart(loans = null) {
 // Initialize tab switching functionality
 function initTabSwitching() {
     console.log('Initializing tab switching');
-    const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
-    console.log('Found nav items:', navItems.length);
     
-    navItems.forEach((item, index) => {
-        console.log(`Adding click listener to nav item ${index}:`, item.getAttribute('data-tab'));
+    // Wait for DOM to be fully loaded
+    setTimeout(() => {
+        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+        console.log('Found nav items:', navItems.length);
         
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        navItems.forEach((item, index) => {
+            const targetTab = item.getAttribute('data-tab');
+            console.log(`Adding click listener to nav item ${index}:`, targetTab);
             
-            const targetTab = this.getAttribute('data-tab');
-            console.log('Tab clicked:', targetTab);
+            // Remove existing listeners by cloning
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
             
-            if (targetTab) {
-                switchToTab(targetTab);
-            } else {
-                console.error('No data-tab attribute found on:', this);
-            }
+            newItem.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const targetTab = this.getAttribute('data-tab');
+                console.log('Tab clicked:', targetTab);
+                
+                if (targetTab) {
+                    switchToTab(targetTab);
+                } else {
+                    console.error('No data-tab attribute found on:', this);
+                }
+            });
         });
-    });
+    }, 300);
 }
 
 // Initialize bottom navigation
@@ -1229,36 +1295,55 @@ function goToHome() {
 function switchToTab(tabId) {
     console.log('Switching to tab:', tabId);
     
-    // Remove active class from all nav items and tab contents
-    const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    navItems.forEach(nav => nav.classList.remove('active'));
-    tabContents.forEach(tab => {
-        tab.classList.remove('active');
-        tab.style.display = 'none';
-    });
+    try {
+        // Remove active class from all nav items and tab contents
+        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        console.log('Found nav items:', navItems.length);
+        console.log('Found tab contents:', tabContents.length);
+        
+        navItems.forEach(nav => {
+            nav.classList.remove('active');
+        });
+        
+        tabContents.forEach(tab => {
+            tab.classList.remove('active');
+            tab.style.display = 'none';
+        });
 
-    // Add active class to target tab and nav item
-    const targetTab = document.getElementById(tabId);
-    const targetNavs = document.querySelectorAll(`[data-tab="${tabId}"]`);
-    
-    if (targetTab) {
-        targetTab.classList.add('active');
-        targetTab.style.display = 'block';
-        console.log('Tab activated:', tabId);
-    } else {
-        console.error('Tab not found:', tabId);
-    }
-    
-    targetNavs.forEach(nav => {
-        if (nav) {
-            nav.classList.add('active');
+        // Add active class to target tab and nav item
+        const targetTab = document.getElementById(tabId);
+        const targetNavs = document.querySelectorAll(`[data-tab="${tabId}"]`);
+        
+        console.log('Target tab element:', targetTab);
+        console.log('Target nav elements:', targetNavs.length);
+        
+        if (targetTab) {
+            targetTab.classList.add('active');
+            targetTab.style.display = 'block';
+            console.log('Tab activated:', tabId);
+        } else {
+            console.error('Tab not found:', tabId);
+            return;
         }
-    });
-    
-    // Save active tab
-    localStorage.setItem('activeTab', tabId);
+        
+        targetNavs.forEach(nav => {
+            if (nav) {
+                nav.classList.add('active');
+                console.log('Nav activated:', nav);
+            }
+        });
+        
+        // Save active tab
+        localStorage.setItem('activeTab', tabId);
+        
+        // Scroll to top when switching tabs
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+    } catch (error) {
+        console.error('Error switching tabs:', error);
+    }
 }
 
 window.switchToTab = switchToTab;

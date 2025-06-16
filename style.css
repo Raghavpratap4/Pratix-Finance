@@ -388,6 +388,9 @@ body::after {
     pointer-events: auto !important;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    z-index: 10;
+    outline: none;
 }
 
 .calculate-btn::before,
