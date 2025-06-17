@@ -583,10 +583,10 @@
                 </div>
             </section>
 
-            <!-- Tax Implications Tab -->
-            <section id="tax-implications" class="tab-content">
+            <!-- Tax Impact Tab -->
+            <section id="tax-impact" class="tab-content">
                 <div class="glass-card">
-                    <h2 class="section-title">Tax Implications</h2>
+                    <h2 class="section-title">Tax Impact</h2>
 
                     <div class="tax-form">
                         <div class="input-group">
@@ -679,28 +679,114 @@
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <!-- Quick Access to Other Calculators -->
-                <div class="tools-grid" style="margin-top: 2rem;">
-                    <div class="tool-card" onclick="goToEMI()">
-                        <div class="tool-icon">🏠</div>
-                        <h3>EMI Calculator</h3>
-                        <p>Calculate loan EMI payments</p>
+            <!-- Tools & Extras Tab -->
+            <section id="tools-extras" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Tools & Extras</h2>
+
+                    <!-- Quick Access to Other Calculators -->
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="goToEMI()">
+                            <div class="tool-icon">🏠</div>
+                            <h3>EMI Calculator</h3>
+                            <p>Calculate loan EMI payments and plan your home loan effectively</p>
+                            <div class="tool-features">
+                                <span>Loan EMI</span>
+                                <span>Amortization</span>
+                                <span>Prepayment</span>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="goToSIP()">
+                            <div class="tool-icon">📈</div>
+                            <h3>SIP Calculator</h3>
+                            <p>Plan systematic investments and build wealth over time</p>
+                            <div class="tool-features">
+                                <span>SIP Planning</span>
+                                <span>Goal Setting</span>
+                                <span>Returns Analysis</span>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="goToGST()">
+                            <div class="tool-icon">📊</div>
+                            <h3>GST Calculator</h3>
+                            <p>Calculate GST amounts for your business transactions</p>
+                            <div class="tool-features">
+                                <span>GST Calculation</span>
+                                <span>Invoice Generator</span>
+                                <span>Tax Analysis</span>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="goToTax()">
+                            <div class="tool-icon">💼</div>
+                            <h3>Tax Calculator</h3>
+                            <p>Calculate income tax liability and plan tax savings</p>
+                            <div class="tool-features">
+                                <span>Income Tax</span>
+                                <span>Tax Planning</span>
+                                <span>80C Benefits</span>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="goToHome()">
+                            <div class="tool-icon">🏠</div>
+                            <h3>All Calculators</h3>
+                            <p>Access all financial calculators in one place</p>
+                            <div class="tool-features">
+                                <span>Complete Suite</span>
+                                <span>Free Tools</span>
+                                <span>Mobile Friendly</span>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="window.open('https://www.rbi.org.in/', '_blank')">
+                            <div class="tool-icon">🏦</div>
+                            <h3>RBI Information</h3>
+                            <p>Get latest banking rates and RBI updates</p>
+                            <div class="tool-features">
+                                <span>Current Rates</span>
+                                <span>RBI Updates</span>
+                                <span>Banking Info</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tool-card" onclick="goToSIP()">
-                        <div class="tool-icon">📈</div>
-                        <h3>SIP Calculator</h3>
-                        <p>Plan systematic investments</p>
+
+                    <!-- Financial Tips Section -->
+                    <div class="financial-tips">
+                        <h3 class="sub-title">💡 Financial Tips</h3>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <h4>🎯 Diversification</h4>
+                                <p>Don't put all your money in FDs. Diversify across equity, debt, and real estate for better returns.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>📅 Emergency Fund</h4>
+                                <p>Keep 6-12 months of expenses in liquid instruments like savings account or liquid funds.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>💰 Tax Planning</h4>
+                                <p>Use tax-saving instruments like ELSS, PPF, and Tax Saver FDs to reduce your tax liability.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>📈 Long-term Investing</h4>
+                                <p>For goals beyond 5 years, consider equity mutual funds for better inflation-adjusted returns.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tool-card" onclick="goToGST()">
-                        <div class="tool-icon">📊</div>
-                        <h3>GST Calculator</h3>
-                        <p>Calculate GST amounts</p>
-                    </div>
-                    <div class="tool-card" onclick="goToTax()">
-                        <div class="tool-icon">💼</div>
-                        <h3>Tax Calculator</h3>
-                        <p>Calculate income tax liability</p>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h3 class="sub-title">⚡ Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button class="feature-btn" onclick="downloadFDReport()">
+                                📄 Download FD Report
+                            </button>
+                            <button class="feature-btn" onclick="shareFDCalculation()">
+                                📱 Share Calculation
+                            </button>
+                            <button class="feature-btn" onclick="printFDResults()">
+                                🖨️ Print Results
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section            <footer class="simple-footer">
