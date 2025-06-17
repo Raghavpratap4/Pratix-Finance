@@ -33,9 +33,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add click event listeners to nav items
     navItems.forEach(item => {
-        item.addEventListener('click', function() {
+        // Use both click and touchend for better mobile support
+        const handleTabSwitch = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             const targetTab = this.getAttribute('data-tab');
-            switchTab(targetTab);
+            if (targetTab) {
+                switchTab(targetTab);
+            }
+        };
+        
+        item.addEventListener('click', handleTabSwitch);
+        item.addEventListener('touchend', handleTabSwitch);
+        
+        // Prevent default touch actions that might interfere
+        item.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
         });
     });
 
