@@ -989,14 +989,50 @@
             window.location.href = '/fd-calculator.html';
         }
 
-        // Collapsible Footer Sections
+        // Enhanced Collapsible Footer Sections
         document.addEventListener('DOMContentLoaded', function() {
             const collapsibleSections = document.querySelectorAll('.footer-section-collapsible');
 
             collapsibleSections.forEach(section => {
                 const header = section.querySelector('.footer-section-header');
-                header.addEventListener('click', function() {
-                    section.classList.toggle('open');
+                const content = section.querySelector('.footer-section-content');
+                const icon = section.querySelector('.footer-expand-icon');
+                
+                if (header && content && icon) {
+                    header.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const isExpanded = content.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // Collapse
+                            content.style.maxHeight = '0px';
+                            content.classList.remove('expanded');
+                            header.classList.remove('active');
+                            icon.style.transform = 'rotate(0deg)';
+                        } else {
+                            // Expand
+                            content.style.maxHeight = content.scrollHeight + 'px';
+                            content.classList.add('expanded');
+                            header.classList.add('active');
+                            icon.style.transform = 'rotate(180deg)';
+                        }
+                    });
+                    
+                    // Touch event for mobile
+                    header.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        this.click();
+                    });
+                }
+            });
+            
+            // Auto-adjust on window resize
+            window.addEventListener('resize', function() {
+                const expandedContents = document.querySelectorAll('.footer-section-content.expanded');
+                expandedContents.forEach(content => {
+                    content.style.maxHeight = content.scrollHeight + 'px';
                 });
             });
         });
