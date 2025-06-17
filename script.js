@@ -1024,5 +1024,48 @@ Calculated using PRATIX FINANCE - https://pratix-finance.vercel.app
         });
     }
 
+    // Initialize collapsible footer sections
+    initCollapsibleFooter();
+
     console.log('PRATIX FINANCE Homepage loaded successfully!');
+
+    // Collapsible Footer Functionality
+    function initCollapsibleFooter() {
+        const footerHeaders = document.querySelectorAll('.footer-section-header');
+        
+        footerHeaders.forEach(header => {
+            header.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const content = this.nextElementSibling;
+                const isExpanded = content.classList.contains('expanded');
+                
+                // Toggle current section
+                if (isExpanded) {
+                    this.classList.remove('active');
+                    content.classList.remove('expanded');
+                    content.style.maxHeight = '0px';
+                } else {
+                    this.classList.add('active');
+                    content.classList.add('expanded');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+            
+            // Touch event handling for better mobile support
+            header.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.click();
+            });
+        });
+        
+        // Auto-adjust max-height on window resize
+        window.addEventListener('resize', function() {
+            const expandedContents = document.querySelectorAll('.footer-section-content.expanded');
+            expandedContents.forEach(content => {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            });
+        });
+    }
 });

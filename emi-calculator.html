@@ -40,6 +40,50 @@
       gtag('js', new Date());
       gtag('config', 'G-1NSSQW00JS');
     </script>
+    <style>
+        .footer-section-collapsible .footer-section-content {
+            display: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section-collapsible.open .footer-section-content {
+            display: block;
+        }
+
+        .footer-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .footer-section-title-collapsible {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .footer-expand-icon {
+            font-size: 1.1em;
+        }
+
+        .footer-links-list-collapsible a {
+            display: block;
+            padding: 8px 0;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links-list-collapsible a:hover {
+            color: #333;
+        }
+
+        .footer-link-icon {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -146,7 +190,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="result-section">
                             <div class="result-card" id="resultCard" style="display: none;">
                                 <div class="result-item">
@@ -515,7 +559,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
             </section>
 
@@ -662,8 +706,7 @@
                         <div class="settings-list">
                             <div class="setting-item">
                                 <div class="setting-info">
-                                    <h4>Currency</h4>
-                                    <p>Select your preferred currency format</p>
+                                    <h4>Currency                                    <p>Select your preferred currency format</p>
                                 </div>
                                 <select class="setting-select" id="currencySelect">
                                     <option value="INR" selected>₹ Indian Rupee (INR)</option>
@@ -732,106 +775,96 @@
                         <p class="brand-tagline-simple">Your Complete Financial Calculator Suite</p>
                     </div>
 
-                    <!-- Links Grid -->
+                    <!-- Collapsible Links Grid -->
                     <div class="footer-links-grid">
                         <!-- Company Section -->
-                        <div class="footer-section">
-                            <h4 class="footer-section-title">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                </svg>
-                                Company
-                            </h4>
-                            <div class="footer-links-list">
-                                <a href="about.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">ℹ️</span>
-                                    About Us
-                                </a>
-                                <a href="blog.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">📝</span>
-                                    Blog & Insights
-                                </a>
-                                <a href="contact.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">📞</span>
-                                    Contact Us
-                                </a>
-                                <a href="feedback.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">💬</span>
-                                    Feedback
-                                </a>
+                        <div class="footer-section-collapsible">
+                            <div class="footer-section-header">
+                                <h4 class="footer-section-title-collapsible">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    </svg>
+                                    Company
+                                </h4>
+                                <span class="footer-expand-icon">▼</span>
+                            </div>
+                            <div class="footer-section-content">
+                                <div class="footer-links-list-collapsible">
+                                    <a href="about.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">ℹ️</span>
+                                        About Us
+                                    </a>
+                                    <a href="blog.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">📚</span>
+                                        Blog
+                                    </a>
+                                    <a href="privacy.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">🔒</span>
+                                        Privacy Policy
+                                    </a>
+                                    <a href="terms.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">📋</span>
+                                        Terms of Service
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calculators Section -->
+                        <div class="footer-section-collapsible">
+                            <div class="footer-section-header">
+                                <h4 class="footer-section-title-collapsible">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    Calculators
+                                </h4>
+                                <span class="footer-expand-icon">▼</span>
+                            </div>
+                            <div class="footer-section-content">
+                                <div class="footer-links-list-collapsible">
+                                    <a href="sip-calculator.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">📈</span>
+                                        SIP Calculator
+                                    </a>
+                                    <a href="gst-calculator.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">📊</span>
+                                        GST Calculator
+                                    </a>
+                                    <a href="tax-calculator.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">💼</span>
+                                        Tax Calculator
+                                    </a>
+                                    <a href="fd-calculator.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">🏦</span>
+                                        FD Calculator
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Legal Section -->
-                        <div class="footer-section">
-                            <h4 class="footer-section-title">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14,2 14,8 20,8"/>
-                                </svg>
-                                Legal
-                            </h4>
-                            <div class="footer-links-list">
-                                <a href="privacy.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">🔒</span>
-                                    Privacy Policy
-                                </a>
-                                <a href="terms.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">📋</span>
-                                    Terms of Service
-                                </a>
+                        <div class="footer-section-collapsible">
+                            <div class="footer-section-header">
+                                <h4 class="footer-section-title-collapsible">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Legal & Support
+                                </h4>
+                                <span class="footer-expand-icon">▼</span>
                             </div>
-                        </div>
-
-                        <!-- Tools Section -->
-                        <div class="footer-section">
-                            <h4 class="footer-section-title">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                                Calculators
-                            </h4>
-                            <div class="footer-links-list">
-                                <a href="index.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">🏠</span>
-                                    All Tools
-                                </a>
-                                <a href="sip-calculator.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">📈</span>
-                                    SIP Calculator
-                                </a>
-                                <a href="tax-calculator.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">💼</span>
-                                    Tax Calculator
-                                </a>
-                                <a href="gst-calculator.html" class="footer-link-simple">
-                                    <span class="link-icon-simple">📊</span>
-                                    GST Calculator
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Quick Stats -->
-                        <div class="footer-section">
-                            <h4 class="footer-section-title">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
-                                </svg>
-                                App Stats
-                            </h4>
-                            <div class="quick-stats">
-                                <div class="stat-item">
-                                    <div class="stat-number">5+</div>
-                                    <div class="stat-label">Tools</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-number">1M+</div>
-                                    <div class="stat-label">Calculations</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-number">4.9★</div>
-                                    <div class="stat-label">Rating</div>
+                            <div class="footer-section-content">
+                                <div class="footer-links-list-collapsible">
+                                    <a href="contact.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">📞</span>
+                                        Contact Us
+                                    </a>
+                                    <a href="feedback.html" class="footer-link-collapsible">
+                                        <span class="footer-link-icon">💬</span>
+                                        Feedback
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -955,6 +988,18 @@
         function goToFdCalculator() {
             window.location.href = '/fd-calculator.html';
         }
+
+        // Collapsible Footer Sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapsibleSections = document.querySelectorAll('.footer-section-collapsible');
+
+            collapsibleSections.forEach(section => {
+                const header = section.querySelector('.footer-section-header');
+                header.addEventListener('click', function() {
+                    section.classList.toggle('open');
+                });
+            });
+        });
     </script>
 </body>
 </html>
