@@ -992,7 +992,8 @@ function generateLoanInputs() {
     const loanCount = parseInt(loanCountSelect.value) || 2;
     console.log('Generating loan inputs for', loanCount, 'loans');
 
-    container.innerHTML = '';
+    ```text
+container.innerHTML = '';
 
     for (let i = 1; i <= loanCount; i++) {
         const loanCard = document.createElement('div');
@@ -1040,38 +1041,7 @@ function generateLoanInputs() {
     console.log('Generated', container.children.length, 'loan input cards');
 }
 
-// Footer Dropdown Functionality
-function toggleFooterDropdown(dropdownId) {
-    const content = document.getElementById(dropdownId + '-content');
-    const arrow = document.getElementById(dropdownId + '-arrow');
-
-    // Close all other dropdowns first
-    const allDropdowns = document.querySelectorAll('.dropdown-content');
-    const allArrows = document.querySelectorAll('.dropdown-arrow');
-
-    allDropdowns.forEach(dropdown => {
-        if (dropdown.id !== dropdownId + '-content') {
-            dropdown.classList.remove('expanded');
-        }
-    });
-
-    allArrows.forEach(arrowEl => {
-        if (arrowEl.id !== dropdownId + '-arrow') {
-            arrowEl.classList.remove('rotated');
-        }
-    });
-
-    // Toggle current dropdown
-    content.classList.toggle('expanded');
-    arrow.classList.toggle('rotated');
-
-    // Add smooth animation
-    if (content.classList.contains('expanded')) {
-        content.style.maxHeight = content.scrollHeight + 'px';
-    } else {
-        content.style.maxHeight = '0px';
-    }
-}
+// Simple footer - no complex dropdown functionality needed
 
 // Close dropdowns when clicking outside
 document.addEventListener('click', function(event) {
@@ -1896,7 +1866,7 @@ function generatePrepaymentPDF() {
 
         // Footer
         doc.setFontSize(10);
-        doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
+        doc.text('©2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
 
         doc.save('Prepayment_Impact_Analysis.pdf');
         showNotification('Prepayment PDF downloaded successfully!', 'success');
