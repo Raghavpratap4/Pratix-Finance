@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,6 +30,54 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Desktop Tab Navigation -->
+        <nav class="tab-navigation">
+            <div class="tab-nav-item active" data-tab="gst-calculator">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                GST Calculator
+            </div>
+            <div class="tab-nav-item" data-tab="invoice-generator">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="6" width="20" height="8" rx="1"/>
+                    <path d="m22 4-10 7L2 4"/>
+                </svg>
+                Invoice Generator
+            </div>
+            <div class="tab-nav-item" data-tab="hsn-lookup">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                HSN Lookup
+            </div>
+            <div class="tab-nav-item" data-tab="gst-analysis">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v18h18"/>
+                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                </svg>
+                GST Analysis
+            </div>
+            <div class="tab-nav-item" data-tab="gst-returns">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="6" width="20" height="8" rx="1"/>
+                    <path d="m22 4-10 7L2 4"/>
+                </svg>
+                GST Returns
+            </div>
+            <div class="tab-nav-item" data-tab="tools-extras">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Tools & Extras
+            </div>
+        </nav>
+
+        <div class="main-app-content">
         <!-- Standardized Header -->
         <header class="standard-header">
             <div class="standard-header-content">
@@ -454,90 +501,86 @@
 
         <!-- Standardized Bottom Navigation -->
         <nav class="standard-bottom-nav" style="grid-template-columns: repeat(6, 1fr);">
-            <button class="standard-nav-item active" data-tab="gst-calculator">
+            <button class="standard-nav-item active" data-tab="gst-calculator" aria-label="GST Calculator">
                 <div class="standard-nav-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
                         <line x1="8" y1="21" x2="16" y2="21"/>
                         <line x1="12" y1="17" x2="12" y2="21"/>
                     </svg>
                 </div>
-                <span class="standard-nav-label">GST Calc</span>
+                <span class="standard-nav-label">GST</span>
             </button>
-            <button class="standard-nav-item" data-tab="invoice-generator">
+            <button class="standard-nav-item" data-tab="invoice-generator" aria-label="Invoice Generator">
                 <div class="standard-nav-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14,2 14,8 20,8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <polyline points="10,9 9,9 8,9"/>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="8" rx="1"/>
+                        <path d="m22 4-10 7L2 4"/>
                     </svg>
                 </div>
                 <span class="standard-nav-label">Invoice</span>
             </button>
-            <button class="standard-nav-item" data-tab="hsn-lookup">
+            <button class="standard-nav-item" data-tab="hsn-lookup" aria-label="HSN Lookup">
                 <div class="standard-nav-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/>
                         <path d="m21 21-4.35-4.35"/>
                     </svg>
                 </div>
                 <span class="standard-nav-label">HSN</span>
             </button>
-            <button class="standard-nav-item" data-tab="gst-analysis">
+            <button class="standard-nav-item" data-tab="gst-analysis" aria-label="GST Analysis">
                 <div class="standard-nav-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 3v18h18"/>
                         <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
                     </svg>
                 </div>
                 <span class="standard-nav-label">Analysis</span>
             </button>
-            <button class="standard-nav-item" data-tab="gst-returns">
+            <button class="standard-nav-item" data-tab="gst-returns" aria-label="GST Returns">
                 <div class="standard-nav-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="6" width="20" height="8" rx="1"/>
                         <path d="m22 4-10 7L2 4"/>
                     </svg>
                 </div>
                 <span class="standard-nav-label">Returns</span>
             </button>
-            <button class="standard-nav-item" data-tab="tools">
+            <button class="standard-nav-item" data-tab="tools-extras" aria-label="Tools and Extras">
                 <div class="standard-nav-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
                     </svg>
                 </div>
                 <span class="standard-nav-label">Tools</span>
             </button>
         </nav>
-
-        <!-- Standardized Footer -->
-        <footer class="standard-footer">
-            <div class="standard-footer-container">
-                <div class="standard-footer-brand">
-                    <div class="standard-footer-brand-header">
-                        <img src="logo.png" alt="Pratix Finance" class="standard-footer-logo">
-                        <h3 class="standard-footer-brand-name">PRATIX FINANCE</h3>
-                    </div>
-                    <p class="standard-footer-tagline">Your Complete Financial Calculator Suite</p>
-                </div>
-                <div class="standard-footer-links">
-                    <a href="index.html" class="standard-footer-link">Home</a>
-                    <a href="about.html" class="standard-footer-link">About</a>
-                    <a href="privacy.html" class="standard-footer-link">Privacy</a>
-                    <a href="terms.html" class="standard-footer-link">Terms</a>
-                    <a href="contact.html" class="standard-footer-link">Contact</a>
-                </div>
-                <div class="standard-footer-copyright">
-                    <p>© 2025 <strong>RAGHAV PRATAP | PRATIX FINANCE</strong> | All rights reserved</p>
-                    <p>Empowering your financial decisions with intelligent calculators</p>
-                </div>
-            </div>
-        </footer>
+        </div>
     </div>
-
+            <footer class="standard-footer">
+                <div class="standard-footer-container">
+                    <div class="standard-footer-brand">
+                        <div class="standard-footer-brand-header">
+                            <img src="logo.png" alt="Pratix Finance" class="standard-footer-logo">
+                            <h3 class="standard-footer-brand-name">PRATIX FINANCE</h3>
+                        </div>
+                        <p class="standard-footer-tagline">Your Complete Financial Calculator Suite</p>
+                    </div>
+                    <div class="standard-footer-links">
+                        <a href="index.html" class="standard-footer-link">Home</a>
+                        <a href="about.html" class="standard-footer-link">About</a>
+                        <a href="privacy.html" class="standard-footer-link">Privacy</a>
+                        <a href="terms.html" class="standard-footer-link">Terms</a>
+                        <a href="contact.html" class="standard-footer-link">Contact</a>
+                    </div>
+                    <div class="standard-footer-copyright">
+                        <p>© 2025 <strong>RAGHAV PRATAP | PRATIX FINANCE</strong> | All rights reserved</p>
+                        <p>Empowering your financial decisions with intelligent calculators</p>
+                    </div>
+                </div>
+            </footer>
     <script src="gst-script.js"></script>
 </body>
 </html>
