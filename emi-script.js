@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
         switchToTab('emi-calculator');
     }, 100);
 
+    // Re-initialize tab switching after a delay to ensure DOM is fully ready
+    setTimeout(() => {
+        initTabSwitching();
+        initBottomNavigation();
+        console.log('Tab switching re-initialized');
+    }, 500);
+
     console.log('EMI calculator initialization complete');
 });
 
@@ -467,19 +474,42 @@ function generateMonthlyBreakdown(data) {
 function initTabSwitching() {
     console.log('Initializing tab switching');
 
-    const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
-    console.log('Found nav items:', navItems.length);
+    // Get all navigation items (both desktop and mobile)
+    const desktopNavItems = document.querySelectorAll('.tab-nav-item');
+    const mobileNavItems = document.querySelectorAll('.bottom-nav .nav-item');
+    
+    console.log('Found desktop nav items:', desktopNavItems.length);
+    console.log('Found mobile nav items:', mobileNavItems.length);
 
-    navItems.forEach((item, index) => {
+    // Add event listeners to desktop navigation
+    desktopNavItems.forEach((item, index) => {
         const targetTab = item.getAttribute('data-tab');
-        console.log(`Adding click listener to nav item ${index}:`, targetTab);
+        console.log(`Adding click listener to desktop nav item ${index}:`, targetTab);
 
         item.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
             const targetTab = this.getAttribute('data-tab');
-            console.log('Tab clicked:', targetTab);
+            console.log('Desktop tab clicked:', targetTab);
+
+            if (targetTab) {
+                switchToTab(targetTab);
+            }
+        });
+    });
+
+    // Add event listeners to mobile navigation
+    mobileNavItems.forEach((item, index) => {
+        const targetTab = item.getAttribute('data-tab');
+        console.log(`Adding click listener to mobile nav item ${index}:`, targetTab);
+
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Mobile tab clicked:', targetTab);
 
             if (targetTab) {
                 switchToTab(targetTab);
@@ -494,16 +524,35 @@ function initBottomNavigation() {
     const navItems = document.querySelectorAll('.bottom-nav .nav-item');
     console.log('Found bottom nav items:', navItems.length);
 
+    // Remove any existing listeners to prevent duplicates
     navItems.forEach((item, index) => {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Bottom nav item ${index}:`, targetTab);
 
-        item.addEventListener('click', function(e) {
+        // Clone the element to remove all event listeners
+        const newItem = item.cloneNode(true);
+        item.parentNode.replaceChild(newItem, item);
+
+        // Add fresh event listener
+        newItem.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
             const targetTab = this.getAttribute('data-tab');
             console.log('Bottom nav tab clicked:', targetTab);
+
+            if (targetTab) {
+                switchToTab(targetTab);
+            }
+        });
+
+        // Add touch event for mobile
+        newItem.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Bottom nav tab touched:', targetTab);
 
             if (targetTab) {
                 switchToTab(targetTab);
@@ -517,23 +566,27 @@ function switchToTab(tabId) {
     console.log('Switching to tab:', tabId);
 
     try {
-        // Remove active class from all nav items and tab contents
-        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        navItems.forEach(nav => {
+        // Remove active class from all desktop nav items
+        const desktopNavItems = document.querySelectorAll('.tab-nav-item');
+        desktopNavItems.forEach(nav => {
             nav.classList.remove('active');
         });
 
+        // Remove active class from all mobile nav items
+        const mobileNavItems = document.querySelectorAll('.bottom-nav .nav-item');
+        mobileNavItems.forEach(nav => {
+            nav.classList.remove('active');
+        });
+
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('.tab-content');
         tabContents.forEach(tab => {
             tab.classList.remove('active');
             tab.style.display = 'none';
         });
 
-        // Add active class to target tab and nav item
+        // Show target tab
         const targetTab = document.getElementById(tabId);
-        const targetNavs = document.querySelectorAll(`[data-tab="${tabId}"]`);
-
         if (targetTab) {
             targetTab.classList.add('active');
             targetTab.style.display = 'block';
@@ -546,19 +599,30 @@ function switchToTab(tabId) {
             initializeTabContent(tabId);
         } else {
             console.error('Target tab not found:', tabId);
+            return;
         }
 
-        targetNavs.forEach(nav => {
-            if (nav) {
-                nav.classList.add('active');
-            }
+        // Add active class to all nav items with matching data-tab
+        const targetDesktopNavs = document.querySelectorAll(`.tab-nav-item[data-tab="${tabId}"]`);
+        const targetMobileNavs = document.querySelectorAll(`.bottom-nav .nav-item[data-tab="${tabId}"]`);
+
+        targetDesktopNavs.forEach(nav => {
+            nav.classList.add('active');
+        });
+
+        targetMobileNavs.forEach(nav => {
+            nav.classList.add('active');
         });
 
         // Save active tab
         localStorage.setItem('activeTab', tabId);
 
-        // Scroll to top when switching tabs
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Scroll to top when switching tabs on mobile
+        if (window.innerWidth <= 768) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        console.log('Tab switch completed for:', tabId);
 
     } catch (error) {
         console.error('Error switching tabs:', error);
