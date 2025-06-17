@@ -745,7 +745,9 @@ body::after {
         transform: translateX(0);
     }
 
-    .bottom-nav {
+    /* Hide bottom navigation on desktop */
+    .bottom-nav,
+    .standard-bottom-nav {
         display: none !important;
     }
 }
@@ -943,34 +945,34 @@ body::after {
     margin-top: 2rem;
 }
 
-/* Bottom navigation with neon glow */
+/* Bottom navigation with neon glow - Mobile only */
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.98);
-    backdrop-filter: blur(25px);
-    border-top: 2px solid var(--glass-border);
-    padding: 0.75rem 0.5rem;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.125rem;
-    z-index: 10000; /* Higher z-index to stay above footer */
-    box-shadow: 
-        0 0 30px rgba(0, 212, 255, 0.3),
-        0 -8px 32px rgba(0, 0, 0, 0.4);
+    display: none;
 }
 
-/* Show bottom nav on mobile and tablet */
+/* Show bottom nav on mobile and tablet only */
 @media (max-width: 1023px) {
     .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(25px);
+        border-top: 2px solid var(--glass-border);
+        padding: 0.75rem 0.5rem;
         display: grid !important;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.125rem;
+        z-index: 10000;
+        box-shadow: 
+            0 0 30px rgba(0, 212, 255, 0.3),
+            0 -8px 32px rgba(0, 0, 0, 0.4);
     }
 }
 
-/* Hide bottom nav on desktop */
+/* Ensure bottom nav is hidden on desktop */
 @media (min-width: 1024px) {
     .bottom-nav {
         display: none !important;
@@ -1845,23 +1847,37 @@ html {
     text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
 }
 
-/* Standardized Bottom Navigation */
+/* Standardized Bottom Navigation - Mobile only */
 .standard-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.98);
-    backdrop-filter: blur(25px);
-    border-top: 2px solid var(--glass-border);
-    padding: 0.75rem 0.5rem;
-    display: grid;
-    gap: 0.125rem;
-    z-index: 10000;
-    box-shadow: 
-        0 0 30px rgba(0, 212, 255, 0.3),
-        0 -8px 32px rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+/* Show standardized bottom nav on mobile and tablet only */
+@media (max-width: 1023px) {
+    .standard-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(25px);
+        border-top: 2px solid var(--glass-border);
+        padding: 0.75rem 0.5rem;
+        display: grid !important;
+        gap: 0.125rem;
+        z-index: 10000;
+        box-shadow: 
+            0 0 30px rgba(0, 212, 255, 0.3),
+            0 -8px 32px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* Ensure standardized bottom nav is hidden on desktop */
+@media (min-width: 1024px) {
+    .standard-bottom-nav {
+        display: none !important;
+    }
 }
 
 .standard-nav-item {
