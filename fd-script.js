@@ -118,9 +118,36 @@ function clearAllInputs() {
     document.getElementById('interestRateInput').value = '';
     document.getElementById('tenureInput').value = '';
 
-    // Reset dropdowns
+    // Bank Comparison inputs
+    document.getElementById('comparisonAmount').value = '';
+    document.getElementById('comparisonTenure').value = '';
+
+    // Alternatives inputs
+    document.getElementById('altInvestmentAmount').value = '';
+    document.getElementById('altInvestmentPeriod').value = '';
+    document.getElementById('altFDRate').value = '';
+
+    // Laddering inputs
+    document.getElementById('ladderingAmount').value = '';
+    document.getElementById('ladderingRate').value = '';
+
+    // Tax inputs
+    document.getElementById('annualInterest').value = '';
+
+    // Reset dropdowns to default values
     document.getElementById('compoundingFrequency').value = 4;
+    document.getElementById('numberOfFDs').value = 4;
+    document.getElementById('taxSlab').value = 20;
+    
+    // Reset radio buttons to default
     document.getElementById('regularFD').checked = true;
+    document.getElementById('notSenior').checked = true;
+
+    // Hide all result sections
+    document.getElementById('comparisonResults').style.display = 'none';
+    document.getElementById('alternativesResults').style.display = 'none';
+    document.getElementById('ladderingResults').style.display = 'none';
+    document.getElementById('taxResults').style.display = 'none';
 
     // Clear results
     clearResults();
