@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFDCalculator();
     setupEventListeners();
     setupNavigationListeners();
+    setupInputValidation();
 });
 
 // Initialize FD Calculator
 function initializeFDCalculator() {
     clearAllInputs();
-    updateSliderDisplays();
-    setupSliderSyncing();
+    clearAllErrors();
 }
 
 // Setup Event Listeners
@@ -118,17 +118,52 @@ function clearAllInputs() {
     document.getElementById('interestRateInput').value = '';
     document.getElementById('tenureInput').value = '';
 
-    // Reset sliders to default values
-    document.getElementById('principalAmountSlider').value = 100000;
-    document.getElementById('interestRateSlider').value = 7.5;
-    document.getElementById('tenureSlider').value = 3;
-
     // Reset dropdowns
     document.getElementById('compoundingFrequency').value = 4;
     document.getElementById('regularFD').checked = true;
 
     // Clear results
     clearResults();
+    clearAllErrors();
+}
+
+// Clear all error messages
+function clearAllErrors() {
+    const errorElements = document.querySelectorAll('.error-message');
+    const inputElements = document.querySelectorAll('.calc-input');
+    
+    errorElements.forEach(error => {
+        error.textContent = '';
+        error.classList.remove('show');
+    });
+    
+    inputElements.forEach(input => {
+        input.classList.remove('error');
+    });
+}
+
+// Show error message
+function showError(inputId, message) {
+    const input = document.getElementById(inputId);
+    const errorElement = document.getElementById(inputId + 'Error');
+    
+    if (input && errorElement) {
+        input.classList.add('error');
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+    }
+}
+
+// Hide error message
+function hideError(inputId) {
+    const input = document.getElementById(inputId);
+    const errorElement = document.getElementById(inputId + 'Error');
+    
+    if (input && errorElement) {
+        input.classList.remove('error');
+        errorElement.textContent = '';
+        errorElement.classList.remove('show');
+    }
 }
 
 // Clear results
@@ -161,107 +196,70 @@ function clearResults() {
     }
 }
 
-// Setup slider syncing
-function setupSliderSyncing() {
-    // Principal Amount
-    const principalSlider = document.getElementById('principalAmountSlider');
-    const principalInput = document.getElementById('principalAmountInput');
-
-    principalSlider.addEventListener('input', function() {
-        principalInput.value = this.value;
-        updateSliderDisplays();
+// Setup input validation
+function setupInputValidation() {
+    const inputs = ['principalAmountInput', 'interestRateInput', 'tenureInput'];
+    
+    inputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('input', function() {
+                hideError(inputId);
+            });
+        }
     });
-
-    principalInput.addEventListener('input', function() {
-        principalSlider.value = this.value;
-        updateSliderDisplays();
-    });
-
-    // Interest Rate
-    const rateSlider = document.getElementById('interestRateSlider');
-    const rateInput = document.getElementById('interestRateInput');
-
-    rateSlider.addEventListener('input', function() {
-        rateInput.value = this.value;
-        updateSliderDisplays();
-    });
-
-    rateInput.addEventListener('input', function() {
-        rateSlider.value = this.value;
-        updateSliderDisplays();
-    });
-
-    // Tenure
-    const tenureSlider = document.getElementById('tenureSlider');
-    const tenureInput = document.getElementById('tenureInput');
-
-    tenureSlider.addEventListener('input', function() {
-        tenureInput.value = this.value;
-        updateSliderDisplays();
-    });
-
-    tenureInput.addEventListener('input', function() {
-        tenureSlider.value = this.value;
-        updateSliderDisplays();
-    });
-}
-
-// Update slider displays
-function updateSliderDisplays() {
-    const principal = document.getElementById('principalAmountSlider').value;
-    const rate = document.getElementById('interestRateSlider').value;
-    const tenure = document.getElementById('tenureSlider').value;
-
-    document.getElementById('principalAmountDisplay').textContent = `₹${formatNumber(principal)}`;
-    document.getElementById('interestRateDisplay').textContent = `${rate}% per annum`;
-    document.getElementById('tenureDisplay').textContent = `${tenure} year${tenure > 1 ? 's' : ''}`;
 }
 
 // Handle FD Type Change
 function handleFDTypeChange(event) {
-    const tenureSlider = document.getElementById('tenureSlider');
     const tenureInput = document.getElementById('tenureInput');
 
     if (event.target.value === 'taxsaver') {
-        tenureSlider.value = 5;
         tenureInput.value = 5;
-        tenureSlider.disabled = true;
         tenureInput.disabled = true;
-        updateSliderDisplays();
+        hideError('tenureInput');
     } else {
-        tenureSlider.disabled = false;
         tenureInput.disabled = false;
     }
 }
 
 // Calculate FD
 function calculateFD() {
-    const principal = parseFloat(document.getElementById('principalAmountInput').value) || 
-                     parseFloat(document.getElementById('principalAmountSlider').value);
-    const rate = parseFloat(document.getElementById('interestRateInput').value) || 
-                parseFloat(document.getElementById('interestRateSlider').value);
-    const tenure = parseFloat(document.getElementById('tenureInput').value) || 
-                  parseFloat(document.getElementById('tenureSlider').value);
+    clearAllErrors();
+    
+    const principal = parseFloat(document.getElementById('principalAmountInput').value);
+    const rate = parseFloat(document.getElementById('interestRateInput').value);
+    const tenure = parseFloat(document.getElementById('tenureInput').value);
     const frequency = parseInt(document.getElementById('compoundingFrequency').value);
 
-    // Validation
-    if (!principal || !rate || !tenure) {
-        showWarning('Please fill in all required fields to calculate FD returns.');
-        return;
+    let hasError = false;
+
+    // Validation with individual error messages
+    if (!principal || isNaN(principal)) {
+        showError('principalAmountInput', 'please enter principal amount');
+        hasError = true;
+    } else if (principal <= 0) {
+        showError('principalAmountInput', 'principal amount must be greater than 0');
+        hasError = true;
     }
 
-    if (principal < 1000) {
-        showWarning('Principal amount should be at least ₹1,000.');
-        return;
+    if (!rate || isNaN(rate)) {
+        showError('interestRateInput', 'please enter interest rate');
+        hasError = true;
+    } else if (rate <= 0) {
+        showError('interestRateInput', 'interest rate must be greater than 0');
+        hasError = true;
     }
 
-    if (rate <= 0 || rate > 20) {
-        showWarning('Interest rate should be between 0.1% and 20%.');
-        return;
+    if (!tenure || isNaN(tenure)) {
+        showError('tenureInput', 'please enter tenure');
+        hasError = true;
+    } else if (tenure <= 0) {
+        showError('tenureInput', 'tenure must be greater than 0');
+        hasError = true;
     }
 
-    if (tenure <= 0 || tenure > 10) {
-        showWarning('Tenure should be between 1 and 10 years.');
+    if (hasError) {
         return;
     }
 
@@ -777,8 +775,8 @@ function createTaxChart(postTaxReturns, totalTax) {
 // Refresh Functions
 function refreshFDCalculator() {
     clearAllInputs();
-    updateSliderDisplays();
     clearResults();
+    clearAllErrors();
     showNotification('FD calculator refreshed!', 'info');
 }
 

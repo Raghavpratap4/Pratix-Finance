@@ -107,26 +107,23 @@
                     <div class="calculator-form">
                         <div class="input-group">
                             <label>Principal Amount</label>
-                            <div class="slider-display" id="principalAmountDisplay">Enter deposit amount</div>
-                            <input type="range" id="principalAmountSlider" min="10000" max="5000000" step="10000" value="100000" class="slider">
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="principalAmountInput" placeholder="1,00,000" class="calc-input">
+                                <input type="number" id="principalAmountInput" placeholder="Enter deposit amount" class="calc-input">
                             </div>
+                            <div class="error-message" id="principalAmountError"></div>
                         </div>
 
                         <div class="input-group">
                             <label>Annual Interest Rate (%)</label>
-                            <div class="slider-display" id="interestRateDisplay">Enter interest rate</div>
-                            <input type="range" id="interestRateSlider" min="1" max="15" step="0.1" value="7.5" class="slider">
-                            <input type="number" id="interestRateInput" placeholder="7.5" class="calc-input" step="0.1">
+                            <input type="number" id="interestRateInput" placeholder="Enter interest rate" class="calc-input" step="0.01">
+                            <div class="error-message" id="interestRateError"></div>
                         </div>
 
                         <div class="input-group">
                             <label>Tenure (Years)</label>
-                            <div class="slider-display" id="tenureDisplay">Enter FD tenure</div>
-                            <input type="range" id="tenureSlider" min="1" max="10" step="1" value="3" class="slider">
-                            <input type="number" id="tenureInput" placeholder="3" class="calc-input">
+                            <input type="number" id="tenureInput" placeholder="Enter tenure in years" class="calc-input" step="0.1">
+                            <div class="error-message" id="tenureError"></div>
                         </div>
 
                         <div class="input-group">
