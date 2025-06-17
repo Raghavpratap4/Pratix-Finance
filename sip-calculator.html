@@ -29,18 +29,26 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="logo.png" alt="Pratix Finance" class="app-logo">
+        <!-- Standardized Header -->
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="Pratix Finance" class="standard-app-logo">
+                    <h1 class="standard-app-title">SIP Calculator</h1>
                 </div>
-                <h1 class="app-title">SIP Calculator</h1>
-                <button class="icon-btn" onclick="goBack()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="m15 18-6-6 6-6"/>
-                    </svg>
-                </button>
+                <div class="standard-nav-buttons">
+                    <a href="index.html" class="standard-nav-btn" title="Home">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9,22 9,12 15,12 15,22"/>
+                        </svg>
+                    </a>
+                    <button class="standard-nav-btn" onclick="goBack()" title="Back">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -497,67 +505,86 @@
             </section>
         </main>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <button class="nav-item active" data-tab="sip-calculator">
-                <div class="nav-icon">
+        <!-- Standardized Bottom Navigation -->
+        <nav class="standard-bottom-nav" style="grid-template-columns: repeat(6, 1fr);">
+            <button class="standard-nav-item active" data-tab="sip-calculator">
+                <div class="standard-nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
                         <line x1="8" y1="21" x2="16" y2="21"/>
                         <line x1="12" y1="17" x2="12" y2="21"/>
                     </svg>
                 </div>
-                <span class="nav-label">SIP Calc</span>
+                <span class="standard-nav-label">SIP Calc</span>
             </button>
-            <button class="nav-item" data-tab="goal-planning">
-                <div class="nav-icon">
+            <button class="standard-nav-item" data-tab="goal-planning">
+                <div class="standard-nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
                 </div>
-                <span class="nav-label">Goals</span>
+                <span class="standard-nav-label">Goals</span>
             </button>
-            <button class="nav-item" data-tab="sip-comparison">
-                <div class="nav-icon">
+            <button class="standard-nav-item" data-tab="sip-comparison">
+                <div class="standard-nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
                         <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
                         <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
                     </svg>
                 </div>
-                <span class="nav-label">Compare</span>
+                <span class="standard-nav-label">Compare</span>
             </button>
-            <button class="nav-item" data-tab="investment-analysis">
-                <div class="nav-icon">
+            <button class="standard-nav-item" data-tab="investment-analysis">
+                <div class="standard-nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 3v18h18"/>
                         <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
                     </svg>
                 </div>
-                <span class="nav-label">Analysis</span>
+                <span class="standard-nav-label">Analysis</span>
             </button>
-            <button class="nav-item" data-tab="lumpsum-vs-sip">
-                <div class="nav-icon">
+            <button class="standard-nav-item" data-tab="lumpsum-vs-sip">
+                <div class="standard-nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12,6 12,12 16,14"/>
                     </svg>
                 </div>
-                <span class="nav-label">Lumpsum</span>
+                <span class="standard-nav-label">Lumpsum</span>
             </button>
-            <button class="nav-item" data-tab="tools">
-                <div class="nav-icon">
+            <button class="standard-nav-item" data-tab="tools">
+                <div class="standard-nav-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
                     </svg>
                 </div>
-                <span class="nav-label">Tools</span>
+                <span class="standard-nav-label">Tools</span>
             </button>
         </nav>
 
-        <!-- Footer -->
-        <footer class="app-footer">
-            <p>© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/</p>
+        <!-- Standardized Footer -->
+        <footer class="standard-footer">
+            <div class="standard-footer-container">
+                <div class="standard-footer-brand">
+                    <div class="standard-footer-brand-header">
+                        <img src="logo.png" alt="Pratix Finance" class="standard-footer-logo">
+                        <h3 class="standard-footer-brand-name">PRATIX FINANCE</h3>
+                    </div>
+                    <p class="standard-footer-tagline">Your Complete Financial Calculator Suite</p>
+                </div>
+                <div class="standard-footer-links">
+                    <a href="index.html" class="standard-footer-link">Home</a>
+                    <a href="about.html" class="standard-footer-link">About</a>
+                    <a href="privacy.html" class="standard-footer-link">Privacy</a>
+                    <a href="terms.html" class="standard-footer-link">Terms</a>
+                    <a href="contact.html" class="standard-footer-link">Contact</a>
+                </div>
+                <div class="standard-footer-copyright">
+                    <p>© 2025 <strong>RAGHAV PRATAP | PRATIX FINANCE</strong> | All rights reserved</p>
+                    <p>Empowering your financial decisions with intelligent calculators</p>
+                </div>
+            </div>
         </footer>
     </div>
 
