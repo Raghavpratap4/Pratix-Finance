@@ -928,82 +928,33 @@
 
     <script src="emi-script.js"></script>
     <script>
-        // Global navigation functions
         function goToHome() {
-            try {
-                window.location.href = '/index.html';
-            } catch (error) {
-                console.error('Navigation error:', error);
-                window.location.href = 'index.html';
-            }
+            window.location.href = '/index.html';
         }
 
         function goBack() {
-            try {
-                if (window.history.length > 1) {
-                    window.history.back();
-                } else {
-                    goToHome();
-                }
-            } catch (error) {
-                console.error('Back navigation error:', error);
-                goToHome();
-            }
+            window.history.back();
         }
 
         function goToSipCalculator() {
-            try {
-                window.location.href = '/sip-calculator.html';
-            } catch (error) {
-                window.location.href = 'sip-calculator.html';
-            }
+            window.location.href = '/sip-calculator.html';
         }
 
         function goToEmiCalculator() {
-            try {
-                // If already on EMI calculator, switch to main tab
-                if (window.location.pathname.includes('emi-calculator')) {
-                    switchToTab('emi-calculator');
-                } else {
-                    window.location.href = '/emi-calculator.html';
-                }
-            } catch (error) {
-                window.location.href = 'emi-calculator.html';
-            }
+            window.location.href = '/emi-calculator.html';
         }
 
         function goToGstCalculator() {
-            try {
-                window.location.href = '/gst-calculator.html';
-            } catch (error) {
-                window.location.href = 'gst-calculator.html';
-            }
+            window.location.href = '/gst-calculator.html';
         }
 
         function goToTaxCalculator() {
-            try {
-                window.location.href = '/tax-calculator.html';
-            } catch (error) {
-                window.location.href = 'tax-calculator.html';
-            }
+            window.location.href = '/tax-calculator.html';
         }
 
         function goToFdCalculator() {
-            try {
-                window.location.href = '/fd-calculator.html';
-            } catch (error) {
-                window.location.href = 'fd-calculator.html';
-            }
+            window.location.href = '/fd-calculator.html';
         }
-
-        // Additional error handling for page load
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e.error);
-        });
-
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e.reason);
-        });
     </script>
 </body>
 </html>
