@@ -113,28 +113,28 @@ function switchTab(tabId) {
 
 // Clear all inputs
 function clearAllInputs() {
-    // FD Calculator inputs
+    // FD Calculator inputs - ALL EMPTY
     document.getElementById('principalAmountInput').value = '';
     document.getElementById('interestRateInput').value = '';
     document.getElementById('tenureInput').value = '';
 
-    // Bank Comparison inputs
+    // Bank Comparison inputs - ALL EMPTY
     document.getElementById('comparisonAmount').value = '';
     document.getElementById('comparisonTenure').value = '';
 
-    // Alternatives inputs
+    // Alternatives inputs - ALL EMPTY
     document.getElementById('altInvestmentAmount').value = '';
     document.getElementById('altInvestmentPeriod').value = '';
     document.getElementById('altFDRate').value = '';
 
-    // Laddering inputs
+    // Laddering inputs - ALL EMPTY
     document.getElementById('ladderingAmount').value = '';
     document.getElementById('ladderingRate').value = '';
 
-    // Tax inputs
+    // Tax inputs - ALL EMPTY
     document.getElementById('annualInterest').value = '';
 
-    // Reset dropdowns to default values
+    // Reset dropdowns to default values (but keep them functional)
     document.getElementById('compoundingFrequency').value = 4;
     document.getElementById('numberOfFDs').value = 4;
     document.getElementById('taxSlab').value = 20;
