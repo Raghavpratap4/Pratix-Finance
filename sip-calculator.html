@@ -47,25 +47,28 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- SIP Calculator Tab -->
-            <section id="sip-calculator" class="tab-content active">
+            <section id="sip-calculator" class="tab-content active" aria-labelledby="sip-calculator-title">
                 <div class="glass-card">
                     <div class="calculator-form">
                         <div class="input-group">
-                            <label>Monthly Investment Amount</label>
+                            <label for="monthlyAmountInput">Monthly Investment Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="monthlyAmountInput" placeholder="5,000" class="calc-input" min="500" max="100000">
+                                <input type="number" id="monthlyAmountInput" placeholder="5,000" class="calc-input" aria-describedby="monthlyAmount-help" required>
                             </div>
+                            <small id="monthlyAmount-help" class="input-help">Enter amount between ₹100 to ₹1,00,00,000</small>
                         </div>
 
                         <div class="input-group">
-                            <label>Expected Annual Return (%)</label>
-                            <input type="number" id="returnRateInput" placeholder="12" class="calc-input" step="0.5" min="1" max="30">
+                            <label for="returnRateInput">Expected Annual Return (%)</label>
+                            <input type="number" id="returnRateInput" placeholder="12" class="calc-input" step="0.1" aria-describedby="returnRate-help" required>
+                            <small id="returnRate-help" class="input-help">Enter expected return between 0.1% to 50%</small>
                         </div>
 
                         <div class="input-group">
-                            <label>Investment Period (Years)</label>
-                            <input type="number" id="investmentPeriodInput" placeholder="10" class="calc-input" min="1" max="40">
+                            <label for="investmentPeriodInput">Investment Period (Years)</label>
+                            <input type="number" id="investmentPeriodInput" placeholder="10" class="calc-input" step="1" aria-describedby="period-help" required>
+                            <small id="period-help" class="input-help">Enter period between 1 to 50 years</small>
                         </div>
 
                         <div class="input-group">
