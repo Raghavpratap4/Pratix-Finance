@@ -9,21 +9,36 @@ let currentEMIData = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing EMI calculator');
     
-    // Initialize all functionality
-    initEMICalculator();
-    initTabSwitching();
-    initBottomNavigation();
-    initAmortizationTable();
-    initPrepaymentCalculator();
-    initLoanComparison();
-    initSmartFeatures();
-    
-    // Show first tab by default
-    setTimeout(() => {
-        switchToTab('emi-calculator');
-    }, 100);
-    
-    console.log('EMI calculator initialization complete');
+    try {
+        // Initialize all functionality with error handling
+        initEMICalculator();
+        initTabSwitching();
+        initBottomNavigation();
+        initAmortizationTable();
+        initPrepaymentCalculator();
+        initLoanComparison();
+        initSmartFeatures();
+        
+        // Show first tab by default
+        setTimeout(() => {
+            try {
+                switchToTab('emi-calculator');
+            } catch (error) {
+                console.error('Error switching to default tab:', error);
+                // Fallback: show the first tab content directly
+                const firstTab = document.getElementById('emi-calculator');
+                if (firstTab) {
+                    firstTab.style.display = 'block';
+                    firstTab.classList.add('active');
+                }
+            }
+        }, 100);
+        
+        console.log('EMI calculator initialization complete');
+    } catch (error) {
+        console.error('Error during initialization:', error);
+        showNotification('Application initialization error. Please refresh the page.', 'error');
+    }
 });
 
 // Initialize EMI Calculator
@@ -133,15 +148,16 @@ function initEMICalculator() {
 function calculateEMI() {
     console.log('calculateEMI function called');
     
-    const loanAmountInput = document.getElementById('loanAmountInput');
-    const interestRateInput = document.getElementById('interestRateInput');
-    const loanTenureInput = document.getElementById('loanTenureInput');
-    
-    if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
-        console.error('Input fields not found!');
-        showNotification('Input fields not found!', 'error');
-        return;
-    }
+    try {
+        const loanAmountInput = document.getElementById('loanAmountInput');
+        const interestRateInput = document.getElementById('interestRateInput');
+        const loanTenureInput = document.getElementById('loanTenureInput');
+        
+        if (!loanAmountInput || !interestRateInput || !loanTenureInput) {
+            console.error('Input fields not found!');
+            showNotification('Input fields not found! Please refresh the page.', 'error');
+            return;
+        }
     
     const loanAmountValue = loanAmountInput.value.trim();
     const interestRateValue = interestRateInput.value.trim();
@@ -234,17 +250,37 @@ function calculateEMI() {
         if (chartContainer) chartContainer.style.display = 'block';
         if (chartControls) chartControls.style.display = 'block';
         
-        // Update chart
-        updateChart(currentEMIData);
+        // Update chart with error handling
+        try {
+            updateChart(currentEMIData);
+        } catch (chartError) {
+            console.warn('Chart update failed:', chartError);
+            // Hide chart container if chart fails
+            const chartContainer = document.getElementById('chartContainer');
+            if (chartContainer) {
+                chartContainer.style.display = 'none';
+            }
+        }
         
         // Update amortization table
-        generateAmortizationTable(currentEMIData);
+        try {
+            generateAmortizationTable(currentEMIData);
+        } catch (tableError) {
+            console.warn('Amortization table generation failed:', tableError);
+        }
         
         showNotification('EMI calculated successfully!', 'success');
         
     } catch (error) {
         console.error('Error in EMI calculation:', error);
-        showNotification('Calculation error. Please verify your inputs!', 'error');
+        showNotification('Calculation error. Please verify your inputs and try again!', 'error');
+        
+        // Reset loading state if any
+        const calculateButton = document.getElementById('calculateEMI');
+        if (calculateButton) {
+            calculateButton.disabled = false;
+            calculateButton.classList.remove('loading');
+        }
     }
 }
 
@@ -292,20 +328,45 @@ function resetEMICalculator() {
 
 // Update chart based on selected type
 function updateChart(data) {
-    const chartTypeSelect = document.getElementById('chartTypeSelect');
-    const canvas = document.getElementById('emiChart');
-    
-    if (!chartTypeSelect || !canvas) return;
-    
-    const chartType = chartTypeSelect.value;
-    const ctx = canvas.getContext('2d');
-    
-    if (emiChart) {
-        emiChart.destroy();
+    try {
+        const chartTypeSelect = document.getElementById('chartTypeSelect');
+        const canvas = document.getElementById('emiChart');
+        
+        if (!chartTypeSelect || !canvas) {
+            console.warn('Chart elements not found');
+            return;
+        }
+        
+        const chartType = chartTypeSelect.value;
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+            console.error('Cannot get 2D context from canvas');
+            return;
+        }
+        
+        if (emiChart) {
+            try {
+                emiChart.destroy();
+            } catch (destroyError) {
+                console.warn('Error destroying existing chart:', destroyError);
+            }
+        }
+        
+        // Check if Chart.js is loaded
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js library not loaded');
+            showNotification('Chart library not loaded. Please refresh the page.', 'error');
+            return;
+        }
+        
+        const chartConfig = getChartConfig(chartType, data);
+        emiChart = new Chart(ctx, chartConfig);
+        
+    } catch (error) {
+        console.error('Error updating chart:', error);
+        showNotification('Error updating chart. Please try again.', 'error');
     }
-    
-    const chartConfig = getChartConfig(chartType, data);
-    emiChart = new Chart(ctx, chartConfig);
 }
 
 // Get chart configuration
@@ -492,25 +553,66 @@ function initTabSwitching() {
 // Initialize bottom navigation
 function initBottomNavigation() {
     console.log('Initializing bottom navigation');
-    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
-    console.log('Found bottom nav items:', navItems.length);
     
-    navItems.forEach((item, index) => {
-        const targetTab = item.getAttribute('data-tab');
-        console.log(`Bottom nav item ${index}:`, targetTab);
+    try {
+        const navItems = document.querySelectorAll('.bottom-nav .nav-item, .standard-bottom-nav .standard-nav-item');
+        console.log('Found bottom nav items:', navItems.length);
         
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const targetTab = this.getAttribute('data-tab');
-            console.log('Bottom nav tab clicked:', targetTab);
-            
-            if (targetTab) {
-                switchToTab(targetTab);
+        if (navItems.length === 0) {
+            console.warn('No bottom navigation items found');
+            return;
+        }
+        
+        navItems.forEach((item, index) => {
+            try {
+                const targetTab = item.getAttribute('data-tab');
+                console.log(`Bottom nav item ${index}:`, targetTab);
+                
+                if (!targetTab) {
+                    console.warn(`Bottom nav item ${index} has no data-tab attribute`);
+                    return;
+                }
+                
+                // Remove any existing listeners to prevent duplicates
+                const newItem = item.cloneNode(true);
+                item.parentNode.replaceChild(newItem, item);
+                
+                newItem.addEventListener('click', function(e) {
+                    try {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const targetTab = this.getAttribute('data-tab');
+                        console.log('Bottom nav tab clicked:', targetTab);
+                        
+                        if (targetTab) {
+                            switchToTab(targetTab);
+                        } else {
+                            console.error('No target tab specified for navigation item');
+                        }
+                    } catch (clickError) {
+                        console.error('Error handling nav item click:', clickError);
+                    }
+                });
+                
+                // Add touch event for better mobile responsiveness
+                newItem.addEventListener('touchstart', function(e) {
+                    this.style.opacity = '0.7';
+                });
+                
+                newItem.addEventListener('touchend', function(e) {
+                    this.style.opacity = '1';
+                });
+                
+            } catch (itemError) {
+                console.error(`Error initializing nav item ${index}:`, itemError);
             }
         });
-    });
+        
+    } catch (error) {
+        console.error('Error initializing bottom navigation:', error);
+        showNotification('Navigation initialization error. Some features may not work.', 'error');
+    }
 }
 
 // Switch to tab function
@@ -518,17 +620,33 @@ function switchToTab(tabId) {
     console.log('Switching to tab:', tabId);
     
     try {
+        // Validate tabId
+        if (!tabId || typeof tabId !== 'string') {
+            console.error('Invalid tabId provided:', tabId);
+            return;
+        }
+        
         // Remove active class from all nav items and tab contents
-        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item, .standard-nav-item');
         const tabContents = document.querySelectorAll('.tab-content');
         
         navItems.forEach(nav => {
-            nav.classList.remove('active');
+            try {
+                nav.classList.remove('active');
+            } catch (e) {
+                console.warn('Error removing active class from nav item:', e);
+            }
         });
         
         tabContents.forEach(tab => {
-            tab.classList.remove('active');
-            tab.style.display = 'none';
+            try {
+                tab.classList.remove('active');
+                tab.style.display = 'none';
+                tab.style.visibility = 'hidden';
+                tab.style.opacity = '0';
+            } catch (e) {
+                console.warn('Error hiding tab content:', e);
+            }
         });
         
         // Add active class to target tab and nav item
@@ -543,26 +661,46 @@ function switchToTab(tabId) {
             
             console.log('Tab activated:', tabId);
             
-            // Initialize tab-specific content
-            initializeTabContent(tabId);
+            // Initialize tab-specific content with error handling
+            try {
+                initializeTabContent(tabId);
+            } catch (initError) {
+                console.error('Error initializing tab content:', initError);
+            }
         } else {
             console.error('Target tab not found:', tabId);
+            showNotification(`Tab "${tabId}" not found. Please refresh the page.`, 'error');
+            return;
         }
         
         targetNavs.forEach(nav => {
             if (nav) {
-                nav.classList.add('active');
+                try {
+                    nav.classList.add('active');
+                } catch (e) {
+                    console.warn('Error adding active class to nav item:', e);
+                }
             }
         });
         
         // Save active tab
-        localStorage.setItem('activeTab', tabId);
+        try {
+            localStorage.setItem('activeTab', tabId);
+        } catch (storageError) {
+            console.warn('Error saving active tab to localStorage:', storageError);
+        }
         
         // Scroll to top when switching tabs
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        try {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (scrollError) {
+            console.warn('Error scrolling to top:', scrollError);
+            window.scrollTo(0, 0);
+        }
         
     } catch (error) {
         console.error('Error switching tabs:', error);
+        showNotification('Error switching tabs. Please try again.', 'error');
     }
 }
 
@@ -1322,7 +1460,19 @@ function updateComparisonChart(loans = null) {
     comparisonChart = new Chart(ctx, chartConfig);
 }
 
-// Initialize Smart Features
+// Initialize Smart Features - Main function
+function initSmartFeatures() {
+    console.log('Initializing smart features...');
+    
+    try {
+        initializeSmartFeatures();
+    } catch (error) {
+        console.error('Error initializing smart features:', error);
+        showNotification('Smart features initialization error.', 'error');
+    }
+}
+
+// Initialize Smart Features - Detail function
 function initializeSmartFeatures() {
     console.log('Initializing smart features...');
     

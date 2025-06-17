@@ -953,22 +953,24 @@ body::after {
 /* Show bottom nav on mobile and tablet only */
 @media (max-width: 1023px) {
     .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        background: rgba(15, 23, 42, 0.98);
-        backdrop-filter: blur(25px);
-        border-top: 2px solid var(--glass-border);
-        padding: 0.75rem 0.5rem;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        background: rgba(15, 23, 42, 0.98) !important;
+        backdrop-filter: blur(25px) !important;
+        border-top: 2px solid var(--glass-border) !important;
+        padding: 0.75rem 0.5rem !important;
         display: grid !important;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 0.125rem;
-        z-index: 10000;
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 0.125rem !important;
+        z-index: 99999 !important;
         box-shadow: 
             0 0 30px rgba(0, 212, 255, 0.3),
-            0 -8px 32px rgba(0, 0, 0, 0.4);
+            0 -8px 32px rgba(0, 0, 0, 0.4) !important;
+        transform: translateZ(0) !important;
+        will-change: transform !important;
     }
 }
 
@@ -1855,21 +1857,23 @@ html {
 /* Show standardized bottom nav on mobile and tablet only */
 @media (max-width: 1023px) {
     .standard-bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        background: rgba(15, 23, 42, 0.98);
-        backdrop-filter: blur(25px);
-        border-top: 2px solid var(--glass-border);
-        padding: 0.75rem 0.5rem;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        background: rgba(15, 23, 42, 0.98) !important;
+        backdrop-filter: blur(25px) !important;
+        border-top: 2px solid var(--glass-border) !important;
+        padding: 0.75rem 0.5rem !important;
         display: grid !important;
-        gap: 0.125rem;
-        z-index: 10000;
+        gap: 0.125rem !important;
+        z-index: 99999 !important;
         box-shadow: 
             0 0 30px rgba(0, 212, 255, 0.3),
-            0 -8px 32px rgba(0, 0, 0, 0.4);
+            0 -8px 32px rgba(0, 0, 0, 0.4) !important;
+        transform: translateZ(0) !important;
+        will-change: transform !important;
     }
 }
 
