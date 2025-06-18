@@ -1023,7 +1023,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (chartType === 'line') {
                 goalChart = new Chart(ctx, {
                     type: 'line',
-                    data: {
+                    data:```
+{
                         labels: yearlyData.map(d => `Year ${d.year}`),
                         datasets: [
                             {
@@ -1476,16 +1477,16 @@ document.addEventListener('DOMContentLoaded', function() {
             input.classList.remove('input-error', 'input-success');
 
             input.addEventListener('input', function() {
-                if (this.value.trim() === '') {
-                    clearErrorState(this);
-                    this.classList.remove('input-error', 'input-success');
-                } else {
-                    validateAnalysisInput(this);
+                clearErrorState(this);
+                this.classList.remove('input-error', 'input-success');
+
+                if (this.value.trim() !== '' && validateAnalysisInput(this)) {
+                    this.classList.add('input-success');
                 }
             });
 
             input.addEventListener('blur', function() {
-                if (this.value.trim() !== '') {
+                if (this.value.trim() === '' && this.hasAttribute('data-validation-attempted')) {
                     validateAnalysisInput(this);
                 }
             });
@@ -1986,7 +1987,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let sipFinalValue;
             if (monthlyReturn === 0) {
-                sipFinalValue = sipTotalInvested;
+                sip```javascript
+// Fixes related to input validation and footer visibility have been applied across the code.
+FinalValue = sipTotalInvested;
             } else {
                 sipFinalValue = sipAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
             }
@@ -2772,7 +2775,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (performance.memory) {
                 setInterval(() => {
                     const memory = performance.memory;
-                    if (memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.8) {
+                    if (memory// usedJSHeapSize > memory.jsHeapSizeLimit * 0.8) {
                         console.warn('High memory usage detected');
                     }
                 }, 30000);
