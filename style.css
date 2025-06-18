@@ -1369,26 +1369,38 @@ body::after {
       gap: 2rem;
   }
 
-  .app-container {
+  /* Only apply sidebar layout to calculator pages, not content pages */
+  .calculator-page .app-container {
       max-width: 1400px;
       display: grid;
       grid-template-columns: 280px 1fr;
       gap: 0;
   }
 
-  .main-app-content {
+  .calculator-page .main-app-content {
       grid-column: 2;
+  }
+
+  /* Content pages use full width layout */
+  .content-page .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
   }
 
   .main-content {
       padding: 1.5rem 2rem 2rem;
   }
 
-  .tab-navigation {
+  /* Only show tab navigation on calculator pages */
+  .calculator-page .tab-navigation {
       position: sticky;
       top: 0;
       height: 100vh;
       overflow-y: auto;
+  }
+  
+  .content-page .tab-navigation {
+      display: none !important;
   }
 }
 
