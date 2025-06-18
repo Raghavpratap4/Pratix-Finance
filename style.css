@@ -799,11 +799,11 @@ body::after {
       border-right: 2px solid var(--glass-border);
       padding: 2rem 1rem;
       height: 100vh;
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
       overflow-y: auto;
       z-index: 50;
-      grid-column: 1;
       width: 280px;
       min-width: 280px;
   }
@@ -846,6 +846,11 @@ body::after {
       color: white !important;
       box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
       transform: translateX(0);
+  }
+
+  /* Adjust main content for left sidebar */
+  .main-app-content {
+      margin-left: 280px;
   }
 
   /* Hide bottom navigation on desktop */
@@ -1065,10 +1070,10 @@ body::after {
       background: rgba(15, 23, 42, 0.98) !important;
       backdrop-filter: blur(30px) !important;
       border-top: 2px solid var(--neon-blue) !important;
-      padding: 0.75rem 0.5rem !important;
+      padding: 0.5rem 0.25rem !important;
       display: grid !important;
       grid-template-columns: repeat(6, 1fr) !important;
-      gap: 0.25rem !important;
+      gap: 0.125rem !important;
       z-index: 999999 !important;
       box-shadow: 
           0 0 40px rgba(0, 212, 255, 0.5),
@@ -1078,7 +1083,7 @@ body::after {
       visibility: visible !important;
       opacity: 1 !important;
       /* Fixed height for consistency */
-      height: 85px !important;
+      height: 75px !important;
       /* Prevent any hiding during scroll */
       position: fixed !important;
       transition: none !important;
@@ -1086,20 +1091,30 @@ body::after {
       -webkit-transform: translate3d(0, 0, 0) !important;
       transform: translate3d(0, 0, 0) !important;
       /* Prevent iOS safari bottom bar interference */
-      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
+      padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)) !important;
       /* Ensure it stays above everything */
       isolation: isolate !important;
   }
 
+  /* Hide left sidebar on mobile */
+  .tab-navigation {
+      display: none !important;
+  }
+
+  /* Reset main content margin on mobile */
+  .main-app-content {
+      margin-left: 0 !important;
+  }
+
   /* Ensure content doesn't overlap with fixed navigation */
   .main-content {
-      padding-bottom: 120px !important;
+      padding-bottom: 90px !important;
       margin-bottom: 0 !important;
   }
 
   /* Footer spacing adjustment */
   .simple-footer {
-      margin-bottom: 120px !important;
+      margin-bottom: 90px !important;
       padding-bottom: 2rem !important;
   }
 
@@ -1127,18 +1142,18 @@ body::after {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 0.25rem !important;
+  gap: 0.2rem !important;
   background: rgba(0, 0, 0, 0.2) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: var(--text-muted) !important;
   cursor: pointer !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  padding: 0.5rem 0.25rem !important;
-  border-radius: 12px !important;
+  padding: 0.4rem 0.1rem !important;
+  border-radius: 8px !important;
   position: relative !important;
-  min-height: 60px !important;
+  min-height: 55px !important;
   justify-content: center !important;
-  font-size: 0.7rem !important;
+  font-size: 0.65rem !important;
   user-select: none !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
@@ -1149,7 +1164,7 @@ body::after {
   z-index: 100000 !important;
   outline: none !important;
   /* Enhanced touch target for mobile */
-  min-width: 48px !important;
+  min-width: 40px !important;
   flex: 1 !important;
   /* Better mobile interaction */
   -webkit-touch-callout: none !important;
@@ -1192,11 +1207,16 @@ body::after {
 }
 
 .nav-label {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* GST Rate buttons */
