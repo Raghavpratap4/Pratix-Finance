@@ -430,6 +430,11 @@ body::after {
 }
 
 /* Input validation states */
+/* NO RED BORDER BY DEFAULT - ONLY ON VALIDATION ERROR */
+.calc-input {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
 .calc-input.input-error {
   border-color: #ff4757 !important;
   background: rgba(255, 71, 87, 0.1) !important;
@@ -1074,7 +1079,7 @@ body::after {
   display: none;
 }
 
-/* Show bottom nav on mobile and tablet only - Always visible and properly fixed */
+/* FOOTER ALWAYS VISIBLE - FIXED */
 @media (max-width: 1023px) {
   .bottom-nav,
   .standard-bottom-nav {
@@ -1098,18 +1103,27 @@ body::after {
       will-change: transform !important;
       visibility: visible !important;
       opacity: 1 !important;
-      /* Fixed height for consistency */
       height: 85px !important;
-      /* Prevent any hiding during scroll */
-      position: fixed !important;
       transition: none !important;
-      /* Enhanced mobile stability */
       -webkit-transform: translate3d(0, 0, 0) !important;
       transform: translate3d(0, 0, 0) !important;
-      /* Prevent iOS safari bottom bar interference */
       padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
-      /* Ensure it stays above everything */
       isolation: isolate !important;
+  }
+
+  /* FORCE FOOTER VISIBILITY */
+  .professional-footer,
+  .simple-footer {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      position: relative !important;
+      z-index: 1 !important;
+      margin-bottom: 120px !important;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 25%, rgba(15, 23, 42, 0.98) 50%, rgba(30, 41, 59, 0.95) 75%, rgba(15, 23, 42, 0.98) 100%) !important;
+      backdrop-filter: blur(30px) !important;
+      border-top: 3px solid var(--neon-blue) !important;
+      padding: 2rem 0 !important;
   }
 
   /* Ensure content doesn't overlap with fixed navigation */

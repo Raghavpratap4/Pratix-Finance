@@ -56,95 +56,91 @@ document.addEventListener('DOMContentLoaded', function() {
         showNotification(message, 'success', duration);
     }
 
-    // Tab switching functionality - Fixed
+    // Tab switching functionality - COMPLETELY FIXED
     function initTabNavigation() {
+        console.log('🔄 Initializing tab navigation...');
+        
         try {
-            // Get both desktop and mobile navigation items
-            const desktopNavItems = document.querySelectorAll('.tab-nav-item[data-tab]');
-            const mobileNavItems = document.querySelectorAll('.standard-nav-item[data-tab]');
+            // Get ALL navigation items
+            const allNavItems = document.querySelectorAll('[data-tab]');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            console.log('Desktop nav items found:', desktopNavItems.length);
-            console.log('Mobile nav items found:', mobileNavItems.length);
-            console.log('Tab contents found:', tabContents.length);
+            console.log('✅ Found nav items:', allNavItems.length);
+            console.log('✅ Found tab contents:', tabContents.length);
 
             function switchTab(targetTab) {
-                try {
-                    console.log('Switching to tab:', targetTab);
+                console.log('🎯 Switching to tab:', targetTab);
 
-                    // Remove active class from all nav items
-                    desktopNavItems.forEach(item => item.classList.remove('active'));
-                    mobileNavItems.forEach(item => item.classList.remove('active'));
+                // Remove active from ALL navigation items
+                allNavItems.forEach(item => {
+                    item.classList.remove('active');
+                });
 
-                    // Hide all tab contents
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        content.style.display = 'none';
-                    });
+                // Hide ALL tab contents
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                });
 
-                    // Add active class to target nav items
-                    const targetDesktopNav = document.querySelector(`.tab-nav-item[data-tab="${targetTab}"]`);
-                    const targetMobileNav = document.querySelector(`.standard-nav-item[data-tab="${targetTab}"]`);
+                // Activate target navigation items
+                const targetNavItems = document.querySelectorAll(`[data-tab="${targetTab}"]`);
+                targetNavItems.forEach(item => {
+                    item.classList.add('active');
+                });
 
-                    if (targetDesktopNav) {
-                        targetDesktopNav.classList.add('active');
-                    }
-                    if (targetMobileNav) {
-                        targetMobileNav.classList.add('active');
-                    }
-
-                    // Show active tab content
-                    const activeTabContent = document.getElementById(targetTab);
-                    if (activeTabContent) {
-                        activeTabContent.classList.add('active');
-                        activeTabContent.style.display = 'block';
-                        console.log('Tab activated successfully:', targetTab);
-                    } else {
-                        console.error('Tab content not found:', targetTab);
-                    }
-
-                    // Update URL hash
-                    history.pushState(null, null, `#${targetTab}`);
-
-                } catch (error) {
-                    console.error('Error in switchTab:', error);
+                // Show target tab content
+                const activeTabContent = document.getElementById(targetTab);
+                if (activeTabContent) {
+                    activeTabContent.classList.add('active');
+                    activeTabContent.style.display = 'block';
+                    console.log('✅ Tab activated:', targetTab);
+                } else {
+                    console.error('❌ Tab content not found:', targetTab);
                 }
             }
 
-            // Add click event listeners to desktop navigation
-            desktopNavItems.forEach(item => {
+            // Add click listeners to ALL navigation items
+            allNavItems.forEach(item => {
+                // Remove existing listeners
+                item.onclick = null;
+                
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
+                    
                     const targetTab = this.getAttribute('data-tab');
-                    console.log('Desktop nav clicked:', targetTab);
+                    console.log('🖱️ Tab clicked:', targetTab);
+                    
+                    if (targetTab) {
+                        switchTab(targetTab);
+                    }
+                });
+
+                // Add touch support for mobile
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const targetTab = this.getAttribute('data-tab');
                     if (targetTab) {
                         switchTab(targetTab);
                     }
                 });
             });
 
-            // Add click event listeners to mobile navigation
-            mobileNavItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetTab = this.getAttribute('data-tab');
-                    console.log('Mobile nav clicked:', targetTab);
-                    if (targetTab) {
-                        switchTab(targetTab);
-                    }
-                });
-            });
-
-            // Initialize with first tab or URL hash
-            const urlHash = window.location.hash.substring(1);
-            const initialTab = urlHash && document.getElementById(urlHash) ? urlHash : 'sip-calculator';
-            setTimeout(() => switchTab(initialTab), 100);
+            // Initialize first tab
+            setTimeout(() => {
+                const firstTab = 'sip-calculator';
+                console.log('🚀 Initializing first tab:', firstTab);
+                switchTab(firstTab);
+            }, 100);
 
             // Make switchTab globally available
             window.switchTab = switchTab;
+            console.log('✅ Tab navigation initialized successfully!');
 
         } catch (error) {
-            console.error('Error in initTabNavigation:', error);
+            console.error('❌ Error in initTabNavigation:', error);
         }
     }
 
@@ -176,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initialize with empty chart
             initSIPChart();
 
-    // Input validation for SIP Calculator - only show red when calculate is pressed
+    // Input validation for SIP Calculator - NO red border initially
     const sipInputs = ['monthlyAmountInput', 'returnRateInput', 'investmentPeriodInput'];
     sipInputs.forEach(inputId => {
         const input = document.getElementById(inputId);
@@ -185,14 +181,16 @@ document.addEventListener('DOMContentLoaded', function() {
             input.removeAttribute('max');
             input.removeAttribute('min');
 
-            // Reset initial state - clear all validation styles initially
-            clearErrorState(input);
+            // CLEAR ALL VALIDATION STYLES - NO RED BORDER INITIALLY
+            input.style.borderColor = '';
             input.classList.remove('input-error', 'input-success');
+            clearErrorState(input);
 
             input.addEventListener('input', function() {
-                // Clear any validation styles when user is typing
-                clearErrorState(this);
+                // ALWAYS clear validation styles when user is typing
+                this.style.borderColor = '';
                 this.classList.remove('input-error', 'input-success');
+                clearErrorState(this);
 
                 // Auto-calculate if all inputs are valid
                 if (hasValidInputs()) {
@@ -201,9 +199,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             input.addEventListener('focus', function() {
-                // Clear validation styles on focus
-                clearErrorState(this);
+                // ALWAYS clear validation styles on focus
+                this.style.borderColor = '';
                 this.classList.remove('input-error', 'input-success');
+                clearErrorState(this);
             });
         }
     });
@@ -776,15 +775,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const chartTypeSelector = document.getElementById('goalChartType');
             const downloadPDFBtn = document.getElementById('downloadGoalPDF');
 
-     // Initialize validation for Goal Planning inputs
+     // Initialize validation for Goal Planning inputs - NO RED BORDER INITIALLY
      const goalInputs = ['targetAmount', 'goalYears', 'goalReturnRate'];
      goalInputs.forEach(inputId => {
         const input = document.getElementById(inputId);
         if (input) {
             input.removeAttribute('max');
             input.removeAttribute('min');
-            clearErrorState(input);
+            
+            // CLEAR ALL VALIDATION STYLES INITIALLY
+            input.style.borderColor = '';
             input.classList.remove('input-error', 'input-success');
+            clearErrorState(input);
 
             input.addEventListener('input', function() {
                 if (this.value.trim() === '') {
@@ -2542,8 +2544,13 @@ FinalValue = sipTotalInvested;
     let isShowingNotification = false;
 
     function showNotification(message, type = 'info', duration = 3000) {
-        // Don't show persistent "if you have error then do refresh" notification
-        if (message.includes('error') && message.includes('refresh')) {
+        // BLOCK ALL ERROR/REFRESH NOTIFICATIONS
+        if (message.includes('error') || 
+            message.includes('refresh') || 
+            message.includes('problem') ||
+            message.toLowerCase().includes('error') ||
+            message.toLowerCase().includes('refresh')) {
+            console.log('🚫 Blocked unwanted notification:', message);
             return;
         }
         
