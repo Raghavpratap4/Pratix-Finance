@@ -64,27 +64,38 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tab switching functionality - Fixed
     function initTabNavigation() {
         try {
-            const navItems = document.querySelectorAll('.nav-item[data-tab]');
+            // Get both desktop and mobile navigation items
+            const desktopNavItems = document.querySelectorAll('.tab-nav-item[data-tab]');
+            const mobileNavItems = document.querySelectorAll('.standard-nav-item[data-tab]');
             const tabContents = document.querySelectorAll('.tab-content');
             
-            if (!navItems.length || !tabContents.length) {
-                console.warn('Navigation elements not found');
-                return;
-            }
+            console.log('Desktop nav items found:', desktopNavItems.length);
+            console.log('Mobile nav items found:', mobileNavItems.length);
+            console.log('Tab contents found:', tabContents.length);
             
             function switchTab(targetTab) {
                 try {
-                    // Remove active class from all nav items and tab contents
-                    navItems.forEach(item => item.classList.remove('active'));
+                    console.log('Switching to tab:', targetTab);
+                    
+                    // Remove active class from all nav items
+                    desktopNavItems.forEach(item => item.classList.remove('active'));
+                    mobileNavItems.forEach(item => item.classList.remove('active'));
+                    
+                    // Hide all tab contents
                     tabContents.forEach(content => {
                         content.classList.remove('active');
                         content.style.display = 'none';
                     });
                     
-                    // Add active class to clicked nav item
-                    const activeNavItem = document.querySelector(`[data-tab="${targetTab}"]`);
-                    if (activeNavItem) {
-                        activeNavItem.classList.add('active');
+                    // Add active class to target nav items
+                    const targetDesktopNav = document.querySelector(`.tab-nav-item[data-tab="${targetTab}"]`);
+                    const targetMobileNav = document.querySelector(`.standard-nav-item[data-tab="${targetTab}"]`);
+                    
+                    if (targetDesktopNav) {
+                        targetDesktopNav.classList.add('active');
+                    }
+                    if (targetMobileNav) {
+                        targetMobileNav.classList.add('active');
                     }
                     
                     // Show active tab content
@@ -92,21 +103,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (activeTabContent) {
                         activeTabContent.classList.add('active');
                         activeTabContent.style.display = 'block';
+                        console.log('Tab activated successfully:', targetTab);
+                    } else {
+                        console.error('Tab content not found:', targetTab);
                     }
                     
-                    // Update URL hash without scrolling
+                    // Update URL hash
                     history.pushState(null, null, `#${targetTab}`);
                     
                 } catch (error) {
-                    logError(error, 'switchTab');
+                    console.error('Error in switchTab:', error);
                 }
             }
             
-            // Add click event listeners
-            navItems.forEach(item => {
+            // Add click event listeners to desktop navigation
+            desktopNavItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
                     const targetTab = this.getAttribute('data-tab');
+                    console.log('Desktop nav clicked:', targetTab);
+                    if (targetTab) {
+                        switchTab(targetTab);
+                    }
+                });
+            });
+            
+            // Add click event listeners to mobile navigation
+            mobileNavItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetTab = this.getAttribute('data-tab');
+                    console.log('Mobile nav clicked:', targetTab);
                     if (targetTab) {
                         switchTab(targetTab);
                     }
@@ -118,8 +145,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const initialTab = urlHash && document.getElementById(urlHash) ? urlHash : 'sip-calculator';
             switchTab(initialTab);
             
+            // Make switchTab globally available
+            window.switchTab = switchTab;
+            
         } catch (error) {
-            logError(error, 'initTabNavigation');
+            console.error('Error in initTabNavigation:', error);
         }
     }
     
