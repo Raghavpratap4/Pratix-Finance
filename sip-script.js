@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initialize with first tab or URL hash
             const urlHash = window.location.hash.substring(1);
             const initialTab = urlHash && document.getElementById(urlHash) ? urlHash : 'sip-calculator';
-            switchTab(initialTab);
+            setTimeout(() => switchTab(initialTab), 100);
 
             // Make switchTab globally available
             window.switchTab = switchTab;
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initialize with empty chart
             initSIPChart();
 
-    // Real-time input validation for SIP Calculator
+    // Input validation for SIP Calculator - only show red when calculate is pressed
     const sipInputs = ['monthlyAmountInput', 'returnRateInput', 'investmentPeriodInput'];
     sipInputs.forEach(inputId => {
         const input = document.getElementById(inputId);
@@ -185,34 +185,25 @@ document.addEventListener('DOMContentLoaded', function() {
             input.removeAttribute('max');
             input.removeAttribute('min');
 
-            // Reset initial state
+            // Reset initial state - clear all validation styles initially
             clearErrorState(input);
             input.classList.remove('input-error', 'input-success');
 
             input.addEventListener('input', function() {
-                // Clear previous state when user starts typing
-                if (this.value.trim() === '') {
-                    clearErrorState(this);
-                    this.classList.remove('input-error', 'input-success');
-                } else {
-                    validateSIPInput(this);
-                }
+                // Clear any validation styles when user is typing
+                clearErrorState(this);
+                this.classList.remove('input-error', 'input-success');
 
+                // Auto-calculate if all inputs are valid
                 if (hasValidInputs()) {
                     calculateSIP();
                 }
             });
 
-            input.addEventListener('blur', function() {
-                if (this.value.trim() !== '') {
-                    validateSIPInput(this);
-                }
-            });
-
             input.addEventListener('focus', function() {
-                // Clear error state when user focuses on input
+                // Clear validation styles on focus
                 clearErrorState(this);
-                this.classList.remove('input-error');
+                this.classList.remove('input-error', 'input-success');
             });
         }
     });
@@ -2551,6 +2542,11 @@ FinalValue = sipTotalInvested;
     let isShowingNotification = false;
 
     function showNotification(message, type = 'info', duration = 3000) {
+        // Don't show persistent "if you have error then do refresh" notification
+        if (message.includes('error') && message.includes('refresh')) {
+            return;
+        }
+        
         const notification = { message, type, duration };
         notificationQueue.push(notification);
 
@@ -2800,7 +2796,6 @@ FinalValue = sipTotalInvested;
         initPerformanceMonitoring();
 
         console.log('SIP Calculator initialized successfully!');
-        showNotification('Welcome to Professional SIP Calculator!', 'success');
 
     } catch (error) {
         logError(error, 'Main Initialization');

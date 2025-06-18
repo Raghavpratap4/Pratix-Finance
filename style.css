@@ -3239,10 +3239,14 @@ select.calc-input option {
   backdrop-filter: blur(30px);
   border-top: 3px solid;
   border-image: linear-gradient(90deg, var(--neon-blue), var(--neon-green), var(--neon-cyan), var(--neon-purple)) 1;
-  position: relative;
+  position: relative !important;
   overflow: hidden;
   padding: 3rem 0 2rem;
   margin-bottom: 90px; /* Space for bottom navigation */
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1 !important;
 }
 
 /* Animated background glow */
@@ -3696,6 +3700,10 @@ select.calc-input option {
   .professional-footer {
       padding: 2rem 0 1.5rem;
       margin-bottom: 100px; /* More space for mobile bottom nav */
+      position: relative !important;
+      z-index: 1 !important;
+      display: block !important;
+      visibility: visible !important;
   }
 
   .footer-container {
