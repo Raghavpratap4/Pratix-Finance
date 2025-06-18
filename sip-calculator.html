@@ -110,21 +110,21 @@
                             <label for="monthlyAmountInput">Monthly Investment Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="monthlyAmountInput" placeholder="" class="calc-input" aria-describedby="monthlyAmount-help" required>
+                                <input type="number" id="monthlyAmountInput" placeholder="Enter monthly SIP amount (e.g., 5000)" class="calc-input" aria-describedby="monthlyAmount-help" required>
                             </div>
-                            <small id="monthlyAmount-help" class="input-help">Enter amount between ₹100 to ₹1,00,00,000</small>
+                            <small id="monthlyAmount-help" class="input-help">Enter any amount you want to invest monthly</small>
                         </div>
 
                         <div class="input-group">
                             <label for="returnRateInput">Expected Annual Return (%)</label>
-                            <input type="number" id="returnRateInput" placeholder="" class="calc-input" step="0.1" aria-describedby="returnRate-help" required>
-                            <small id="returnRate-help" class="input-help">Enter expected return between 0.1% to 50%</small>
+                            <input type="number" id="returnRateInput" placeholder="Enter expected return rate (e.g., 12)" class="calc-input" step="0.1" aria-describedby="returnRate-help" required>
+                            <small id="returnRate-help" class="input-help">Enter expected annual return percentage</small>
                         </div>
 
                         <div class="input-group">
                             <label for="investmentPeriodInput">Investment Period (Years)</label>
-                            <input type="number" id="investmentPeriodInput" placeholder="" class="calc-input" step="1" aria-describedby="period-help" required>
-                            <small id="period-help" class="input-help">Enter period between 1 to 50 years</small>
+                            <input type="number" id="investmentPeriodInput" placeholder="Enter investment duration (e.g., 10)" class="calc-input" step="1" aria-describedby="period-help" required>
+                            <small id="period-help" class="input-help">Enter investment period in years</small>
                         </div>
 
                         <div class="input-group">
@@ -143,7 +143,7 @@
 
                         <div class="input-group" id="stepUpGroup" style="display: none;">
                             <label>Annual Step-up Rate (%)</label>
-                            <input type="number" id="stepUpRate" placeholder="" class="calc-input" step="0.5">
+                            <input type="number" id="stepUpRate" placeholder="Enter yearly increase rate (e.g., 10)" class="calc-input" step="0.5">
                         </div>
 
                         <button class="calculate-btn" id="calculateSIP">
@@ -223,18 +223,18 @@
                             <label>Target Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="targetAmount" placeholder="" class="calc-input">
+                                <input type="number" id="targetAmount" placeholder="Enter your goal amount (e.g., 1000000)" class="calc-input">
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label>Time to Achieve Goal (Years)</label>
-                            <input type="number" id="goalYears" placeholder="" class="calc-input">
+                            <input type="number" id="goalYears" placeholder="Enter time period (e.g., 15)" class="calc-input">
                         </div>
 
                         <div class="input-group">
                             <label>Expected Annual Return (%)</label>
-                            <input type="number" id="goalReturnRate" placeholder="" class="calc-input" step="0.5">
+                            <input type="number" id="goalReturnRate" placeholder="Enter expected return (e.g., 12)" class="calc-input" step="0.5">
                         </div>
 
                         <button class="calculate-btn" id="calculateGoal">Calculate Required SIP</button>

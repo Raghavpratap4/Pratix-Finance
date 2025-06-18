@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error(`[${context}]`, error);
     }
     
-    function validateNumber(value, min = 0, max = Infinity, required = true) {
+    function validateNumber(value, required = true) {
         if (required && (!value || value === '')) {
             return { valid: false, message: 'This field is required' };
         }
@@ -29,12 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return { valid: false, message: 'Please enter a valid number' };
         }
         
-        if (num < min) {
-            return { valid: false, message: `Value must be at least ${min}` };
-        }
-        
-        if (num > max) {
-            return { valid: false, message: `Value must not exceed ${max}` };
+        if (num <= 0) {
+            return { valid: false, message: 'Value must be greater than 0' };
         }
         
         return { valid: true, value: num };
@@ -191,14 +187,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.removeAttribute('min');
                     
                     input.addEventListener('input', function() {
-                        clearErrorState(this);
+                        // Clear previous state when user starts typing
+                        if (this.value.trim() === '') {
+                            clearErrorState(this);
+                            this.classList.remove('input-error', 'input-success');
+                        } else {
+                            validateSIPInput(this);
+                        }
+                        
                         if (hasValidInputs()) {
                             calculateSIP();
                         }
                     });
                     
                     input.addEventListener('blur', function() {
-                        validateSIPInput(this);
+                        if (this.value.trim() !== '') {
+                            validateSIPInput(this);
+                        } else {
+                            // Show error if required field is empty on blur
+                            setInputState(this, 'error');
+                            showInputError(this, 'This field is required');
+                        }
+                    });
+                    
+                    input.addEventListener('focus', function() {
+                        // Clear error state when user focuses on input
+                        if (this.classList.contains('input-error') && this.value.trim() === '') {
+                            clearErrorState(this);
+                            this.classList.remove('input-error');
+                        }
                     });
                 }
             });
@@ -260,16 +277,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             switch (input.id) {
                 case 'monthlyAmountInput':
-                    validation = validateNumber(value, 100, 10000000);
-                    break;
                 case 'returnRateInput':
-                    validation = validateNumber(value, 0.1, 50);
-                    break;
                 case 'investmentPeriodInput':
-                    validation = validateNumber(value, 1, 50);
+                    validation = validateNumber(value, true);
                     break;
                 case 'stepUpRate':
-                    validation = validateNumber(value, 0, 100, false);
+                    validation = validateNumber(value, false);
                     break;
                 default:
                     validation = { valid: true };
@@ -277,14 +290,31 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!validation.valid) {
                 showInputError(input, validation.message);
+                setInputState(input, 'error');
                 return false;
             } else {
                 clearErrorState(input);
+                setInputState(input, 'success');
                 return true;
             }
         } catch (error) {
             logError(error, 'validateSIPInput');
             return false;
+        }
+    }
+    
+    function setInputState(input, state) {
+        try {
+            // Remove existing state classes
+            input.classList.remove('input-error', 'input-success');
+            
+            if (state === 'error') {
+                input.classList.add('input-error');
+            } else if (state === 'success') {
+                input.classList.add('input-success');
+            }
+        } catch (error) {
+            logError(error, 'setInputState');
         }
     }
     
@@ -364,6 +394,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (input) {
                     input.value = '';
                     clearErrorState(input);
+                    // Clear validation state classes
+                    input.classList.remove('input-error', 'input-success');
                 }
             });
             
@@ -800,9 +832,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
             
-            const amountValidation = validateNumber(targetAmount, 10000, 100000000);
-            const yearsValidation = validateNumber(years, 1, 50);
-            const returnValidation = validateNumber(returnRate, 0.1, 50);
+            const amountValidation = validateNumber(targetAmount, true);
+            const yearsValidation = validateNumber(years, true);
+            const returnValidation = validateNumber(returnRate, true);
             
             if (!amountValidation.valid) {
                 showError(`Target Amount: ${amountValidation.message}`);
