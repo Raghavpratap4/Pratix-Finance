@@ -56,13 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
         showNotification(message, 'success', duration);
     }
 
-    // Tab switching functionality - COMPLETELY FIXED
+    // Enhanced Tab Navigation for All Devices
     function initTabNavigation() {
-        console.log('🔄 Initializing tab navigation...');
+        console.log('🔄 Initializing enhanced tab navigation...');
         
         try {
-            // Get ALL navigation items
-            const allNavItems = document.querySelectorAll('[data-tab]');
+            // Get ALL navigation items (desktop + mobile)
+            const allNavItems = document.querySelectorAll('[data-tab], .tab-nav-item[data-tab], .standard-nav-item[data-tab]');
             const tabContents = document.querySelectorAll('.tab-content');
 
             console.log('✅ Found nav items:', allNavItems.length);
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     content.style.display = 'none';
                 });
 
-                // Activate target navigation items
+                // Activate target navigation items (both desktop and mobile)
                 const targetNavItems = document.querySelectorAll(`[data-tab="${targetTab}"]`);
                 targetNavItems.forEach(item => {
                     item.classList.add('active');
@@ -99,12 +99,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-            // Add click listeners to ALL navigation items
+            // Add enhanced click listeners to ALL navigation items
             allNavItems.forEach(item => {
-                // Remove existing listeners
-                item.onclick = null;
+                // Clear any existing listeners
+                const newItem = item.cloneNode(true);
+                item.parentNode.replaceChild(newItem, item);
                 
-                item.addEventListener('click', function(e) {
+                // Add new listeners
+                newItem.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     
@@ -112,20 +114,48 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('🖱️ Tab clicked:', targetTab);
                     
                     if (targetTab) {
+                        // Add visual feedback
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                        
                         switchTab(targetTab);
                     }
                 });
 
-                // Add touch support for mobile
-                item.addEventListener('touchend', function(e) {
+                // Enhanced touch support for mobile
+                newItem.addEventListener('touchstart', function(e) {
+                    this.style.transform = 'scale(0.95)';
+                });
+
+                newItem.addEventListener('touchend', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     
+                    this.style.transform = '';
+                    
                     const targetTab = this.getAttribute('data-tab');
                     if (targetTab) {
-                        switchTab(targetTab);
+                        setTimeout(() => switchTab(targetTab), 50);
                     }
                 });
+
+                // Keyboard support
+                newItem.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const targetTab = this.getAttribute('data-tab');
+                        if (targetTab) {
+                            switchTab(targetTab);
+                        }
+                    }
+                });
+
+                // Make sure it's focusable
+                newItem.setAttribute('tabindex', '0');
+                newItem.style.cursor = 'pointer';
+                newItem.style.pointerEvents = 'auto';
             });
 
             // Initialize first tab
@@ -133,11 +163,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const firstTab = 'sip-calculator';
                 console.log('🚀 Initializing first tab:', firstTab);
                 switchTab(firstTab);
-            }, 100);
+            }, 200);
 
             // Make switchTab globally available
             window.switchTab = switchTab;
-            console.log('✅ Tab navigation initialized successfully!');
+            console.log('✅ Enhanced tab navigation initialized successfully!');
 
         } catch (error) {
             console.error('❌ Error in initTabNavigation:', error);
