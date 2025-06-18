@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initPrepaymentCalculator();
     initLoanComparison();
     initSmartFeatures();
+    initCollapsibleFooter();
     
     // Show first tab by default
     setTimeout(() => {
@@ -25,6 +26,89 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('EMI calculator initialization complete');
 });
+
+// Collapsible Footer Functionality
+function initCollapsibleFooter() {
+    console.log('Initializing collapsible footer...');
+    
+    const footerHeaders = document.querySelectorAll('.footer-section-header');
+    
+    footerHeaders.forEach(header => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.footer-expand-icon');
+        
+        if (header && content && icon) {
+            // Set initial state - collapsed
+            content.style.maxHeight = '0px';
+            content.style.overflow = 'hidden';
+            content.style.transition = 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease 0.1s';
+            content.style.opacity = '0';
+            content.style.padding = '0 1.5rem';
+            icon.style.transform = 'rotate(0deg)';
+            icon.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            // Click handler
+            const toggleSection = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isExpanded = content.classList.contains('expanded');
+                
+                if (isExpanded) {
+                    // Collapse
+                    content.style.maxHeight = '0px';
+                    content.style.opacity = '0';
+                    content.style.padding = '0 1.5rem';
+                    content.classList.remove('expanded');
+                    header.classList.remove('active');
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    // Expand
+                    content.style.maxHeight = (content.scrollHeight + 40) + 'px';
+                    content.style.opacity = '1';
+                    content.style.padding = '1.25rem 1.5rem';
+                    content.classList.add('expanded');
+                    header.classList.add('active');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            };
+
+            // Add event listeners
+            header.addEventListener('click', toggleSection);
+            
+            // Touch support for mobile
+            let touchStartY = 0;
+            header.addEventListener('touchstart', function(e) {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            header.addEventListener('touchend', function(e) {
+                const touchEndY = e.changedTouches[0].clientY;
+                const touchDiff = Math.abs(touchStartY - touchEndY);
+                
+                // Only trigger if it's a tap, not a scroll
+                if (touchDiff < 10) {
+                    e.preventDefault();
+                    toggleSection(e);
+                }
+            });
+        }
+    });
+    
+    // Auto-adjust on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            const expandedContents = document.querySelectorAll('.footer-section-content.expanded');
+            expandedContents.forEach(content => {
+                content.style.maxHeight = (content.scrollHeight + 40) + 'px';
+            });
+        }, 150);
+    });
+    
+    console.log('Collapsible footer initialized successfully');
+}
 
 // Initialize EMI Calculator
 function initEMICalculator() {

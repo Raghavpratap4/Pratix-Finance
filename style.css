@@ -2733,13 +2733,15 @@ select.calc-input option {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   min-height: 56px; /* Better touch target */
+  position: relative;
+  z-index: 10;
 }
 
 .footer-section-header:hover {
@@ -2789,10 +2791,34 @@ select.calc-input option {
 }
 
 .footer-section-content.expanded {
-  max-height: 600px;
-  padding: 1.25rem 1.5rem;
-  opacity: 1;
-  transform: translateY(0);
+  max-height: 600px !important;
+  padding: 1.25rem 1.5rem !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  display: block !important;
+}
+
+/* Ensure footer links are visible */
+.footer-links-list-collapsible {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+}
+
+.footer-link-collapsible {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.875rem !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-radius: 8px !important;
+  color: var(--text-secondary) !important;
+  text-decoration: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 0.5rem !important;
+  min-height: 44px !important;
 }
 
 /* Enhanced header styling */
