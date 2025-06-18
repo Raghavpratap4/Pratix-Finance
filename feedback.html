@@ -3,581 +3,710 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <meta name="description" content="Share feedback for PRATIX FINANCE - Help us improve our financial calculators with your valuable suggestions and ratings" />
-    <title>User Feedback - PRATIX FINANCE</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#31417F">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Icons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
-    
-    <!-- Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - PRATIX FINANCE</title>
+    <meta name="description" content="Share your feedback about PRATIX FINANCE calculators. Help us improve and rate your experience with our financial tools.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <h1 class="app-title">User Feedback</h1>
-                <button class="icon-btn" onclick="goToHome()">🏠</button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="glass-card">
-                <h1 class="section-title">We Value Your Voice</h1>
-                <p class="text-gray-300 mb-8">Your feedback drives our innovation. Help us create better financial tools by sharing your experience with PRATIX FINANCE.</p>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Feedback Form -->
-                    <div class="space-y-6">
-                        <h2 class="text-2xl font-bold text-white mb-6">💬 Share Your Experience</h2>
-                        
-                        <form class="space-y-6" id="feedbackForm">
-                            <div>
-                                <label for="rating" class="block text-gray-300 font-semibold mb-3">Overall Rating *</label>
-                                <div class="flex space-x-2" id="starRating">
-                                    <span class="star text-4xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="1">⭐</span>
-                                    <span class="star text-4xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="2">⭐</span>
-                                    <span class="star text-4xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="3">⭐</span>
-                                    <span class="star text-4xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="4">⭐</span>
-                                    <span class="star text-4xl cursor-pointer hover:text-yellow-400 transition-colors" data-rating="5">⭐</span>
-                                </div>
-                                <div class="flex justify-between text-xs text-gray-400 mt-2">
-                                    <span>Poor</span>
-                                    <span>Fair</span>
-                                    <span>Good</span>
-                                    <span>Very Good</span>
-                                    <span>Excellent</span>
-                                </div>
-                                <input type="hidden" id="ratingValue" name="rating" required>
-                                <p id="ratingText" class="text-blue-400 text-sm mt-2 font-medium"></p>
-                            </div>
-
-                            <!-- Quick Rating Categories -->
-                            <div>
-                                <label class="block text-gray-300 font-semibold mb-3">Rate Specific Aspects</label>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-gray-400 text-sm mb-2">Ease of Use</p>
-                                        <div class="flex space-x-1" data-category="ease">
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="1">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="2">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="3">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="4">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="5">⭐</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-400 text-sm mb-2">Accuracy</p>
-                                        <div class="flex space-x-1" data-category="accuracy">
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="1">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="2">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="3">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="4">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="5">⭐</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-400 text-sm mb-2">Design</p>
-                                        <div class="flex space-x-1" data-category="design">
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="1">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="2">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="3">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="4">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="5">⭐</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-400 text-sm mb-2">Speed</p>
-                                        <div class="flex space-x-1" data-category="speed">
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="1">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="2">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="3">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="4">⭐</span>
-                                            <span class="mini-star text-lg cursor-pointer" data-rating="5">⭐</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label for="name" class="block text-gray-300 font-semibold mb-2">Your Name (Optional)</label>
-                                <input 
-                                    type="text" 
-                                    id="name" 
-                                    name="name"
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
-                                    placeholder="Enter your name (publicly displayed if shared)"
-                                >
-                            </div>
-
-                            <div>
-                                <label for="email" class="block text-gray-300 font-semibold mb-2">Email (Optional)</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email"
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
-                                    placeholder="Email for follow-up (kept private)"
-                                >
-                            </div>
-
-                            <div>
-                                <label for="userType" class="block text-gray-300 font-semibold mb-2">I am a *</label>
-                                <select 
-                                    id="userType" 
-                                    name="userType" 
-                                    required
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
-                                >
-                                    <option value="">Select your profile</option>
-                                    <option value="individual">Individual User</option>
-                                    <option value="student">Student</option>
-                                    <option value="professional">Finance Professional</option>
-                                    <option value="business">Business Owner</option>
-                                    <option value="advisor">Financial Advisor</option>
-                                    <option value="developer">Developer/Tech</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="category" class="block text-gray-300 font-semibold mb-2">Feedback Type *</label>
-                                <select 
-                                    id="category" 
-                                    name="category" 
-                                    required
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
-                                >
-                                    <option value="">Select feedback type</option>
-                                    <option value="general">General Feedback</option>
-                                    <option value="feature">Feature Request</option>
-                                    <option value="bug">Bug Report</option>
-                                    <option value="ui">User Interface</option>
-                                    <option value="calculator">Calculator Accuracy</option>
-                                    <option value="performance">Performance Issue</option>
-                                    <option value="suggestion">Improvement Suggestion</option>
-                                    <option value="compliment">Compliment</option>
-                                    <option value="complaint">Complaint</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="calculator" class="block text-gray-300 font-semibold mb-2">Which Calculator? (Optional)</label>
-                                <select 
-                                    id="calculator" 
-                                    name="calculator"
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
-                                >
-                                    <option value="">All calculators / General</option>
-                                    <option value="emi">EMI Calculator</option>
-                                    <option value="sip">SIP Calculator</option>
-                                    <option value="tax">Income Tax Calculator</option>
-                                    <option value="gst">GST Calculator</option>
-                                    <option value="fd">Fixed Deposit Calculator</option>
-                                    <option value="home">Home Page</option>
-                                    <option value="mobile">Mobile App</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="usage" class="block text-gray-300 font-semibold mb-2">How often do you use our calculators?</label>
-                                <select 
-                                    id="usage" 
-                                    name="usage"
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors"
-                                >
-                                    <option value="">Select usage frequency</option>
-                                    <option value="first-time">First time user</option>
-                                    <option value="weekly">Several times a week</option>
-                                    <option value="monthly">Monthly</option>
-                                    <option value="occasionally">Occasionally</option>
-                                    <option value="daily">Daily</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="message" class="block text-gray-300 font-semibold mb-2">Detailed Feedback *</label>
-                                <textarea 
-                                    id="message" 
-                                    name="message" 
-                                    rows="6" 
-                                    required
-                                    class="w-full px-4 py-3 bg-black bg-opacity-20 border border-gray-600 rounded-lg text-white focus:border-blue-400 focus:outline-none transition-colors resize-vertical"
-                                    placeholder="Share your thoughts, suggestions, or describe any issues you've encountered. Be specific to help us improve!"
-                                ></textarea>
-                                <p class="text-gray-500 text-xs mt-1">Minimum 20 characters. The more detail, the better we can help!</p>
-                            </div>
-
-                            <div class="flex items-center space-x-3">
-                                <input type="checkbox" id="consent" name="consent" class="w-4 h-4 text-blue-600">
-                                <label for="consent" class="text-gray-300 text-sm">
-                                    I consent to my feedback being used for improvement purposes and potentially shared anonymously in testimonials.
-                                </label>
-                            </div>
-
-                            <button 
-                                type="submit" 
-                                class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 text-lg"
-                            >
-                                Submit Feedback 🚀
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Feedback Stats & Community -->
-                    <div class="space-y-6">
-                        <h2 class="text-2xl font-bold text-white mb-6">📊 Community Impact</h2>
-                        
-                        <!-- Real-time Stats -->
-                        <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-6 rounded-lg">
-                            <h3 class="text-lg font-semibold text-white mb-4">🎯 Your Voice Creates Change</h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-white">2,847</div>
-                                    <div class="text-gray-200 text-sm">Total Feedback</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-white">156</div>
-                                    <div class="text-gray-200 text-sm">Features Added</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-white">99.2%</div>
-                                    <div class="text-gray-200 text-sm">Issues Resolved</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-white">4.9⭐</div>
-                                    <div class="text-gray-200 text-sm">Average Rating</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recent Feature Additions -->
-                        <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                            <h3 class="text-lg font-semibold text-white mb-4">🆕 Recently Added (Thanks to You!)</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-start space-x-3">
-                                    <span class="text-green-400 text-lg">✅</span>
-                                    <div>
-                                        <p class="text-white text-sm font-medium">Dark mode toggle</p>
-                                        <p class="text-gray-400 text-xs">Requested by 47 users • Added Jan 2025</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <span class="text-green-400 text-lg">✅</span>
-                                    <div>
-                                        <p class="text-white text-sm font-medium">Advanced tax deduction options</p>
-                                        <p class="text-gray-400 text-xs">Suggested by CA professionals • Added Dec 2024</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <span class="text-green-400 text-lg">✅</span>
-                                    <div>
-                                        <p class="text-white text-sm font-medium">Export calculation results</p>
-                                        <p class="text-gray-400 text-xs">High-demand feature • Added Nov 2024</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3">
-                                    <span class="text-orange-400 text-lg">🔄</span>
-                                    <div>
-                                        <p class="text-white text-sm font-medium">Multi-language support</p>
-                                        <p class="text-gray-400 text-xs">In development • Expected Feb 2025</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Feedback Categories -->
-                        <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                            <h3 class="text-lg font-semibold text-white mb-4">💡 What Kind of Feedback Helps Most?</h3>
-                            <div class="space-y-4">
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">🐛</span>
-                                    <div>
-                                        <h4 class="text-white font-medium">Bug Reports</h4>
-                                        <p class="text-gray-400 text-sm">Help us fix issues quickly with detailed descriptions</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">💡</span>
-                                    <div>
-                                        <h4 class="text-white font-medium">Feature Ideas</h4>
-                                        <p class="text-gray-400 text-sm">Suggest new calculators or improvements</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">🎨</span>
-                                    <div>
-                                        <h4 class="text-white font-medium">UI/UX Feedback</h4>
-                                        <p class="text-gray-400 text-sm">Make our interface more user-friendly</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">📊</span>
-                                    <div>
-                                        <h4 class="text-white font-medium">Accuracy Feedback</h4>
-                                        <p class="text-gray-400 text-sm">Help us improve calculation precision</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Reward Program -->
-                        <div class="bg-gradient-to-r from-yellow-600 to-orange-600 p-6 rounded-lg">
-                            <h3 class="text-lg font-semibold text-white mb-3">🏆 Feedback Rewards Program</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">🥇</span>
-                                    <div>
-                                        <p class="text-white font-medium text-sm">Bug Report → Get credited in our updates</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">🥈</span>
-                                    <div>
-                                        <p class="text-white font-medium text-sm">Feature Suggestion → Early access to new tools</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-2xl">🥉</span>
-                                    <div>
-                                        <p class="text-white font-medium text-sm">Detailed Review → Featured testimonial</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Testimonials -->
-                <div class="mt-12 bg-black bg-opacity-20 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold text-white mb-6">🗣️ What Our Community Says</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-grad�ient-to-br from-blue-600 to-purple-600 p-5 rounded-lg">
-                            <div class="text-yellow-400 mb-3 text-lg">⭐⭐⭐⭐⭐</div>
-                            <p class="text-white text-sm mb-3">"Exceptional accuracy in EMI calculations! Helped me negotiate better loan terms with my bank. The interface is clean and professional."</p>
-                            <p class="text-gray-200 text-xs">- Priya Sharma, Mumbai (Business Owner)</p>
-                            <p class="text-gray-300 text-xs mt-1">Verified User • Dec 2024</p>
-                        </div>
-                        <div class="bg-gradient-to-br from-green-600 to-blue-600 p-5 rounded-lg">
-                            <div class="text-yellow-400 mb-3 text-lg">⭐⭐⭐⭐⭐</div>
-                            <p class="text-white text-sm mb-3">"As a CA, I recommend PRATIX FINANCE to all my clients. The tax calculator is incredibly accurate and saves hours of manual work."</p>
-                            <p class="text-gray-200 text-xs">- CA Rahul Mehta, Delhi (Chartered Accountant)</p>
-                            <p class="text-gray-300 text-xs mt-1">Professional User • Jan 2025</p>
-                        </div>
-                        <div class="bg-gradient-to-br from-purple-600 to-pink-600 p-5 rounded-lg">
-                            <div class="text-yellow-400 mb-3 text-lg">⭐⭐⭐⭐⭐</div>
-                            <p class="text-white text-sm mb-3">"SIP calculator helped me start my investment journey. The projections were spot-on and motivated me to increase my contributions!"</p>
-                            <p class="text-gray-200 text-xs">- Anjali Gupta, Bangalore (Software Engineer)</p>
-                            <p class="text-gray-300 text-xs mt-1">Regular User • Nov 2024</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="footer-links">
-                    <a href="about.html" class="footer-link">About Us</a>
-                    <a href="privacy.html" class="footer-link">Privacy Policy</a>
-                    <a href="terms.html" class="footer-link">Terms of Service</a>
-                    <a href="blog.html" class="footer-link">Blog</a>
-                    <a href="contact.html" class="footer-link">Contact</a>
-                    <a href="feedback.html" class="footer-link">Feedback</a>
-                </div>
-                <div class="footer-content">
-                    <p>&copy; 2025 PRATIX FINANCE by <strong>Raghav Pratap</strong>. All rights reserved.</p>
-                    <p>Empowering your financial decisions with intelligent calculators.</p>
-                    <p class="mt-2">
-                        <a href="mailto:pratixfinance4@gmail.com" class="text-blue-400 hover:text-blue-300 transition-colors">
-                            pratixfinance4@gmail.com
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        // Star rating functionality
-        const stars = document.querySelectorAll('.star');
-        const ratingValue = document.getElementById('ratingValue');
-        const ratingText = document.getElementById('ratingText');
-        let currentRating = 0;
-
-        const ratingTexts = {
-            1: "😞 Poor - Needs significant improvement",
-            2: "😐 Fair - Below expectations",
-            3: "😊 Good - Meets basic needs",
-            4: "😃 Very Good - Exceeds expectations",
-            5: "🤩 Excellent - Outstanding experience!"
-        };
-
-        stars.forEach((star, index) => {
-            star.addEventListener('click', () => {
-                currentRating = index + 1;
-                ratingValue.value = currentRating;
-                ratingText.textContent = ratingTexts[currentRating];
-                updateStars();
-            });
-
-            star.addEventListener('mouseover', () => {
-                updateStars(index + 1);
-            });
-        });
-
-        document.getElementById('starRating').addEventListener('mouseleave', () => {
-            updateStars();
-        });
-
-        function updateStars(hoverRating = null) {
-            const rating = hoverRating || currentRating;
-            stars.forEach((star, index) => {
-                if (index < rating) {
-                    star.style.filter = 'none';
-                    star.style.color = '#fbbf24';
-                } else {
-                    star.style.filter = 'grayscale(100%)';
-                    star.style.color = '#6b7280';
-                }
-            });
+    <style>
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-green: #00ff88;
+            --neon-cyan: #00ffff;
+            --neon-purple: #8b5cf6;
+            --neon-yellow: #ffd700;
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%);
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(0, 212, 255, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.4);
         }
 
-        // Mini star ratings
-        const miniStarContainers = document.querySelectorAll('[data-category]');
-        const miniRatings = {};
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        miniStarContainers.forEach(container => {
-            const category = container.getAttribute('data-category');
-            const miniStars = container.querySelectorAll('.mini-star');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #312e81 50%, #581c87 75%, #1e1b4b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .main-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: var(--neon-blue);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feedback-form-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-section {
+            margin-bottom: 2rem;
+        }
+
+        .rating-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #444;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .star:hover, .star.active {
+            color: var(--neon-yellow);
+            transform: scale(1.1);
+        }
+
+        .rating-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.2);
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--neon-cyan);
+        }
+
+        .checkbox-item label {
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .testimonials-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .testimonial-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-rating .star {
+            font-size: 1rem;
+            color: var(--neon-yellow);
+        }
+
+        .testimonial-text {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--neon-cyan);
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .feedback-form-section, .testimonials-section {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .star-rating {
+                justify-content: center;
+            }
+
+            .rating-labels {
+                font-size: 0.7rem;
+            }
+
+            .back-button {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back to Home</a>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo.png" alt="PRATIX FINANCE Logo" class="logo">
+                <div>
+                    <h1 class="main-title">PRATIX FINANCE</h1>
+                    <p class="subtitle">Your Feedback Matters</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">Help Us Improve</h1>
+                <p class="hero-description">
+                    Your feedback drives our innovation. Share your experience and help us build 
+                    better financial tools for millions of users across India.
+                </p>
+            </section>
+
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-number">4.8★</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25K+</div>
+                    <div class="stat-label">Reviews Collected</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Features Added</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">99%</div>
+                    <div class="stat-label">User Satisfaction</div>
+                </div>
+            </div>
+
+            <!-- Feedback Form -->
+            <section class="feedback-form-section">
+                <h2 class="section-title">📝 Share Your Experience</h2>
+                
+                <form id="feedbackForm">
+                    <!-- Overall Rating -->
+                    <div class="rating-section">
+                        <h3 class="rating-title">Overall Experience Rating</h3>
+                        <div class="star-rating" data-rating="overall">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <div class="rating-labels">
+                            <span>Poor</span>
+                            <span>Fair</span>
+                            <span>Good</span>
+                            <span>Very Good</span>
+                            <span>Excellent</span>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Specific Rating -->
+                    <div class="rating-section">
+                        <h3 class="rating-title">Calculator Accuracy & Ease of Use</h3>
+                        <div class="star-rating" data-rating="accuracy">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <div class="rating-labels">
+                            <span>Needs Work</span>
+                            <span>Okay</span>
+                            <span>Good</span>
+                            <span>Great</span>
+                            <span>Perfect</span>
+                        </div>
+                    </div>
+
+                    <!-- Most Used Calculator -->
+                    <div class="form-group">
+                        <label class="form-label" for="calculator">Which calculator do you use most?</label>
+                        <select id="calculator" class="form-select">
+                            <option value="">Select calculator</option>
+                            <option value="emi">EMI Calculator</option>
+                            <option value="sip">SIP Calculator</option>
+                            <option value="tax">Tax Calculator</option>
+                            <option value="fd">FD Calculator</option>
+                            <option value="gst">GST Calculator</option>
+                            <option value="ppf">PPF Calculator</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Feedback Text -->
+                    <div class="form-group">
+                        <label class="form-label" for="feedback">What do you love most about PRATIX FINANCE?</label>
+                        <textarea id="feedback" class="form-textarea" placeholder="Share what makes our calculators special for you..."></textarea>
+                    </div>
+
+                    <!-- Improvement Suggestions -->
+                    <div class="form-group">
+                        <label class="form-label" for="improvements">What would you like us to improve?</label>
+                        <textarea id="improvements" class="form-textarea" placeholder="Help us make PRATIX FINANCE even better..."></textarea>
+                    </div>
+
+                    <!-- Feature Requests -->
+                    <div class="form-group">
+                        <label class="form-label">Which new features would you like to see?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="feature1" value="loan-comparison">
+                                <label for="feature1">Advanced Loan Comparison Tool</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="feature2" value="investment-tracker">
+                                <label for="feature2">Investment Portfolio Tracker</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="feature3" value="goal-planner">
+                                <label for="feature3">Financial Goal Planner</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="feature4" value="retirement-calculator">
+                                <label for="feature4">Detailed Retirement Calculator</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="feature5" value="crypto-calculator">
+                                <label for="feature5">Cryptocurrency Calculator</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="feature6" value="mobile-app">
+                                <label for="feature6">Dedicated Mobile App</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info (Optional) -->
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email (Optional - for follow-up)</label>
+                        <input type="email" id="email" class="form-input" placeholder="your.email@example.com">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Feedback</button>
+                </form>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="testimonials-section">
+                <h2 class="section-title">💬 What Our Users Say</h2>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <p class="testimonial-text">
+                            "PRATIX FINANCE helped me choose the right home loan. The EMI calculator is so accurate 
+                            and easy to use. Saved me lakhs in interest!"
+                        </p>
+                        <div class="testimonial-author">- Priya Sharma, Mumbai</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <p class="testimonial-text">
+                            "The SIP calculator changed my investment strategy. Now I'm on track to reach my 
+                            financial goals 5 years earlier than planned!"
+                        </p>
+                        <div class="testimonial-author">- Rajesh Kumar, Delhi</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <p class="testimonial-text">
+                            "As a CA, I recommend PRATIX FINANCE to all my clients. The tax calculator is 
+                            incredibly detailed and always up-to-date."
+                        </p>
+                        <div class="testimonial-author">- CA Neha Agarwal, Bangalore</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <p class="testimonial-text">
+                            "The interface is beautiful and intuitive. My whole family now uses PRATIX FINANCE 
+                            for all financial planning. Simply the best!"
+                        </p>
+                        <div class="testimonial-author">- Amit Patel, Ahmedabad</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Star Rating Functionality
+        const ratingContainers = document.querySelectorAll('.star-rating');
+        const ratings = {};
+
+        ratingContainers.forEach(container => {
+            const ratingType = container.dataset.rating;
+            const stars = container.querySelectorAll('.star');
             
-            miniStars.forEach((star, index) => {
-                star.addEventListener('click', () => {
-                    miniRatings[category] = index + 1;
-                    updateMiniStars(container, index + 1);
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = parseInt(this.dataset.value);
+                    ratings[ratingType] = value;
+                    
+                    // Update visual state
+                    stars.forEach((s, index) => {
+                        if (index < value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseenter', function() {
+                    const value = parseInt(this.dataset.value);
+                    
+                    stars.forEach((s, index) => {
+                        if (index < value) {
+                            s.style.color = 'var(--neon-yellow)';
+                        } else {
+                            s.style.color = '#444';
+                        }
+                    });
+                });
+            });
+
+            container.addEventListener('mouseleave', function() {
+                const currentRating = ratings[ratingType] || 0;
+                
+                stars.forEach((s, index) => {
+                    if (index < currentRating) {
+                        s.style.color = 'var(--neon-yellow)';
+                    } else {
+                        s.style.color = '#444';
+                    }
                 });
             });
         });
 
-        function updateMiniStars(container, rating) {
-            const miniStars = container.querySelectorAll('.mini-star');
-            miniStars.forEach((star, index) => {
-                if (index < rating) {
-                    star.style.color = '#fbbf24';
-                } else {
-                    star.style.color = '#6b7280';
-                }
-            });
-        }
-
-        // Initialize stars
-        updateStars();
-
-        // Feedback form handling
+        // Form Submission
         document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            if (!currentRating) {
-                showNotification('Please provide a rating before submitting.', 'error');
-                return;
-            }
-            
-            const message = document.getElementById('message').value;
-            if (message.length < 20) {
-                showNotification('Please provide more detailed feedback (minimum 20 characters).', 'error');
-                return;
-            }
-            
-            // Get form data
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Add mini ratings to email
-            let miniRatingsText = '';
-            for (const [category, rating] of Object.entries(miniRatings)) {
-                miniRatingsText += `${category.charAt(0).toUpperCase() + category.slice(1)}: ${rating}/5 stars\n`;
-            }
-            
-            // Create email body
-            const emailBody = `
-FEEDBACK SUBMISSION - PRATIX FINANCE
+            // Collect form data
+            const formData = {
+                overallRating: ratings.overall || 0,
+                accuracyRating: ratings.accuracy || 0,
+                calculator: document.getElementById('calculator').value,
+                feedback: document.getElementById('feedback').value,
+                improvements: document.getElementById('improvements').value,
+                email: document.getElementById('email').value,
+                features: []
+            };
 
-Overall Rating: ${currentRating}/5 stars (${ratingTexts[currentRating]})
-
-Specific Ratings:
-${miniRatingsText}
-
-User Profile:
-Name: ${data.name || 'Anonymous'}
-Email: ${data.email || 'Not provided'}
-User Type: ${data.userType}
-Usage Frequency: ${data.usage || 'Not specified'}
-
-Feedback Details:
-Category: ${data.category}
-Calculator: ${data.calculator || 'General/All'}
-Consent for testimonials: ${data.consent ? 'Yes' : 'No'}
-
-Detailed Feedback:
-${data.message}
-
----
-Submitted via Feedback Form at ${new Date().toLocaleString()}
-User Agent: ${navigator.userAgent}
-            `.trim();
-            
-            // Create mailto link
-            const mailtoLink = `mailto:pratixfinance4@gmail.com?subject=User Feedback: ${data.category} (${currentRating}⭐)&body=${encodeURIComponent(emailBody)}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
-            
-            // Show success message
-            showNotification('Thank you for your valuable feedback! Email client opened.', 'success');
-            
-            // Reset form
-            this.reset();
-            currentRating = 0;
-            ratingValue.value = '';
-            ratingText.textContent = '';
- �           updateStars();
-            
-            // Reset mini stars
-            miniStarContainers.forEach(container => {
-                updateMiniStars(container, 0);
+            // Collect selected features
+            const featureCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            featureCheckboxes.forEach(checkbox => {
+                formData.features.push(checkbox.value);
             });
-            Object.keys(miniRatings).forEach(key => delete miniRatings[key]);
-        });
 
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 p-4 rounded-lg z-50 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white max-w-sm shadow-lg`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
+            // Validate required fields
+            if (formData.overallRating === 0) {
+                alert('Please provide an overall rating.');
+                return;
+            }
+
+            // Simulate form submission
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = 'Submitting Feedback...';
+            submitBtn.disabled = true;
             
             setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 5000);
-        }
+                alert('Thank you for your valuable feedback! 🙏\n\nYour input helps us improve PRATIX FINANCE for millions of users. We truly appreciate your time and suggestions.');
+                
+                // Reset form
+                document.getElementById('feedbackForm').reset();
+                
+                // Reset ratings
+                Object.keys(ratings).forEach(key => delete ratings[key]);
+                document.querySelectorAll('.star').forEach(star => {
+                    star.classList.remove('active');
+                    star.style.color = '#444';
+                });
+                
+                submitBtn.textContent = 'Submit Feedback';
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        console.log('PRATIX FINANCE Feedback page loaded successfully!');
     </script>
 </body>
 </html>

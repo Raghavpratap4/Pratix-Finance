@@ -3,374 +3,411 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <meta name="description" content="Privacy Policy - PRATIX FINANCE commitment to protecting your data privacy and security" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - PRATIX FINANCE</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#31417F">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Icons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
-    
-    <!-- Fonts -->
+    <meta name="description" content="PRATIX FINANCE Privacy Policy - Learn how we protect your data and ensure complete privacy in all financial calculations.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-green: #00ff88;
+            --neon-cyan: #00ffff;
+            --neon-purple: #8b5cf6;
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%);
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(0, 212, 255, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #312e81 50%, #581c87 75%, #1e1b4b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .main-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: var(--neon-blue);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-text {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--neon-green);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-title {
+            color: var(--neon-green);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .data-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .data-list li {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .data-list li::before {
+            content: '🔒';
+            position: absolute;
+            left: 0;
+        }
+
+        .contact-info {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--neon-blue);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .contact-title {
+            color: var(--neon-blue);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .contact-email {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .contact-email:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .back-button {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <h1 class="app-title">Privacy Policy</h1>
-                <button class="icon-btn" onclick="goToHome()">🏠</button>
-            </div>
-        </header>
+    <a href="index.html" class="back-button">← Back to Home</a>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="glass-card">
-                <h1 class="section-title">Privacy Policy</h1>
-                <p class="text-gray-300 mb-6">Last updated: January 15, 2025 | Effective Date: January 1, 2025</p>
-                
-                <!-- Privacy at a Glance -->
-                <div class="bg-gradient-to-r from-green-600 to-blue-600 p-6 rounded-lg mb-8">
-                    <h2 class="text-xl font-bold text-white mb-4">🔒 Your Privacy at a Glance</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-2xl">✅</span>
-                            <span class="text-white font-medium">Zero personal data collection</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <span class="text-2xl">✅</span>
-                            <span class="text-white font-medium">Local-only calculations</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <span class="text-2xl">✅</span>
-                            <span class="text-white font-medium">No tracking cookies</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <span class="text-2xl">✅</span>
-                            <span class="text-white font-medium">GDPR compliant</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-8">
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">🛡️ Our Privacy Commitment</h2>
-                        <p class="text-gray-300 leading-relaxed mb-4">
-                            At PRATIX FINANCE, we believe your financial data is sacred. This Privacy Policy outlines our unwavering commitment to protecting your privacy while providing world-class financial calculation tools. We operate on a <strong>"Privacy by Design"</strong> principle.
-                        </p>
-                        <div class="bg-blue-900 bg-opacity-30 p-4 rounded-lg border border-blue-500">
-                            <p class="text-blue-200 text-sm">
-                                <strong>Our Promise:</strong> Your financial calculations and personal data never leave your device. We cannot see, store, or access your financial information.
-                            </p>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">📊 What Information We Collect</h2>
-                        <div class="space-y-6">
-                            
-                            <!-- Information We DON'T Collect -->
-                            <div class="bg-red-900 bg-opacity-20 p-6 rounded-lg border border-red-500">
-                                <h3 class="text-lg font-semibold text-white mb-3">❌ What We DON'T Collect</h3>
-                                <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                    <li>Financial calculation inputs (loan amounts, salaries, investments)</li>
-                                    <li>Personal financial data or calculation results</li>
-                                    <li>Banking information or account details</li>
-                                    <li>Credit scores or financial history</li>
-                                    <li>Location data or device identifiers</li>
-                                    <li>Personal identification information</li>
-                                    <li>Browsing behavior across other websites</li>
-                                </ul>
-                            </div>
-
-                            <!-- Minimal Technical Data -->
-                            <div class="bg-yellow-900 bg-opacity-20 p-6 rounded-lg border border-yellow-500">
-                                <h3 class="text-lg font-semibold text-white mb-3">⚙️ Minimal Technical Data (Anonymous)</h3>
-                                <p class="text-gray-300 leading-relaxed mb-3">
-                                    We collect only essential, anonymized technical information to maintain and improve our service:
-                                </p>
-                                <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                    <li><strong>Usage Statistics:</strong> Which calculators are accessed (no calculation data)</li>
-                                    <li><strong>Performance Metrics:</strong> App loading times and error rates</li>
-                                    <li><strong>Technical Diagnostics:</strong> Browser compatibility and crash reports</li>
-                                    <li><strong>General Analytics:</strong> Page visits and user flow (anonymized)</li>
-                                </ul>
-                                <p class="text-yellow-200 text-sm mt-3">
-                                    <strong>Note:</strong> All technical data is aggregated and cannot be linked to individual users.
-                                </p>
-                            </div>
-
-                            <!-- Local Storage -->
-                            <div class="bg-green-900 bg-opacity-20 p-6 rounded-lg border border-green-500">
-                                <h3 class="text-lg font-semibold text-white mb-3">💾 Local Storage (Your Device Only)</h3>
-                                <p class="text-gray-300 leading-relaxed mb-3">
-                                    We store limited data locally on your device to enhance your experience:
-                                </p>
-                                <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                    <li>Calculator preferences and settings</li>
-                                    <li>Theme and display preferences</li>
-                                    <li>Recently used calculator types (not calculation data)</li>
-                                    <li>App performance optimization data</li>
-                                </ul>
-                                <p class="text-green-200 text-sm mt-3">
-                                    <strong>Your Control:</strong> You can clear this data anytime through your browser settings.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">🔐 How We Protect Your Privacy</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">🏠 Local Processing</h3>
-                                <p class="text-gray-300 text-sm">All financial calculations happen entirely on your device. No data is transmitted to our servers during calculations.</p>
-                            </div>
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">🚫 No Account Required</h3>
-                                <p class="text-gray-300 text-sm">Use all features without creating accounts, providing personal information, or logging in.</p>
-                            </div>
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">🍪 No Tracking Cookies</h3>
-                                <p class="text-gray-300 text-sm">We don't use advertising cookies, tracking pixels, or cross-site tracking technologies.</p>
-                            </div>
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">🔒 HTTPS Encryption</h3>
-                                <p class="text-gray-300 text-sm">All connections are secured with industry-standard SSL/TLS encryption.</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">🌐 Third-Party Services</h2>
-                        <div class="bg-blue-900 bg-opacity-30 p-6 rounded-lg border border-blue-500">
-                            <p class="text-gray-300 leading-relaxed mb-4">
-                                PRATIX FINANCE operates independently without integrating third-party tracking, advertising, or analytics services that could compromise your privacy.
-                            </p>
-                            <div class="space-y-3">
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-red-400">❌</span>
-                                    <span class="text-gray-300">No Google Analytics or similar tracking</span>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-red-400">❌</span>
-                                    <span class="text-gray-300">No Facebook Pixel or social media tracking</span>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-red-400">❌</span>
-                                    <span class="text-gray-300">No advertising networks or retargeting</span>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-green-400">✅</span>
-                                    <span class="text-gray-300">Only essential CDNs for fonts and basic functionality</span>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">👶 Children's Privacy</h2>
-                        <div class="bg-purple-900 bg-opacity-30 p-6 rounded-lg border border-purple-500">
-                            <p class="text-gray-300 leading-relaxed mb-4">
-                                PRATIX FINANCE is safe for users of all ages. Since we don't collect personal information, there are no special privacy concerns for children under 13.
-                            </p>
-                            <p class="text-purple-200 text-sm">
-                                <strong>Parents:</strong> Our calculators can be excellent educational tools for teaching financial literacy to children in a completely safe environment.
-                            </p>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">🌍 International Users & GDPR</h2>
-                        <div class="space-y-4">
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">🇪🇺 European Union (GDPR)</h3>
-                                <p class="text-gray-300 text-sm mb-3">
-                                    PRATIX FINANCE is fully compliant with the General Data Protection Regulation (GDPR). Since we don't collect personal data, most GDPR obligations are naturally fulfilled.
-                                </p>
-                                <ul class="list-disc list-inside text-gray-300 text-sm space-y-1">
-                                    <li>Right to access: No personal data is collected</li>
-                                    <li>Right to deletion: No personal data to delete</li>
-                                    <li>Right to portability: No personal data to export</li>
-                                    <li>Right to rectification: No personal data to correct</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">🌏 Global Privacy Standards</h3>
-                                <p class="text-gray-300 text-sm">
-                                    Our privacy practices meet or exceed requirements in major jurisdictions including USA (CCPA), Canada (PIPEDA), India (PDPB), and Australia (Privacy Act).
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">🔄 Data Retention</h2>
-                        <div class="bg-green-900 bg-opacity-30 p-6 rounded-lg border border-green-500">
-                            <h3 class="text-lg font-semibold text-white mb-3">Simple Answer: We Don't Retain Personal Data</h3>
-                            <div class="space-y-3">
-                                <p class="text-gray-300 text-sm">
-                                    <strong>Financial Calculations:</strong> Processed locally and never stored on our servers
-                                </p>
-                                <p class="text-gray-300 text-sm">
-                                    <strong>Local Storage:</strong> Remains on your device until you clear it
-                                </p>
-                                <p class="text-gray-300 text-sm">
-                                    <strong>Anonymous Analytics:</strong> Aggregated for 12 months maximum for service improvement
-                                </p>
-                                <p class="text-gray-300 text-sm">
-                                    <strong>Contact Form Data:</strong> Only if you email us directly, handled according to standard email practices
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">💪 Your Rights & Control</h2>
-                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-lg">
-                            <h3 class="text-lg font-semibold text-white mb-4">You Have Complete Control</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <h4 class="text-white font-medium mb-2">🗑️ Clear Local Data</h4>
-                                    <p class="text-gray-200 text-sm">Clear browser cache and local storage anytime to remove all stored preferences.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-medium mb-2">🚫 Block JavaScript</h4>
-                                    <p class="text-gray-200 text-sm">Our calculators work with JavaScript disabled, providing even more privacy.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-medium mb-2">🔐 Use Private Browsing</h4>
-                                    <p class="text-gray-200 text-sm">Use incognito/private mode for maximum privacy - no local data will be stored.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-medium mb-2">📱 Offline Usage</h4>
-                                    <p class="text-gray-200 text-sm">Download as PWA and use offline - no internet connection required after initial load.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">📧 Contact & Communication</h2>
-                        <div class="space-y-4">
-                            <div class="bg-black bg-opacity-20 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-white mb-3">When You Contact Us</h3>
-                                <p class="text-gray-300 leading-relaxed mb-3">
-                                    If you contact us via email (pratixfinance4@gmail.com), we handle your information as follows:
-                                </p>
-                                <ul class="list-disc list-inside text-gray-300 space-y-2 text-sm">
-                                    <li><strong>Purpose:</strong> Respond to your inquiry and provide support</li>
-                                    <li><strong>Retention:</strong> Email correspondence kept for 24 months for support continuity</li>
-                                    <li><strong>Sharing:</strong> Never shared with third parties</li>
-                                    <li><strong>Security:</strong> Stored securely with encryption</li>
-                                    <li><strong>Your Rights:</strong> Request deletion of your correspondence anytime</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">🔄 Policy Updates</h2>
-                        <div class="bg-orange-900 bg-opacity-30 p-6 rounded-lg border border-orange-500">
-                            <p class="text-gray-300 leading-relaxed mb-4">
-                                We may update this Privacy Policy to reflect changes in our practices or legal requirements. Any material changes will be communicated through:
-                            </p>
-                            <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                <li>Prominent notice on our homepage</li>
-                                <li>Updated "Last Modified" date at the top of this policy</li>
-                                <li>Email notification if you've contacted us previously</li>
-                            </ul>
-                            <p class="text-orange-200 text-sm mt-4">
-                                <strong>Commitment:</strong> Any changes will maintain or strengthen privacy protections, never weaken them.
-                            </p>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2 class="text-2xl font-bold text-white mb-4">📞 Privacy Questions & Contact</h2>
-                        <div class="bg-gradient-to-r from-green-600 to-blue-600 p-6 rounded-lg">
-                            <h3 class="text-lg font-semibold text-white mb-3">Get in Touch</h3>
-                            <p class="text-gray-100 mb-4">
-                                Have questions about our privacy practices? We're transparent and happy to help.
-                            </p>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-lg">
-                                <p class="text-white font-semibold mb-2">Email:</p>
-                                <a href="mailto:pratixfinance4@gmail.com?subject=Privacy Policy Question" class="text-blue-300 hover:text-blue-200 transition-colors">
-                                    pratixfinance4@gmail.com
-                                </a>
-                                <p class="text-gray-300 text-sm mt-2">Response time: Within 48 hours</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Privacy Score -->
-                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-8 rounded-lg mt-8">
-                        <div class="text-center">
-                            <h3 class="text-2xl font-bold text-white mb-4">🏆 PRATIX FINANCE Privacy Score</h3>
-                            <div class="text-6xl font-bold text-white mb-4">A+</div>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                                <div>
-                                    <div class="text-2xl mb-1">🔒</div>
-                                    <div class="text-white font-medium text-sm">Zero Data Collection</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl mb-1">🏠</div>
-                                    <div class="text-white font-medium text-sm">Local Processing</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl mb-1">🚫</div>
-                                    <div class="text-white font-medium text-sm">No Tracking</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl mb-1">✅</div>
-                                    <div class="text-white font-medium text-sm">GDPR Compliant</div>
-                                </div>
-                            </div>
-                            <p class="text-gray-200 text-sm mt-4">
-                                Leading privacy practices in the financial technology space
-                            </p>
-                        </div>
-                    </div>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo.png" alt="PRATIX FINANCE Logo" class="logo">
+                <div>
+                    <h1 class="main-title">PRATIX FINANCE</h1>
+                    <p class="subtitle">Privacy Policy</p>
                 </div>
             </div>
-        </main>
+        </div>
+    </header>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="footer-links">
-                    <a href="about.html" class="footer-link">About Us</a>
-                    <a href="privacy.html" class="footer-link">Privacy Policy</a>
-                    <a href="terms.html" class="footer-link">Terms of Service</a>
-                    <a href="blog.html" class="footer-link">Blog</a>
-                    <a href="contact.html" class="footer-link">Contact</a>
-                    <a href="feedback.html" class="footer-link">Feedback</a>
-                </div>
-                <div class="footer-content">
-                    <p>&copy; 2025 PRATIX FINANCE by <strong>Raghav Pratap</strong>. All rights reserved.</p>
-                    <p>Empowering your financial decisions with intelligent calculators.</p>
-                    <p class="mt-2">
-                        <a href="mailto:pratixfinance4@gmail.com" class="text-blue-400 hover:text-blue-300 transition-colors">
-                            pratixfinance4@gmail.com
-                        </a>
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">Your Privacy is Our Priority</h1>
+                <p class="last-updated">Last Updated: December 15, 2024</p>
+                <p style="color: var(--text-secondary);">
+                    We are committed to protecting your privacy and ensuring the security of your financial data.
+                </p>
+            </section>
+
+            <!-- Privacy Commitment -->
+            <section class="content-section">
+                <h2 class="section-title">🛡️ Our Privacy Commitment</h2>
+                <div class="highlight-box">
+                    <h3 class="highlight-title">Zero Data Collection Promise</h3>
+                    <p class="content-text">
+                        PRATIX FINANCE operates on a <strong>privacy-first principle</strong>. All financial calculations 
+                        happen locally in your browser. We do not collect, store, or transmit any of your personal 
+                        financial information to our servers.
                     </p>
                 </div>
-            </div>
-        </footer>
-    </div>
+            </section>
 
-    <script src="script.js"></script>
+            <!-- What We Don't Collect -->
+            <section class="content-section">
+                <h2 class="section-title">🚫 What We DON'T Collect</h2>
+                <ul class="data-list">
+                    <li>Your loan amounts, EMI calculations, or investment figures</li>
+                    <li>Personal financial information or income details</li>
+                    <li>Bank account numbers or financial institution details</li>
+                    <li>Tax calculation data or income tax information</li>
+                    <li>Investment portfolios or SIP amounts</li>
+                    <li>Credit scores or financial history</li>
+                    <li>Location data unless explicitly needed for app functionality</li>
+                </ul>
+            </section>
+
+            <!-- What We May Collect -->
+            <section class="content-section">
+                <h2 class="section-title">📊 What We May Collect</h2>
+                <p class="content-text">
+                    To improve our service and provide you with the best experience, we may collect limited non-personal information:
+                </p>
+                <ul class="data-list">
+                    <li>App usage analytics (which calculators are most popular)</li>
+                    <li>Device type and browser information for optimization</li>
+                    <li>General location (country/state) for regional content</li>
+                    <li>Error logs to fix technical issues</li>
+                    <li>App performance metrics to enhance speed</li>
+                </ul>
+                <div class="highlight-box">
+                    <h3 class="highlight-title">Important Note</h3>
+                    <p class="content-text">
+                        Even this limited data is collected anonymously and cannot be traced back to individual users.
+                    </p>
+                </div>
+            </section>
+
+            <!-- How We Protect You -->
+            <section class="content-section">
+                <h2 class="section-title">🔐 How We Protect Your Data</h2>
+                <p class="content-text">
+                    Your financial privacy is protected through multiple layers of security:
+                </p>
+                <ul class="data-list">
+                    <li><strong>Local Processing:</strong> All calculations happen on your device</li>
+                    <li><strong>HTTPS Encryption:</strong> Secure connection for all app interactions</li>
+                    <li><strong>No Server Storage:</strong> Your data never leaves your browser</li>
+                    <li><strong>No Cookies for Financial Data:</strong> We don't track your calculations</li>
+                    <li><strong>Regular Security Audits:</strong> Continuous monitoring for vulnerabilities</li>
+                    <li><strong>Open Source Commitment:</strong> Transparent code for community review</li>
+                </ul>
+            </section>
+
+            <!-- Third-Party Services -->
+            <section class="content-section">
+                <h2 class="section-title">🔗 Third-Party Services</h2>
+                <p class="content-text">
+                    We use minimal third-party services to enhance your experience:
+                </p>
+                <ul class="data-list">
+                    <li><strong>Google Fonts:</strong> For beautiful typography (no tracking)</li>
+                    <li><strong>CDN Services:</strong> For faster app loading</li>
+                    <li><strong>Analytics (Optional):</strong> Anonymous usage statistics only</li>
+                </ul>
+                <p class="content-text">
+                    None of these services have access to your financial calculations or personal data.
+                </p>
+            </section>
+
+            <!-- Your Rights -->
+            <section class="content-section">
+                <h2 class="section-title">⚖️ Your Privacy Rights</h2>
+                <p class="content-text">You have complete control over your data:</p>
+                <ul class="data-list">
+                    <li><strong>Right to Know:</strong> Understand exactly what data we collect</li>
+                    <li><strong>Right to Delete:</strong> Clear all local storage anytime</li>
+                    <li><strong>Right to Opt-Out:</strong> Disable analytics in settings</li>
+                    <li><strong>Right to Transparency:</strong> Access our full privacy practices</li>
+                    <li><strong>Right to Security:</strong> Expect the highest security standards</li>
+                </ul>
+            </section>
+
+            <!-- Data Retention -->
+            <section class="content-section">
+                <h2 class="section-title">🗃️ Data Retention</h2>
+                <div class="highlight-box">
+                    <h3 class="highlight-title">Local Storage Only</h3>
+                    <p class="content-text">
+                        Any data saved (like calculator preferences) is stored locally on your device. 
+                        You can clear this data anytime through your browser settings or our app controls.
+                    </p>
+                </div>
+                <p class="content-text">
+                    We do not retain any personal or financial information on our servers. 
+                    Anonymous usage statistics may be retained for up to 12 months for service improvement.
+                </p>
+            </section>
+
+            <!-- Updates to Privacy Policy -->
+            <section class="content-section">
+                <h2 class="section-title">📋 Policy Updates</h2>
+                <p class="content-text">
+                    We may update this privacy policy to reflect changes in our practices or for legal compliance. 
+                    Any material changes will be prominently displayed on our website with at least 30 days notice.
+                </p>
+                <p class="content-text">
+                    Continued use of PRATIX FINANCE after policy updates constitutes acceptance of the revised terms.
+                </p>
+            </section>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h3 class="contact-title">Questions About Your Privacy?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    We're committed to transparency. Contact us with any privacy concerns.
+                </p>
+                <a href="mailto:privacy@pratixfinance.com" class="contact-email">
+                    📧 privacy@pratixfinance.com
+                </a>
+            </div>
+
+            <!-- Trust Indicators -->
+            <section class="content-section">
+                <h2 class="section-title">🏆 Trust & Compliance</h2>
+                <p class="content-text">
+                    PRATIX FINANCE adheres to global privacy standards and best practices:
+                </p>
+                <ul class="data-list">
+                    <li>GDPR Compliant (European Union)</li>
+                    <li>CCPA Compliant (California)</li>
+                    <li>Indian Data Protection Laws</li>
+                    <li>Industry Standard Security Practices</li>
+                    <li>Regular Third-Party Security Audits</li>
+                </ul>
+            </section>
+        </div>
+    </main>
 </body>
 </html>
