@@ -112,6 +112,24 @@ body::after {
   backdrop-filter: blur(10px);
 }
 
+/* Static pages should be wider on desktop */
+@media (min-width: 1024px) {
+  .app-container:not(.calculator-app) {
+      max-width: 1200px;
+      padding: 0 2rem;
+  }
+  
+  .app-container:not(.calculator-app) .main-content {
+      padding: 1.5rem 0 2rem;
+      max-width: 100%;
+  }
+  
+  .app-container:not(.calculator-app) .glass-card {
+      margin: 0 auto;
+      max-width: 100%;
+  }
+}
+
 .main-app-content {
   display: flex;
   flex-direction: column;
@@ -1369,15 +1387,22 @@ body::after {
       gap: 2rem;
   }
 
-  .app-container {
+  /* Only apply grid layout to main EMI calculator app, not static pages */
+  .app-container.calculator-app {
       max-width: 1400px;
       display: grid;
       grid-template-columns: 280px 1fr;
       gap: 0;
   }
 
-  .main-app-content {
+  .app-container.calculator-app .main-app-content {
       grid-column: 2;
+  }
+
+  /* Static pages should be centered without grid layout */
+  .app-container:not(.calculator-app) {
+      max-width: 1200px;
+      margin: 0 auto;
   }
 
   .main-content {
