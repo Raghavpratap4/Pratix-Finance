@@ -1,41 +1,40 @@
-
 // SIP Calculator JavaScript - Professional Version
 document.addEventListener('DOMContentLoaded', function() {
     console.log('SIP Calculator - Professional Version Loading...');
-    
+
     // Global variables
     let sipChart = null;
     let goalChart = null;
     let sipComparisonChart = null;
     let analysisChart = null;
     let lumpsumChart = null;
-    
+
     // Error tracking
     const errors = [];
-    
+
     // Utility Functions
     function logError(error, context) {
         errors.push({ error: error.message, context, timestamp: new Date() });
         console.error(`[${context}]`, error);
     }
-    
+
     function validateNumber(value, required = true) {
         if (required && (!value || value === '')) {
             return { valid: false, message: 'This field is required' };
         }
-        
+
         const num = parseFloat(value);
         if (isNaN(num)) {
             return { valid: false, message: 'Please enter a valid number' };
         }
-        
+
         if (num <= 0) {
             return { valid: false, message: 'Value must be greater than 0' };
         }
-        
+
         return { valid: true, value: num };
     }
-    
+
     function formatCurrency(amount) {
         try {
             return new Intl.NumberFormat('en-IN', {
@@ -48,15 +47,15 @@ document.addEventListener('DOMContentLoaded', function() {
             return `₹${Math.round(amount).toLocaleString('en-IN')}`;
         }
     }
-    
+
     function showError(message, duration = 5000) {
         showNotification(message, 'error', duration);
     }
-    
+
     function showSuccess(message, duration = 3000) {
         showNotification(message, 'success', duration);
     }
-    
+
     // Tab switching functionality - Fixed
     function initTabNavigation() {
         try {
@@ -64,36 +63,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const desktopNavItems = document.querySelectorAll('.tab-nav-item[data-tab]');
             const mobileNavItems = document.querySelectorAll('.standard-nav-item[data-tab]');
             const tabContents = document.querySelectorAll('.tab-content');
-            
+
             console.log('Desktop nav items found:', desktopNavItems.length);
             console.log('Mobile nav items found:', mobileNavItems.length);
             console.log('Tab contents found:', tabContents.length);
-            
+
             function switchTab(targetTab) {
                 try {
                     console.log('Switching to tab:', targetTab);
-                    
+
                     // Remove active class from all nav items
                     desktopNavItems.forEach(item => item.classList.remove('active'));
                     mobileNavItems.forEach(item => item.classList.remove('active'));
-                    
+
                     // Hide all tab contents
                     tabContents.forEach(content => {
                         content.classList.remove('active');
                         content.style.display = 'none';
                     });
-                    
+
                     // Add active class to target nav items
                     const targetDesktopNav = document.querySelector(`.tab-nav-item[data-tab="${targetTab}"]`);
                     const targetMobileNav = document.querySelector(`.standard-nav-item[data-tab="${targetTab}"]`);
-                    
+
                     if (targetDesktopNav) {
                         targetDesktopNav.classList.add('active');
                     }
                     if (targetMobileNav) {
                         targetMobileNav.classList.add('active');
                     }
-                    
+
                     // Show active tab content
                     const activeTabContent = document.getElementById(targetTab);
                     if (activeTabContent) {
@@ -103,15 +102,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         console.error('Tab content not found:', targetTab);
                     }
-                    
+
                     // Update URL hash
                     history.pushState(null, null, `#${targetTab}`);
-                    
+
                 } catch (error) {
                     console.error('Error in switchTab:', error);
                 }
             }
-            
+
             // Add click event listeners to desktop navigation
             desktopNavItems.forEach(item => {
                 item.addEventListener('click', function(e) {
@@ -123,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             });
-            
+
             // Add click event listeners to mobile navigation
             mobileNavItems.forEach(item => {
                 item.addEventListener('click', function(e) {
@@ -135,20 +134,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             });
-            
+
             // Initialize with first tab or URL hash
             const urlHash = window.location.hash.substring(1);
             const initialTab = urlHash && document.getElementById(urlHash) ? urlHash : 'sip-calculator';
             switchTab(initialTab);
-            
+
             // Make switchTab globally available
             window.switchTab = switchTab;
-            
+
         } catch (error) {
             console.error('Error in initTabNavigation:', error);
         }
     }
-    
+
     // Navigation functions
     window.goBack = function() {
         try {
@@ -161,11 +160,11 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'index.html';
         }
     };
-    
+
     window.goToHome = function() {
         window.location.href = 'index.html';
     };
-    
+
     // Enhanced SIP Calculator with proper error handling
     function initSIPCalculator() {
         try {
@@ -173,57 +172,55 @@ document.addEventListener('DOMContentLoaded', function() {
             const refreshBtn = document.getElementById('refreshSIP');
             const chartTypeSelector = document.getElementById('sipChartType');
             const downloadPDFBtn = document.getElementById('downloadSIPPDF');
-            
+
             // Initialize with empty chart
             initSIPChart();
-            
-            // Real-time input validation
-            const inputs = ['monthlyAmountInput', 'returnRateInput', 'investmentPeriodInput'];
-            inputs.forEach(inputId => {
-                const input = document.getElementById(inputId);
-                if (input) {
-                    // Remove any input restrictions
-                    input.removeAttribute('max');
-                    input.removeAttribute('min');
-                    
-                    input.addEventListener('input', function() {
-                        // Clear previous state when user starts typing
-                        if (this.value.trim() === '') {
-                            clearErrorState(this);
-                            this.classList.remove('input-error', 'input-success');
-                        } else {
-                            validateSIPInput(this);
-                        }
-                        
-                        if (hasValidInputs()) {
-                            calculateSIP();
-                        }
-                    });
-                    
-                    input.addEventListener('blur', function() {
-                        if (this.value.trim() !== '') {
-                            validateSIPInput(this);
-                        } else {
-                            // Show error if required field is empty on blur
-                            setInputState(this, 'error');
-                            showInputError(this, 'This field is required');
-                        }
-                    });
-                    
-                    input.addEventListener('focus', function() {
-                        // Clear error state when user focuses on input
-                        if (this.classList.contains('input-error') && this.value.trim() === '') {
-                            clearErrorState(this);
-                            this.classList.remove('input-error');
-                        }
-                    });
+
+    // Real-time input validation for SIP Calculator
+    const sipInputs = ['monthlyAmountInput', 'returnRateInput', 'investmentPeriodInput'];
+    sipInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            // Remove any input restrictions
+            input.removeAttribute('max');
+            input.removeAttribute('min');
+
+            // Reset initial state
+            clearErrorState(input);
+            input.classList.remove('input-error', 'input-success');
+
+            input.addEventListener('input', function() {
+                // Clear previous state when user starts typing
+                if (this.value.trim() === '') {
+                    clearErrorState(this);
+                    this.classList.remove('input-error', 'input-success');
+                } else {
+                    validateSIPInput(this);
+                }
+
+                if (hasValidInputs()) {
+                    calculateSIP();
                 }
             });
-            
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    validateSIPInput(this);
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                // Clear error state when user focuses on input
+                clearErrorState(this);
+                this.classList.remove('input-error');
+            });
+        }
+    });
+
             // SIP Type radio buttons
             const sipTypeRadios = document.querySelectorAll('input[name="sipType"]');
             const stepUpGroup = document.getElementById('stepUpGroup');
-            
+
             sipTypeRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value === 'stepup') {
@@ -236,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             });
-            
+
             if (calculateBtn) {
                 calculateBtn.addEventListener('click', function() {
                     if (validateAllSIPInputs()) {
@@ -245,14 +242,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (refreshBtn) {
                 refreshBtn.addEventListener('click', function() {
                     resetSIPInputs();
                     showSuccess('Calculator refreshed!');
                 });
             }
-            
+
             if (chartTypeSelector) {
                 chartTypeSelector.addEventListener('change', function() {
                     if (hasValidInputs()) {
@@ -260,21 +257,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (downloadPDFBtn) {
                 downloadPDFBtn.addEventListener('click', generateSIPPDF);
             }
-            
+
         } catch (error) {
             logError(error, 'initSIPCalculator');
         }
     }
-    
+
     function validateSIPInput(input) {
         try {
             const value = input.value.trim();
             let validation;
-            
+
             switch (input.id) {
                 case 'monthlyAmountInput':
                 case 'returnRateInput':
@@ -287,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 default:
                     validation = { valid: true };
             }
-            
+
             if (!validation.valid) {
                 showInputError(input, validation.message);
                 setInputState(input, 'error');
@@ -302,12 +299,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
     }
-    
+
     function setInputState(input, state) {
         try {
             // Remove existing state classes
             input.classList.remove('input-error', 'input-success');
-            
+
             if (state === 'error') {
                 input.classList.add('input-error');
             } else if (state === 'success') {
@@ -317,19 +314,19 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'setInputState');
         }
     }
-    
+
     function validateAllSIPInputs() {
         try {
             const inputs = ['monthlyAmountInput', 'returnRateInput', 'investmentPeriodInput'];
             let allValid = true;
-            
+
             inputs.forEach(inputId => {
                 const input = document.getElementById(inputId);
                 if (input && !validateSIPInput(input)) {
                     allValid = false;
                 }
             });
-            
+
             // Validate step-up rate if step-up SIP is selected
             const stepUpSIP = document.getElementById('stepUpSIP');
             if (stepUpSIP && stepUpSIP.checked) {
@@ -338,29 +335,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     allValid = false;
                 }
             }
-            
+
             if (!allValid) {
                 showError('Please correct the errors before calculating');
             }
-            
+
             return allValid;
         } catch (error) {
             logError(error, 'validateAllSIPInputs');
             return false;
         }
     }
-    
+
     function showInputError(input, message) {
         try {
             input.style.borderColor = '#ff4757';
             input.setAttribute('aria-invalid', 'true');
-            
+
             // Remove existing error message
             const existingError = input.parentNode.querySelector('.error-message');
             if (existingError) {
                 existingError.remove();
             }
-            
+
             // Add new error message
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
@@ -371,12 +368,12 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'showInputError');
         }
     }
-    
+
     function clearErrorState(input) {
         try {
             input.style.borderColor = '';
             input.removeAttribute('aria-invalid');
-            
+
             const errorMessage = input.parentNode.querySelector('.error-message');
             if (errorMessage) {
                 errorMessage.remove();
@@ -385,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'clearErrorState');
         }
     }
-    
+
     function resetSIPInputs() {
         try {
             const inputs = ['monthlyAmountInput', 'returnRateInput', 'investmentPeriodInput', 'stepUpRate'];
@@ -398,42 +395,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.classList.remove('input-error', 'input-success');
                 }
             });
-            
+
             // Reset radio buttons
             const regularSIP = document.getElementById('regularSIP');
             if (regularSIP) {
                 regularSIP.checked = true;
             }
-            
+
             const stepUpGroup = document.getElementById('stepUpGroup');
             if (stepUpGroup) {
                 stepUpGroup.style.display = 'none';
             }
-            
+
             // Hide results
             const resultsCard = document.getElementById('sipResults');
             if (resultsCard) {
                 resultsCard.style.display = 'none';
             }
-            
+
             // Reset chart
             if (sipChart) {
                 sipChart.destroy();
                 sipChart = null;
             }
             initSIPChart();
-            
+
         } catch (error) {
             logError(error, 'resetSIPInputs');
         }
     }
-    
+
     function hasValidInputs() {
         try {
             const monthlyAmount = document.getElementById('monthlyAmountInput')?.value;
             const returnRate = document.getElementById('returnRateInput')?.value;
             const period = document.getElementById('investmentPeriodInput')?.value;
-            
+
             return monthlyAmount && returnRate && period && 
                    !isNaN(parseFloat(monthlyAmount)) && 
                    !isNaN(parseFloat(returnRate)) && 
@@ -443,25 +440,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
     }
-    
+
     function calculateSIP() {
         try {
             if (!hasValidInputs()) {
                 return;
             }
-            
+
             const monthlyAmount = parseFloat(document.getElementById('monthlyAmountInput').value);
             const annualReturn = parseFloat(document.getElementById('returnRateInput').value);
             const years = parseFloat(document.getElementById('investmentPeriodInput').value);
             const sipType = document.querySelector('input[name="sipType"]:checked')?.value || 'regular';
             const stepUpRate = parseFloat(document.getElementById('stepUpRate')?.value) || 10;
-            
+
             const monthlyReturn = annualReturn / 12 / 100;
             const totalMonths = years * 12;
-            
+
             let totalInvestment = 0;
             let maturityValue = 0;
-            
+
             if (sipType === 'regular') {
                 totalInvestment = monthlyAmount * totalMonths;
                 if (monthlyReturn === 0) {
@@ -473,12 +470,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Step-up SIP calculation
                 let currentAmount = monthlyAmount;
                 let futureValue = 0;
-                
+
                 for (let year = 1; year <= years; year++) {
                     const monthsInYear = 12;
                     const yearInvestment = currentAmount * monthsInYear;
                     totalInvestment += yearInvestment;
-                    
+
                     const remainingMonths = (years - year + 1) * 12 - 12;
                     if (monthlyReturn === 0) {
                         futureValue += yearInvestment;
@@ -486,26 +483,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         const yearFV = currentAmount * ((Math.pow(1 + monthlyReturn, monthsInYear) - 1) / monthlyReturn);
                         futureValue += yearFV * Math.pow(1 + monthlyReturn, remainingMonths);
                     }
-                    
+
                     if (year < years) {
                         currentAmount = currentAmount * (1 + stepUpRate / 100);
                     }
                 }
                 maturityValue = futureValue;
             }
-            
+
             const totalReturns = maturityValue - totalInvestment;
-            
+
             // Update display with proper error handling
             updateSIPResults(totalInvestment, totalReturns, maturityValue);
             updateSIPChart(totalInvestment, totalReturns);
-            
+
         } catch (error) {
             logError(error, 'calculateSIP');
             showError('Error calculating SIP. Please check your inputs.');
         }
     }
-    
+
     function updateSIPResults(totalInvestment, totalReturns, maturityValue) {
         try {
             const elements = {
@@ -514,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 maturityValue: document.getElementById('maturityValue'),
                 resultsCard: document.getElementById('sipResults')
             };
-            
+
             if (elements.totalInvestment) {
                 elements.totalInvestment.textContent = formatCurrency(totalInvestment);
             }
@@ -531,18 +528,18 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateSIPResults');
         }
     }
-    
+
     function initSIPChart() {
         try {
             const ctx = document.getElementById('sipChart');
             if (!ctx) return;
-            
+
             // Destroy existing chart
             if (sipChart) {
                 sipChart.destroy();
                 sipChart = null;
             }
-            
+
             sipChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -596,19 +593,19 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'initSIPChart');
         }
     }
-    
+
     function updateSIPChart(investment, returns) {
         try {
             const chartType = document.getElementById('sipChartType')?.value || 'doughnut';
-            
+
             if (sipChart) {
                 sipChart.destroy();
                 sipChart = null;
             }
-            
+
             const ctx = document.getElementById('sipChart');
             if (!ctx) return;
-            
+
             if (chartType === 'doughnut') {
                 sipChart = new Chart(ctx, {
                     type: 'doughnut',
@@ -693,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const years = parseInt(document.getElementById('investmentPeriodInput')?.value) || 10;
                 const monthlyAmount = parseInt(document.getElementById('monthlyAmountInput')?.value) || 5000;
                 const annualReturn = parseFloat(document.getElementById('returnRateInput')?.value) || 12;
-                
+
                 const yearlyData = [];
                 for (let year = 1; year <= years; year++) {
                     const yearlyInvestment = monthlyAmount * 12 * year;
@@ -704,7 +701,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         maturity: yearlyMaturity
                     });
                 }
-                
+
                 sipChart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -763,23 +760,23 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateSIPChart');
         }
     }
-    
+
     function calculateMaturityForYear(monthlyAmount, annualReturn, years) {
         try {
             const monthlyReturn = annualReturn / 12 / 100;
             const totalMonths = years * 12;
-            
+
             if (monthlyReturn === 0) {
                 return monthlyAmount * totalMonths;
             }
-            
+
             return monthlyAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
         } catch (error) {
             logError(error, 'calculateMaturityForYear');
             return 0;
         }
     }
-    
+
     // Goal Based Planning
     function initGoalPlanning() {
         try {
@@ -787,7 +784,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const refreshGoalBtn = document.getElementById('refreshGoal');
             const chartTypeSelector = document.getElementById('goalChartType');
             const downloadPDFBtn = document.getElementById('downloadGoalPDF');
-            
+
+     // Initialize validation for Goal Planning inputs
+     const goalInputs = ['targetAmount', 'goalYears', 'goalReturnRate'];
+     goalInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.removeAttribute('max');
+            input.removeAttribute('min');
+            clearErrorState(input);
+            input.classList.remove('input-error', 'input-success');
+
+            input.addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    clearErrorState(this);
+                    this.classList.remove('input-error', 'input-success');
+                } else {
+                    validateGoalInput(this);
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    validateGoalInput(this);
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                clearErrorState(this);
+                this.classList.remove('input-error');
+            });
+        }
+    });
+
             if (calculateGoalBtn) {
                 calculateGoalBtn.addEventListener('click', function() {
                     if (validateGoalInputs()) {
@@ -796,14 +825,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (refreshGoalBtn) {
                 refreshGoalBtn.addEventListener('click', function() {
                     resetGoalInputs();
                     showSuccess('Goal planning refreshed!');
                 });
             }
-            
+
             if (chartTypeSelector) {
                 chartTypeSelector.addEventListener('change', function() {
                     const goalResult = document.getElementById('goalResult');
@@ -812,7 +841,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (downloadPDFBtn) {
                 downloadPDFBtn.addEventListener('click', generateGoalPDF);
             }
@@ -820,44 +849,44 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'initGoalPlanning');
         }
     }
-    
+
     function validateGoalInputs() {
         try {
             const targetAmount = document.getElementById('targetAmount')?.value;
             const years = document.getElementById('goalYears')?.value;
             const returnRate = document.getElementById('goalReturnRate')?.value;
-            
+
             if (!targetAmount || !years || !returnRate) {
                 showError('Please fill all goal details');
                 return false;
             }
-            
+
             const amountValidation = validateNumber(targetAmount, true);
             const yearsValidation = validateNumber(years, true);
             const returnValidation = validateNumber(returnRate, true);
-            
+
             if (!amountValidation.valid) {
                 showError(`Target Amount: ${amountValidation.message}`);
                 return false;
             }
-            
+
             if (!yearsValidation.valid) {
                 showError(`Years: ${yearsValidation.message}`);
                 return false;
             }
-            
+
             if (!returnValidation.valid) {
                 showError(`Return Rate: ${returnValidation.message}`);
                 return false;
             }
-            
+
             return true;
         } catch (error) {
             logError(error, 'validateGoalInputs');
             return false;
         }
     }
-    
+
     function resetGoalInputs() {
         try {
             const inputs = ['goalType', 'targetAmount', 'goalYears', 'goalReturnRate'];
@@ -867,12 +896,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.value = '';
                 }
             });
-            
+
             const goalResult = document.getElementById('goalResult');
             if (goalResult) {
                 goalResult.style.display = 'none';
             }
-            
+
             if (goalChart) {
                 goalChart.destroy();
                 goalChart = null;
@@ -881,31 +910,31 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'resetGoalInputs');
         }
     }
-    
+
     function calculateGoalBasedSIP() {
         try {
             const targetAmount = parseFloat(document.getElementById('targetAmount')?.value);
             const years = parseFloat(document.getElementById('goalYears')?.value);
             const annualReturn = parseFloat(document.getElementById('goalReturnRate')?.value);
-            
+
             if (!targetAmount || !years || !annualReturn) {
                 showError('Please fill all goal details');
                 return;
             }
-            
+
             const monthlyReturn = annualReturn / 12 / 100;
             const totalMonths = years * 12;
-            
+
             let requiredSIP;
             if (monthlyReturn === 0) {
                 requiredSIP = targetAmount / totalMonths;
             } else {
                 requiredSIP = (targetAmount * monthlyReturn) / (Math.pow(1 + monthlyReturn, totalMonths) - 1);
             }
-            
+
             const totalInvestment = requiredSIP * totalMonths;
             const totalReturns = targetAmount - totalInvestment;
-            
+
             // Update display
             const elements = {
                 requiredSIP: document.getElementById('requiredSIP'),
@@ -913,7 +942,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 goalTotalReturns: document.getElementById('goalTotalReturns'),
                 goalResult: document.getElementById('goalResult')
             };
-            
+
             if (elements.requiredSIP) {
                 elements.requiredSIP.textContent = formatCurrency(requiredSIP);
             }
@@ -926,31 +955,31 @@ document.addEventListener('DOMContentLoaded', function() {
             if (elements.goalResult) {
                 elements.goalResult.style.display = 'block';
             }
-            
+
             updateGoalChart(totalInvestment, totalReturns, years);
-            
+
         } catch (error) {
             logError(error, 'calculateGoalBasedSIP');
             showError('Error calculating goal-based SIP');
         }
     }
-    
+
     function updateGoalChart(investment, returns, years) {
         try {
             const chartType = document.getElementById('goalChartType')?.value || 'line';
-            
+
             if (goalChart) {
                 goalChart.destroy();
                 goalChart = null;
             }
-            
+
             const ctx = document.getElementById('goalChart');
             if (!ctx) return;
-            
+
             const yearlyData = [];
             const requiredSIP = parseFloat(document.getElementById('requiredSIP')?.textContent.replace(/[₹,]/g, '')) || 0;
             const annualReturn = parseFloat(document.getElementById('goalReturnRate')?.value) || 12;
-            
+
             for (let i = 1; i <= years; i++) {
                 const yearlyInvestment = requiredSIP * 12 * i;
                 const yearlyMaturity = calculateMaturityForYear(requiredSIP, annualReturn, i);
@@ -960,7 +989,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     maturity: yearlyMaturity
                 });
             }
-            
+
             const chartConfig = {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -990,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             };
-            
+
             if (chartType === 'line') {
                 goalChart = new Chart(ctx, {
                     type: 'line',
@@ -1062,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateGoalChart');
         }
     }
-    
+
     // SIP Comparison
     function initSIPComparison() {
         try {
@@ -1071,7 +1100,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const refreshComparisonBtn = document.getElementById('refreshComparison');
             const chartTypeSelector = document.getElementById('comparisonChartType');
             const downloadPDFBtn = document.getElementById('downloadComparisonPDF');
-            
+
             if (sipCountSelector) {
                 sipCountSelector.addEventListener('change', function() {
                     const count = parseInt(this.value);
@@ -1080,7 +1109,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (compareSIPsBtn) {
                 compareSIPsBtn.addEventListener('click', function() {
                     if (validateComparisonInputs()) {
@@ -1089,14 +1118,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (refreshComparisonBtn) {
                 refreshComparisonBtn.addEventListener('click', function() {
                     resetComparisonInputs();
                     showSuccess('SIP comparison refreshed!');
                 });
             }
-            
+
             if (chartTypeSelector) {
                 chartTypeSelector.addEventListener('change', function() {
                     const results = document.getElementById('comparisonResults');
@@ -1105,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (downloadPDFBtn) {
                 downloadPDFBtn.addEventListener('click', generateComparisonPDF);
             }
@@ -1113,7 +1142,7 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'initSIPComparison');
         }
     }
-    
+
     function validateComparisonInputs() {
         try {
             const sipCount = parseInt(document.getElementById('sipCount')?.value);
@@ -1121,54 +1150,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError('Please select number of SIPs to compare');
                 return false;
             }
-            
+
             let allValid = true;
             for (let i = 1; i <= sipCount; i++) {
                 const amount = document.getElementById(`sip${i}Amount`)?.value;
                 const returnRate = document.getElementById(`sip${i}Return`)?.value;
                 const period = document.getElementById(`sip${i}Period`)?.value;
-                
+
                 if (!amount || !returnRate || !period) {
                     showError(`Please fill all details for SIP Option ${i}`);
                     allValid = false;
                     break;
                 }
-                
+
                 const amountValidation = validateNumber(amount, 100, 10000000);
                 const returnValidation = validateNumber(returnRate, 0.1, 50);
                 const periodValidation = validateNumber(period, 1, 50);
-                
+
                 if (!amountValidation.valid || !returnValidation.valid || !periodValidation.valid) {
                     showError(`Invalid input for SIP Option ${i}`);
                     allValid = false;
                     break;
                 }
             }
-            
+
             return allValid;
         } catch (error) {
             logError(error, 'validateComparisonInputs');
             return false;
         }
     }
-    
+
     function resetComparisonInputs() {
         try {
             const sipCountSelect = document.getElementById('sipCount');
             if (sipCountSelect) {
                 sipCountSelect.value = '';
             }
-            
+
             const comparisonInputs = document.getElementById('comparisonInputs');
             if (comparisonInputs) {
                 comparisonInputs.innerHTML = '';
             }
-            
+
             const comparisonResults = document.getElementById('comparisonResults');
             if (comparisonResults) {
                 comparisonResults.style.display = 'none';
             }
-            
+
             if (sipComparisonChart) {
                 sipComparisonChart.destroy();
                 sipComparisonChart = null;
@@ -1177,12 +1206,12 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'resetComparisonInputs');
         }
     }
-    
+
     function generateComparisonInputs(count) {
         try {
             const container = document.getElementById('comparisonInputs');
             if (!container || !count) return;
-            
+
             let html = '';
             for (let i = 1; i <= count; i++) {
                 html += `
@@ -1211,7 +1240,7 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'generateComparisonInputs');
         }
     }
-    
+
     function compareSIPOptions() {
         try {
             const sipCount = parseInt(document.getElementById('sipCount')?.value);
@@ -1219,33 +1248,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError('Please select number of SIPs to compare');
                 return;
             }
-            
+
             const sipData = [];
-            
+
             for (let i = 1; i <= sipCount; i++) {
                 const amount = parseFloat(document.getElementById(`sip${i}Amount`)?.value);
                 const returnRate = parseFloat(document.getElementById(`sip${i}Return`)?.value);
                 const period = parseFloat(document.getElementById(`sip${i}Period`)?.value);
-                
+
                 if (!amount || !returnRate || !period) {
                     showError(`Please fill all details for SIP Option ${i}`);
                     return;
                 }
-                
+
                 // Calculate SIP
                 const monthlyReturn = returnRate / 12 / 100;
                 const totalMonths = period * 12;
                 const investment = amount * totalMonths;
-                
+
                 let maturity;
                 if (monthlyReturn === 0) {
                     maturity = investment;
                 } else {
                     maturity = amount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
                 }
-                
+
                 const returns = maturity - investment;
-                
+
                 sipData.push({
                     option: i,
                     monthlyAmount: amount,
@@ -1254,28 +1283,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     returns: returns
                 });
             }
-            
+
             // Update comparison table
             updateComparisonTable(sipData);
-            
+
             const comparisonResults = document.getElementById('comparisonResults');
             if (comparisonResults) {
                 comparisonResults.style.display = 'block';
             }
-            
+
             updateSIPComparisonChart(sipData);
-            
+
         } catch (error) {
             logError(error, 'compareSIPOptions');
             showError('Error comparing SIP options');
         }
     }
-    
+
     function updateComparisonTable(sipData) {
         try {
             const tableBody = document.getElementById('comparisonTableBody');
             if (!tableBody) return;
-            
+
             let tableHTML = '';
             sipData.forEach(sip => {
                 tableHTML += `
@@ -1293,23 +1322,23 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateComparisonTable');
         }
     }
-    
+
     function updateSIPComparisonChart(sipData) {
         try {
             const chartType = document.getElementById('comparisonChartType')?.value || 'bar';
-            
+
             if (sipComparisonChart) {
                 sipComparisonChart.destroy();
                 sipComparisonChart = null;
             }
-            
+
             const ctx = document.getElementById('sipComparisonChart');
             if (!ctx) return;
-            
+
             const labels = sipData.map(sip => `SIP ${sip.option}`);
             const maturityValues = sipData.map(sip => sip.maturity);
             const colors = ['rgba(49, 65, 127, 0.8)', 'rgba(240, 147, 251, 0.8)', 'rgba(0, 255, 136, 0.8)', 'rgba(255, 0, 128, 0.8)'];
-            
+
             const chartConfig = {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -1324,7 +1353,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             };
-            
+
             if (chartType === 'bar') {
                 sipComparisonChart = new Chart(ctx, {
                     type: 'bar',
@@ -1394,7 +1423,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Normalize data for radar chart
                 const maxValue = Math.max(...maturityValues);
                 const normalizedData = maturityValues.map(value => maxValue > 0 ? (value / maxValue) * 100 : 0);
-                
+
                 sipComparisonChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
@@ -1427,7 +1456,7 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateSIPComparisonChart');
         }
     }
-    
+
     // Investment Analysis
     function initInvestmentAnalysis() {
         try {
@@ -1435,7 +1464,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const refreshAnalysisBtn = document.getElementById('refreshAnalysis');
             const chartTypeSelector = document.getElementById('analysisChartType');
             const downloadPDFBtn = document.getElementById('downloadAnalysisPDF');
-            
+
+             // Initialize validation for Analysis inputs
+    const analysisInputs = ['analysisMonthlyAmount', 'analysisReturnRate', 'analysisPeriod', 'inflationRate'];
+    analysisInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.removeAttribute('max');
+            input.removeAttribute('min');
+            clearErrorState(input);
+            input.classList.remove('input-error', 'input-success');
+
+            input.addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    clearErrorState(this);
+                    this.classList.remove('input-error', 'input-success');
+                } else {
+                    validateAnalysisInput(this);
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    validateAnalysisInput(this);
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                clearErrorState(this);
+                this.classList.remove('input-error');
+            });
+        }
+    });
+
             if (calculateAnalysisBtn) {
                 calculateAnalysisBtn.addEventListener('click', function() {
                     if (validateAnalysisInputs()) {
@@ -1444,14 +1505,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (refreshAnalysisBtn) {
                 refreshAnalysisBtn.addEventListener('click', function() {
                     resetAnalysisInputs();
                     showSuccess('Investment analysis refreshed!');
                 });
             }
-            
+
             if (chartTypeSelector) {
                 chartTypeSelector.addEventListener('change', function() {
                     const results = document.getElementById('analysisResults');
@@ -1460,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (downloadPDFBtn) {
                 downloadPDFBtn.addEventListener('click', generateAnalysisPDF);
             }
@@ -1468,51 +1529,51 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'initInvestmentAnalysis');
         }
     }
-    
+
     function validateAnalysisInputs() {
         try {
             const monthlyAmount = document.getElementById('analysisMonthlyAmount')?.value;
             const returnRate = document.getElementById('analysisReturnRate')?.value;
             const period = document.getElementById('analysisPeriod')?.value;
             const inflationRate = document.getElementById('inflationRate')?.value;
-            
+
             if (!monthlyAmount || !returnRate || !period) {
                 showError('Please fill all required analysis details');
                 return false;
             }
-            
+
             const amountValidation = validateNumber(monthlyAmount, 100, 10000000);
             const returnValidation = validateNumber(returnRate, 0.1, 50);
             const periodValidation = validateNumber(period, 1, 50);
             const inflationValidation = validateNumber(inflationRate, 0, 25, false);
-            
+
             if (!amountValidation.valid) {
                 showError(`Monthly Amount: ${amountValidation.message}`);
                 return false;
             }
-            
+
             if (!returnValidation.valid) {
                 showError(`Return Rate: ${returnValidation.message}`);
                 return false;
             }
-            
+
             if (!periodValidation.valid) {
                 showError(`Period: ${periodValidation.message}`);
                 return false;
             }
-            
+
             if (inflationRate && !inflationValidation.valid) {
                 showError(`Inflation Rate: ${inflationValidation.message}`);
                 return false;
             }
-            
+
             return true;
         } catch (error) {
             logError(error, 'validateAnalysisInputs');
             return false;
         }
     }
-    
+
     function resetAnalysisInputs() {
         try {
             const inputs = ['analysisMonthlyAmount', 'analysisReturnRate', 'analysisPeriod', 'inflationRate'];
@@ -1522,12 +1583,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.value = '';
                 }
             });
-            
+
             const analysisResults = document.getElementById('analysisResults');
             if (analysisResults) {
                 analysisResults.style.display = 'none';
             }
-            
+
             if (analysisChart) {
                 analysisChart.destroy();
                 analysisChart = null;
@@ -1536,34 +1597,34 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'resetAnalysisInputs');
         }
     }
-    
+
     function calculateInvestmentAnalysis() {
         try {
             const monthlyAmount = parseFloat(document.getElementById('analysisMonthlyAmount')?.value);
             const annualReturn = parseFloat(document.getElementById('analysisReturnRate')?.value);
             const years = parseFloat(document.getElementById('analysisPeriod')?.value);
             const inflationRate = parseFloat(document.getElementById('inflationRate')?.value) || 6;
-            
+
             if (!monthlyAmount || !annualReturn || !years) {
                 showError('Please fill all analysis details');
                 return;
             }
-            
+
             const monthlyReturn = annualReturn / 12 / 100;
             const totalMonths = years * 12;
             const totalInvestment = monthlyAmount * totalMonths;
-            
+
             let nominalValue;
             if (monthlyReturn === 0) {
                 nominalValue = totalInvestment;
             } else {
                 nominalValue = monthlyAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
             }
-            
+
             // Real value calculation (inflation adjusted)
             const realValue = nominalValue / Math.pow(1 + inflationRate / 100, years);
             const realReturns = realValue - totalInvestment;
-            
+
             // Update display
             const elements = {
                 nominalValue: document.getElementById('nominalValue'),
@@ -1572,7 +1633,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 realReturns: document.getElementById('realReturns'),
                 analysisResults: document.getElementById('analysisResults')
             };
-            
+
             if (elements.nominalValue) {
                 elements.nominalValue.textContent = formatCurrency(nominalValue);
             }
@@ -1588,27 +1649,27 @@ document.addEventListener('DOMContentLoaded', function() {
             if (elements.analysisResults) {
                 elements.analysisResults.style.display = 'block';
             }
-            
+
             updateAnalysisChart(totalInvestment, nominalValue, realValue, years);
-            
+
         } catch (error) {
             logError(error, 'calculateInvestmentAnalysis');
             showError('Error calculating investment analysis');
         }
     }
-    
+
     function updateAnalysisChart(investment, nominalValue, realValue, years) {
         try {
             const chartType = document.getElementById('analysisChartType')?.value || 'line';
-            
+
             if (analysisChart) {
                 analysisChart.destroy();
                 analysisChart = null;
             }
-            
+
             const ctx = document.getElementById('analysisChart');
             if (!ctx) return;
-            
+
             const chartConfig = {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -1638,18 +1699,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             };
-            
+
             if (chartType === 'line') {
                 const monthlyAmount = parseFloat(document.getElementById('analysisMonthlyAmount')?.value);
                 const annualReturn = parseFloat(document.getElementById('analysisReturnRate')?.value);
                 const inflationRate = parseFloat(document.getElementById('inflationRate')?.value) || 6;
-                
+
                 const yearlyData = [];
                 for (let year = 1; year <= years; year++) {
                     const yearlyInvestment = monthlyAmount * 12 * year;
                     const yearlyNominal = calculateMaturityForYear(monthlyAmount, annualReturn, year);
                     const yearlyReal = yearlyNominal / Math.pow(1 + inflationRate / 100, year);
-                    
+
                     yearlyData.push({
                         year: year,
                         investment: yearlyInvestment,
@@ -1657,7 +1718,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         real: yearlyReal
                     });
                 }
-                
+
                 analysisChart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -1717,19 +1778,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const monthlyAmount = parseFloat(document.getElementById('analysisMonthlyAmount')?.value);
                 const annualReturn = parseFloat(document.getElementById('analysisReturnRate')?.value);
                 const inflationRate = parseFloat(document.getElementById('inflationRate')?.value) || 6;
-                
+
                 const yearlyData = [];
                 for (let year = 1; year <= years; year++) {
                     const yearlyNominal = calculateMaturityForYear(monthlyAmount, annualReturn, year);
                     const yearlyReal = yearlyNominal / Math.pow(1 + inflationRate / 100, year);
-                    
+
                     yearlyData.push({
                         year: year,
                         nominal: yearlyNominal,
                         real: yearlyReal
                     });
                 }
-                
+
                 analysisChart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -1760,7 +1821,39 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateAnalysisChart');
         }
     }
-    
+
+     // Initialize validation for Lumpsum vs SIP inputs
+     const lumpsumInputs = ['investmentAmount', 'alternativeSIP', 'comparisonReturnRate', 'comparisonPeriod'];
+     lumpsumInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.removeAttribute('max');
+            input.removeAttribute('min');
+            clearErrorState(input);
+            input.classList.remove('input-error', 'input-success');
+
+            input.addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    clearErrorState(this);
+                    this.classList.remove('input-error', 'input-success');
+                } else {
+                    validateLumpsumInput(this);
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    validateLumpsumInput(this);
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                clearErrorState(this);
+                this.classList.remove('input-error');
+            });
+        }
+    });
+
     // Lumpsum vs SIP Comparison
     function initLumpsumComparison() {
         try {
@@ -1768,7 +1861,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const refreshComparisonBtn = document.getElementById('refreshComparison2');
             const chartTypeSelector = document.getElementById('lumpsumChartType');
             const downloadPDFBtn = document.getElementById('downloadLumpsumPDF');
-            
+
             if (compareInvestmentBtn) {
                 compareInvestmentBtn.addEventListener('click', function() {
                     if (validateLumpsumInputs()) {
@@ -1777,14 +1870,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (refreshComparisonBtn) {
                 refreshComparisonBtn.addEventListener('click', function() {
                     resetLumpsumInputs();
                     showSuccess('Comparison refreshed!');
                 });
             }
-            
+
             if (chartTypeSelector) {
                 chartTypeSelector.addEventListener('change', function() {
                     const results = document.getElementById('lumpsumResults');
@@ -1793,7 +1886,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             if (downloadPDFBtn) {
                 downloadPDFBtn.addEventListener('click', generateLumpsumPDF);
             }
@@ -1801,51 +1894,51 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'initLumpsumComparison');
         }
     }
-    
+
     function validateLumpsumInputs() {
         try {
             const lumpsumAmount = document.getElementById('investmentAmount')?.value;
             const sipAmount = document.getElementById('alternativeSIP')?.value;
             const returnRate = document.getElementById('comparisonReturnRate')?.value;
             const period = document.getElementById('comparisonPeriod')?.value;
-            
+
             if (!lumpsumAmount || !sipAmount || !returnRate || !period) {
                 showError('Please fill all comparison details');
                 return false;
             }
-            
+
             const lumpsumValidation = validateNumber(lumpsumAmount, 10000, 100000000);
             const sipValidation = validateNumber(sipAmount, 100, 1000000);
             const returnValidation = validateNumber(returnRate, 0.1, 50);
             const periodValidation = validateNumber(period, 1, 50);
-            
+
             if (!lumpsumValidation.valid) {
                 showError(`Lumpsum Amount: ${lumpsumValidation.message}`);
                 return false;
             }
-            
+
             if (!sipValidation.valid) {
                 showError(`SIP Amount: ${sipValidation.message}`);
                 return false;
             }
-            
+
             if (!returnValidation.valid) {
                 showError(`Return Rate: ${returnValidation.message}`);
                 return false;
             }
-            
+
             if (!periodValidation.valid) {
                 showError(`Period: ${periodValidation.message}`);
                 return false;
             }
-            
+
             return true;
         } catch (error) {
             logError(error, 'validateLumpsumInputs');
             return false;
         }
     }
-    
+
     function resetLumpsumInputs() {
         try {
             const inputs = ['investmentAmount', 'alternativeSIP', 'comparisonReturnRate', 'comparisonPeriod'];
@@ -1855,12 +1948,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.value = '';
                 }
             });
-            
+
             const lumpsumResults = document.getElementById('lumpsumResults');
             if (lumpsumResults) {
                 lumpsumResults.style.display = 'none';
             }
-            
+
             if (lumpsumChart) {
                 lumpsumChart.destroy();
                 lumpsumChart = null;
@@ -1869,37 +1962,37 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'resetLumpsumInputs');
         }
     }
-    
+
     function calculateLumpsumComparison() {
         try {
             const lumpsumAmount = parseFloat(document.getElementById('investmentAmount')?.value);
             const sipAmount = parseFloat(document.getElementById('alternativeSIP')?.value);
             const annualReturn = parseFloat(document.getElementById('comparisonReturnRate')?.value);
             const years = parseFloat(document.getElementById('comparisonPeriod')?.value);
-            
+
             if (!lumpsumAmount || !sipAmount || !annualReturn || !years) {
                 showError('Please fill all comparison details');
                 return;
             }
-            
+
             // Lumpsum calculation
             const lumpsumFinal = lumpsumAmount * Math.pow(1 + annualReturn / 100, years);
             const lumpsumReturns = lumpsumFinal - lumpsumAmount;
-            
+
             // SIP calculation
             const monthlyReturn = annualReturn / 12 / 100;
             const totalMonths = years * 12;
             const sipTotalInvested = sipAmount * totalMonths;
-            
+
             let sipFinalValue;
             if (monthlyReturn === 0) {
                 sipFinalValue = sipTotalInvested;
             } else {
                 sipFinalValue = sipAmount * ((Math.pow(1 + monthlyReturn, totalMonths) - 1) / monthlyReturn);
             }
-            
+
             const sipTotalReturns = sipFinalValue - sipTotalInvested;
-            
+
             // Update display
             const elements = {
                 lumpsumInitial: document.getElementById('lumpsumInitial'),
@@ -1911,7 +2004,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 investmentRecommendation: document.getElementById('investmentRecommendation'),
                 lumpsumResults: document.getElementById('lumpsumResults')
             };
-            
+
             if (elements.lumpsumInitial) {
                 elements.lumpsumInitial.textContent = formatCurrency(lumpsumAmount);
             }
@@ -1930,7 +2023,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (elements.sipTotalReturns) {
                 elements.sipTotalReturns.textContent = formatCurrency(sipTotalReturns);
             }
-            
+
             // Recommendation
             const difference = Math.abs(lumpsumFinal - sipFinalValue);
             let recommendation;
@@ -1941,35 +2034,35 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 recommendation = 'Both investment strategies generate similar wealth';
             }
-            
+
             if (elements.investmentRecommendation) {
                 elements.investmentRecommendation.textContent = recommendation;
             }
-            
+
             if (elements.lumpsumResults) {
                 elements.lumpsumResults.style.display = 'block';
             }
-            
+
             updateLumpsumChart(lumpsumAmount, lumpsumFinal, sipTotalInvested, sipFinalValue, years);
-            
+
         } catch (error) {
             logError(error, 'calculateLumpsumComparison');
             showError('Error calculating investment comparison');
         }
     }
-    
+
     function updateLumpsumChart(lumpsumInitial, lumpsumFinal, sipInvested, sipFinal, years) {
         try {
             const chartType = document.getElementById('lumpsumChartType')?.value || 'line';
-            
+
             if (lumpsumChart) {
                 lumpsumChart.destroy();
                 lumpsumChart = null;
             }
-            
+
             const ctx = document.getElementById('lumpsumChart');
             if (!ctx) return;
-            
+
             const chartConfig = {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -1999,23 +2092,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             };
-            
+
             if (chartType === 'line') {
                 const annualReturn = parseFloat(document.getElementById('comparisonReturnRate')?.value);
                 const sipAmount = parseFloat(document.getElementById('alternativeSIP')?.value);
-                
+
                 const yearlyData = [];
                 for (let year = 1; year <= years; year++) {
                     const lumpsumValue = lumpsumInitial * Math.pow(1 + annualReturn / 100, year);
                     const sipValue = calculateMaturityForYear(sipAmount, annualReturn, year);
-                    
+
                     yearlyData.push({
                         year: year,
                         lumpsum: lumpsumValue,
                         sip: sipValue
                     });
                 }
-                
+
                 lumpsumChart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -2093,24 +2186,24 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'updateLumpsumChart');
         }
     }
-    
+
     // Navigation functions for Tools tab
     window.goToEmiCalculator = function() {
         window.location.href = 'emi-calculator.html';
     };
-    
+
     window.goToGstCalculator = function() {
         window.location.href = 'gst-calculator.html';
     };
-    
+
     window.goToFdCalculator = function() {
         window.location.href = 'fd-calculator.html';
     };
-    
+
     window.goToTaxCalculator = function() {
         window.location.href = 'tax-calculator.html';
     };
-    
+
     // Enhanced PDF Generation Functions with error handling
     function generateSIPPDF() {
         try {
@@ -2118,177 +2211,177 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             // Header with enhanced styling
             doc.setFontSize(24);
             doc.setTextColor(0, 100, 200);
             doc.text('PRATIX FINANCE', 20, 25);
-            
+
             doc.setFontSize(18);
             doc.setTextColor(0, 0, 0);
             doc.text('SIP Calculator Report', 20, 40);
-            
+
             // Add timestamp
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text(`Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 50);
-            
+
             // Input Data
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0);
             doc.text('Input Parameters:', 20, 70);
-            
+
             const monthlyAmount = document.getElementById('monthlyAmountInput')?.value || '0';
             const returnRate = document.getElementById('returnRateInput')?.value || '0';
             const period = document.getElementById('investmentPeriodInput')?.value || '0';
             const sipType = document.querySelector('input[name="sipType"]:checked')?.value || 'regular';
-            
+
             doc.setFontSize(12);
             doc.text(`Monthly Investment: ${formatCurrency(parseFloat(monthlyAmount) || 0)}`, 20, 85);
             doc.text(`Expected Return: ${returnRate}% per annum`, 20, 100);
             doc.text(`Investment Period: ${period} years`, 20, 115);
             doc.text(`SIP Type: ${sipType === 'regular' ? 'Regular SIP' : 'Step-up SIP'}`, 20, 130);
-            
+
             // Results
             doc.setFontSize(14);
             doc.text('Calculated Results:', 20, 150);
-            
+
             const totalInvestment = document.getElementById('totalInvestment')?.textContent || formatCurrency(0);
             const totalReturns = document.getElementById('totalReturns')?.textContent || formatCurrency(0);
             const maturityValue = document.getElementById('maturityValue')?.textContent || formatCurrency(0);
-            
+
             doc.setFontSize(12);
             doc.text(`Total Investment: ${totalInvestment}`, 20, 165);
             doc.text(`Total Returns: ${totalReturns}`, 20, 180);
             doc.text(`Maturity Value: ${maturityValue}`, 20, 195);
-            
+
             // Add disclaimer
             doc.setFontSize(10);
             doc.setTextColor(150, 150, 150);
             doc.text('Disclaimer: This calculation is for illustrative purposes only.', 20, 220);
             doc.text('Actual returns may vary based on market conditions.', 20, 235);
-            
+
             // Footer
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
-            
+
             doc.save('SIP_Calculator_Report.pdf');
             showSuccess('PDF downloaded successfully!');
-            
+
         } catch (error) {
             logError(error, 'generateSIPPDF');
             showError('Failed to generate PDF. Please try again.');
         }
     }
-    
+
     function generateGoalPDF() {
         try {
             if (typeof jsPDF === 'undefined') {
                 showError('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             // Header
             doc.setFontSize(24);
             doc.setTextColor(0, 100, 200);
             doc.text('PRATIX FINANCE', 20, 25);
-            
+
             doc.setFontSize(18);
             doc.setTextColor(0, 0, 0);
             doc.text('Goal Based SIP Planning Report', 20, 40);
-            
+
             // Add timestamp
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text(`Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 50);
-            
+
             // Input Data
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0);
             doc.text('Goal Parameters:', 20, 70);
-            
+
             const targetAmount = document.getElementById('targetAmount')?.value || '0';
             const goalYears = document.getElementById('goalYears')?.value || '0';
             const goalReturn = document.getElementById('goalReturnRate')?.value || '0';
             const goalType = document.getElementById('goalType')?.value || 'Custom Goal';
-            
+
             doc.setFontSize(12);
             doc.text(`Goal Type: ${goalType}`, 20, 85);
             doc.text(`Target Amount: ${formatCurrency(parseFloat(targetAmount) || 0)}`, 20, 100);
             doc.text(`Time Period: ${goalYears} years`, 20, 115);
             doc.text(`Expected Return: ${goalReturn}% per annum`, 20, 130);
-            
+
             // Results
             doc.setFontSize(14);
             doc.text('Required Investment:', 20, 150);
-            
+
             const requiredSIP = document.getElementById('requiredSIP')?.textContent || formatCurrency(0);
             const goalTotalInvestment = document.getElementById('goalTotalInvestment')?.textContent || formatCurrency(0);
             const goalTotalReturns = document.getElementById('goalTotalReturns')?.textContent || formatCurrency(0);
-            
+
             doc.setFontSize(12);
             doc.text(`Required Monthly SIP: ${requiredSIP}`, 20, 165);
             doc.text(`Total Investment: ${goalTotalInvestment}`, 20, 180);
             doc.text(`Total Returns: ${goalTotalReturns}`, 20, 195);
-            
+
             // Add tips
             doc.setFontSize(10);
             doc.setTextColor(150, 150, 150);
             doc.text('Tips: Start investing early, invest regularly, and review your goals periodically.', 20, 220);
-            
+
             // Footer
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
-            
+
             doc.save('SIP_Goal_Planning_Report.pdf');
             showSuccess('PDF downloaded successfully!');
-            
+
         } catch (error) {
             logError(error, 'generateGoalPDF');
             showError('Failed to generate PDF. Please try again.');
         }
     }
-    
+
     function generateComparisonPDF() {
         try {
             if (typeof jsPDF === 'undefined') {
                 showError('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             // Header
             doc.setFontSize(24);
             doc.setTextColor(0, 100, 200);
             doc.text('PRATIX FINANCE', 20, 25);
-            
+
             doc.setFontSize(18);
             doc.setTextColor(0, 0, 0);
             doc.text('SIP Comparison Report', 20, 40);
-            
+
             // Add timestamp
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text(`Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 50);
-            
+
             // Comparison Results
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0);
             doc.text('SIP Comparison Results:', 20, 70);
-            
+
             const tableRows = document.querySelectorAll('#comparisonTableBody tr');
             let yPosition = 85;
-            
+
             doc.setFontSize(12);
             tableRows.forEach((row, index) => {
                 const cells = row.querySelectorAll('td');
@@ -2299,191 +2392,191 @@ document.addEventListener('DOMContentLoaded', function() {
                     yPosition += 45;
                 }
             });
-            
+
             // Footer
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
-            
+
             doc.save('SIP_Comparison_Report.pdf');
             showSuccess('PDF downloaded successfully!');
-            
+
         } catch (error) {
             logError(error, 'generateComparisonPDF');
             showError('Failed to generate PDF. Please try again.');
         }
     }
-    
+
     function generateAnalysisPDF() {
         try {
             if (typeof jsPDF === 'undefined') {
                 showError('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             // Header
             doc.setFontSize(24);
             doc.setTextColor(0, 100, 200);
             doc.text('PRATIX FINANCE', 20, 25);
-            
+
             doc.setFontSize(18);
             doc.setTextColor(0, 0, 0);
             doc.text('Investment Analysis Report', 20, 40);
-            
+
             // Add timestamp
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text(`Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 50);
-            
+
             // Input Data
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0);
             doc.text('Analysis Parameters:', 20, 70);
-            
+
             const monthlyAmount = document.getElementById('analysisMonthlyAmount')?.value || '0';
             const returnRate = document.getElementById('analysisReturnRate')?.value || '0';
             const period = document.getElementById('analysisPeriod')?.value || '0';
             const inflationRate = document.getElementById('inflationRate')?.value || '6';
-            
+
             doc.setFontSize(12);
             doc.text(`Monthly Investment: ${formatCurrency(parseFloat(monthlyAmount) || 0)}`, 20, 85);
             doc.text(`Expected Return: ${returnRate}% per annum`, 20, 100);
             doc.text(`Investment Period: ${period} years`, 20, 115);
             doc.text(`Inflation Rate: ${inflationRate}% per annum`, 20, 130);
-            
+
             // Results
             doc.setFontSize(14);
             doc.text('Analysis Results:', 20, 150);
-            
+
             const nominalValue = document.getElementById('nominalValue')?.textContent || formatCurrency(0);
             const realValue = document.getElementById('realValue')?.textContent || formatCurrency(0);
             const totalInvestment = document.getElementById('analysisTotalInvestment')?.textContent || formatCurrency(0);
             const realReturns = document.getElementById('realReturns')?.textContent || formatCurrency(0);
-            
+
             doc.setFontSize(12);
             doc.text(`Nominal Value: ${nominalValue}`, 20, 165);
             doc.text(`Real Value (Inflation Adjusted): ${realValue}`, 20, 180);
             doc.text(`Total Investment: ${totalInvestment}`, 20, 195);
             doc.text(`Real Returns: ${realReturns}`, 20, 210);
-            
+
             // Footer
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
-            
+
             doc.save('SIP_Investment_Analysis_Report.pdf');
             showSuccess('PDF downloaded successfully!');
-            
+
         } catch (error) {
             logError(error, 'generateAnalysisPDF');
             showError('Failed to generate PDF. Please try again.');
         }
     }
-    
+
     function generateLumpsumPDF() {
         try {
             if (typeof jsPDF === 'undefined') {
                 showError('PDF library not loaded. Please refresh the page and try again.');
                 return;
             }
-            
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
             // Header
             doc.setFontSize(24);
             doc.setTextColor(0, 100, 200);
             doc.text('PRATIX FINANCE', 20, 25);
-            
+
             doc.setFontSize(18);
             doc.setTextColor(0, 0, 0);
             doc.text('Lumpsum vs SIP Comparison Report', 20, 40);
-            
+
             // Add timestamp
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text(`Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 50);
-            
+
             // Input Data
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0);
             doc.text('Comparison Parameters:', 20, 70);
-            
+
             const lumpsumAmount = document.getElementById('investmentAmount')?.value || '0';
             const sipAmount = document.getElementById('alternativeSIP')?.value || '0';
             const returnRate = document.getElementById('comparisonReturnRate')?.value || '0';
             const period = document.getElementById('comparisonPeriod')?.value || '0';
-            
+
             doc.setFontSize(12);
             doc.text(`Lumpsum Amount: ${formatCurrency(parseFloat(lumpsumAmount) || 0)}`, 20, 85);
             doc.text(`Monthly SIP: ${formatCurrency(parseFloat(sipAmount) || 0)}`, 20, 100);
             doc.text(`Expected Return: ${returnRate}% per annum`, 20, 115);
             doc.text(`Investment Period: ${period} years`, 20, 130);
-            
+
             // Results
             doc.setFontSize(14);
             doc.text('Comparison Results:', 20, 150);
-            
+
             const lumpsumFinal = document.getElementById('lumpsumFinal')?.textContent || formatCurrency(0);
             const sipFinalValue = document.getElementById('sipFinalValue')?.textContent || formatCurrency(0);
             const recommendation = document.getElementById('investmentRecommendation')?.textContent || '';
-            
+
             doc.setFontSize(12);
             doc.text(`Lumpsum Final Value: ${lumpsumFinal}`, 20, 165);
             doc.text(`SIP Final Value: ${sipFinalValue}`, 20, 180);
             doc.text(`Recommendation: ${recommendation}`, 20, 195);
-            
+
             // Footer
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
             doc.text('© 2025 RAGHAV PRATAP | PRATIX FINANCE | https://pratix-finance.vercel.app/', 20, 280);
-            
+
             doc.save('SIP_Lumpsum_Comparison_Report.pdf');
             showSuccess('PDF downloaded successfully!');
-            
+
         } catch (error) {
             logError(error, 'generateLumpsumPDF');
             showError('Failed to generate PDF. Please try again.');
         }
     }
-    
+
     // Enhanced notification system with queue support
     let notificationQueue = [];
     let isShowingNotification = false;
-    
+
     function showNotification(message, type = 'info', duration = 3000) {
         const notification = { message, type, duration };
         notificationQueue.push(notification);
-        
+
         if (!isShowingNotification) {
             displayNextNotification();
         }
     }
-    
+
     function displayNextNotification() {
         if (notificationQueue.length === 0) {
             isShowingNotification = false;
             return;
         }
-        
+
         isShowingNotification = true;
         const { message, type, duration } = notificationQueue.shift();
-        
+
         try {
             // Remove existing notification
             const existingNotification = document.querySelector('.notification');
             if (existingNotification) {
                 existingNotification.remove();
             }
-            
+
             const notification = document.createElement('div');
             notification.className = 'notification';
             notification.setAttribute('role', 'alert');
             notification.setAttribute('aria-live', 'polite');
-            
+
             notification.style.cssText = `
                 position: fixed;
                 top: 6rem;
@@ -2504,7 +2597,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 font-size: 0.95rem;
                 line-height: 1.4;
             `;
-            
+
             // Type-specific styling
             if (type === 'success') {
                 notification.style.borderColor = '#00ff88';
@@ -2519,7 +2612,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 notification.style.boxShadow = '0 12px 40px rgba(0, 212, 255, 0.3)';
                 notification.style.background = 'linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 0, 0, 0.95))';
             }
-            
+
             notification.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
                     <span style="flex: 1;">${message}</span>
@@ -2533,9 +2626,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             aria-label="Close notification">×</button>
                 </div>
             `;
-            
+
             document.body.appendChild(notification);
-            
+
             // Auto remove
             setTimeout(() => {
                 if (notification.parentNode) {
@@ -2550,14 +2643,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayNextNotification();
                 }
             }, duration);
-            
+
         } catch (error) {
             logError(error, 'displayNextNotification');
             isShowingNotification = false;
             setTimeout(displayNextNotification, 100);
         }
     }
-    
+
     // Add CSS animations
     const style = document.createElement('style');
     style.textContent = `
@@ -2571,7 +2664,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 transform: translate(-50%, 0);
             }
         }
-        
+
         @keyframes slideOutUp {
             from {
                 opacity: 1;
@@ -2582,25 +2675,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 transform: translate(-50%, -100%);
             }
         }
-        
+
         .error-message {
             color: #ff4757;
             font-size: 0.8rem;
             margin-top: 0.25rem;
             font-weight: 500;
         }
-        
+
         .calc-input[aria-invalid="true"] {
             border-color: #ff4757 !important;
             box-shadow: 0 0 0 2px rgba(255, 71, 87, 0.2) !important;
         }
-        
+
         .calc-input:focus[aria-invalid="true"] {
             box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1) !important;
         }
     `;
     document.head.appendChild(style);
-    
+
     // Cleanup function for charts
     function cleanupCharts() {
         try {
@@ -2613,16 +2706,16 @@ document.addEventListener('DOMContentLoaded', function() {
             logError(error, 'cleanupCharts');
         }
     }
-    
+
     // Window cleanup
     window.addEventListener('beforeunload', cleanupCharts);
-    
+
     // Global error handler
     window.addEventListener('error', function(e) {
         logError(e.error || new Error(e.message), 'Global Error Handler');
         showError('An unexpected error occurred. Please refresh the page if problems persist.');
     });
-    
+
     // Accessibility improvements
     function initAccessibility() {
         try {
@@ -2631,7 +2724,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navItems.forEach(item => {
                 item.setAttribute('role', 'tab');
                 item.setAttribute('tabindex', '0');
-                
+
                 item.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -2639,7 +2732,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             });
-            
+
             // Add ARIA labels to inputs
             const inputs = document.querySelectorAll('.calc-input');
             inputs.forEach(input => {
@@ -2648,7 +2741,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.setAttribute('aria-label', label.textContent);
                 }
             });
-            
+
             // Add ARIA labels to buttons
             const buttons = document.querySelectorAll('button');
             buttons.forEach(button => {
@@ -2656,12 +2749,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.setAttribute('aria-label', button.textContent.trim());
                 }
             });
-            
+
         } catch (error) {
             logError(error, 'initAccessibility');
         }
     }
-    
+
     // Performance monitoring
     function initPerformanceMonitoring() {
         try {
@@ -2674,7 +2767,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(`SIP calculation took ${end - start} milliseconds`);
                 return result;
             };
-            
+
             // Monitor memory usage
             if (performance.memory) {
                 setInterval(() => {
@@ -2684,16 +2777,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }, 30000);
             }
-            
+
         } catch (error) {
             logError(error, 'initPerformanceMonitoring');
         }
     }
-    
+
     // Initialize all components
     try {
         console.log('Initializing SIP Calculator...');
-        
+
         initTabNavigation();
         initSIPCalculator();
         initGoalPlanning();
@@ -2702,12 +2795,107 @@ document.addEventListener('DOMContentLoaded', function() {
         initLumpsumComparison();
         initAccessibility();
         initPerformanceMonitoring();
-        
+
         console.log('SIP Calculator initialized successfully!');
         showNotification('Welcome to Professional SIP Calculator!', 'success');
-        
+
     } catch (error) {
         logError(error, 'Main Initialization');
         showError('Failed to initialize calculator. Please refresh the page.');
     }
 });
+
+// Validation functions for other tabs
+function validateGoalInput(input) {
+    try {
+        const value = input.value.trim();
+        let validation;
+
+        switch (input.id) {
+            case 'targetAmount':
+            case 'goalYears':
+            case 'goalReturnRate':
+                validation = validateNumber(value, true);
+                break;
+            default:
+                validation = { valid: true };
+        }
+
+        if (!validation.valid) {
+            showInputError(input, validation.message);
+            setInputState(input, 'error');
+            return false;
+        } else {
+            clearErrorState(input);
+            setInputState(input, 'success');
+            return true;
+        }
+    } catch (error) {
+        logError(error, 'validateGoalInput');
+        return false;
+    }
+}
+
+function validateAnalysisInput(input) {
+    try {
+        const value = input.value.trim();
+        let validation;
+
+        switch (input.id) {
+            case 'analysisMonthlyAmount':
+            case 'analysisReturnRate':
+            case 'analysisPeriod':
+                validation = validateNumber(value, true);
+                break;
+            case 'inflationRate':
+                validation = validateNumber(value, false); // Inflation rate is optional
+                break;
+            default:
+                validation = { valid: true };
+        }
+
+        if (!validation.valid) {
+            showInputError(input, validation.message);
+            setInputState(input, 'error');
+            return false;
+        } else {
+            clearErrorState(input);
+            setInputState(input, 'success');
+            return true;
+        }
+    } catch (error) {
+        logError(error, 'validateAnalysisInput');
+        return false;
+    }
+}
+
+function validateLumpsumInput(input) {
+    try {
+        const value = input.value.trim();
+        let validation;
+
+        switch (input.id) {
+            case 'investmentAmount':
+            case 'alternativeSIP':
+            case 'comparisonReturnRate':
+            case 'comparisonPeriod':
+                validation = validateNumber(value, true);
+                break;
+            default:
+                validation = { valid: true };
+        }
+
+        if (!validation.valid) {
+            showInputError(input, validation.message);
+            setInputState(input, 'error');
+            return false;
+        } else {
+            clearErrorState(input);
+            setInputState(input, 'success');
+            return true;
+        }
+    } catch (error) {
+        logError(error, 'validateLumpsumInput');
+        return false;
+    }
+}
