@@ -139,6 +139,20 @@ body::after {
   align-items: center;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+  object-fit: cover;
+}
+
 .app-title {
   font-size: 1.75rem;
   font-weight: 800;
