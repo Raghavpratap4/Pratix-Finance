@@ -1345,6 +1345,25 @@ body::after {
   .bottom-nav,
   .standard-bottom-nav {
       display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+  }
+  
+  /* Remove bottom padding from main content on desktop */
+  .main-app-content {
+      padding-bottom: 0 !important;
+  }
+  
+  /* Remove footer margin on desktop */
+  .simple-footer,
+  .professional-footer {
+      margin-bottom: 0 !important;
+  }
+  
+  /* Remove body padding on desktop */
+  body {
+      padding-bottom: 0 !important;
   }
 }
 
@@ -2428,8 +2447,11 @@ html {
 
 /* Ensure standardized bottom nav is hidden on desktop */
 @media (min-width: 1024px) {
+  .bottom-nav,
   .standard-bottom-nav {
       display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
   }
 }
 
