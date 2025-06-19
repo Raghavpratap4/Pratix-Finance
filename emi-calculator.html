@@ -170,16 +170,16 @@
                                 <label>Loan Amount</label>
                                 <div class="input-wrapper">
                                     <span class="currency">₹</span>
-                                    <input type="number" id="loanAmountInput" placeholder="Enter loan amount (e.g., 1000000)" class="calc-input" step="1000">
+                                    <input type="number" id="loanAmountInput" placeholder="Enter loan amount" class="calc-input" step="1000">
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Interest Rate (%)</label>
-                                <input type="number" id="interestRateInput" placeholder="Enter annual interest rate (e.g., 8.5)" class="calc-input" min="0.1" max="50" step="0.01">
+                                <input type="number" id="interestRateInput" placeholder="Enter interest rate" class="calc-input" min="0.1" max="50" step="0.01">
                             </div>
                             <div class="input-group">
                                 <label>Loan Tenure (Years)</label>
-                                <input type="number" id="loanTenureInput" placeholder="Enter tenure in years (e.g., 20)" class="calc-input" min="1" max="50" step="1">
+                                <input type="number" id="loanTenureInput" placeholder="Enter tenure in years" class="calc-input" min="1" max="50" step="1">
                             </div>
                             <div class="button-group">
                                 <button class="calculate-btn" id="calculateEMI">
@@ -294,13 +294,13 @@
                             <label>Prepayment Amount</label>
                             <div class="input-wrapper">
                                 <span class="currency">₹</span>
-                                <input type="number" id="prepaymentAmount" placeholder="Enter prepayment amount (e.g., 200000)" class="calc-input">
+                                <input type="number" id="prepaymentAmount" placeholder="Enter prepayment amount" class="calc-input">
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label>Prepay After (Months)</label>
-                            <input type="number" id="prepayAfterMonths" placeholder="Enter number of months (e.g., 12)" class="calc-input">
+                            <input type="number" id="prepayAfterMonths" placeholder="Enter number of months" class="calc-input">
                         </div>
 
                         <div class="input-group">
@@ -701,7 +701,7 @@
                     </div>
 
                     <!-- Regional Settings -->
-                    <div class="settings-section">```text
+                    <div class="settings-section">
                         <h3 class="settings-section-title">Regional Settings</h3>
                         <div class="settings-list">
                             <div class="setting-item">
@@ -850,7 +850,7 @@
                         <div class="footer-section-elite">
                             <h4 class="footer-section-title-elite">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
                                     <circle cx="12" cy="12" r="3"/>
                                 </svg>
                                 Calculators
@@ -1016,595 +1016,6 @@
     </button>
     </nav>
 
-        <div id="loanInputsGrid" class="loan-inputs-grid">
-                            <!-- Loan input cards will be generated by JavaScript -->
-                        </div>
-
-                        <div class="button-group">
-                            <button class="calculate-btn" id="compareLoans">
-                                <span class="btn-text">Compare Loans</span>
-                            </button>
-                            <button class="refresh-btn" id="refreshComparison">
-                                <span class="btn-text">Reset</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="comparisonResults" style="display: none;">
-                        <h3>Comparison Results</h3>
-                        <div class="results-table-container">
-                            <table class="comparison-table">
-                                <thead>
-                                    <tr>
-                                        <th>Loan Option</th>
-                                        <th>Monthly EMI</th>
-                                        <th>Total Interest</th>
-                                        <th>Total Repayment</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="comparisonTableBody">
-                                    <!-- Results will be populated here -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="input-group">
-                            <label>Chart Type</label>
-                            <select id="comparisonChartType" class="calc-input">
-                                <option value="bar">Bar Chart</option>
-                                <option value="pie">Pie Chart</option>
-                                <option value="line">Line Chart</option>
-                            </select>
-                        </div>
-
-                        <!-- Bar Chart -->
-                        <div class="chart-container glow-chart">
-                            <div class="chart-title">Loan Comparison Analysis</div>
-                            <div class="chart-wrapper">
-                                <canvas id="loanComparisonChart" width="400" height="300"></canvas>
-                            </div>
-                        </div>
-
-                        <div class="download-section">
-                            <button class="feature-btn" id="downloadComparisonPDF">
-                                <span class="btn-text">Download Comparison PDF</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Tools & Extras Tab -->
-            <section id="tools-extras" class="tab-content">
-                <div class="glass-card">
-                    <h2 class="section-title">Related Financial Tools</h2>
-                    <p class="section-description">Access other calculators to complete your financial planning</p>
-
-                    <div class="tools-grid">
-                        <div class="tool-card" onclick="goToSipCalculator()">
-                            <div class="tool-icon">📈</div>
-                            <h3>SIP Calculator</h3>
-                            <p>Plan systematic investments and wealth creation</p>
-                            <div class="tool-features">
-                                <span>Goal Planning</span>
-                                <span>Step-up SIP SIP</span>
-                                <span>Returns Analysis</span>
-                            </div>
-                        </div>
-
-                        <div class="tool-card" onclick="goToTaxCalculator()">
-                            <div class="tool-icon">💼</div>
-                            <h3>Income Tax Calculator</h3>
-                            <p>Calculate tax liability under old and new regimes</p>
-                            <div class="tool-features">
-                                <span>Tax Comparison</span>
-                                <span>Deduction Planning</span>
-                                <span>Salary Breakdown</span>
-                            </div>
-                        </div>
-
-                        <div class="tool-card" onclick="goToGstCalculator()">
-                            <div class="tool-icon">📊</div>
-                            <h3>GST Calculator</h3>
-                            <p>Calculate GST for business transactions</p>
-                            <div class="tool-features">
-                                <span>Invoice Generation</span>
-                                <span>HSN Lookup</span>
-                                <span>Returns Filing</span>
-                            </div>
-                        </div>
-
-                        <div class="tool-card" onclick="goToFdCalculator()">
-                            <div class="tool-icon">🏦</div>
-                            <h3>FD Calculator</h3>
-                            <p>Calculate fixed deposit returns and compare rates</p>
-                            <div class="tool-features">
-                                <span>Maturity Calculation</span>
-                                <span>Bank Comparison</span>
-                                <span>Tax Impact</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="financial-tips">
-                        <h3>Financial Planning Tips</h3>
-                        <div class="tips-grid">
-                            <div class="tip-card">
-                                <h4>🎯 Set Clear Goals</h4>
-                                <p>Define your financial objectives - home purchase, retirement, children's education, etc.</p>
-                            </div>
-                            <div class="tip-card">
-                                <h4>📊 Diversify Investments</h4>
-                                <p>Don't put all money in one basket. Mix FDs, SIPs, PPF, and other instruments.</p>
-                            </div>
-                            <div class="tip-card">
-                                <h4>💰 Emergency Fund</h4>
-                                <p>Maintain 6-12 months of expenses in liquid funds before taking major loans.</p>
-                            </div>
-                            <div class="tip-card">
-                                <h4>📈 Review Regularly</h4>
-                                <p>Review your financial plan annually and adjust based on life changes.</p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </section>
-
-            <!-- Smart Features Tab -->
-            <section id="smart-features" class="tab-content">
-                <div class="glass-card">
-                    <h2 class="section-title">Smart Features</h2>
-
-                    <!-- Loan Plan Management -->
-                    <div class="feature-section">
-                        <h3 class="feature-section-title">Loan Plan Management</h3>
-                        <div class="plan-management-grid">
-                            <div class="plan-card">
-                                <div class="plan-icon">💾</div>
-                                <h4>Save Plan</h4>
-                                <p>Save your current EMI calculation to browser storage</p>
-                                <button class="feature-btn" id="saveLoanPlan">Save Current Plan</button>
-                            </div>
-                            <div class="plan-card">
-                                <div class="plan-icon">📤</div>
-                                <h4>Share Plan</h4>
-                                <p>Share current or saved plans via link or WhatsApp</p>
-                                <button class="feature-btn" id="shareLoanPlan">Share Plan</button>
-                            </div>
-                            <div class="plan-card">
-                                <div class="plan-icon">⏰</div>
-                                <h4>Reminder Feature</h4>
-                                <p>Set EMI reminders with browser notifications</p>
-                                <button class="feature-btn" id="addEMIReminder">Set Reminder</button>
-                            </div>
-                            <div class="plan-card">
-                                <div class="plan-icon">🤖</div>
-                                <h4>AI Loan Assistance</h4>
-                                <p>Get smart loan optimization suggestions</p>
-                                <button class="feature-btn" id="aiAssistance">Get AI Tips</button>
-                            </div>
-                            <div class="plan-card">
-                                <div class="plan-icon">🔔</div>
-                                <h4>Smart Notification</h4>
-                                <p>Automatic notifications for EMI dues and savings</p>
-                                <button class="feature-btn" id="smartNotifications">Enable Alerts</button>
-                            </div>
-                            <div class="plan-card">
-                                <div class="plan-icon">📊</div>
-                                <h4>Analytics Dashboard</h4>
-                                <p>View charts and statistics of saved plans</p>
-                                <button class="feature-btn" id="analyticsBoard">View Analytics</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Saved Plans -->
-                    <div class="feature-section">
-                        <h3 class="feature-section-title">Saved Plans</h3>
-                        <div class="saved-plans-container" id="savedPlansContainer">
-                            <div class="no-plans-message">
-                                <p>No saved loan plans yet. Calculate an EMI and save your first plan!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Share Modal -->
-                    <div class="modal-overlay" id="shareModal" style="display: none;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3>Share Loan Plan</h3>
-                                <button class="modal-close" id="closeShareModal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="share-option">
-                                    <label>Shareable Link:</label>
-                                    <div class="share-input-group">
-                                        <input type="text" id="shareableLink" readonly class="share-input">
-                                        <button class="copy-btn" id="copyLink">Copy</button>
-                                    </div>
-                                </div>
-                                <div class="share-option">
-                                    <label>Share Text:</label>
-                                    <textarea id="shareText" readonly class="share-textarea"></textarea>
-                                    <button class="copy-btn" id="copyText">Copy Text</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Original Features -->
-                    <div class="feature-section">
-                        <h3 class="feature-section-title">AI & Analytics</h3>
-                        <div class="features-list">
-                            <div class="feature-item">
-                                <div class="feature-icon">🤖</div>
-                                <div class="feature-content">
-                                    <h3>AI Loan Assistant</h3>
-                                    <p>Get personalized loan recommendations based on your profile</p>
-                                    <button class="feature-btn">Try Now</button>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">📱</div>
-                                <div class="feature-content">
-                                    <h3>Smart Notifications</h3>
-                                    <p>Get alerts for rate changes and payment reminders</p>
-                                    <button class="feature-btn">Enable</button>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">📊</div>
-                                <div class="feature-content">
-                                    <h3>Analytics Dashboard</h3>
-                                    <p>Visualize your loan journey with interactive charts</p>
-                                    <button class="feature-btn">View</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Settings Tab -->
-            <section id="settings" class="tab-content">
-                <div class="glass-card">
-                    <h2 class="section-title">Settings</h2>
-
-                    <!-- Theme & Display Settings -->
-                    <div class="settings-section">
-                        <h3 class="settings-section-title">Theme & Display</h3>
-                        <div class="settings-list">
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Dark Mode</h4>
-                                    <p>Toggle between dark and light theme</p>
-                                </div>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="darkMode" checked>
-                                    <label for="darkMode"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Regional Settings -->
-                    <div class="settings-section">
-                        <h3 class="settings-section-title">Regional Settings</h3>
-                        <div class="settings-list">
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Currency                                    <p>Select your preferred currency format</p                                </div>
-                                <select class="setting-select" id="currencySelect">
-                                    <option value="INR" selected>₹ Indian Rupee (INR)</option>
-                                    <option value="USD">$ US Dollar (USD)</option>
-                                    <option value="EUR">€ Euro (EUR)</option>
-                                </select>
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Language</h4>
-                                    <p>Choose your preferred language</p>
-                                </div>
-                                <select class="setting-select" id="languageSelect">
-                                    <option value="en" selected>🇺🇸 English</option>
-                                    <option value="hi">🇮🇳 हिंदी (Hindi)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- App Settings -->
-                    <div class="settings-section">
-                        <h3 class="settings-section-title">App Settings</h3>
-                        <div class="settings-list">
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Notification Settings</h4>
-                                    <p>Toggle smart reminders and alerts on/off</p>
-                                </div>
-                                <button class="setting-btn" id="configureNotifications">Configure</button>
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Export Saved Data</h4>
-                                    <p>Export saved plans in PDF or CSV format</p>
-                                </div>
-                                <button class="setting-btn" id="exportData">Export All Plans</button>
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-info">
-                                    <h4>Reset App</h4>
-                                    <p>Clear all saved data and preferences</p>
-                                </div>
-                                <button class="setting-btn danger" id="resetApp">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- App Version -->
-                    <div class="app-version">
-                        <p>Pratix Finance EMI Calculator v1.0.0</p>
-                        <p>Built with ❤️ for smart financial planning</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Enhanced Professional World-Class Footer -->
-            <footer class="professional-footer">
-                <div class="footer-container">
-                    <!-- Elite Brand Section -->
-                    <div class="footer-brand-elite">
-                        <div class="brand-header-elite">
-                            <img src="logo.png" alt="Pratix Finance" class="footer-logo-elite">
-                            <h3 class="brand-name-elite">PRATIX FINANCE</h3>
-                        </div>
-                        <p class="brand-tagline-elite">World's Most Advanced Financial Calculator Suite</p>
-                        <div class="world-no1-badge">
-                            <span>🏆</span>
-                            <span>World's #1 Financial Calculator App</span>
-                            <span>⭐</span>
-                        </div>
-                    </div>
-
-                    <!-- Awards & Achievements -->
-                    <div class="awards-section">
-                        <div class="award-badge">
-                            <span>🥇</span>
-                            <span>Best Financial App 2024</span>
-                        </div>
-                        <div class="award-badge">
-                            <span>⭐</span>
-                            <span>5 Million+ Users Trust</span>
-                        </div>
-                        <div class="award-badge">
-                            <span>🌟</span>
-                            <span>4.9★ User Rating</span>
-                        </div>
-                    </div>
-
-                    <!-- Enhanced Links Grid -->
-                    <div class="footer-links-elite-grid">
-                        <!-- Company Section -->
-                        <div class="footer-section-elite">
-                            <h4 class="footer-section-title-elite">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                </svg>
-                                Company
-                            </h4>
-                            <div class="footer-links-list-elite">
-                                <a href="about.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">ℹ️</span>
-                                    About Us
-                                </a>
-                                <a href="blog.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">📚</span>
-                                    Blog & Insights
-                                </a>
-                                <a href="contact.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">📞</span>
-                                    Contact Us
-                                </a>
-                                <a href="feedback.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">💬</span>
-                                    Feedback
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Legal Section -->
-                        <div class="footer-section-elite">
-                            <h4 class="footer-section-title-elite">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14,2 14,8 20,8"/>
-                                </svg>
-                                Legal
-                            </h4>
-                            <div class="footer-links-list-elite">
-                                <a href="privacy.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">🔒</span>
-                                    Privacy Policy
-                                </a>
-                                <a href="terms.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">📋</span>
-                                    Terms of Service
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Calculators Section -->
-                        <div class="footer-section-elite">
-                            <h4 class="footer-section-title-elite">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                                Calculators
-                            </h4>
-                            <div class="footer-links-list-elite">
-                                <a href="index.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">🏠</span>
-                                    All Tools
-                                </a>
-                                <a href="sip-calculator.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">📈</span>
-                                    SIP Calculator
-                                </a>
-                                <a href="gst-calculator.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">📊</span>
-                                    GST Calculator
-                                </a>
-                                <a href="tax-calculator.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">💼</span>
-                                    Tax Calculator
-                                </a>
-                                <a href="fd-calculator.html" class="footer-link-elite">
-                                    <span class="footer-link-icon-elite">🏦</span>
-                                    FD Calculator
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Elite Stats Section -->
-                    <div class="footer-stats-section">
-                        <h3 class="footer-section-title-elite" style="text-align: center; margin-bottom: 1.5rem;">
-                            <span>📊</span>
-                            Trusted by Millions Worldwide
-                        </h3>
-                        <div class="footer-stats-grid">
-                            <div class="stat-item-elite">
-                                <span class="stat-number-elite">5M+</span>
-                                <span class="stat-label-elite">Active Users</span>
-                            </div>
-                            <div class="stat-item-elite">
-                                <span class="stat-number-elite">50M+</span>
-                                <span class="stat-label-elite">Calculations</span>
-                            </div>
-                            <div class="stat-item-elite">
-                                <span class="stat-number-elite">15+</span>
-                                <span class="stat-label-elite">Tools</span>
-                            </div>
-                            <div class="stat-item-elite">
-                                <span class="stat-number-elite">4.9★</span>
-                                <span class="stat-label-elite">Rating</span>
-                            </div>
-                            <div class="stat-item-elite">
-                                <span class="stat-number-elite">99.9%</span>
-                                <span class="stat-label-elite">Uptime</span>
-                            </div>
-                            <div class="stat-item-elite">
-                                <span class="stat-number-elite">180+</span>
-                                <span class="stat-label-elite">Countries</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Elite Contact Section -->
-                    <div class="footer-contact-elite">
-                        <h3 class="footer-section-title-elite" style="margin-bottom: 1rem; text-align: center;">
-                            <span>📧</span>
-                            Get in Touch
-                        </h3>
-                        <div class="contact-info-elite">
-                            <div class="contact-icon-elite">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                    <polyline points="22,6 12,13 2,6"/>
-                                </svg>
-                            </div>
-                            <a href="mailto:pratixfinance4@gmail.com" class="contact-email-elite">
-                                pratixfinance4@gmail.com
-                            </a>
-                        </div>
-                        <p style="color: var(--text-secondary); margin-top: 0.75rem; font-size: 0.8rem; text-align: center;">
-                            Response within 24 hours • Available 24/7
-                        </p>
-                    </div>
-
-                    <!-- Enhanced Copyright -->
-                    <div class="footer-copyright-elite">
-                        <p class="copyright-text-elite">
-                            © 2025 <strong>PRATIX FINANCE</strong> by <strong>Raghav Pratap</strong>. All rights reserved worldwide.
-                        </p>
-                        <p class="tagline-elite">
-                            🌟 Empowering 5+ Million Users with Smart Financial Decisions Globally 🌟
-                        </p>
-                        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.5rem;">
-                            Made with ❤️ in India • Trusted Globally • Bank-Grade Security
-                        </p>
-                    </div>
-                </div>
-            </footer>
-
-        </main>
-
-        </div>
-
-        </div>
-
-    <!-- Fixed Bottom Navigation - Always visible at screen bottom -->
-    <nav class="standard-bottom-nav" style="grid-template-columns: repeat(6, 1fr); position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 999999999 !important; width: 100vw !important;">
-        <button class="standard-nav-item active" data-tab="emi-calculator" aria-label="EMI Calculator">
-            <div class="standard-nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-            </div>
-            <span class="standard-nav-label">EMI</span>
-        </button>
-        <button class="standard-nav-item" data-tab="amortization-table" aria-label="Amortization Table">
-            <div class="standard-nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 3v18h18"/>
-                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
-                </svg>
-            </div>
-            <span class="standard-nav-label">Table</span>
-        </button>
-        <button class="standard-nav-item" data-tab="prepayment-impact" aria-label="Prepayment Impact">
-            <div class="standard-nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12,6 12,12 16,14"/>
-                </svg>
-            </div>
-            <span class="standard-nav-label">Prepay</span>
-        </button>
-        <button class="standard-nav-item" data-tab="loan-comparison" aria-label="Loan Comparison">
-            <div class="standard-nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
-                    <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
-                    <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
-                </svg>
-            </div>
-            <span class="standard-nav-label">Compare</span>
-        </button>
-        <button class="standard-nav-item" data-tab="tools-extras" aria-label="Tools and Extras">
-            <div class="standard-nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                <circle cx="12" cy="12" r="3"/>
-            </svg>
-        </div>
-        <span class="standard-nav-label">Tools</span>
-    </button>
-    <button class="standard-nav-item" data-tab="smart-features" aria-label="Smart Features">
-        <div class="standard-nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-            </svg>
-        </div>
-        <span class="standard-nav-label">Smart</span>
-    </button>
-    </nav>
-
 
         </div>
     </div>
@@ -1630,7 +1041,7 @@
 
             function switchTab(targetTab) {
                 console.log('Switching to tab:', targetTab);
-
+                
                 // Remove active class from all nav items and tab contents
                 allNavItems.forEach(item => item.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
@@ -1638,7 +1049,7 @@
                 // Add active class to corresponding nav items (both desktop and mobile)
                 const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
                 const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
-
+                
                 if (activeDesktopNav) {
                     activeDesktopNav.classList.add('active');
                 }
@@ -1671,7 +1082,7 @@
                         switchTab(targetTab);
                     }
                 };
-
+                
                 item.addEventListener('click', handleTabSwitch);
                 item.addEventListener('touchend', function(e) {
                     e.preventDefault();
