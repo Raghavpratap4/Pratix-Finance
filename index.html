@@ -168,7 +168,7 @@
                 <!-- Mobile-First Calculator Cards -->
                 <div class="mobile-optimized-grid" id="calculatorsGrid">
                     <!-- Compact EMI Calculator -->
-                    <div class="compact-calculator-card featured" data-name="EMI Calculator" data-keywords="emi loan mortgage home car personal finance interest" data-category="loan" data-type="basic">
+                    <div class="compact-calculator-card featured clickable-card" data-name="EMI Calculator" data-keywords="emi loan mortgage home car personal finance interest" data-category="loan" data-type="basic" onclick="window.location.href='emi-calculator.html'" style="cursor: pointer;">
                         <div class="compact-card-header">
                             <div class="calculator-icon">🏠</div>
                             <div class="card-badge">Popular</div>
@@ -183,7 +183,7 @@
                             </div>
                         </div>
                         <div class="compact-card-footer">
-                            <a href="emi-calculator.html" class="compact-use-btn">
+                            <a href="emi-calculator.html" class="compact-use-btn" onclick="event.stopPropagation();">
                                 <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
@@ -191,7 +191,7 @@
                     </div>
 
                     <!-- Compact SIP Calculator -->
-                    <div class="compact-calculator-card" data-name="SIP Calculator" data-keywords="sip mutual fund investment systematic plan returns" data-category="investment" data-type="basic">
+                    <div class="compact-calculator-card clickable-card" data-name="SIP Calculator" data-keywords="sip mutual fund investment systematic plan returns" data-category="investment" data-type="basic" onclick="window.location.href='sip-calculator.html'" style="cursor: pointer;">
                         <div class="compact-card-header">
                             <div class="calculator-icon">📈</div>
                         </div>
@@ -205,7 +205,7 @@
                             </div>
                         </div>
                         <div class="compact-card-footer">
-                            <a href="sip-calculator.html" class="compact-use-btn">
+                            <a href="sip-calculator.html" class="compact-use-btn" onclick="event.stopPropagation();">
                                 <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
@@ -213,7 +213,7 @@
                     </div>
 
                     <!-- Compact Tax Calculator -->
-                    <div class="compact-calculator-card" data-name="Income Tax Calculator" data-keywords="tax income tax calculator old new regime" data-category="tax" data-type="basic">
+                    <div class="compact-calculator-card clickable-card" data-name="Income Tax Calculator" data-keywords="tax income tax calculator old new regime" data-category="tax" data-type="basic" onclick="window.location.href='tax-calculator.html'" style="cursor: pointer;">
                         <div class="compact-card-header">
                             <div class="calculator-icon">💼</div>
                         </div>
@@ -227,7 +227,7 @@
                             </div>
                         </div>
                         <div class="compact-card-footer">
-                            <a href="tax-calculator.html" class="compact-use-btn">
+                            <a href="tax-calculator.html" class="compact-use-btn" onclick="event.stopPropagation();">
                                 <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
@@ -235,7 +235,7 @@
                     </div>
 
                     <!-- Compact FD Calculator -->
-                    <div class="compact-calculator-card" data-name="Fixed Deposit Calculator" data-keywords="fd fixed deposit bank interest maturity" data-category="banking" data-type="basic">
+                    <div class="compact-calculator-card clickable-card" data-name="Fixed Deposit Calculator" data-keywords="fd fixed deposit bank interest maturity" data-category="banking" data-type="basic" onclick="window.location.href='fd-calculator.html'" style="cursor: pointer;">
                         <div class="compact-card-header">
                             <div class="calculator-icon">🏦</div>
                         </div>
@@ -249,7 +249,7 @@
                             </div>
                         </div>
                         <div class="compact-card-footer">
-                            <a href="fd-calculator.html" class="compact-use-btn">
+                            <a href="fd-calculator.html" class="compact-use-btn" onclick="event.stopPropagation();">
                                 <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
@@ -257,7 +257,7 @@
                     </div>
 
                     <!-- Compact GST Calculator -->
-                    <div class="compact-calculator-card" data-name="GST Calculator" data-keywords="gst goods services tax business invoice" data-category="business" data-type="basic">
+                    <div class="compact-calculator-card clickable-card" data-name="GST Calculator" data-keywords="gst goods services tax business invoice" data-category="business" data-type="basic" onclick="window.location.href='gst-calculator.html'" style="cursor: pointer;">
                         <div class="compact-card-header">
                             <div class="calculator-icon">📊</div>
                         </div>
@@ -271,7 +271,7 @@
                             </div>
                         </div>
                         <div class="compact-card-footer">
-                            <a href="gst-calculator.html" class="compact-use-btn">
+                            <a href="gst-calculator.html" class="compact-use-btn" onclick="event.stopPropagation();">
                                 <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
@@ -281,43 +281,150 @@
             </div>
         </section>
 
-        <!-- Features Section -->
+        <!-- Enhanced Features Section -->
         <section class="features-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Why Choose PRATIX FINANCE?</h2>
-                    <p class="section-subtitle">Professional-grade financial tools trusted by thousands of users</p>
+                    <div class="features-badge">
+                        <span class="badge-icon">🏆</span>
+                        <span>Why Choose Us?</span>
+                    </div>
+                    <h2 class="section-title">PRATIX FINANCE Advantage</h2>
+                    <p class="section-subtitle">Professional-grade financial tools trusted by thousands of users across India</p>
+                    <div class="features-highlight">
+                        <div class="highlight-stat">
+                            <div class="highlight-number">99.9%</div>
+                            <div class="highlight-label">Accuracy</div>
+                        </div>
+                        <div class="highlight-stat">
+                            <div class="highlight-number">50K+</div>
+                            <div class="highlight-label">Happy Users</div>
+                        </div>
+                        <div class="highlight-stat">
+                            <div class="highlight-number">24/7</div>
+                            <div class="highlight-label">Available</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <h3 class="feature-title">Lightning Fast</h3>
-                        <p class="feature-description">Get instant calculations with real-time updates, interactive charts, and seamless performance across all devices.</p>
+                <div class="enhanced-features-grid">
+                    <div class="enhanced-feature-item featured-primary">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-wrapper">
+                                <div class="feature-icon">⚡</div>
+                                <div class="feature-glow"></div>
+                            </div>
+                            <div class="feature-badge">Most Popular</div>
+                        </div>
+                        <div class="feature-content">
+                            <h3 class="feature-title">Lightning Fast</h3>
+                            <p class="feature-description">Get instant calculations with real-time updates, interactive charts, and seamless performance across all devices.</p>
+                            <div class="feature-benefits">
+                                <span class="benefit-tag">⚡ Instant Results</span>
+                                <span class="benefit-tag">📊 Live Charts</span>
+                                <span class="benefit-tag">🚀 Fast Loading</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🔒</div>
-                        <h3 class="feature-title">100% Secure</h3>
-                        <p class="feature-description">Your financial data stays completely private. All calculations happen locally in your browser with no data transmission.</p>
+                    
+                    <div class="enhanced-feature-item featured-secondary">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-wrapper">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-glow security-glow"></div>
+                            </div>
+                            <div class="feature-badge security-badge">100% Secure</div>
+                        </div>
+                        <div class="feature-content">
+                            <h3 class="feature-title">Bank-Grade Security</h3>
+                            <p class="feature-description">Your financial data stays completely private. All calculations happen locally in your browser with zero data transmission.</p>
+                            <div class="feature-benefits">
+                                <span class="benefit-tag">🔐 Local Processing</span>
+                                <span class="benefit-tag">🛡️ No Data Storage</span>
+                                <span class="benefit-tag">🔒 Zero Tracking</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📱</div>
-                        <h3 class="feature-title">Mobile Optimized</h3>
-                        <p class="feature-description">Access all calculators on any device with our responsive design and progressive web app capabilities.</p>
+                    
+                    <div class="enhanced-feature-item">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-wrapper">
+                                <div class="feature-icon">📱</div>
+                                <div class="feature-glow mobile-glow"></div>
+                            </div>
+                        </div>
+                        <div class="feature-content">
+                            <h3 class="feature-title">Mobile Optimized</h3>
+                            <p class="feature-description">Access all calculators on any device with our responsive design and progressive web app capabilities.</p>
+                            <div class="feature-benefits">
+                                <span class="benefit-tag">📱 PWA Support</span>
+                                <span class="benefit-tag">📋 Responsive</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">💡</div>
-                        <h3 class="feature-title">Smart Insights</h3>
-                        <p class="feature-description">Get detailed analysis, visual charts, and intelligent recommendations for better financial planning.</p>
+                    
+                    <div class="enhanced-feature-item">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-wrapper">
+                                <div class="feature-icon">💡</div>
+                                <div class="feature-glow insights-glow"></div>
+                            </div>
+                        </div>
+                        <div class="feature-content">
+                            <h3 class="feature-title">Smart Insights</h3>
+                            <p class="feature-description">Get detailed analysis, visual charts, and intelligent recommendations for better financial planning.</p>
+                            <div class="feature-benefits">
+                                <span class="benefit-tag">🧠 AI Analysis</span>
+                                <span class="benefit-tag">💡 Smart Tips</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📊</div>
-                        <h3 class="feature-title">Detailed Reports</h3>
-                        <p class="feature-description">Generate comprehensive reports with amortization tables, tax breakdowns, and investment projections.</p>
+                    
+                    <div class="enhanced-feature-item">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-wrapper">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-glow reports-glow"></div>
+                            </div>
+                        </div>
+                        <div class="feature-content">
+                            <h3 class="feature-title">Detailed Reports</h3>
+                            <p class="feature-description">Generate comprehensive reports with amortization tables, tax breakdowns, and investment projections.</p>
+                            <div class="feature-benefits">
+                                <span class="benefit-tag">📋 PDF Export</span>
+                                <span class="benefit-tag">📈 Charts</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🎯</div>
-                        <h3 class="feature-title">Goal Planning</h3>
-                        <p class="feature-description">Set financial goals and get personalized strategies to achieve them with our advanced planning tools.</p>
+                    
+                    <div class="enhanced-feature-item">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-wrapper">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-glow goals-glow"></div>
+                            </div>
+                        </div>
+                        <div class="feature-content">
+                            <h3 class="feature-title">Goal Planning</h3>
+                            <p class="feature-description">Set financial goals and get personalized strategies to achieve them with our advanced planning tools.</p>
+                            <div class="feature-benefits">
+                                <span class="benefit-tag">🎯 Goal Tracking</span>
+                                <span class="benefit-tag">📅 Planning</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial Section -->
+                <div class="testimonial-section">
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">"PRATIX FINANCE helped me save ₹2.5 lakhs on my home loan with their accurate EMI calculator and prepayment analysis!"</div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <div class="author-name">Priya Sharma</div>
+                                <div class="author-title">Software Engineer, Mumbai</div>
+                            </div>
+                            <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
                     </div>
                 </div>
             </div>
