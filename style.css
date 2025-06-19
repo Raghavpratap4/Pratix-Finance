@@ -1348,6 +1348,10 @@ body::after {
       visibility: hidden !important;
       opacity: 0 !important;
       pointer-events: none !important;
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      z-index: -1 !important;
   }
   
   /* Remove bottom padding from main content on desktop */
@@ -2452,6 +2456,10 @@ html {
       display: none !important;
       visibility: hidden !important;
       opacity: 0 !important;
+      pointer-events: none !important;
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
   }
 }
 
