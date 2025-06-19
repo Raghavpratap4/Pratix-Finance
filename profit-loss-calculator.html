@@ -1,0 +1,986 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE - Advanced Profit Loss Calculator with business analysis, break-even calculation, and comprehensive financial insights." />
+    <meta name="keywords" content="Profit loss calculator, business calculator, break-even analysis, financial analysis, PRATIX FINANCE" />
+    <meta name="author" content="Pratix Finance" />
+    <title>Profit Loss Calculator - PRATIX FINANCE</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Desktop Tab Navigation -->
+        <nav class="tab-navigation">
+            <div class="tab-nav-item active" data-tab="profit-loss-calculator">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                P&L Calculator
+            </div>
+            <div class="tab-nav-item" data-tab="break-even-analysis">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v18h18"/>
+                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                </svg>
+                Break-Even Analysis
+            </div>
+            <div class="tab-nav-item" data-tab="business-scenario">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
+                    <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
+                    <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
+                </svg>
+                Scenario Planning
+            </div>
+            <div class="tab-nav-item" data-tab="margin-analysis">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+                Margin Analysis
+            </div>
+            <div class="tab-nav-item" data-tab="monthly-projections">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 2v4"/>
+                    <path d="M16 2v4"/>
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <path d="M3 10h18"/>
+                </svg>
+                Monthly Projections
+            </div>
+            <div class="tab-nav-item" data-tab="tools-extras">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Tools & Extras
+            </div>
+        </nav>
+
+        <div class="main-app-content">
+        <!-- Standardized Header -->
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="Pratix Finance" class="standard-app-logo">
+                    <h1 class="standard-app-title">Profit Loss Calculator</h1>
+                </div>
+                <div class="standard-nav-buttons">
+                    <a href="index.html" class="standard-nav-btn" title="Home">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9,22 9,12 15,12 15,22"/>
+                        </svg>
+                    </a>
+                    <button class="standard-nav-btn" onclick="goBack()" title="Back">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Profit Loss Calculator Tab -->
+            <section id="profit-loss-calculator" class="tab-content active">
+                <div class="glass-card">
+                    <h2 class="section-title">Profit & Loss Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Total Revenue</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="totalRevenue" placeholder="Enter total revenue (e.g., 1000000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Cost of Goods Sold (COGS)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="costOfGoods" placeholder="Enter COGS (e.g., 400000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Operating Expenses</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="operatingExpenses" placeholder="Enter operating expenses (e.g., 300000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Other Income</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="otherIncome" placeholder="Enter other income (e.g., 50000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Interest & Financial Costs</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="financialCosts" placeholder="Enter interest expenses (e.g., 25000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Tax Rate (%)</label>
+                            <input type="number" id="taxRate" placeholder="Enter tax rate (e.g., 30)" class="calc-input" step="0.1">
+                        </div>
+
+                        <button class="calculate-btn" id="calculatePL">
+                            <span class="btn-text">Calculate P&L</span>
+                        </button>
+                        <button class="refresh-btn" id="refreshPL">
+                            <span class="btn-text">Refresh</span>
+                        </button>
+                    </div>
+
+                    <div class="result-card" id="plResults" style="display: none;">
+                        <div class="result-item">
+                            <span class="result-label">Gross Profit</span>
+                            <span class="result-value" id="grossProfit">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Operating Profit (EBIT)</span>
+                            <span class="result-value" id="operatingProfit">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Profit Before Tax</span>
+                            <span class="result-value" id="profitBeforeTax">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Tax Amount</span>
+                            <span class="result-value" id="taxAmount">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Net Profit</span>
+                            <span class="result-value" id="netProfit">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Gross Margin (%)</span>
+                            <span class="result-value" id="grossMargin">0%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Net Margin (%)</span>
+                            <span class="result-value" id="netMargin">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container glow-chart" id="plChartContainer" style="display: none;">
+                        <div class="chart-header">
+                            <h3 class="chart-title">P&L Breakdown</h3>
+                            <div class="chart-selector">
+                                <select id="plChartType" class="calc-input">
+                                    <option value="doughnut">Pie Chart</option>
+                                    <option value="bar">Bar Chart</option>
+                                    <option value="waterfall">Waterfall Chart</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="plChart" width="400" height="300"></canvas>
+                        </div>
+                        <button class="feature-btn" id="downloadPLPDF">Download P&L Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Break-Even Analysis Tab -->
+            <section id="break-even-analysis" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Break-Even Analysis</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Fixed Costs</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="fixedCosts" placeholder="Enter fixed costs (e.g., 200000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Variable Cost per Unit</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="variableCostPerUnit" placeholder="Enter variable cost per unit (e.g., 50)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Selling Price per Unit</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="sellingPricePerUnit" placeholder="Enter selling price per unit (e.g., 100)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateBreakEven">Calculate Break-Even</button>
+                        <button class="refresh-btn" id="refreshBreakEven">Refresh</button>
+                    </div>
+
+                    <div class="result-card" id="breakEvenResults" style="display: none;">
+                        <div class="result-item">
+                            <span class="result-label">Break-Even Units</span>
+                            <span class="result-value" id="breakEvenUnits">0 units</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Break-Even Revenue</span>
+                            <span class="result-value" id="breakEvenRevenue">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Contribution Margin</span>
+                            <span class="result-value" id="contributionMargin">₹0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Contribution Margin (%)</span>
+                            <span class="result-value" id="contributionMarginPercent">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container glow-chart" id="breakEvenChartContainer" style="display: none;">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Break-Even Analysis</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="breakEvenChart" width="400" height="300"></canvas>
+                        </div>
+                        <button class="feature-btn" id="downloadBreakEvenPDF">Download Break-Even Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Business Scenario Tab -->
+            <section id="business-scenario" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Scenario Planning</h2>
+                    <div class="scenario-form">
+                        <div class="input-group">
+                            <label>Base Case Revenue</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="baseCaseRevenue" placeholder="Enter base revenue (e.g., 1000000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Optimistic Scenario (+%)</label>
+                            <input type="number" id="optimisticPercent" placeholder="Enter increase percentage (e.g., 20)" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Pessimistic Scenario (-%)</label>
+                            <input type="number" id="pessimisticPercent" placeholder="Enter decrease percentage (e.g., 15)" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Base Case Costs</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="baseCaseCosts" placeholder="Enter base costs (e.g., 700000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateScenarios">Calculate Scenarios</button>
+                        <button class="refresh-btn" id="refreshScenarios">Refresh</button>
+                    </div>
+
+                    <div class="scenario-results" id="scenarioResults" style="display: none;">
+                        <div class="scenario-cards">
+                            <div class="scenario-card pessimistic">
+                                <h4>Pessimistic Case</h4>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Revenue:</span>
+                                        <span id="pessimisticRevenue">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Profit:</span>
+                                        <span id="pessimisticProfit">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Margin:</span>
+                                        <span id="pessimisticMargin">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-card base">
+                                <h4>Base Case</h4>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Revenue:</span>
+                                        <span id="baseRevenue">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Profit:</span>
+                                        <span id="baseProfit">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Margin:</span>
+                                        <span id="baseMargin">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-card optimistic">
+                                <h4>Optimistic Case</h4>
+                                <div class="scenario-details">
+                                    <div class="detail-item">
+                                        <span>Revenue:</span>
+                                        <span id="optimisticRevenue">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Profit:</span>
+                                        <span id="optimisticProfit">₹0</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>Margin:</span>
+                                        <span id="optimisticMargin">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Scenario Comparison</h3>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="scenarioChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+
+                        <button class="feature-btn" id="downloadScenarioPDF">Download Scenario Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Margin Analysis Tab -->
+            <section id="margin-analysis" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Margin Analysis</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Product/Service Name</label>
+                            <input type="text" id="productName" placeholder="Enter product name" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Units Sold</label>
+                            <input type="number" id="unitsSold" placeholder="Enter units sold (e.g., 1000)" class="calc-input">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Revenue per Unit</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="revenuePerUnit" placeholder="Enter revenue per unit (e.g., 500)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Cost per Unit</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="costPerUnit" placeholder="Enter cost per unit (e.g., 300)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" id="calculateMargins">Calculate Margins</button>
+                        <button class="refresh-btn" id="refreshMargins">Refresh</button>
+                    </div>
+
+                    <div class="margin-results" id="marginResults" style="display: none;">
+                        <div class="margin-cards">
+                            <div class="margin-card">
+                                <h4>Total Revenue</h4>
+                                <div class="margin-value" id="totalRevenueMargin">₹0</div>
+                            </div>
+                            <div class="margin-card">
+                                <h4>Total Cost</h4>
+                                <div class="margin-value" id="totalCostMargin">₹0</div>
+                            </div>
+                            <div class="margin-card">
+                                <h4>Total Profit</h4>
+                                <div class="margin-value" id="totalProfitMargin">₹0</div>
+                            </div>
+                            <div class="margin-card">
+                                <h4>Profit Margin</h4>
+                                <div class="margin-value" id="profitMarginPercent">0%</div>
+                            </div>
+                            <div class="margin-card">
+                                <h4>Markup %</h4>
+                                <div class="margin-value" id="markupPercent">0%</div>
+                            </div>
+                            <div class="margin-card">
+                                <h4>ROI %</h4>
+                                <div class="margin-value" id="roiPercent">0%</div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Margin Analysis</h3>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="marginChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+
+                        <button class="feature-btn" id="downloadMarginPDF">Download Margin Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Projections Tab -->
+            <section id="monthly-projections" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Monthly P&L Projections</h2>
+                    <div class="calculator-form">
+                        <div class="input-group">
+                            <label>Starting Monthly Revenue</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="startingRevenue" placeholder="Enter starting revenue (e.g., 100000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Monthly Revenue Growth (%)</label>
+                            <input type="number" id="revenueGrowth" placeholder="Enter growth rate (e.g., 5)" class="calc-input" step="0.1">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Fixed Costs per Month</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="monthlyFixedCosts" placeholder="Enter monthly fixed costs (e.g., 30000)" class="calc-input">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Variable Cost % of Revenue</label>
+                            <input type="number" id="variableCostPercent" placeholder="Enter variable cost % (e.g., 40)" class="calc-input" step="0.1">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Projection Period (Months)</label>
+                            <input type="number" id="projectionMonths" placeholder="Enter months (e.g., 12)" class="calc-input" min="1" max="60">
+                        </div>
+
+                        <button class="calculate-btn" id="calculateProjections">Calculate Projections</button>
+                        <button class="refresh-btn" id="refreshProjections">Refresh</button>
+                    </div>
+
+                    <div class="projection-results" id="projectionResults" style="display: none;">
+                        <div class="projection-summary">
+                            <div class="summary-cards">
+                                <div class="summary-card">
+                                    <h4>Total Revenue (Year 1)</h4>
+                                    <div class="summary-value" id="totalYearRevenue">₹0</div>
+                                </div>
+                                <div class="summary-card">
+                                    <h4>Total Profit (Year 1)</h4>
+                                    <div class="summary-value" id="totalYearProfit">₹0</div>
+                                </div>
+                                <div class="summary-card">
+                                    <h4>Average Monthly Profit</h4>
+                                    <div class="summary-value" id="avgMonthlyProfit">₹0</div>
+                                </div>
+                                <div class="summary-card">
+                                    <h4>Break-Even Month</h4>
+                                    <div class="summary-value" id="breakEvenMonth">Month 0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container glow-chart">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Monthly P&L Projections</h3>
+                                <div class="chart-selector">
+                                    <select id="projectionChartType" class="calc-input">
+                                        <option value="line">Line Chart</option>
+                                        <option value="bar">Bar Chart</option>
+                                        <option value="area">Area Chart</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="projectionChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="projection-table">
+                            <h4>Monthly Breakdown</h4>
+                            <div class="table-container">
+                                <table class="analysis-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Month</th>
+                                            <th>Revenue</th>
+                                            <th>Fixed Costs</th>
+                                            <th>Variable Costs</th>
+                                            <th>Net Profit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="projectionTableBody">
+                                        <!-- Rows will be generated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <button class="feature-btn" id="downloadProjectionPDF">Download Projection Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools & Extras Tab -->
+            <section id="tools-extras" class="tab-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Related Financial Tools</h2>
+                    <p class="section-description">Access other calculators to complete your financial planning</p>
+
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="goToEmiCalculator()">
+                            <div class="tool-icon">🏠</div>
+                            <h3>EMI Calculator</h3>
+                            <p>Calculate loan EMI payments and amortization schedules</p>
+                            <div class="tool-features">
+                                <span>Loan Planning</span>
+                                <span>Prepayment Analysis</span>
+                                <span>Comparison Tools</span>
+                            </div>
+                        </div>
+
+                        <div class="tool-card" onclick="goToSipCalculator()">
+                            <div class="tool-icon">📈</div>
+                            <h3>SIP Calculator</h3>
+                            <p>Plan systematic investments and wealth creation</p>
+                            <div class="tool-features">
+                                <span>Goal Planning</span>
+                                <span>Step-up SIP</span>
+                                <span>Returns Analysis</span>
+                            </div>
+                        </div>
+
+                        <div class="tool-card" onclick="goToTaxCalculator()">
+                            <div class="tool-icon">💼</div>
+                            <h3>Income Tax Calculator</h3>
+                            <p>Calculate tax liability under old and new regimes</p>
+                            <div class="tool-features">
+                                <span>Tax Comparison</span>
+                                <span>Deduction Planning</span>
+                                <span>Salary Breakdown</span>
+                            </div>
+                        </div>
+
+                        <div class="tool-card" onclick="goToGstCalculator()">
+                            <div class="tool-icon">📊</div>
+                            <h3>GST Calculator</h3>
+                            <p>Calculate GST for business transactions</p>
+                            <div class="tool-features">
+                                <span>Invoice Generation</span>
+                                <span>HSN Lookup</span>
+                                <span>Returns Filing</span>
+                            </div>
+                        </div>
+
+                        <div class="tool-card" onclick="goToFdCalculator()">
+                            <div class="tool-icon">🏦</div>
+                            <h3>FD Calculator</h3>
+                            <p>Calculate fixed deposit returns and compare rates</p>
+                            <div class="tool-features">
+                                <span>Maturity Calculation</span>
+                                <span>Bank Comparison</span>
+                                <span>Tax Impact</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="financial-tips">
+                        <h3>Business Financial Tips</h3>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <h4>💰 Monitor Cash Flow</h4>
+                                <p>Keep track of monthly cash inflows and outflows to maintain healthy liquidity.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>📊 Track Key Metrics</h4>
+                                <p>Monitor gross margin, net margin, and break-even point regularly.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>🎯 Control Costs</h4>
+                                <p>Regularly review and optimize both fixed and variable costs.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>📈 Plan for Growth</h4>
+                                <p>Use scenario planning to prepare for different business conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        </div>
+    </div>
+
+    <!-- Enhanced Professional World-Class Footer -->
+    <footer class="professional-footer">
+        <div class="footer-container">
+            <!-- Elite Brand Section -->
+            <div class="footer-brand-elite">
+                <div class="brand-header-elite">
+                    <img src="logo.png" alt="Pratix Finance" class="footer-logo-elite">
+                    <h3 class="brand-name-elite">PRATIX FINANCE</h3>
+                </div>
+                <p class="brand-tagline-elite">World's Most Advanced Financial Calculator Suite</p>
+                <div class="world-no1-badge">
+                    <span>🏆</span>
+                    <span>World's #1 Financial Calculator App</span>
+                    <span>⭐</span>
+                </div>
+            </div>
+
+            <!-- Awards & Achievements -->
+            <div class="awards-section">
+                <div class="award-badge">
+                    <span>🥇</span>
+                    <span>Best Financial App 2024</span>
+                </div>
+                <div class="award-badge">
+                    <span>⭐</span>
+                    <span>5 Million+ Users Trust</span>
+                </div>
+                <div class="award-badge">
+                    <span>🌟</span>
+                    <span>4.9★ User Rating</span>
+                </div>
+            </div>
+
+            <!-- Enhanced Links Grid -->
+            <div class="footer-links-elite-grid">
+                <!-- Company Section -->
+                <div class="footer-section-elite">
+                    <h4 class="footer-section-title-elite">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        </svg>
+                        Company
+                    </h4>
+                    <div class="footer-links-list-elite">
+                        <a href="about.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">ℹ️</span>
+                            About Us
+                        </a>
+                        <a href="blog.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">📚</span>
+                            Blog & Insights
+                        </a>
+                        <a href="contact.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">📞</span>
+                            Contact Us
+                        </a>
+                        <a href="feedback.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">💬</span>
+                            Feedback
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Legal Section -->
+                <div class="footer-section-elite">
+                    <h4 class="footer-section-title-elite">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                        </svg>
+                        Legal
+                    </h4>
+                    <div class="footer-links-list-elite">
+                        <a href="privacy.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">🔒</span>
+                            Privacy Policy
+                        </a>
+                        <a href="terms.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">📋</span>
+                            Terms of Service
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Calculators Section -->
+                <div class="footer-section-elite">
+                    <h4 class="footer-section-title-elite">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Calculators
+                    </h4>
+                    <div class="footer-links-list-elite">
+                        <a href="index.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">🏠</span>
+                            All Tools
+                        </a>
+                        <a href="emi-calculator.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">🏠</span>
+                            EMI Calculator
+                        </a>
+                        <a href="sip-calculator.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">📈</span>
+                            SIP Calculator
+                        </a>
+                        <a href="tax-calculator.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">💼</span>
+                            Tax Calculator
+                        </a>
+                        <a href="fd-calculator.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">🏦</span>
+                            FD Calculator
+                        </a>
+                        <a href="gst-calculator.html" class="footer-link-elite">
+                            <span class="footer-link-icon-elite">📊</span>
+                            GST Calculator
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Elite Stats Section -->
+            <div class="footer-stats-section">
+                <h3 class="footer-section-title-elite" style="text-align: center; margin-bottom: 1.5rem;">
+                    <span>📊</span>
+                    Trusted by Millions Worldwide
+                </h3>
+                <div class="footer-stats-grid">
+                    <div class="stat-item-elite">
+                        <span class="stat-number-elite">5M+</span>
+                        <span class="stat-label-elite">Active Users</span>
+                    </div>
+                    <div class="stat-item-elite">
+                        <span class="stat-number-elite">50M+</span>
+                        <span class="stat-label-elite">Calculations</span>
+                    </div>
+                    <div class="stat-item-elite">
+                        <span class="stat-number-elite">15+</span>
+                        <span class="stat-label-elite">Tools</span>
+                    </div>
+                    <div class="stat-item-elite">
+                        <span class="stat-number-elite">4.9★</span>
+                        <span class="stat-label-elite">Rating</span>
+                    </div>
+                    <div class="stat-item-elite">
+                        <span class="stat-number-elite">99.9%</span>
+                        <span class="stat-label-elite">Uptime</span>
+                    </div>
+                    <div class="stat-item-elite">
+                        <span class="stat-number-elite">180+</span>
+                        <span class="stat-label-elite">Countries</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Elite Contact Section -->
+            <div class="footer-contact-elite">
+                <h3 class="footer-section-title-elite" style="margin-bottom: 1rem; text-align: center;">
+                    <span>📧</span>
+                    Get in Touch
+                </h3>
+                <div class="contact-info-elite">
+                    <div class="contact-icon-elite">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <a href="mailto:pratixfinance4@gmail.com" class="contact-email-elite">
+                        pratixfinance4@gmail.com
+                    </a>
+                </div>
+                <p style="color: var(--text-secondary); margin-top: 0.75rem; font-size: 0.8rem; text-align: center;">
+                    Response within 24 hours • Available 24/7
+                </p>
+            </div>
+
+            <!-- Enhanced Copyright -->
+            <div class="footer-copyright-elite">
+                <p class="copyright-text-elite">
+                    © 2025 <strong>PRATIX FINANCE</strong> by <strong>Raghav Pratap</strong>. All rights reserved worldwide.
+                </p>
+                <p class="tagline-elite">
+                    🌟 Empowering 5+ Million Users with Smart Financial Decisions Globally 🌟
+                </p>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.5rem;">
+                    Made with ❤️ in India • Trusted Globally • Bank-Grade Security
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fixed Bottom Navigation - Mobile only -->
+    <nav class="standard-bottom-nav">
+        <button class="standard-nav-item active" data-tab="profit-loss-calculator" aria-label="Profit Loss Calculator">
+            <div class="standard-nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+            </div>
+            <span class="standard-nav-label">P&L</span>
+        </button>
+        <button class="standard-nav-item" data-tab="break-even-analysis" aria-label="Break-Even Analysis">
+            <div class="standard-nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v18h18"/>
+                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                </svg>
+            </div>
+            <span class="standard-nav-label">Break-Even</span>
+        </button>
+        <button class="standard-nav-item" data-tab="business-scenario" aria-label="Business Scenario">
+            <div class="standard-nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
+                    <path d="M15 11h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4"/>
+                    <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
+                </svg>
+            </div>
+            <span class="standard-nav-label">Scenarios</span>
+        </button>
+        <button class="standard-nav-item" data-tab="margin-analysis" aria-label="Margin Analysis">
+            <div class="standard-nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <span class="standard-nav-label">Margins</span>
+        </button>
+        <button class="standard-nav-item" data-tab="monthly-projections" aria-label="Monthly Projections">
+            <div class="standard-nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 2v4"/>
+                    <path d="M16 2v4"/>
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <path d="M3 10h18"/>
+                </svg>
+            </div>
+            <span class="standard-nav-label">Projections</span>
+        </button>
+        <button class="standard-nav-item" data-tab="tools-extras" aria-label="Tools and Extras">
+            <div class="standard-nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </div>
+            <span class="standard-nav-label">Tools</span>
+        </button>
+    </nav>
+
+    <script src="universal-nav.js"></script>
+    <script src="profit-loss-script.js"></script>
+    <script>
+        // Fix mobile tab navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle both desktop and mobile navigation
+            const desktopNavItems = document.querySelectorAll('.tab-navigation .tab-nav-item[data-tab]');
+            const mobileNavItems = document.querySelectorAll('.standard-bottom-nav .standard-nav-item[data-tab]');
+            const allNavItems = [...desktopNavItems, ...mobileNavItems];
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            function switchTab(targetTab) {
+                console.log('Switching to tab:', targetTab);
+
+                // Remove active class from all nav items and tab contents
+                allNavItems.forEach(item => item.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to corresponding nav items (both desktop and mobile)
+                const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
+                const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
+
+                if (activeDesktopNav) {
+                    activeDesktopNav.classList.add('active');
+                }
+                if (activeMobileNav) {
+                    activeMobileNav.classList.add('active');
+                }
+
+                // Show corresponding tab content
+                const activeTabContent = document.getElementById(targetTab);
+                if (activeTabContent) {
+                    activeTabContent.classList.add('active');
+                    console.log('Tab content activated:', targetTab);
+                }
+
+                // Scroll to top of main content
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.scrollTop = 0;
+                }
+            }
+
+            // Add event listeners to all nav items
+            allNavItems.forEach(item => {
+                const handleTabSwitch = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const targetTab = this.getAttribute('data-tab');
+                    console.log('Tab clicked:', targetTab);
+                    if (targetTab) {
+                        switchTab(targetTab);
+                    }
+                };
+
+                item.addEventListener('click', handleTabSwitch);
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    handleTabSwitch.call(this, e);
+                });
+            });
+
+            // Initialize with first tab active
+            if (allNavItems.length > 0) {
+                const firstTab = allNavItems[0].getAttribute('data-tab');
+                if (firstTab) {
+                    switchTab(firstTab);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
