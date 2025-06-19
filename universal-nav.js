@@ -2,8 +2,8 @@
 // Universal Tab Navigation Script for PRATIX FINANCE Calculators
 document.addEventListener('DOMContentLoaded', function() {
     // Get all navigation items (desktop and mobile)
-    const desktopNavItems = document.querySelectorAll('.tab-navigation .tab-nav-item[data-tab]');
-    const mobileNavItems = document.querySelectorAll('.standard-bottom-nav .standard-nav-item[data-tab]');
+    const desktopNavItems = document.querySelectorAll('.tab-navigation .tab-nav-item[data-tab], .tab-nav-item[data-tab]');
+    const mobileNavItems = document.querySelectorAll('.standard-bottom-nav .standard-nav-item[data-tab], .bottom-nav .nav-item[data-tab]');
     const allNavItems = [...desktopNavItems, ...mobileNavItems];
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         tabContents.forEach(content => content.classList.remove('active'));
 
         // Add active class to corresponding navigation items (both desktop and mobile)
-        const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
-        const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
+        const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"], .tab-nav-item[data-tab="${targetTab}"]`);
+        const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"], .bottom-nav .nav-item[data-tab="${targetTab}"]`);
         
         if (activeDesktopNav) {
             activeDesktopNav.classList.add('active');
@@ -33,29 +33,25 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Tab content activated:', targetTab);
         }
 
-        // Enhanced Auto Scroll to Top
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.scrollTop = 0;
-        }
-        
-        // Scroll window to top for mobile
-        if (window.innerWidth <= 1023) {
+        // Enhanced Auto Scroll to Top - Different behavior for desktop vs mobile
+        if (window.innerWidth >= 1024) {
+            // Desktop: Only scroll the main content area
+            const mainAppContent = document.querySelector('.main-app-content');
+            if (mainAppContent) {
+                mainAppContent.scrollTop = 0;
+            }
+        } else {
+            // Mobile: Scroll the window
             window.scrollTo({ 
                 top: 0, 
                 behavior: 'smooth' 
             });
+            
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.scrollTop = 0;
+            }
         }
-        
-        // Also scroll main app content
-        const mainAppContent = document.querySelector('.main-app-content');
-        if (mainAppContent) {
-            mainAppContent.scrollTop = 0;
-        }
-        
-        // Ensure body scroll is at top
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
     }
 
     // Add event listeners to all navigation items
@@ -92,22 +88,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Ensure mobile navigation is always visible
     function ensureMobileNavVisibility() {
-        const mobileNav = document.querySelector('.standard-bottom-nav');
-        if (mobileNav && window.innerWidth <= 1023) {
-            mobileNav.style.display = 'grid';
-            mobileNav.style.visibility = 'visible';
-            mobileNav.style.opacity = '1';
-            mobileNav.style.position = 'fixed';
-            mobileNav.style.bottom = '0';
-            mobileNav.style.left = '0';
-            mobileNav.style.right = '0';
-            mobileNav.style.zIndex = '999999999';
+        const mobileNavs = document.querySelectorAll('.standard-bottom-nav, .bottom-nav');
+        mobileNavs.forEach(mobileNav => {
+            if (mobileNav && window.innerWidth <= 1023) {
+                mobileNav.style.display = 'grid';
+                mobileNav.style.visibility = 'visible';
+                mobileNav.style.opacity = '1';
+                mobileNav.style.position = 'fixed';
+                mobileNav.style.bottom = '0';
+                mobileNav.style.left = '0';
+                mobileNav.style.right = '0';
+                mobileNav.style.zIndex = '999999999';
+                mobileNav.style.width = '100vw';
+                mobileNav.style.transform = 'translateZ(0)';
+                mobileNav.style.willChange = 'transform';
+            }
+        });
+        
+        // Ensure body has proper padding for mobile navigation
+        if (window.innerWidth <= 1023) {
+            document.body.style.paddingBottom = '110px';
+        } else {
+            document.body.style.paddingBottom = '0';
         }
     }
 
     // Call on load and resize
     ensureMobileNavVisibility();
     window.addEventListener('resize', ensureMobileNavVisibility);
+    
+    // Force check after a short delay to ensure DOM is ready
+    setTimeout(ensureMobileNavVisibility, 100);
 
     // Handle keyboard navigation for accessibility
     document.addEventListener('keydown', function(e) {

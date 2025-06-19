@@ -544,7 +544,7 @@
 
                 </div>
             </section>
-           
+
         </main>
 
         </div>
@@ -739,7 +739,7 @@
         </div>
     </footer>
 
-           
+
     <!-- Fixed Bottom Navigation - Mobile only -->
     <nav class="standard-bottom-nav">
         <button class="standard-nav-item active" data-tab="gst-calculator" aria-label="GST Calculator">
@@ -755,47 +755,50 @@
         <button class="standard-nav-item" data-tab="invoice-generator" aria-label="Invoice Generator">
             <div class="standard-nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="6" width="20" height="8" rx="1"/>
-                    <path d="m22 4-10 7L2 4"/>
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10,9 9,9 8,9"/>
                 </svg>
             </div>
             <span class="standard-nav-label">Invoice</span>
         </button>
-        <button class="standard-nav-item" data-tab="hsn-lookup" aria-label="HSN Lookup">
+        <button class="standard-nav-item" onclick="goToEmiCalculator()" aria-label="EMI Calculator">
             <div class="standard-nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
                 </svg>
             </div>
-            <span class="standard-nav-label">HSN</span>
+            <span class="standard-nav-label">EMI</span>
         </button>
-        <button class="standard-nav-item" data-tab="gst-analysis" aria-label="GST Analysis">
+        <button class="standard-nav-item" onclick="goToSipCalculator()" aria-label="SIP Calculator">
             <div class="standard-nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 3v18h18"/>
                     <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
                 </svg>
             </div>
-            <span class="standard-nav-label">Analysis</span>
+            <span class="standard-nav-label">SIP</span>
         </button>
-        <button class="standard-nav-item" data-tab="gst-returns" aria-label="GST Returns">
+        <button class="standard-nav-item" onclick="goToTaxCalculator()" aria-label="Tax Calculator">
             <div class="standard-nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="6" width="20" height="8" rx="1"/>
-                    <path d="m22 4-10 7L2 4"/>
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
                 </svg>
             </div>
-            <span class="standard-nav-label">Returns</span>
+            <span class="standard-nav-label">Tax</span>
         </button>
         <button class="standard-nav-item" data-tab="tools-extras" aria-label="Tools and Extras">
             <div class="standard-nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                </svg>
-            </div>
-            <span class="standard-nav-label">Tools</span>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        </div>
+        <span class="standard-nav-label">Tools</span>
         </button>
     </nav>
 

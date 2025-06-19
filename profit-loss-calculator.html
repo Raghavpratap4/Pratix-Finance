@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -701,7 +700,7 @@
                     </h4>
                     <div class="footer-links-list-elite">
                         <a href="about.html" class="footer-link-elite">
-                            <span class="footer-link-icon-elite">ℹ️</span>
+                            <span class="footer-link-icon-elite">elite">ℹ️</span>
                             About Us
                         </a>
                         <a href="blog.html" class="footer-link-elite">
@@ -944,37 +943,39 @@
                 const activeTabContent = document.getElementById(targetTab);
                 if (activeTabContent) {
                     activeTabContent.classList.add('active');
-                    console.log('Tab content activated:', targetTab);
                 }
 
-                // Scroll to top of main content
-                const mainContent = document.querySelector('.main-content');
-                if (mainContent) {
-                    mainContent.scrollTop = 0;
+                // Scroll to top
+                if (window.innerWidth >= 1024) {
+                    const mainAppContent = document.querySelector('.main-app-content');
+                    if (mainAppContent) {
+                        mainAppContent.scrollTop = 0;
+                    }
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             }
 
-            // Add event listeners to all nav items
+            // Add event listeners
             allNavItems.forEach(item => {
                 const handleTabSwitch = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     const targetTab = this.getAttribute('data-tab');
-                    console.log('Tab clicked:', targetTab);
                     if (targetTab) {
                         switchTab(targetTab);
                     }
                 };
 
                 item.addEventListener('click', handleTabSwitch);
-                item.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    handleTabSwitch.call(this, e);
-                });
+                item.addEventListener('touchend', handleTabSwitch);
             });
 
-            // Initialize with first tab active
-            if (allNavItems.length > 0) {
+            // Initialize with first active tab
+            const activeTab = document.querySelector('.tab-content.active');
+            if (activeTab) {
+                switchTab(activeTab.id);
+            } else if (allNavItems.length > 0) {
                 const firstTab = allNavItems[0].getAttribute('data-tab');
                 if (firstTab) {
                     switchTab(firstTab);
