@@ -1151,9 +1151,6 @@ body::after {
       overflow: visible !important;
       max-width: 100vw !important;
       box-sizing: border-box !important;
-      /* Force visibility on all pages */
-      display: grid !important;
-      /* Ensure it stays on top of everything */
       transform: translateZ(0) !important;
       will-change: transform !important;
   }
@@ -1172,17 +1169,31 @@ body::after {
       overflow: visible !important;
       display: block !important;
       grid-column: auto !important;
+      padding-bottom: 120px !important;
   }
 
   .main-content {
       overflow: visible !important;
       height: auto !important;
       min-height: auto !important;
+      padding-bottom: 2rem !important;
+  }
+
+  /* Single footer for mobile */
+  .professional-footer,
+  .simple-footer {
+      margin-bottom: 0 !important;
+      position: relative !important;
+      z-index: 1 !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
   }
 
   body {
       overflow: auto !important;
       height: auto !important;
+      padding-bottom: 0 !important;
   }
 }
 
@@ -1303,71 +1314,7 @@ body::after {
   }
 }
 
-  /* FORCE FOOTER VISIBILITY - Better performance */
-  .professional-footer,
-  .simple-footer {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      position: relative !important;
-      z-index: 1 !important;
-      margin-bottom: 120px !important;
-      background: rgba(15, 23, 42, 0.95) !important;
-      backdrop-filter: blur(20px) !important;
-      border-top: 2px solid var(--neon-blue) !important;
-      padding: 2rem 0 !important;
-      will-change: auto !important;
-  }
-
-  /* Ensure content doesn't overlap with fixed navigation */
-  .main-content {
-      padding-bottom: 120px !important;
-      margin-bottom: 0 !important;
-      min-height: calc(100vh - 200px) !important;
-  }
-
-  /* Force main app content padding for all calculator pages */
-  .main-app-content {
-      padding-bottom: 110px !important;
-      min-height: 100vh !important;
-  }
-
-  /* Footer spacing adjustment */
-  .simple-footer,
-  .professional-footer {
-      margin-bottom: 120px !important;
-      padding-bottom: 2rem !important;
-      position: relative !important;
-      z-index: 1 !important;
-  }
-
-  /* Prevent body scroll issues on mobile */
-  body {
-      padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
-      margin-bottom: 0 !important;
-      min-height: 100vh !important;
-      overflow-x: hidden !important;
-  }
-
-  /* Ensure proper app container structure */
-  .app-container {
-      position: relative !important;
-      min-height: 100vh !important;
-      width: 100% !important;
-      overflow-x: hidden !important;
-  }
-
-  .main-app-content {
-      min-height: calc(100vh - 120px) !important;
-      padding-bottom: 0 !important;
-  }
-
-  /* Force display on all screen sizes below 1024px */
-  .standard-bottom-nav {
-      display: grid !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-  }
+  
 }
 
 /* Ensure bottom nav is hidden on desktop */
@@ -1382,22 +1329,6 @@ body::after {
       left: -9999px !important;
       top: -9999px !important;
       z-index: -1 !important;
-  }
-  
-  /* Remove bottom padding from main content on desktop */
-  .main-app-content {
-      padding-bottom: 0 !important;
-  }
-  
-  /* Remove footer margin on desktop */
-  .simple-footer,
-  .professional-footer {
-      margin-bottom: 0 !important;
-  }
-  
-  /* Remove body padding on desktop */
-  body {
-      padding-bottom: 0 !important;
   }
 }
 
@@ -2394,8 +2325,8 @@ body::after {
       gap: 2rem;
   }
 
-  /* DESKTOP LAYOUT - Only apply fixed layout for calculator pages, not homepage */
-  .app-container:not(.homepage) {
+  /* DESKTOP LAYOUT - Proper responsive design for calculators */
+  .app-container {
       max-width: 100vw;
       display: grid;
       grid-template-columns: 280px 1fr;
@@ -2409,7 +2340,7 @@ body::after {
       bottom: 0;
   }
 
-  .app-container:not(.homepage) .main-app-content {
+  .main-app-content {
       grid-column: 2;
       height: 100vh;
       overflow-y: auto;
@@ -2419,7 +2350,7 @@ body::after {
       position: relative;
   }
 
-  .app-container:not(.homepage) .main-content {
+  .main-content {
       padding: 1.5rem 2rem 2rem;
       flex: 1;
       overflow-y: auto;
@@ -2427,21 +2358,22 @@ body::after {
       min-height: 0;
   }
 
-  /* Footer scrolls with main content for calculators */
-  .app-container:not(.homepage) .professional-footer,
-  .app-container:not(.homepage) .simple-footer {
+  /* Footer scrolls with main content */
+  .professional-footer,
+  .simple-footer {
       margin-top: auto;
       margin-bottom: 0 !important;
       position: relative;
+      padding-bottom: 2rem !important;
   }
 
-  .app-container:not(.homepage) .tab-navigation {
+  .tab-navigation {
       position: fixed !important;
       top: 0 !important;
       left: 0 !important;
       height: 100vh !important;
       width: 280px !important;
-      overflow-y: hidden !important;
+      overflow-y: auto !important;
       overflow-x: hidden !important;
       z-index: 1000 !important;
       display: flex !important;
@@ -2452,29 +2384,10 @@ body::after {
       padding: 2rem 1rem !important;
   }
 
-  /* Homepage normal scrolling */
-  .app-container.homepage {
-      position: relative !important;
-      overflow: visible !important;
-      height: auto !important;
-      display: block !important;
-  }
-
-  .app-container.homepage .main-wrapper {
-      overflow: visible !important;
-      height: auto !important;
-  }
-
-  /* Hide body scroll on desktop for calculators only */
-  body:has(.app-container:not(.homepage)) {
+  /* Hide body scroll on desktop */
+  body {
       overflow: hidden !important;
       height: 100vh !important;
-  }
-
-  /* Normal body scroll for homepage */
-  body:has(.app-container.homepage) {
-      overflow: auto !important;
-      height: auto !important;
   }
 }
 
@@ -2675,6 +2588,19 @@ body::after {
       padding: 0;
       min-height: 100vh;
       position: relative;
+  }
+
+  /* Single footer display */
+  .professional-footer,
+  .simple-footer {
+      margin-bottom: 0 !important;
+      padding-bottom: 2rem !important;
+      position: relative !important;
+      z-index: 1 !important;
+  }
+
+  .main-content {
+      padding-bottom: 120px !important;
   }</old_str>
 
   /* Enhanced bottom navigation for mobile */
