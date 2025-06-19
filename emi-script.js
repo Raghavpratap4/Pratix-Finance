@@ -126,6 +126,45 @@ function initEMICalculator() {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
     }
+
+    // Initialize input placeholders and watermarks
+    initInputPlaceholders();
+}
+
+function initInputPlaceholders() {
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const loanTenureInput = document.getElementById('loanTenureInput');
+
+    if (loanAmountInput) {
+        loanAmountInput.placeholder = "Enter loan amount";
+        loanAmountInput.addEventListener('focus', function() {
+            this.placeholder = "";
+        });
+        loanAmountInput.addEventListener('blur', function() {
+            this.placeholder = "Enter loan amount";
+        });
+    }
+
+    if (interestRateInput) {
+        interestRateInput.placeholder = "Enter interest rate";
+        interestRateInput.addEventListener('focus', function() {
+            this.placeholder = "";
+        });
+        interestRateInput.addEventListener('blur', function() {
+            this.placeholder = "Enter interest rate";
+        });
+    }
+
+    if (loanTenureInput) {
+        loanTenureInput.placeholder = "Enter loan tenure (years)";
+        loanTenureInput.addEventListener('focus', function() {
+            this.placeholder = "";
+        });
+        loanTenureInput.addEventListener('blur', function() {
+            this.placeholder = "Enter loan tenure (years)";
+        });
+    }
 }
 
 // Calculate EMI with proper validation
@@ -256,6 +295,7 @@ function resetEMICalculator() {
     inputs.forEach(id => {
         const element = document.getElementById(id);
         if (element) element.value = '';
+        if (element) element.placeholder = getPlaceholderText(id); // Reset placeholder
     });
 
     // Hide results and charts
@@ -286,6 +326,24 @@ function resetEMICalculator() {
     const loanCountSelect = document.getElementById('loanCountSelect');
     if (loanCountSelect && loanCountSelect.value) {
         generateLoanInputs();
+    }
+}
+
+// Helper function to get placeholder text
+function getPlaceholderText(inputId) {
+    switch (inputId) {
+        case 'loanAmountInput':
+            return 'Enter loan amount';
+        case 'interestRateInput':
+            return 'Enter interest rate';
+        case 'loanTenureInput':
+            return 'Enter loan tenure (years)';
+        case 'prepaymentAmount':
+            return 'Enter prepayment amount';
+        case 'prepayAfterMonths':
+            return 'Enter months after which prepayment is made';
+        default:
+            return '';
     }
 }
 
@@ -501,7 +559,7 @@ function initBottomNavigation() {
         // Remove any existing event listeners
         item.removeEventListener('click', handleNavClick);
         item.addEventListener('click', handleNavClick);
-        
+
         // Also add touch events for better mobile support
         item.addEventListener('touchend', function(e) {
             e.preventDefault();
@@ -520,7 +578,7 @@ function handleNavClick(e) {
 
     if (targetTab) {
         switchToTab(targetTab);
-        
+
         // Update active states
         document.querySelectorAll('.nav-item').forEach(nav => {
             nav.classList.remove('active');
@@ -924,7 +982,8 @@ function updatePrepaymentChart(originalData, prepaymentData) {
         options: {
             responsive: true,
             plugins: {
-                legend: {
+                legend:```
+{
                     display: true,
                     labels: {
                         color: '#ffffff'
@@ -1008,8 +1067,6 @@ function generateLoanInputs() {
 
     const loanCount = parseInt(loanCountSelect.value) || 2;
     console.log('Generating loan inputs for', loanCount, 'loans');
-
-```python
 
     container.innerHTML = '';
 
@@ -1997,3 +2054,40 @@ window.goToFdCalculator = goToFdCalculator;
 window.goToHome = goToHome;
 window.generateComparisonPDF = generateComparisonPDF;
 window.deletePlan = deletePlan;
+
+// Apply changes related to empty input fields and not calculating initial EMI.
+// The following code addresses the requirement of initializing input fields as empty and refraining from initial EMI calculation.
+document.addEventListener('DOMContentLoaded', function() {
+    const loanAmountSlider = document.getElementById('loanAmountSlider');
+    const loanAmountInput = document.getElementById('loanAmountInput');
+    const loanAmountDisplay = document.getElementById('loanAmountDisplay');
+
+    const interestRateSlider = document.getElementById('interestRateSlider');
+    const interestRateInput = document.getElementById('interestRateInput');
+    const interestRateDisplay = document.getElementById('interestRateDisplay');
+
+    const loanTenureSlider = document.getElementById('loanTenureSlider');
+    const loanTenureInput = document.getElementById('loanTenureInput');
+    const loanTenureDisplay = document.getElementById('loanTenureDisplay');
+
+    // Initialize with empty values
+    if (loanAmountSlider && loanAmountInput && loanAmountDisplay) {
+        loanAmountSlider.value = '1000000';
+        loanAmountInput.value = '';
+        loanAmountDisplay.textContent = '₹10,00,000';
+    }
+
+    if (interestRateSlider && interestRateInput && interestRateDisplay) {
+        interestRateSlider.value = '8.5';
+        interestRateInput.value = '';
+        interestRateDisplay.textContent = '8.5%';
+    }
+
+    if (loanTenureSlider && loanTenureInput && loanTenureDisplay) {
+        loanTenureSlider.value = '20';
+        loanTenureInput.value = '';
+        loanTenureDisplay.textContent = '20 Years';
+    }
+
+    // Don't calculate initial EMI - wait for user input
+});
