@@ -108,136 +108,171 @@
             </div>
         </section>
 
-        <!-- Search Section -->
+        <!-- Enhanced Search Section -->
         <section class="search-section" id="search">
             <div class="container">
-                <div class="search-container">
-                    <div class="search-icon">🔍</div>
-                    <input type="text" class="search-bar" placeholder="Search calculators (EMI, SIP, Tax, FD, GST...)" id="searchInput">
-                    <div class="search-results" id="searchResults"></div>
+                <div class="enhanced-search-container">
+                    <div class="search-input-wrapper">
+                        <div class="search-icon">🔍</div>
+                        <input type="text" class="enhanced-search-bar" placeholder="Search calculators..." id="searchInput">
+                        <button class="search-filter-btn" id="searchFilterBtn">⚙️</button>
+                    </div>
+                    
+                    <!-- Advanced Search Filters -->
+                    <div class="search-filters" id="searchFilters">
+                        <div class="filter-group">
+                            <label>Category:</label>
+                            <select id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="loan">Loan & EMI</option>
+                                <option value="investment">Investment & SIP</option>
+                                <option value="tax">Tax & Savings</option>
+                                <option value="business">Business & GST</option>
+                                <option value="banking">Banking & FD</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Type:</label>
+                            <select id="typeFilter">
+                                <option value="">All Types</option>
+                                <option value="basic">Basic Calculator</option>
+                                <option value="advanced">Advanced Tools</option>
+                                <option value="comparison">Comparison Tools</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Search Suggestions -->
+                    <div class="quick-suggestions" id="quickSuggestions">
+                        <div class="suggestion-tag" data-search="emi">EMI</div>
+                        <div class="suggestion-tag" data-search="sip">SIP</div>
+                        <div class="suggestion-tag" data-search="tax">Tax</div>
+                        <div class="suggestion-tag" data-search="gst">GST</div>
+                        <div class="suggestion-tag" data-search="fd">FD</div>
+                    </div>
+                    
+                    <!-- Enhanced Search Results -->
+                    <div class="enhanced-search-results" id="searchResults"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Calculators Section -->
+        <!-- Optimized Calculators Section -->
         <section class="calculators-section" id="calculators">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Financial Calculators & Tools</h2>
-                    <p class="section-subtitle">Choose from our comprehensive suite of professional financial calculators</p>
+                    <h2 class="section-title">Financial Calculators</h2>
+                    <p class="section-subtitle">Professional tools for smart financial decisions</p>
                 </div>
-                <div class="calculators-grid" id="calculatorsGrid">
-                    <!-- EMI Calculator -->
-                    <div class="calculator-card featured" data-name="EMI Calculator" data-keywords="emi loan mortgage home car personal finance interest">
-                        <div class="card-header">
+                
+                <!-- Mobile-First Calculator Cards -->
+                <div class="mobile-optimized-grid" id="calculatorsGrid">
+                    <!-- Compact EMI Calculator -->
+                    <div class="compact-calculator-card featured" data-name="EMI Calculator" data-keywords="emi loan mortgage home car personal finance interest" data-category="loan" data-type="basic">
+                        <div class="compact-card-header">
                             <div class="calculator-icon">🏠</div>
-                            <div class="card-badge">Most Popular</div>
+                            <div class="card-badge">Popular</div>
                         </div>
-                        <div class="card-content">
+                        <div class="compact-card-content">
                             <h3 class="calculator-title">EMI Calculator</h3>
-                            <p class="calculator-description">Calculate loan EMIs with detailed amortization schedules, prepayment analysis, and loan comparison tools.</p>
-                            <ul class="calculator-features">
-                                <li><span class="feature-icon">✓</span>Monthly EMI calculation</li>
-                                <li><span class="feature-icon">✓</span>Amortization table</li>
-                                <li><span class="feature-icon">✓</span>Prepayment impact</li>
-                                <li><span class="feature-icon">✓</span>Loan comparison</li>
-                            </ul>
+                            <p class="calculator-description">Calculate loan EMIs & compare options</p>
+                            <div class="key-features">
+                                <span class="feature-tag">Monthly EMI</span>
+                                <span class="feature-tag">Prepayment</span>
+                                <span class="feature-tag">Comparison</span>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="emi-calculator.html" class="use-btn">
-                                <span>Use Calculator</span>
+                        <div class="compact-card-footer">
+                            <a href="emi-calculator.html" class="compact-use-btn">
+                                <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- SIP Calculator -->
-                    <div class="calculator-card" data-name="SIP Calculator" data-keywords="sip mutual fund investment systematic plan returns">
-                        <div class="card-header">
+                    <!-- Compact SIP Calculator -->
+                    <div class="compact-calculator-card" data-name="SIP Calculator" data-keywords="sip mutual fund investment systematic plan returns" data-category="investment" data-type="basic">
+                        <div class="compact-card-header">
                             <div class="calculator-icon">📈</div>
                         </div>
-                        <div class="card-content">
+                        <div class="compact-card-content">
                             <h3 class="calculator-title">SIP Calculator</h3>
-                            <p class="calculator-description">Plan systematic investments with future value projections, step-up SIP analysis, and goal-based planning.</p>
-                            <ul class="calculator-features">
-                                <li><span class="feature-icon">✓</span>Future value calculation</li>
-                                <li><span class="feature-icon">✓</span>Step-up SIP planning</li>
-                                <li><span class="feature-icon">✓</span>Goal-based investing</li>
-                                <li><span class="feature-icon">✓</span>Returns comparison</li>
-                            </ul>
+                            <p class="calculator-description">Plan systematic investments & goals</p>
+                            <div class="key-features">
+                                <span class="feature-tag">Future Value</span>
+                                <span class="feature-tag">Step-up SIP</span>
+                                <span class="feature-tag">Goal Planning</span>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="sip-calculator.html" class="use-btn">
-                                <span>Use Calculator</span>
+                        <div class="compact-card-footer">
+                            <a href="sip-calculator.html" class="compact-use-btn">
+                                <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- Tax Calculator -->
-                    <div class="calculator-card" data-name="Income Tax Calculator" data-keywords="tax income tax calculator old new regime">
-                        <div class="card-header">
+                    <!-- Compact Tax Calculator -->
+                    <div class="compact-calculator-card" data-name="Income Tax Calculator" data-keywords="tax income tax calculator old new regime" data-category="tax" data-type="basic">
+                        <div class="compact-card-header">
                             <div class="calculator-icon">💼</div>
                         </div>
-                        <div class="card-content">
-                            <h3 class="calculator-title">Income Tax Calculator</h3>
-                            <p class="calculator-description">Calculate tax liability under both regimes with deduction optimization and salary breakdown analysis.</p>
-                            <ul class="calculator-features">
-                                <li><span class="feature-icon">✓</span>Old vs New regime</li>
-                                <li><span class="feature-icon">✓</span>Deduction planning</li>
-                                <li><span class="feature-icon">✓</span>Tax saving tips</li>
-                                <li><span class="feature-icon">✓</span>Salary breakdown</li>
-                            </ul>
+                        <div class="compact-card-content">
+                            <h3 class="calculator-title">Tax Calculator</h3>
+                            <p class="calculator-description">Calculate tax under both regimes</p>
+                            <div class="key-features">
+                                <span class="feature-tag">Old vs New</span>
+                                <span class="feature-tag">Deductions</span>
+                                <span class="feature-tag">Tax Saving</span>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="tax-calculator.html" class="use-btn">
-                                <span>Use Calculator</span>
+                        <div class="compact-card-footer">
+                            <a href="tax-calculator.html" class="compact-use-btn">
+                                <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- Fixed Deposit Calculator -->
-                    <div class="calculator-card" data-name="Fixed Deposit Calculator" data-keywords="fd fixed deposit bank interest maturity">
-                        <div class="card-header">
+                    <!-- Compact FD Calculator -->
+                    <div class="compact-calculator-card" data-name="Fixed Deposit Calculator" data-keywords="fd fixed deposit bank interest maturity" data-category="banking" data-type="basic">
+                        <div class="compact-card-header">
                             <div class="calculator-icon">🏦</div>
                         </div>
-                        <div class="card-content">
+                        <div class="compact-card-content">
                             <h3 class="calculator-title">FD Calculator</h3>
-                            <p class="calculator-description">Calculate fixed deposit returns with compound interest analysis and bank rate comparisons.</p>
-                            <ul class="calculator-features">
-                                <li><span class="feature-icon">✓</span>Maturity amount</li>
-                                <li><span class="feature-icon">✓</span>Interest comparison</li>
-                                <li><span class="feature-icon">✓</span>Tax on interest</li>
-                                <li><span class="feature-icon">✓</span>Quarterly compounding</li>
-                            </ul>
+                            <p class="calculator-description">Calculate FD returns & maturity</p>
+                            <div class="key-features">
+                                <span class="feature-tag">Maturity</span>
+                                <span class="feature-tag">Compound Interest</span>
+                                <span class="feature-tag">Tax Impact</span>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="fd-calculator.html" class="use-btn">
-                                <span>Use Calculator</span>
+                        <div class="compact-card-footer">
+                            <a href="fd-calculator.html" class="compact-use-btn">
+                                <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- GST Calculator -->
-                    <div class="calculator-card" data-name="GST Calculator" data-keywords="gst goods services tax business invoice">
-                        <div class="card-header">
+                    <!-- Compact GST Calculator -->
+                    <div class="compact-calculator-card" data-name="GST Calculator" data-keywords="gst goods services tax business invoice" data-category="business" data-type="basic">
+                        <div class="compact-card-header">
                             <div class="calculator-icon">📊</div>
                         </div>
-                        <div class="card-content">
+                        <div class="compact-card-content">
                             <h3 class="calculator-title">GST Calculator</h3>
-                            <p class="calculator-description">Calculate GST for business transactions with multiple tax rates, HSN codes, and invoice generation.</p>
-                            <ul class="calculator-features">
-                                <li><span class="feature-icon">✓</span>Multiple GST rates</li>
-                                <li><span class="feature-icon">✓</span>Inclusive/Exclusive</li>
-                                <li><span class="feature-icon">✓</span>HSN code lookup</li>
-                                <li><span class="feature-icon">✓</span>Invoice generation</li>
-                            </ul>
+                            <p class="calculator-description">Calculate GST & generate invoices</p>
+                            <div class="key-features">
+                                <span class="feature-tag">Multiple Rates</span>
+                                <span class="feature-tag">HSN Codes</span>
+                                <span class="feature-tag">Invoicing</span>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="gst-calculator.html" class="use-btn">
-                                <span>Use Calculator</span>
+                        <div class="compact-card-footer">
+                            <a href="gst-calculator.html" class="compact-use-btn">
+                                <span>Calculate</span>
                                 <span class="btn-arrow">→</span>
                             </a>
                         </div>
@@ -839,51 +874,163 @@
             versionManager.checkUpdateCompletion();
         });
 
-        // Search functionality
+        // Enhanced Search functionality
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
-        const calculatorCards = document.querySelectorAll('.calculator-card');
+        const searchFilterBtn = document.getElementById('searchFilterBtn');
+        const searchFilters = document.getElementById('searchFilters');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const typeFilter = document.getElementById('typeFilter');
+        const quickSuggestions = document.querySelectorAll('.suggestion-tag');
+        const calculatorCards = document.querySelectorAll('.compact-calculator-card');
 
-        // Search data
+        // Enhanced search data with categories and types
         const searchData = Array.from(calculatorCards).map(card => ({
             element: card,
             name: card.dataset.name,
             keywords: card.dataset.keywords,
+            category: card.dataset.category,
+            type: card.dataset.type,
             title: card.querySelector('.calculator-title').textContent,
             description: card.querySelector('.calculator-description').textContent
         }));
 
+        // Future calculators database for scalability
+        const futureCalculators = [
+            {
+                name: 'PPF Calculator',
+                keywords: 'ppf public provident fund retirement savings tax benefits',
+                category: 'tax',
+                type: 'basic',
+                title: 'PPF Calculator',
+                description: 'Calculate PPF returns with tax benefits',
+                url: 'ppf-calculator.html',
+                icon: '🎯',
+                status: 'coming_soon'
+            },
+            {
+                name: 'CAGR Calculator',
+                keywords: 'cagr compound annual growth rate investment returns',
+                category: 'investment',
+                type: 'basic',
+                title: 'CAGR Calculator',
+                description: 'Calculate compound annual growth rate',
+                url: 'cagr-calculator.html',
+                icon: '📊',
+                status: 'coming_soon'
+            },
+            {
+                name: 'Loan Eligibility Calculator',
+                keywords: 'loan eligibility home car personal maximum amount',
+                category: 'loan',
+                type: 'advanced',
+                title: 'Loan Eligibility Calculator',
+                description: 'Check maximum loan eligibility',
+                url: 'loan-eligibility-calculator.html',
+                icon: '🏠',
+                status: 'coming_soon'
+            },
+            {
+                name: 'Mutual Fund Calculator',
+                keywords: 'mutual fund nav returns lumpsum sip comparison',
+                category: 'investment',
+                type: 'advanced',
+                title: 'Mutual Fund Calculator',
+                description: 'Analyze mutual fund investments',
+                url: 'mutual-fund-calculator.html',
+                icon: '📈',
+                status: 'coming_soon'
+            },
+            {
+                name: 'HRA Calculator',
+                keywords: 'hra house rent allowance tax exemption salary',
+                category: 'tax',
+                type: 'basic',
+                title: 'HRA Calculator',
+                description: 'Calculate HRA tax exemption',
+                url: 'hra-calculator.html',
+                icon: '🏠',
+                status: 'coming_soon'
+            }
+        ];
+
+        // Toggle search filters
+        searchFilterBtn.addEventListener('click', function() {
+            searchFilters.classList.toggle('active');
+        });
+
+        // Quick suggestion handlers
+        quickSuggestions.forEach(tag => {
+            tag.addEventListener('click', function() {
+                const searchTerm = this.dataset.search;
+                searchInput.value = searchTerm;
+                performSearch(searchTerm);
+            });
+        });
+
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
+            performSearch(query);
+        });
 
+        function performSearch(query) {
             if (query.length === 0) {
-                searchResults.style.display = 'none';
+                searchResults.classList.remove('active');
                 showAllCalculators();
                 return;
             }
 
-            // Filter results
-            const filtered = searchData.filter(item => 
-                item.name.toLowerCase().includes(query) ||
-                item.keywords.toLowerCase().includes(query) ||
-                item.title.toLowerCase().includes(query) ||
-                item.description.toLowerCase().includes(query)
-            );
+            // Get current filter values
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
 
-            // Show search results dropdown
+            // Combine current and future calculators for search
+            const allCalculators = [
+                ...searchData.map(item => ({ ...item, status: 'available' })),
+                ...futureCalculators
+            ];
+
+            // Enhanced filtering with category and type support
+            const filtered = allCalculators.filter(item => {
+                const matchesQuery = 
+                    item.name.toLowerCase().includes(query) ||
+                    item.keywords.toLowerCase().includes(query) ||
+                    item.title.toLowerCase().includes(query) ||
+                    item.description.toLowerCase().includes(query);
+
+                const matchesCategory = !categoryFilter || item.category === categoryFilter;
+                const matchesType = !typeFilter || item.type === typeFilter;
+
+                return matchesQuery && matchesCategory && matchesType;
+            });
+
+            // Show enhanced search results
             if (filtered.length > 0) {
                 searchResults.innerHTML = filtered.map(item => `
-                    <div class="search-result-item" data-name="${item.name}">
-                        <div class="search-result-title">${item.title}</div>
+                    <div class="search-result-item" data-name="${item.name}" data-status="${item.status || 'available'}">
+                        <div class="search-result-title">
+                            ${item.icon || '🧮'} ${item.title}
+                            ${item.status === 'coming_soon' ? '<span style="color: var(--neon-green); font-size: 0.8rem; margin-left: 0.5rem;">Coming Soon</span>' : ''}
+                        </div>
                         <div class="search-result-description">${item.description}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            Category: ${item.category} • Type: ${item.type}
+                        </div>
                     </div>
                 `).join('');
-                searchResults.style.display = 'block';
+                searchResults.classList.add('active');
 
                 // Add click listeners to search results
                 searchResults.querySelectorAll('.search-result-item').forEach(item => {
                     item.addEventListener('click', function() {
                         const cardName = this.dataset.name;
+                        const status = this.dataset.status;
+
+                        if (status === 'coming_soon') {
+                            showNotification('This calculator is coming soon! Stay tuned for updates.', 'info');
+                            return;
+                        }
+
                         const targetCard = Array.from(calculatorCards).find(card => 
                             card.dataset.name === cardName
                         );
@@ -894,35 +1041,110 @@
                                 targetCard.style.transform = '';
                             }, 1000);
                         }
-                        searchResults.style.display = 'none';
+                        searchResults.classList.remove('active');
                         searchInput.value = '';
                     });
                 });
             } else {
-                searchResults.innerHTML = '<div class="search-result-item">No calculators found</div>';
-                searchResults.style.display = 'block';
+                searchResults.innerHTML = '<div class="search-result-item"><div class="search-result-title">No calculators found</div><div class="search-result-description">Try different keywords or check back later for new calculators</div></div>';
+                searchResults.classList.add('active');
             }
 
             // Filter visible calculators
             filterCalculators(query);
+        }
+
+        // Filter change handlers
+        categoryFilter.addEventListener('change', function() {
+            const query = searchInput.value.toLowerCase().trim();
+            performSearch(query);
+        });
+
+        typeFilter.addEventListener('change', function() {
+            const query = searchInput.value.toLowerCase().trim();
+            performSearch(query);
         });
 
         // Hide search results when clicking outside
         document.addEventListener('click', function(e) {
-            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                searchResults.style.display = 'none';
+            const searchContainer = document.querySelector('.enhanced-search-container');
+            if (!searchContainer.contains(e.target)) {
+                searchResults.classList.remove('active');
+                searchFilters.classList.remove('active');
             }
         });
 
+        // Notification system for coming soon features
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'linear-gradient(135deg, #00ff88, #00d4ff)' : 
+                            type === 'error' ? 'linear-gradient(135deg, #ff4757, #ff6b7a)' : 
+                            'linear-gradient(135deg, #667eea, #764ba2)'};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+                backdrop-filter: blur(20px);
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+                font-size: 0.9rem;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Add CSS for notification animations
+        const notificationStyle = document.createElement('style');
+        notificationStyle.textContent = `
+            @keyframes slideInRight {
+                from { opacity: 0; transform: translateX(100%); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+            @keyframes slideOutRight {
+                from { opacity: 1; transform: translateX(0); }
+                to { opacity: 0; transform: translateX(100%); }
+            }
+        `;
+        document.head.appendChild(notificationStyle);
+
         function filterCalculators(query) {
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+
             calculatorCards.forEach(card => {
                 const name = card.dataset.name.toLowerCase();
                 const keywords = card.dataset.keywords.toLowerCase();
+                const category = card.dataset.category;
+                const type = card.dataset.type;
                 const title = card.querySelector('.calculator-title').textContent.toLowerCase();
                 const description = card.querySelector('.calculator-description').textContent.toLowerCase();
 
-                if (name.includes(query) || keywords.includes(query) || 
-                    title.includes(query) || description.includes(query)) {
+                const matchesQuery = !query || 
+                    name.includes(query) || 
+                    keywords.includes(query) || 
+                    title.includes(query) || 
+                    description.includes(query);
+
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                const matchesType = !typeFilter || type === typeFilter;
+
+                if (matchesQuery && matchesCategory && matchesType) {
                     card.style.display = 'block';
                     card.style.animation = 'fadeIn 0.5s ease';
                 } else {
