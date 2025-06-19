@@ -765,6 +765,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Initialize tab switching functionality
+    function initTabSwitching() {
+        console.log('Initializing tab switching');
+
+        const navItems = document.querySelectorAll('.nav-item, .tab-nav-item');
+        console.log('Found nav items:', navItems.length);
+
+        navItems.forEach((item, index) => {
+            const targetTab = item.getAttribute('data-tab');
+            console.log(`Adding click listener to nav item ${index}:`, targetTab);
+
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const targetTab = this.getAttribute('data-tab');
+                console.log('Tab clicked:', targetTab);
+
+                if (targetTab) {
+                    switchToTab(targetTab);
+                }
+            });
+        });
+    }
+
+// Initialize bottom navigation
+function initBottomNavigation() {
+    console.log('Initializing bottom navigation');
+    const navItems = document.querySelectorAll('.standard-bottom-nav .standard-nav-item');
+    console.log('Found bottom nav items:', navItems.length);
+
+    navItems.forEach((item, index) => {
+        const targetTab = item.getAttribute('data-tab');
+        console.log(`Bottom nav item ${index}:`, targetTab);
+
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const targetTab = this.getAttribute('data-tab');
+            console.log('Bottom nav tab clicked:', targetTab);
+
+            if (targetTab) {
+                switchToTab(targetTab);
+            }
+        });
+    });
+}
+
     // Initialize all components
     initTaxCalculator();
     initTaxPlanning();

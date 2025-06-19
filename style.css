@@ -1164,6 +1164,13 @@ body::after {
       backdrop-filter: blur(30px) !important;
   }
 
+  /* Force display on all screen sizes below 1024px */
+  .standard-bottom-nav {
+      display: grid !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+  }
+
   /* Ensure all navigation items are properly displayed */
   .nav-item,
   .standard-nav-item {
@@ -1197,6 +1204,22 @@ body::after {
       margin: 0.1rem !important;
   }
 
+  .standard-nav-icon,
+  .nav-icon {
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+  }
+
+  .standard-nav-label,
+  .nav-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1;
+      text-align: center;
+  }
+
   .nav-item:hover,
   .standard-nav-item:hover {
       color: var(--neon-cyan) !important;
@@ -1226,6 +1249,14 @@ body::after {
       background: var(--neon-blue);
       border-radius: 50%;
       box-shadow: 0 0 15px var(--neon-blue);
+  }
+
+  .nav-item.active .nav-icon,
+  .nav-item:hover .nav-icon,
+  .standard-nav-item.active .standard-nav-icon,
+  .standard-nav-item:hover .standard-nav-icon {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 10px currentColor);
   }
 
   .nav-icon,
