@@ -491,25 +491,42 @@ function initTabSwitching() {
 // Initialize bottom navigation
 function initBottomNavigation() {
     console.log('Initializing bottom navigation');
-    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+    const navItems = document.querySelectorAll('.bottom-nav .nav-item, .nav-item');
     console.log('Found bottom nav items:', navItems.length);
 
     navItems.forEach((item, index) => {
         const targetTab = item.getAttribute('data-tab');
         console.log(`Bottom nav item ${index}:`, targetTab);
 
-        item.addEventListener('click', function(e) {
+        // Remove any existing event listeners
+        item.removeEventListener('click', handleNavClick);
+        item.addEventListener('click', handleNavClick);
+        
+        // Also add touch events for better mobile support
+        item.addEventListener('touchend', function(e) {
             e.preventDefault();
             e.stopPropagation();
-
-            const targetTab = this.getAttribute('data-tab');
-            console.log('Bottom nav tab clicked:', targetTab);
-
-            if (targetTab) {
-                switchToTab(targetTab);
-            }
+            handleNavClick.call(this, e);
         });
     });
+}
+
+function handleNavClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const targetTab = this.getAttribute('data-tab');
+    console.log('Nav tab clicked:', targetTab);
+
+    if (targetTab) {
+        switchToTab(targetTab);
+        
+        // Update active states
+        document.querySelectorAll('.nav-item').forEach(nav => {
+            nav.classList.remove('active');
+        });
+        this.classList.add('active');
+    }
 }
 
 // Switch to tab function
