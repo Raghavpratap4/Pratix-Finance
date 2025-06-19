@@ -1162,6 +1162,12 @@ body::after {
       /* Ensure it's always on top */
       -webkit-backdrop-filter: blur(30px) !important;
       backdrop-filter: blur(30px) !important;
+      /* Additional fixes for mobile positioning */
+      top: auto !important;
+      min-height: 90px !important;
+      max-height: 90px !important;
+      overflow: visible !important;
+      contain: layout style paint !important;
   }
 
   /* Force display on all screen sizes below 1024px */
@@ -1179,8 +1185,8 @@ body::after {
       align-items: center !important;
       justify-content: center !important;
       gap: 0.25rem !important;
-      background: rgba(0, 0, 0, 0.3) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
       color: var(--text-muted) !important;
       cursor: pointer !important;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -1202,6 +1208,9 @@ body::after {
       text-decoration: none !important;
       flex: 1 !important;
       margin: 0.1rem !important;
+      /* Ensure proper display */
+      visibility: visible !important;
+      opacity: 1 !important;
   }
 
   .standard-nav-icon,
@@ -1301,14 +1310,15 @@ body::after {
 
   /* Ensure content doesn't overlap with fixed navigation */
   .main-content {
-      padding-bottom: 140px !important;
+      padding-bottom: 120px !important;
       margin-bottom: 0 !important;
+      min-height: calc(100vh - 90px) !important;
   }
 
   /* Footer spacing adjustment */
   .simple-footer,
   .professional-footer {
-      margin-bottom: 140px !important;
+      margin-bottom: 110px !important;
       padding-bottom: 2rem !important;
       position: relative !important;
       z-index: 1 !important;
@@ -1316,8 +1326,10 @@ body::after {
 
   /* Prevent body scroll issues on mobile */
   body {
-      padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+      padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
       margin-bottom: 0 !important;
+      min-height: 100vh !important;
+      overflow-x: hidden !important;
   }
 
   /* Force display on all screen sizes below 1024px */
@@ -1330,8 +1342,45 @@ body::after {
 
 /* Ensure bottom nav is hidden on desktop */
 @media (min-width: 1024px) {
-  .bottom-nav {
+  .bottom-nav,
+  .standard-bottom-nav {
       display: none !important;
+  }
+}
+
+/* Additional mobile navigation fixes */
+@media (max-width: 1023px) {
+  /* Ensure app container doesn't interfere */
+  .app-container {
+      position: relative !important;
+      min-height: 100vh !important;
+      padding-bottom: 0 !important;
+  }
+
+  /* Force navigation to stay at bottom */
+  .bottom-nav,
+  .standard-bottom-nav {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 9999999 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      box-sizing: border-box !important;
+      /* Prevent any layout shifts */
+      transform: none !important;
+      -webkit-transform: none !important;
+      /* Ensure it's always visible */
+      display: grid !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+  }
+
+  /* Ensure proper spacing for all content */
+  .main-app-content {
+      padding-bottom: 100px !important;
   }
 }
 
