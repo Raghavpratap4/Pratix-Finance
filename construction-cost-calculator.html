@@ -1,0 +1,653 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Construction Cost Estimator - Calculate construction costs, material quantities, labor costs and project timelines with detailed analysis." />
+    <meta name="keywords" content="construction cost, building cost, material calculator, labor cost, construction estimator, building calculator" />
+    <title>Construction Cost Estimator - PRATIX FINANCE</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Desktop Tab Navigation -->
+        <nav class="tab-navigation">
+            <div class="tab-nav-item active" data-tab="house-construction">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">House Construction</span>
+            </div>
+            <div class="tab-nav-item" data-tab="commercial-construction">
+                <span class="nav-icon">🏢</span>
+                <span class="nav-label">Commercial</span>
+            </div>
+            <div class="tab-nav-item" data-tab="renovation-calculator">
+                <span class="nav-icon">🔨</span>
+                <span class="nav-label">Renovation</span>
+            </div>
+            <div class="tab-nav-item" data-tab="material-calculator">
+                <span class="nav-icon">🧱</span>
+                <span class="nav-label">Material Calculator</span>
+            </div>
+            <div class="tab-nav-item" data-tab="cost-analysis">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Cost Analysis</span>
+            </div>
+            <div class="tab-nav-item" data-tab="project-timeline">
+                <span class="nav-icon">📅</span>
+                <span class="nav-label">Timeline</span>
+            </div>
+        </nav>
+
+        <div class="main-app-content">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="header-content">
+                    <h1 class="app-title">🏗️ Construction Cost Estimator</h1>
+                    <button class="icon-btn" onclick="goBack()">
+                        <span>←</span>
+                    </button>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <!-- House Construction Tab -->
+                <div id="house-construction" class="tab-content active">
+                    <div class="glass-card">
+                        <h2 class="section-title">🏠 House Construction Calculator</h2>
+                        <p class="sub-title">Calculate total construction cost for residential projects</p>
+                        
+                        <div class="calculator-layout">
+                            <div class="calculator-form">
+                                <div class="glass-card">
+                                    <h3>📐 Plot & Building Details</h3>
+                                    <div class="input-group">
+                                        <label for="plotLength">Plot Length (feet)</label>
+                                        <input type="number" id="plotLength" class="calc-input" placeholder="Enter plot length">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="plotWidth">Plot Width (feet)</label>
+                                        <input type="number" id="plotWidth" class="calc-input" placeholder="Enter plot width">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="constructionArea">Construction Area (sq ft)</label>
+                                        <input type="number" id="constructionArea" class="calc-input" placeholder="Enter built-up area">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="floors">Number of Floors</label>
+                                        <select id="floors" class="calc-input">
+                                            <option value="1">Single Floor (Ground)</option>
+                                            <option value="2">Two Floors (G+1)</option>
+                                            <option value="3">Three Floors (G+2)</option>
+                                            <option value="4">Four Floors (G+3)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="glass-card">
+                                    <h3>🏗️ Construction Type & Quality</h3>
+                                    <div class="input-group">
+                                        <label for="constructionType">Construction Type</label>
+                                        <select id="constructionType" class="calc-input">
+                                            <option value="basic">Basic (₹1,200/sq ft)</option>
+                                            <option value="standard">Standard (₹1,500/sq ft)</option>
+                                            <option value="premium">Premium (₹2,000/sq ft)</option>
+                                            <option value="luxury">Luxury (₹2,500/sq ft)</option>
+                                            <option value="custom">Custom Rate</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group" id="customRateGroup" style="display: none;">
+                                        <label for="customRate">Custom Rate (₹ per sq ft)</label>
+                                        <div class="input-wrapper">
+                                            <span class="currency">₹</span>
+                                            <input type="number" id="customRate" class="calc-input" placeholder="Enter custom rate">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="location">Location Factor</label>
+                                        <select id="location" class="calc-input">
+                                            <option value="1.0">Tier 3 Cities/Rural (Base Rate)</option>
+                                            <option value="1.2">Tier 2 Cities (+20%)</option>
+                                            <option value="1.5">Metro Cities (+50%)</option>
+                                            <option value="1.8">Mumbai/Delhi NCR (+80%)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="glass-card">
+                                    <h3>💰 Additional Costs</h3>
+                                    <div class="input-group">
+                                        <label for="electricalCost">Electrical Work (₹)</label>
+                                        <div class="input-wrapper">
+                                            <span class="currency">₹</span>
+                                            <input type="number" id="electricalCost" class="calc-input" placeholder="Default: 8% of construction cost">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="plumbingCost">Plumbing Work (₹)</label>
+                                        <div class="input-wrapper">
+                                            <span class="currency">₹</span>
+                                            <input type="number" id="plumbingCost" class="calc-input" placeholder="Default: 6% of construction cost">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="interiorCost">Interior & Finishing (₹)</label>
+                                        <div class="input-wrapper">
+                                            <span class="currency">₹</span>
+                                            <input type="number" id="interiorCost" class="calc-input" placeholder="Default: 15% of construction cost">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="approvalCost">Approvals & Documentation (₹)</label>
+                                        <div class="input-wrapper">
+                                            <span class="currency">₹</span>
+                                            <input type="number" id="approvalCost" class="calc-input" placeholder="Default: 3% of construction cost">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="button-group">
+                                    <button class="calculate-btn" onclick="calculateHouseConstruction()">
+                                        <span>🧮</span> Calculate Construction Cost
+                                    </button>
+                                    <button class="refresh-btn" onclick="resetHouseConstruction()">
+                                        <span>🔄</span> Reset Calculator
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="result-section">
+                                <div id="houseConstructionResults" style="display: none;">
+                                    <div class="result-card">
+                                        <h3>💰 Total Construction Cost</h3>
+                                        <div class="result-item">
+                                            <span class="result-label">Total Project Cost</span>
+                                            <span class="result-value" id="totalProjectCost">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Cost per Sq Ft</span>
+                                            <span class="result-value" id="costPerSqFt">₹0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="result-card">
+                                        <h3>📊 Cost Breakdown</h3>
+                                        <div class="result-item">
+                                            <span class="result-label">Basic Construction</span>
+                                            <span class="result-value" id="basicConstructionCost">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Electrical Work</span>
+                                            <span class="result-value" id="electricalWorkCost">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Plumbing Work</span>
+                                            <span class="result-value" id="plumbingWorkCost">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Interior & Finishing</span>
+                                            <span class="result-value" id="interiorWorkCost">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Approvals & Documentation</span>
+                                            <span class="result-value" id="approvalWorkCost">₹0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="chart-container">
+                                        <h4 class="chart-title">📈 Cost Distribution</h4>
+                                        <div class="chart-wrapper">
+                                            <canvas id="houseConstructionChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commercial Construction Tab -->
+                <div id="commercial-construction" class="tab-content">
+                    <div class="glass-card">
+                        <h2 class="section-title">🏢 Commercial Construction Calculator</h2>
+                        <p class="sub-title">Calculate costs for commercial buildings, offices, and retail spaces</p>
+                        
+                        <div class="calculator-layout">
+                            <div class="calculator-form">
+                                <div class="glass-card">
+                                    <h3>🏢 Building Specifications</h3>
+                                    <div class="input-group">
+                                        <label for="commercialType">Building Type</label>
+                                        <select id="commercialType" class="calc-input">
+                                            <option value="office">Office Building (₹1,800/sq ft)</option>
+                                            <option value="retail">Retail Space (₹1,600/sq ft)</option>
+                                            <option value="warehouse">Warehouse (₹800/sq ft)</option>
+                                            <option value="hospital">Hospital/Clinic (₹2,200/sq ft)</option>
+                                            <option value="hotel">Hotel (₹2,500/sq ft)</option>
+                                            <option value="mall">Shopping Mall (₹2,000/sq ft)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="commercialArea">Total Built-up Area (sq ft)</label>
+                                        <input type="number" id="commercialArea" class="calc-input" placeholder="Enter total area">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="commercialFloors">Number of Floors</label>
+                                        <input type="number" id="commercialFloors" class="calc-input" placeholder="Enter number of floors" min="1" max="50">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="parkingArea">Parking Area (sq ft)</label>
+                                        <input type="number" id="parkingArea" class="calc-input" placeholder="Enter parking area">
+                                    </div>
+                                </div>
+
+                                <div class="glass-card">
+                                    <h3>⚡ Infrastructure & Systems</h3>
+                                    <div class="input-group">
+                                        <label for="hvacSystem">HVAC System</label>
+                                        <select id="hvacSystem" class="calc-input">
+                                            <option value="basic">Basic (₹200/sq ft)</option>
+                                            <option value="standard">Standard (₹350/sq ft)</option>
+                                            <option value="premium">Premium (₹500/sq ft)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="elevators">Number of Elevators</label>
+                                        <input type="number" id="elevators" class="calc-input" placeholder="0" min="0">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="fireSystem">Fire Safety System</label>
+                                        <select id="fireSystem" class="calc-input">
+                                            <option value="basic">Basic (₹80/sq ft)</option>
+                                            <option value="advanced">Advanced (₹150/sq ft)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="securitySystem">Security System</label>
+                                        <select id="securitySystem" class="calc-input">
+                                            <option value="basic">Basic (₹50/sq ft)</option>
+                                            <option value="advanced">Advanced (₹120/sq ft)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="button-group">
+                                    <button class="calculate-btn" onclick="calculateCommercialConstruction()">
+                                        <span>🧮</span> Calculate Commercial Cost
+                                    </button>
+                                    <button class="refresh-btn" onclick="resetCommercialConstruction()">
+                                        <span>🔄</span> Reset Calculator
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="result-section">
+                                <div id="commercialConstructionResults" style="display: none;">
+                                    <div class="result-card">
+                                        <h3>💰 Total Commercial Cost</h3>
+                                        <div class="result-item">
+                                            <span class="result-label">Total Project Cost</span>
+                                            <span class="result-value" id="totalCommercialCost">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">Cost per Sq Ft</span>
+                                            <span class="result-value" id="commercialCostPerSqFt">₹0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="chart-container">
+                                        <h4 class="chart-title">📊 Commercial Cost Analysis</h4>
+                                        <div class="chart-wrapper">
+                                            <canvas id="commercialConstructionChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Renovation Calculator Tab -->
+                <div id="renovation-calculator" class="tab-content">
+                    <div class="glass-card">
+                        <h2 class="section-title">🔨 Renovation Cost Calculator</h2>
+                        <p class="sub-title">Calculate costs for home renovations and remodeling projects</p>
+                        
+                        <div class="calculator-layout">
+                            <div class="calculator-form">
+                                <div class="glass-card">
+                                    <h3>🏠 Renovation Scope</h3>
+                                    <div class="input-group">
+                                        <label for="renovationType">Renovation Type</label>
+                                        <select id="renovationType" class="calc-input">
+                                            <option value="partial">Partial Renovation (30-50%)</option>
+                                            <option value="major">Major Renovation (60-80%)</option>
+                                            <option value="complete">Complete Renovation (90-100%)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="renovationArea">Area to Renovate (sq ft)</label>
+                                        <input type="number" id="renovationArea" class="calc-input" placeholder="Enter area">
+                                    </div>
+                                </div>
+
+                                <div class="glass-card">
+                                    <h3>🛠️ Room-wise Renovation</h3>
+                                    <div class="renovation-rooms">
+                                        <div class="room-item">
+                                            <label>
+                                                <input type="checkbox" id="kitchenReno"> Kitchen Renovation
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <span class="currency">₹</span>
+                                                <input type="number" id="kitchenCost" class="calc-input" placeholder="Kitchen cost" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="room-item">
+                                            <label>
+                                                <input type="checkbox" id="bathroomReno"> Bathroom Renovation
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <span class="currency">₹</span>
+                                                <input type="number" id="bathroomCost" class="calc-input" placeholder="Bathroom cost" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="room-item">
+                                            <label>
+                                                <input type="checkbox" id="bedroomReno"> Bedroom Renovation
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <span class="currency">₹</span>
+                                                <input type="number" id="bedroomCost" class="calc-input" placeholder="Bedroom cost" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="room-item">
+                                            <label>
+                                                <input type="checkbox" id="livingReno"> Living Room Renovation
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <span class="currency">₹</span>
+                                                <input type="number" id="livingCost" class="calc-input" placeholder="Living room cost" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="button-group">
+                                    <button class="calculate-btn" onclick="calculateRenovation()">
+                                        <span>🧮</span> Calculate Renovation Cost
+                                    </button>
+                                    <button class="refresh-btn" onclick="resetRenovation()">
+                                        <span>🔄</span> Reset Calculator
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="result-section">
+                                <div id="renovationResults" style="display: none;">
+                                    <div class="result-card">
+                                        <h3>💰 Total Renovation Cost</h3>
+                                        <div class="result-item">
+                                            <span class="result-label">Total Cost</span>
+                                            <span class="result-value" id="totalRenovationCost">₹0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Material Calculator Tab -->
+                <div id="material-calculator" class="tab-content">
+                    <div class="glass-card">
+                        <h2 class="section-title">🧱 Material Calculator</h2>
+                        <p class="sub-title">Calculate quantities and costs of construction materials</p>
+                        
+                        <div class="calculator-layout">
+                            <div class="calculator-form">
+                                <div class="glass-card">
+                                    <h3>🧱 Material Requirements</h3>
+                                    <div class="input-group">
+                                        <label for="materialArea">Construction Area (sq ft)</label>
+                                        <input type="number" id="materialArea" class="calc-input" placeholder="Enter area">
+                                    </div>
+                                </div>
+
+                                <div class="glass-card">
+                                    <h3>📊 Material Breakdown</h3>
+                                    <div id="materialBreakdown">
+                                        <!-- Material calculations will be displayed here -->
+                                    </div>
+                                </div>
+
+                                <div class="button-group">
+                                    <button class="calculate-btn" onclick="calculateMaterials()">
+                                        <span>🧮</span> Calculate Materials
+                                    </button>
+                                    <button class="refresh-btn" onclick="resetMaterials()">
+                                        <span>🔄</span> Reset Calculator
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="result-section">
+                                <div id="materialResults" style="display: none;">
+                                    <div class="result-card">
+                                        <h3>💰 Total Material Cost</h3>
+                                        <div class="result-item">
+                                            <span class="result-label">Total Cost</span>
+                                            <span class="result-value" id="totalMaterialCost">₹0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cost Analysis Tab -->
+                <div id="cost-analysis" class="tab-content">
+                    <div class="glass-card">
+                        <h2 class="section-title">📊 Construction Cost Analysis</h2>
+                        <p class="sub-title">Detailed analysis and comparison of construction costs</p>
+                        
+                        <div class="analysis-cards">
+                            <div class="analysis-card">
+                                <h4>📈 Cost Trends</h4>
+                                <div class="analysis-value">Market Analysis</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>💰 Budget Planning</h4>
+                                <div class="analysis-value">Financial Planning</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h4>📊 ROI Analysis</h4>
+                                <div class="analysis-value">Return on Investment</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Timeline Tab -->
+                <div id="project-timeline" class="tab-content">
+                    <div class="glass-card">
+                        <h2 class="section-title">📅 Project Timeline Calculator</h2>
+                        <p class="sub-title">Estimate construction timeline and project milestones</p>
+                        
+                        <div class="calculator-layout">
+                            <div class="calculator-form">
+                                <div class="glass-card">
+                                    <h3>⏱️ Timeline Parameters</h3>
+                                    <div class="input-group">
+                                        <label for="timelineArea">Construction Area (sq ft)</label>
+                                        <input type="number" id="timelineArea" class="calc-input" placeholder="Enter area">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="constructionComplexity">Project Complexity</label>
+                                        <select id="constructionComplexity" class="calc-input">
+                                            <option value="simple">Simple (6-8 months)</option>
+                                            <option value="moderate">Moderate (8-12 months)</option>
+                                            <option value="complex">Complex (12-18 months)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="button-group">
+                                    <button class="calculate-btn" onclick="calculateTimeline()">
+                                        <span>🧮</span> Calculate Timeline
+                                    </button>
+                                    <button class="refresh-btn" onclick="resetTimeline()">
+                                        <span>🔄</span> Reset Calculator
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="result-section">
+                                <div id="timelineResults" style="display: none;">
+                                    <div class="result-card">
+                                        <h3>📅 Project Timeline</h3>
+                                        <div class="result-item">
+                                            <span class="result-label">Estimated Duration</span>
+                                            <span class="result-value" id="estimatedDuration">0 months</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Professional Footer -->
+            <footer class="professional-footer">
+                <div class="footer-container">
+                    <!-- Elite Brand Section -->
+                    <div class="footer-brand-elite">
+                        <div class="brand-header-elite">
+                            <img src="logo.png" alt="Pratix Finance" class="footer-logo-elite">
+                            <h3 class="brand-name-elite">PRATIX FINANCE</h3>
+                        </div>
+                        <p class="brand-tagline-elite">India's Most Trusted Financial Calculator Platform</p>
+                        <div class="world-no1-badge">
+                            <span>🏆</span>
+                            <span>#1 Financial Calculator Suite</span>
+                        </div>
+                    </div>
+
+                    <div class="footer-links-elite-grid">
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>🧮</span>
+                                Calculators
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="emi-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🏠</span>
+                                    EMI Calculator
+                                </a></li>
+                                <li><a href="sip-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📈</span>
+                                    SIP Calculator
+                                </a></li>
+                                <li><a href="fd-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🏦</span>
+                                    FD Calculator
+                                </a></li>
+                                <li><a href="gst-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📊</span>
+                                    GST Calculator
+                                </a></li>
+                                <li><a href="tax-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📋</span>
+                                    Tax Calculator
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>⚖️</span>
+                                Legal
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="privacy.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🔒</span>
+                                    Privacy Policy
+                                </a></li>
+                                <li><a href="terms.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📄</span>
+                                    Terms of Service
+                                </a></li>
+                                <li><a href="about.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">ℹ️</span>
+                                    About Us
+                                </a></li>
+                                <li><a href="contact.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📞</span>
+                                    Contact Support
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Copyright -->
+                    <div class="footer-copyright-elite">
+                        <p class="copyright-text-elite">
+                            © 2024 <strong>PRATIX FINANCE</strong>. All rights reserved. 
+                        </p>
+                        <p class="tagline-elite">
+                            Empowering Financial Decisions Through Smart Calculations
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="standard-bottom-nav">
+            <a href="#" class="standard-nav-item active" data-tab="house-construction">
+                <span class="standard-nav-icon">🏠</span>
+                <span class="standard-nav-label">House</span>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="commercial-construction">
+                <span class="standard-nav-icon">🏢</span>
+                <span class="standard-nav-label">Commercial</span>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="renovation-calculator">
+                <span class="standard-nav-icon">🔨</span>
+                <span class="standard-nav-label">Renovation</span>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="material-calculator">
+                <span class="standard-nav-icon">🧱</span>
+                <span class="standard-nav-label">Materials</span>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="cost-analysis">
+                <span class="standard-nav-icon">📊</span>
+                <span class="standard-nav-label">Analysis</span>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="project-timeline">
+                <span class="standard-nav-icon">📅</span>
+                <span class="standard-nav-label">Timeline</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="universal-nav.js"></script>
+    <script src="construction-cost-script.js"></script>
+</body>
+</html>
