@@ -1127,8 +1127,7 @@ body::after {
 
 /* MOBILE BOTTOM NAVIGATION - FIXED FOR ALL CALCULATORS */
 @media (max-width: 1023px) {
-  .bottom-nav,
-  .standard-bottom-nav {
+  .bottom-nav {
       position: fixed !important;
       bottom: 0 !important;
       left: 0 !important;
@@ -1168,13 +1167,6 @@ body::after {
       max-height: 90px !important;
       overflow: visible !important;
       contain: layout style paint !important;
-  }
-
-  /* Force display on all screen sizes below 1024px */
-  .standard-bottom-nav {
-      display: grid !important;
-      visibility: visible !important;
-      opacity: 1 !important;
   }
 
   /* Ensure all navigation items are properly displayed */
