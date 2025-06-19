@@ -722,26 +722,37 @@
 
     <script src="tax-script.js"></script>
     <script>
-        // Fix mobile tab navigation
+        // Fix desktop and mobile tab navigation
         document.addEventListener('DOMContentLoaded', function() {
+            // Handle both desktop and mobile navigation
+            const desktopNavItems = document.querySelectorAll('.tab-navigation .tab-nav-item[data-tab]');
             const mobileNavItems = document.querySelectorAll('.standard-bottom-nav .standard-nav-item[data-tab]');
+            const allNavItems = [...desktopNavItems, ...mobileNavItems];
             const tabContents = document.querySelectorAll('.tab-content');
 
-            function switchMobileTab(targetTab) {
+            function switchTab(targetTab) {
+                console.log('Switching to tab:', targetTab);
+                
                 // Remove active class from all nav items and tab contents
-                mobileNavItems.forEach(item => item.classList.remove('active'));
+                allNavItems.forEach(item => item.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
 
-                // Add active class to clicked nav item
-                const activeNavItem = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
-                if (activeNavItem) {
-                    activeNavItem.classList.add('active');
+                // Add active class to corresponding nav items (both desktop and mobile)
+                const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
+                const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
+                
+                if (activeDesktopNav) {
+                    activeDesktopNav.classList.add('active');
+                }
+                if (activeMobileNav) {
+                    activeMobileNav.classList.add('active');
                 }
 
                 // Show corresponding tab content
                 const activeTabContent = document.getElementById(targetTab);
                 if (activeTabContent) {
                     activeTabContent.classList.add('active');
+                    console.log('Tab content activated:', targetTab);
                 }
 
                 // Scroll to top of main content
@@ -751,14 +762,15 @@
                 }
             }
 
-            // Add click event listeners to mobile nav items
-            mobileNavItems.forEach(item => {
+            // Add event listeners to all nav items
+            allNavItems.forEach(item => {
                 const handleTabSwitch = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     const targetTab = this.getAttribute('data-tab');
+                    console.log('Tab clicked:', targetTab);
                     if (targetTab) {
-                        switchMobileTab(targetTab);
+                        switchTab(targetTab);
                     }
                 };
                 
@@ -768,6 +780,14 @@
                     handleTabSwitch.call(this, e);
                 });
             });
+
+            // Initialize with first tab active
+            if (allNavItems.length > 0) {
+                const firstTab = allNavItems[0].getAttribute('data-tab');
+                if (firstTab) {
+                    switchTab(firstTab);
+                }
+            }
         });
     </script>
 </body>

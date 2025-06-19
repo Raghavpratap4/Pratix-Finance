@@ -582,7 +582,7 @@
                                 Company
                             </h4>
                             <div class="footer-links-list">
-                                <a href="about.html" class="footer-link-simple">
+                                <a href="about.html"class="footer-link-simple">
                                     <span class="link-icon-simple">ℹ️</span>
                                     About Us
                                 </a>
@@ -714,7 +714,7 @@
 
             function switchTab(targetTab) {
                 console.log('Switching to tab:', targetTab);
-                
+
                 // Remove active class from all nav items and tab contents
                 allNavItems.forEach(item => item.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
@@ -722,7 +722,7 @@
                 // Add active class to corresponding nav items (both desktop and mobile)
                 const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
                 const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
-                
+
                 if (activeDesktopNav) {
                     activeDesktopNav.classList.add('active');
                 }
@@ -755,7 +755,7 @@
                         switchTab(targetTab);
                     }
                 };
-                
+
                 item.addEventListener('click', handleTabSwitch);
                 item.addEventListener('touchend', function(e) {
                     e.preventDefault();
