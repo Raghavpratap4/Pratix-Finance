@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Tab content activated:', targetTab);
         }
 
-        // Scroll to top of main content
+        // Enhanced Auto Scroll to Top
         const mainContent = document.querySelector('.main-content');
         if (mainContent) {
             mainContent.scrollTop = 0;
@@ -41,8 +41,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Scroll window to top for mobile
         if (window.innerWidth <= 1023) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
+            });
         }
+        
+        // Also scroll main app content
+        const mainAppContent = document.querySelector('.main-app-content');
+        if (mainAppContent) {
+            mainAppContent.scrollTop = 0;
+        }
+        
+        // Ensure body scroll is at top
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
 
     // Add event listeners to all navigation items

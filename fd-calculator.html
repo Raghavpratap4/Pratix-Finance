@@ -1089,7 +1089,6 @@
             <div class="standard-nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                    <circle cx="12" cy="12" r="3"/>
                 </svg>
             </div>
             <span class="standard-nav-label">Tools</span>
@@ -1097,6 +1096,125 @@
     </nav>
 
     <script src="universal-nav.js"></script>
+    <script>
+        // Enhanced Tab Navigation with Universal Support and Auto Scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle both desktop and mobile navigation
+            const desktopNavItems = document.querySelectorAll('.tab-navigation .tab-nav-item[data-tab]');
+            const mobileNavItems = document.querySelectorAll('.standard-bottom-nav .standard-nav-item[data-tab]');
+            const allNavItems = [...desktopNavItems, ...mobileNavItems];
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            function switchTab(targetTab) {
+                console.log('Switching to tab:', targetTab);
+
+                // Remove active class from all nav items and tab contents
+                allNavItems.forEach(item => item.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to corresponding nav items (both desktop and mobile)
+                const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
+                const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
+
+                if (activeDesktopNav) {
+                    activeDesktopNav.classList.add('active');
+                }
+                if (activeMobileNav) {
+                    activeMobileNav.classList.add('active');
+                }
+
+                // Show corresponding tab content
+                const activeTabContent = document.getElementById(targetTab);
+                if (activeTabContent) {
+                    activeTabContent.classList.add('active');
+                    console.log('Tab content activated:', targetTab);
+                }
+
+                // Enhanced Auto Scroll to Top
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.scrollTop = 0;
+                }
+
+                // Scroll window to top for mobile
+                if (window.innerWidth <= 1023) {
+                    window.scrollTo({ 
+                        top: 0, 
+                        behavior: 'smooth' 
+                    });
+                }
+
+                // Also scroll main app content
+                const mainAppContent = document.querySelector('.main-app-content');
+                if (mainAppContent) {
+                    mainAppContent.scrollTop = 0;
+                }
+
+                // Ensure body scroll is at top
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+
+            // Attach event listeners for tab switching
+            allNavItems.forEach(item => {
+                item.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetTab = this.dataset.tab;
+                    switchTab(targetTab);
+                });
+            });
+
+            // Initialize first tab as active on load
+            if (allNavItems.length > 0 && tabContents.length > 0) {
+                switchTab(allNavItems[0].dataset.tab);
+            }
+        });
+
+        // Function to navigate to EMI calculator page
+        function goToEMI() {
+            window.location.href = 'emi-calculator.html';
+        }
+
+        // Function to navigate to SIP calculator page
+        function goToSIP() {
+            window.location.href = 'sip-calculator.html';
+        }
+
+        // Function to navigate to GST calculator page
+        function goToGST() {
+            window.location.href = 'gst-calculator.html';
+        }
+
+        // Function to navigate to Tax calculator page
+        function goToTax() {
+            window.location.href = 'tax-calculator.html';
+        }
+
+        // Function to navigate to Home page
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        // Function to go back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+
+        // Function to download FD report
+        function downloadFDReport() {
+            alert('Download FD Report functionality is not yet implemented.');
+        }
+
+        // Function to share FD calculation
+        function shareFDCalculation() {
+            alert('Share FD Calculation functionality is not yet implemented.');
+        }
+
+        // Function to print FD results
+        function printFDResults() {
+            window.print();
+        }
+    </script>
     <script src="fd-script.js"></script>
 </body>
 </html>
