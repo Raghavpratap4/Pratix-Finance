@@ -568,7 +568,7 @@
     </div>
 
     <!-- Fixed Bottom Navigation - Mobile only -->
-    <nav class="standard-bottom-nav" style="position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; width: 100vw !important; z-index: 999999999 !important; grid-template-columns: repeat(6, 1fr) !important; display: grid !important; background: rgba(15, 23, 42, 0.98) !important; backdrop-filter: blur(30px) !important; border-top: 3px solid var(--neon-blue) !important; padding: 0.75rem 0.5rem !important; box-shadow: 0 0 50px rgba(0, 212, 255, 0.6), 0 -12px 40px rgba(0, 0, 0, 0.7) !important; height: 90px !important; padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;"></nav>
+    <nav class="standard-bottom-nav" style="grid-template-columns: repeat(6, 1fr) !important; position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 999999999 !important; width: 100vw !important;"></nav>
     
     <style>
         @media (min-width: 1024px) {
@@ -581,39 +581,12 @@
                 left: -9999px !important;
                 top: -9999px !important;
             }
-            
-            /* Ensure main content doesn't have bottom padding on desktop */
-            .main-app-content {
-                padding-bottom: 0 !important;
-            }
-            
-            .professional-footer {
-                margin-bottom: 0 !important;
-            }
         }
         @media (max-width: 1023px) {
             .standard-bottom-nav {
                 display: grid !important;
                 visibility: visible !important;
                 opacity: 1 !important;
-                position: fixed !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                width: 100vw !important;
-            }
-            
-            /* Ensure content doesn't overlap with bottom nav */
-            .main-app-content {
-                padding-bottom: 120px !important;
-            }
-            
-            .professional-footer {
-                margin-bottom: 120px !important;
-            }
-            
-            body {
-                padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
             }
         }
     </style>
