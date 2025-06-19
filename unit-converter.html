@@ -1,0 +1,1042 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE Unit Converter - Convert units for length, weight, area, volume, temperature, and more with precision and ease." />
+    <meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, area converter, volume converter, PRATIX FINANCE" />
+    <meta name="author" content="Pratix Finance" />
+    <title>Unit Converter - PRATIX FINANCE</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+    <meta name="msapplication-TileColor" content="#31417F">
+    <meta name="msapplication-TileImage" content="/favicon.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Tab Navigation - Desktop Left Side -->
+        <nav class="tab-navigation">
+            <a href="#" class="tab-nav-item active" data-tab="length">
+                <span>📏</span>
+                <span>Length</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="weight">
+                <span>⚖️</span>
+                <span>Weight</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="area">
+                <span>📐</span>
+                <span>Area</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="volume">
+                <span>🪣</span>
+                <span>Volume</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="temperature">
+                <span>🌡️</span>
+                <span>Temperature</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="speed">
+                <span>⚡</span>
+                <span>Speed</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="time">
+                <span>⏰</span>
+                <span>Time</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="energy">
+                <span>🔋</span>
+                <span>Energy</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="pressure">
+                <span>🌪️</span>
+                <span>Pressure</span>
+            </a>
+            <a href="#" class="tab-nav-item" data-tab="tools">
+                <span>🔧</span>
+                <span>Tools</span>
+            </a>
+        </nav>
+
+        <div class="main-app-content">
+            <!-- Header -->
+            <header class="standard-header">
+                <div class="standard-header-content">
+                    <div class="standard-logo-section">
+                        <img src="logo.png" alt="PRATIX FINANCE Logo" class="standard-app-logo">
+                        <h1 class="standard-app-title">UNIT CONVERTER</h1>
+                    </div>
+                    <div class="standard-nav-buttons">
+                        <a href="index.html" class="standard-nav-btn">
+                            <span>🏠</span>
+                        </a>
+                        <a href="#" class="standard-nav-btn" onclick="shareResults()">
+                            <span>📤</span>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="main-content">
+                <!-- Length Converter Tab -->
+                <div id="length" class="tab-content active">
+                    <div class="section-title">📏 Length Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Length Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="lengthInput">Enter Value</label>
+                                    <input type="number" id="lengthInput" class="calc-input" placeholder="Enter length value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="lengthFromUnit">From Unit</label>
+                                    <select id="lengthFromUnit" class="calc-input">
+                                        <option value="meter">Meter (m)</option>
+                                        <option value="kilometer">Kilometer (km)</option>
+                                        <option value="centimeter">Centimeter (cm)</option>
+                                        <option value="millimeter">Millimeter (mm)</option>
+                                        <option value="inch">Inch (in)</option>
+                                        <option value="foot">Foot (ft)</option>
+                                        <option value="yard">Yard (yd)</option>
+                                        <option value="mile">Mile (mi)</option>
+                                        <option value="nautical_mile">Nautical Mile</option>
+                                        <option value="light_year">Light Year</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="lengthToUnit">To Unit</label>
+                                    <select id="lengthToUnit" class="calc-input">
+                                        <option value="centimeter">Centimeter (cm)</option>
+                                        <option value="meter">Meter (m)</option>
+                                        <option value="kilometer">Kilometer (km)</option>
+                                        <option value="millimeter">Millimeter (mm)</option>
+                                        <option value="inch">Inch (in)</option>
+                                        <option value="foot">Foot (ft)</option>
+                                        <option value="yard">Yard (yd)</option>
+                                        <option value="mile">Mile (mi)</option>
+                                        <option value="nautical_mile">Nautical Mile</option>
+                                        <option value="light_year">Light Year</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertLength()">
+                                    🔄 Convert Length
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearLengthConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="lengthResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="lengthResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="lengthResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="lengthFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card">
+                                <h3 class="sub-title">Quick Reference</h3>
+                                <div class="returns-summary">
+                                    <div class="return-item">
+                                        <span class="return-label">1 Meter =</span>
+                                        <span class="return-value">100 cm</span>
+                                    </div>
+                                    <div class="return-item">
+                                        <span class="return-label">1 Kilometer =</span>
+                                        <span class="return-value">1000 m</span>
+                                    </div>
+                                    <div class="return-item">
+                                        <span class="return-label">1 Foot =</span>
+                                        <span class="return-value">12 inches</span>
+                                    </div>
+                                    <div class="return-item">
+                                        <span class="return-label">1 Mile =</span>
+                                        <span class="return-value">5280 ft</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weight Converter Tab -->
+                <div id="weight" class="tab-content">
+                    <div class="section-title">⚖️ Weight Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Weight Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="weightInput">Enter Value</label>
+                                    <input type="number" id="weightInput" class="calc-input" placeholder="Enter weight value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="weightFromUnit">From Unit</label>
+                                    <select id="weightFromUnit" class="calc-input">
+                                        <option value="kilogram">Kilogram (kg)</option>
+                                        <option value="gram">Gram (g)</option>
+                                        <option value="pound">Pound (lb)</option>
+                                        <option value="ounce">Ounce (oz)</option>
+                                        <option value="ton">Metric Ton</option>
+                                        <option value="stone">Stone</option>
+                                        <option value="carat">Carat</option>
+                                        <option value="milligram">Milligram (mg)</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="weightToUnit">To Unit</label>
+                                    <select id="weightToUnit" class="calc-input">
+                                        <option value="gram">Gram (g)</option>
+                                        <option value="kilogram">Kilogram (kg)</option>
+                                        <option value="pound">Pound (lb)</option>
+                                        <option value="ounce">Ounce (oz)</option>
+                                        <option value="ton">Metric Ton</option>
+                                        <option value="stone">Stone</option>
+                                        <option value="carat">Carat</option>
+                                        <option value="milligram">Milligram (mg)</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertWeight()">
+                                    🔄 Convert Weight
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearWeightConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="weightResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="weightResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="weightResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="weightFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area Converter Tab -->
+                <div id="area" class="tab-content">
+                    <div class="section-title">📐 Area Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Area Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="areaInput">Enter Value</label>
+                                    <input type="number" id="areaInput" class="calc-input" placeholder="Enter area value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="areaFromUnit">From Unit</label>
+                                    <select id="areaFromUnit" class="calc-input">
+                                        <option value="square_meter">Square Meter (m²)</option>
+                                        <option value="square_kilometer">Square Kilometer (km²)</option>
+                                        <option value="square_centimeter">Square Centimeter (cm²)</option>
+                                        <option value="square_foot">Square Foot (ft²)</option>
+                                        <option value="square_inch">Square Inch (in²)</option>
+                                        <option value="square_yard">Square Yard (yd²)</option>
+                                        <option value="acre">Acre</option>
+                                        <option value="hectare">Hectare</option>
+                                        <option value="square_mile">Square Mile</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="areaToUnit">To Unit</label>
+                                    <select id="areaToUnit" class="calc-input">
+                                        <option value="square_centimeter">Square Centimeter (cm²)</option>
+                                        <option value="square_meter">Square Meter (m²)</option>
+                                        <option value="square_kilometer">Square Kilometer (km²)</option>
+                                        <option value="square_foot">Square Foot (ft²)</option>
+                                        <option value="square_inch">Square Inch (in²)</option>
+                                        <option value="square_yard">Square Yard (yd²)</option>
+                                        <option value="acre">Acre</option>
+                                        <option value="hectare">Hectare</option>
+                                        <option value="square_mile">Square Mile</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertArea()">
+                                    🔄 Convert Area
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearAreaConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="areaResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="areaResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="areaResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="areaFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Volume Converter Tab -->
+                <div id="volume" class="tab-content">
+                    <div class="section-title">🪣 Volume Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Volume Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="volumeInput">Enter Value</label>
+                                    <input type="number" id="volumeInput" class="calc-input" placeholder="Enter volume value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="volumeFromUnit">From Unit</label>
+                                    <select id="volumeFromUnit" class="calc-input">
+                                        <option value="liter">Liter (L)</option>
+                                        <option value="milliliter">Milliliter (mL)</option>
+                                        <option value="cubic_meter">Cubic Meter (m³)</option>
+                                        <option value="cubic_centimeter">Cubic Centimeter (cm³)</option>
+                                        <option value="gallon_us">US Gallon</option>
+                                        <option value="gallon_uk">UK Gallon</option>
+                                        <option value="quart">Quart</option>
+                                        <option value="pint">Pint</option>
+                                        <option value="cup">Cup</option>
+                                        <option value="fluid_ounce">Fluid Ounce</option>
+                                        <option value="tablespoon">Tablespoon</option>
+                                        <option value="teaspoon">Teaspoon</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="volumeToUnit">To Unit</label>
+                                    <select id="volumeToUnit" class="calc-input">
+                                        <option value="milliliter">Milliliter (mL)</option>
+                                        <option value="liter">Liter (L)</option>
+                                        <option value="cubic_meter">Cubic Meter (m³)</option>
+                                        <option value="cubic_centimeter">Cubic Centimeter (cm³)</option>
+                                        <option value="gallon_us">US Gallon</option>
+                                        <option value="gallon_uk">UK Gallon</option>
+                                        <option value="quart">Quart</option>
+                                        <option value="pint">Pint</option>
+                                        <option value="cup">Cup</option>
+                                        <option value="fluid_ounce">Fluid Ounce</option>
+                                        <option value="tablespoon">Tablespoon</option>
+                                        <option value="teaspoon">Teaspoon</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertVolume()">
+                                    🔄 Convert Volume
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearVolumeConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="volumeResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="volumeResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="volumeResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="volumeFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Temperature Converter Tab -->
+                <div id="temperature" class="tab-content">
+                    <div class="section-title">🌡️ Temperature Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Temperature Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="temperatureInput">Enter Value</label>
+                                    <input type="number" id="temperatureInput" class="calc-input" placeholder="Enter temperature value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="temperatureFromUnit">From Unit</label>
+                                    <select id="temperatureFromUnit" class="calc-input">
+                                        <option value="celsius">Celsius (°C)</option>
+                                        <option value="fahrenheit">Fahrenheit (°F)</option>
+                                        <option value="kelvin">Kelvin (K)</option>
+                                        <option value="rankine">Rankine (°R)</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="temperatureToUnit">To Unit</label>
+                                    <select id="temperatureToUnit" class="calc-input">
+                                        <option value="fahrenheit">Fahrenheit (°F)</option>
+                                        <option value="celsius">Celsius (°C)</option>
+                                        <option value="kelvin">Kelvin (K)</option>
+                                        <option value="rankine">Rankine (°R)</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertTemperature()">
+                                    🔄 Convert Temperature
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearTemperatureConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="temperatureResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="temperatureResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="temperatureResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="temperatureFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card">
+                                <h3 class="sub-title">Temperature Facts</h3>
+                                <div class="returns-summary">
+                                    <div class="return-item">
+                                        <span class="return-label">Water Freezes:</span>
+                                        <span class="return-value">0°C / 32°F</span>
+                                    </div>
+                                    <div class="return-item">
+                                        <span class="return-label">Water Boils:</span>
+                                        <span class="return-value">100°C / 212°F</span>
+                                    </div>
+                                    <div class="return-item">
+                                        <span class="return-label">Absolute Zero:</span>
+                                        <span class="return-value">-273.15°C / 0K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speed Converter Tab -->
+                <div id="speed" class="tab-content">
+                    <div class="section-title">⚡ Speed Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Speed Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="speedInput">Enter Value</label>
+                                    <input type="number" id="speedInput" class="calc-input" placeholder="Enter speed value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="speedFromUnit">From Unit</label>
+                                    <select id="speedFromUnit" class="calc-input">
+                                        <option value="kmh">Kilometers per Hour (km/h)</option>
+                                        <option value="mph">Miles per Hour (mph)</option>
+                                        <option value="ms">Meters per Second (m/s)</option>
+                                        <option value="fps">Feet per Second (ft/s)</option>
+                                        <option value="knot">Knot</option>
+                                        <option value="mach">Mach</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="speedToUnit">To Unit</label>
+                                    <select id="speedToUnit" class="calc-input">
+                                        <option value="mph">Miles per Hour (mph)</option>
+                                        <option value="kmh">Kilometers per Hour (km/h)</option>
+                                        <option value="ms">Meters per Second (m/s)</option>
+                                        <option value="fps">Feet per Second (ft/s)</option>
+                                        <option value="knot">Knot</option>
+                                        <option value="mach">Mach</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertSpeed()">
+                                    🔄 Convert Speed
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearSpeedConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="speedResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="speedResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="speedResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="speedFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Converter Tab -->
+                <div id="time" class="tab-content">
+                    <div class="section-title">⏰ Time Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Time Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="timeInput">Enter Value</label>
+                                    <input type="number" id="timeInput" class="calc-input" placeholder="Enter time value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="timeFromUnit">From Unit</label>
+                                    <select id="timeFromUnit" class="calc-input">
+                                        <option value="second">Second</option>
+                                        <option value="minute">Minute</option>
+                                        <option value="hour">Hour</option>
+                                        <option value="day">Day</option>
+                                        <option value="week">Week</option>
+                                        <option value="month">Month</option>
+                                        <option value="year">Year</option>
+                                        <option value="millisecond">Millisecond</option>
+                                        <option value="microsecond">Microsecond</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="timeToUnit">To Unit</label>
+                                    <select id="timeToUnit" class="calc-input">
+                                        <option value="minute">Minute</option>
+                                        <option value="second">Second</option>
+                                        <option value="hour">Hour</option>
+                                        <option value="day">Day</option>
+                                        <option value="week">Week</option>
+                                        <option value="month">Month</option>
+                                        <option value="year">Year</option>
+                                        <option value="millisecond">Millisecond</option>
+                                        <option value="microsecond">Microsecond</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertTime()">
+                                    🔄 Convert Time
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearTimeConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="timeResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="timeResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="timeResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="timeFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Energy Converter Tab -->
+                <div id="energy" class="tab-content">
+                    <div class="section-title">🔋 Energy Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Energy Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="energyInput">Enter Value</label>
+                                    <input type="number" id="energyInput" class="calc-input" placeholder="Enter energy value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="energyFromUnit">From Unit</label>
+                                    <select id="energyFromUnit" class="calc-input">
+                                        <option value="joule">Joule (J)</option>
+                                        <option value="kilojoule">Kilojoule (kJ)</option>
+                                        <option value="calorie">Calorie (cal)</option>
+                                        <option value="kilocalorie">Kilocalorie (kcal)</option>
+                                        <option value="watt_hour">Watt Hour (Wh)</option>
+                                        <option value="kilowatt_hour">Kilowatt Hour (kWh)</option>
+                                        <option value="btu">BTU</option>
+                                        <option value="erg">Erg</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="energyToUnit">To Unit</label>
+                                    <select id="energyToUnit" class="calc-input">
+                                        <option value="kilojoule">Kilojoule (kJ)</option>
+                                        <option value="joule">Joule (J)</option>
+                                        <option value="calorie">Calorie (cal)</option>
+                                        <option value="kilocalorie">Kilocalorie (kcal)</option>
+                                        <option value="watt_hour">Watt Hour (Wh)</option>
+                                        <option value="kilowatt_hour">Kilowatt Hour (kWh)</option>
+                                        <option value="btu">BTU</option>
+                                        <option value="erg">Erg</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertEnergy()">
+                                    🔄 Convert Energy
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearEnergyConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="energyResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="energyResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="energyResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="energyFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pressure Converter Tab -->
+                <div id="pressure" class="tab-content">
+                    <div class="section-title">🌪️ Pressure Converter</div>
+                    
+                    <div class="calculator-layout">
+                        <div class="calculator-form">
+                            <div class="glass-card">
+                                <h3 class="sub-title">Pressure Conversion</h3>
+                                
+                                <div class="input-group">
+                                    <label for="pressureInput">Enter Value</label>
+                                    <input type="number" id="pressureInput" class="calc-input" placeholder="Enter pressure value" step="any">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="pressureFromUnit">From Unit</label>
+                                    <select id="pressureFromUnit" class="calc-input">
+                                        <option value="pascal">Pascal (Pa)</option>
+                                        <option value="kilopascal">Kilopascal (kPa)</option>
+                                        <option value="bar">Bar</option>
+                                        <option value="atmosphere">Atmosphere (atm)</option>
+                                        <option value="psi">PSI</option>
+                                        <option value="torr">Torr</option>
+                                        <option value="mmhg">mmHg</option>
+                                        <option value="inhg">inHg</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="pressureToUnit">To Unit</label>
+                                    <select id="pressureToUnit" class="calc-input">
+                                        <option value="kilopascal">Kilopascal (kPa)</option>
+                                        <option value="pascal">Pascal (Pa)</option>
+                                        <option value="bar">Bar</option>
+                                        <option value="atmosphere">Atmosphere (atm)</option>
+                                        <option value="psi">PSI</option>
+                                        <option value="torr">Torr</option>
+                                        <option value="mmhg">mmHg</option>
+                                        <option value="inhg">inHg</option>
+                                    </select>
+                                </div>
+
+                                <button class="calculate-btn" onclick="convertPressure()">
+                                    🔄 Convert Pressure
+                                </button>
+
+                                <button class="refresh-btn" onclick="clearPressureConverter()">
+                                    🗑️ Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="glass-card" id="pressureResults">
+                                <h3 class="sub-title">Conversion Result</h3>
+                                <div class="result-card" id="pressureResultDisplay">
+                                    <div class="result-item">
+                                        <span class="result-label">Converted Value:</span>
+                                        <span class="result-value" id="pressureResultValue">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Conversion Formula:</span>
+                                        <span class="result-value" id="pressureFormula">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Tab -->
+                <div id="tools" class="tab-content">
+                    <div class="section-title">🔧 Conversion Tools</div>
+                    
+                    <div class="glass-card">
+                        <h3 class="sub-title">Related Financial Tools</h3>
+                        <div class="tools-grid">
+                            <div class="tool-card" onclick="goToEmiCalculator()">
+                                <div class="tool-icon">🏠</div>
+                                <h3>EMI Calculator</h3>
+                                <p>Calculate loan EMI payments and amortization schedules</p>
+                                <div class="tool-features">
+                                    <span>Loan Planning</span>
+                                    <span>Prepayment Analysis</span>
+                                    <span>Comparison Tools</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-card" onclick="goToSipCalculator()">
+                                <div class="tool-icon">📈</div>
+                                <h3>SIP Calculator</h3>
+                                <p>Plan systematic investments and wealth creation</p>
+                                <div class="tool-features">
+                                    <span>Goal Planning</span>
+                                    <span>Step-up SIP</span>
+                                    <span>Returns Analysis</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-card" onclick="goToTaxCalculator()">
+                                <div class="tool-icon">💼</div>
+                                <h3>Income Tax Calculator</h3>
+                                <p>Calculate tax liability under old and new regimes</p>
+                                <div class="tool-features">
+                                    <span>Tax Comparison</span>
+                                    <span>Deduction Planning</span>
+                                    <span>Salary Breakdown</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-card" onclick="goToGstCalculator()">
+                                <div class="tool-icon">📊</div>
+                                <h3>GST Calculator</h3>
+                                <p>Calculate GST for goods and services with HSN codes</p>
+                                <div class="tool-features">
+                                    <span>Multiple Tax Rates</span>
+                                    <span>HSN Code Support</span>
+                                    <span>Invoice Generation</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-card" onclick="goToFdCalculator()">
+                                <div class="tool-icon">🏦</div>
+                                <h3>FD Calculator</h3>
+                                <p>Calculate fixed deposit returns and maturity amounts</p>
+                                <div class="tool-features">
+                                    <span>Compound Interest</span>
+                                    <span>Maturity Calculation</span>
+                                    <span>Interest Analysis</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-card" onclick="goToProfitLossCalculator()">
+                                <div class="tool-icon">💼</div>
+                                <h3>P&L Calculator</h3>
+                                <p>Analyze business profitability and financial performance</p>
+                                <div class="tool-features">
+                                    <span>Break-Even Analysis</span>
+                                    <span>Scenario Planning</span>
+                                    <span>Profit Projections</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h3 class="sub-title">Unit Conversion Tips</h3>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <h4>💡 Precision Matters</h4>
+                                <p>Our converter provides high precision results for professional and scientific use.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>🔄 Quick Conversions</h4>
+                                <p>Use the swap feature to quickly reverse your conversion units.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>📱 Mobile Friendly</h4>
+                                <p>Access all conversion tools seamlessly on any device, anywhere.</p>
+                            </div>
+                            <div class="tip-card">
+                                <h4>🔢 Multiple Units</h4>
+                                <p>Convert between metric, imperial, and specialized units with ease.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="simple-footer">
+                    <div class="footer-container">
+                        <div class="footer-brand-simple">
+                            <div class="brand-header-simple">
+                                <img src="logo.png" alt="Pratix Finance" class="footer-logo-simple">
+                                <h3 class="brand-name-simple">PRATIX FINANCE</h3>
+                            </div>
+                            <p class="brand-tagline-simple">Professional Unit Conversion Tools</p>
+                        </div>
+
+                        <div class="footer-links-grid">
+                            <div class="footer-section-collapsible">
+                                <div class="footer-section-header" onclick="toggleFooterSection(this)">
+                                    <h4 class="footer-section-title-collapsible">
+                                        <span>🧮</span>
+                                        Calculators
+                                    </h4>
+                                    <span class="footer-expand-icon">+</span>
+                                </div>
+                                <div class="footer-section-content">
+                                    <div class="footer-links-list-collapsible">
+                                        <a href="emi-calculator.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">🏠</span>
+                                            EMI Calculator
+                                        </a>
+                                        <a href="sip-calculator.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">📈</span>
+                                            SIP Calculator
+                                        </a>
+                                        <a href="fd-calculator.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">🏦</span>
+                                            FD Calculator
+                                        </a>
+                                        <a href="gst-calculator.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">📊</span>
+                                            GST Calculator
+                                        </a>
+                                        <a href="tax-calculator.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">📋</span>
+                                            Tax Calculator
+                                        </a>
+                                        <a href="profit-loss-calculator.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">💼</span>
+                                            P&L Calculator
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="footer-section-collapsible">
+                                <div class="footer-section-header" onclick="toggleFooterSection(this)">
+                                    <h4 class="footer-section-title-collapsible">
+                                        <span>📐</span>
+                                        Unit Converters
+                                    </h4>
+                                    <span class="footer-expand-icon">+</span>
+                                </div>
+                                <div class="footer-section-content">
+                                    <div class="footer-links-list-collapsible">
+                                        <a href="#" class="footer-link-collapsible" data-tab="length">
+                                            <span class="footer-link-icon">📏</span>
+                                            Length Converter
+                                        </a>
+                                        <a href="#" class="footer-link-collapsible" data-tab="weight">
+                                            <span class="footer-link-icon">⚖️</span>
+                                            Weight Converter
+                                        </a>
+                                        <a href="#" class="footer-link-collapsible" data-tab="temperature">
+                                            <span class="footer-link-icon">🌡️</span>
+                                            Temperature Converter
+                                        </a>
+                                        <a href="#" class="footer-link-collapsible" data-tab="area">
+                                            <span class="footer-link-icon">📐</span>
+                                            Area Converter
+                                        </a>
+                                        <a href="#" class="footer-link-collapsible" data-tab="volume">
+                                            <span class="footer-link-icon">🪣</span>
+                                            Volume Converter
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="footer-section-collapsible">
+                                <div class="footer-section-header" onclick="toggleFooterSection(this)">
+                                    <h4 class="footer-section-title-collapsible">
+                                        <span>ℹ️</span>
+                                        Information
+                                    </h4>
+                                    <span class="footer-expand-icon">+</span>
+                                </div>
+                                <div class="footer-section-content">
+                                    <div class="footer-links-list-collapsible">
+                                        <a href="about.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">ℹ️</span>
+                                            About Us
+                                        </a>
+                                        <a href="contact.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">📞</span>
+                                            Contact Support
+                                        </a>
+                                        <a href="privacy.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">🔒</span>
+                                            Privacy Policy
+                                        </a>
+                                        <a href="terms.html" class="footer-link-collapsible">
+                                            <span class="footer-link-icon">📄</span>
+                                            Terms of Service
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="footer-contact">
+                            <h4 class="footer-section-title-collapsible">
+                                <span>📧</span>
+                                Get in Touch
+                            </h4>
+                            <div class="contact-info">
+                                <div class="contact-icon">📧</div>
+                                <a href="mailto:support@pratixfinance.com" class="contact-email">
+                                    support@pratixfinance.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="footer-bottom-simple">
+                            <p class="copyright-simple">
+                                © 2024 <strong>PRATIX FINANCE</strong>. All rights reserved.
+                            </p>
+                            <p class="tagline-simple">
+                                Precision Unit Conversion Made Simple
+                            </p>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="standard-bottom-nav">
+            <a href="#" class="standard-nav-item active" data-tab="length">
+                <div class="standard-nav-icon">📏</div>
+                <div class="standard-nav-label">Length</div>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="weight">
+                <div class="standard-nav-icon">⚖️</div>
+                <div class="standard-nav-label">Weight</div>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="area">
+                <div class="standard-nav-icon">📐</div>
+                <div class="standard-nav-label">Area</div>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="temperature">
+                <div class="standard-nav-icon">🌡️</div>
+                <div class="standard-nav-label">Temp</div>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="speed">
+                <div class="standard-nav-icon">⚡</div>
+                <div class="standard-nav-label">Speed</div>
+            </a>
+            <a href="#" class="standard-nav-item" data-tab="tools">
+                <div class="standard-nav-icon">🔧</div>
+                <div class="standard-nav-label">Tools</div>
+            </a>
+        </nav>
+    </div>
+
+    <script src="universal-nav.js"></script>
+    <script src="unit-converter-script.js"></script>
+</body>
+</html>
