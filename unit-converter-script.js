@@ -1,25 +1,18 @@
-
-// PRATIX FINANCE Enhanced Unit Converter Script - Responsive Design
-// Optimized for all screen sizes with modern UX
+// PRATIX FINANCE Simple Unit Converter Script
+// User-friendly and responsive for all devices
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Enhanced Unit Converter loaded successfully!');
-
-    // Initialize the converter
+    console.log('Simple Unit Converter loaded successfully!');
     initializeConverter();
     setupEventListeners();
-    setupResponsiveLayout();
-
-    // Set default category
     setActiveCategory('length');
 });
 
-// Enhanced conversion factors database
+// Simple conversion data
 const conversionData = {
     length: {
         name: 'Length',
         icon: '📏',
-        description: 'Convert between different units of length and distance',
         units: {
             meter: { name: 'Meter (m)', factor: 1 },
             kilometer: { name: 'Kilometer (km)', factor: 1000 },
@@ -28,8 +21,7 @@ const conversionData = {
             inch: { name: 'Inch (in)', factor: 0.0254 },
             foot: { name: 'Foot (ft)', factor: 0.3048 },
             yard: { name: 'Yard (yd)', factor: 0.9144 },
-            mile: { name: 'Mile (mi)', factor: 1609.344 },
-            nautical_mile: { name: 'Nautical Mile', factor: 1852 }
+            mile: { name: 'Mile (mi)', factor: 1609.344 }
         },
         references: [
             { label: '1 Meter =', value: '100 cm' },
@@ -41,161 +33,78 @@ const conversionData = {
     weight: {
         name: 'Weight',
         icon: '⚖️',
-        description: 'Convert between different units of weight and mass',
         units: {
             kilogram: { name: 'Kilogram (kg)', factor: 1000 },
             gram: { name: 'Gram (g)', factor: 1 },
             pound: { name: 'Pound (lb)', factor: 453.592 },
             ounce: { name: 'Ounce (oz)', factor: 28.3495 },
-            ton: { name: 'Metric Ton', factor: 1000000 },
-            stone: { name: 'Stone', factor: 6350.29 },
-            carat: { name: 'Carat', factor: 0.2 }
+            ton: { name: 'Metric Ton', factor: 1000000 }
         },
         references: [
             { label: '1 Kilogram =', value: '1000 g' },
             { label: '1 Pound =', value: '16 oz' },
-            { label: '1 Stone =', value: '14 lbs' },
             { label: '1 Ton =', value: '1000 kg' }
         ]
     },
     area: {
         name: 'Area',
         icon: '📐',
-        description: 'Convert between different units of area and surface',
         units: {
             square_meter: { name: 'Square Meter (m²)', factor: 1 },
             square_kilometer: { name: 'Square Kilometer (km²)', factor: 1000000 },
-            square_centimeter: { name: 'Square Centimeter (cm²)', factor: 0.0001 },
             square_foot: { name: 'Square Foot (ft²)', factor: 0.092903 },
-            square_inch: { name: 'Square Inch (in²)', factor: 0.00064516 },
             acre: { name: 'Acre', factor: 4046.86 },
-            hectare: { name: 'Hectare', factor: 10000 },
-            square_mile: { name: 'Square Mile', factor: 2589988.11 }
+            hectare: { name: 'Hectare', factor: 10000 }
         },
         references: [
             { label: '1 Hectare =', value: '10,000 m²' },
             { label: '1 Acre =', value: '4,047 m²' },
-            { label: '1 km² =', value: '100 hectares' },
-            { label: '1 ft² =', value: '144 in²' }
+            { label: '1 km² =', value: '100 hectares' }
         ]
     },
     volume: {
         name: 'Volume',
         icon: '🪣',
-        description: 'Convert between different units of volume and capacity',
         units: {
             liter: { name: 'Liter (L)', factor: 1 },
             milliliter: { name: 'Milliliter (mL)', factor: 0.001 },
             cubic_meter: { name: 'Cubic Meter (m³)', factor: 1000 },
             gallon_us: { name: 'US Gallon', factor: 3.78541 },
-            gallon_uk: { name: 'UK Gallon', factor: 4.54609 },
-            cubic_foot: { name: 'Cubic Foot (ft³)', factor: 28.3168 },
-            cubic_inch: { name: 'Cubic Inch (in³)', factor: 0.0163871 },
-            barrel: { name: 'Barrel (Oil)', factor: 158.987 }
+            cubic_foot: { name: 'Cubic Foot (ft³)', factor: 28.3168 }
         },
         references: [
             { label: '1 Liter =', value: '1000 mL' },
             { label: '1 m³ =', value: '1000 L' },
-            { label: '1 US Gallon =', value: '3.785 L' },
-            { label: '1 ft³ =', value: '28.3 L' }
+            { label: '1 US Gallon =', value: '3.785 L' }
         ]
     },
     temperature: {
         name: 'Temperature',
         icon: '🌡️',
-        description: 'Convert between different temperature scales',
         units: {
             celsius: { name: 'Celsius (°C)' },
             fahrenheit: { name: 'Fahrenheit (°F)' },
-            kelvin: { name: 'Kelvin (K)' },
-            rankine: { name: 'Rankine (°R)' }
+            kelvin: { name: 'Kelvin (K)' }
         },
         references: [
             { label: 'Water Freezes:', value: '0°C / 32°F' },
             { label: 'Water Boils:', value: '100°C / 212°F' },
-            { label: 'Absolute Zero:', value: '-273.15°C' },
             { label: 'Room Temperature:', value: '20-25°C' }
         ]
     },
     speed: {
         name: 'Speed',
         icon: '⚡',
-        description: 'Convert between different units of speed and velocity',
         units: {
-            kmh: { name: 'Kilometers/Hour (km/h)', factor: 0.277778 },
-            mph: { name: 'Miles/Hour (mph)', factor: 0.44704 },
-            ms: { name: 'Meters/Second (m/s)', factor: 1 },
-            fps: { name: 'Feet/Second (ft/s)', factor: 0.3048 },
-            knot: { name: 'Knot', factor: 0.514444 },
-            mach: { name: 'Mach (at sea level)', factor: 343 }
+            kmh: { name: 'km/h', factor: 0.277778 },
+            mph: { name: 'mph', factor: 0.44704 },
+            ms: { name: 'm/s', factor: 1 },
+            fps: { name: 'ft/s', factor: 0.3048 }
         },
         references: [
             { label: '1 km/h =', value: '0.278 m/s' },
             { label: '1 mph =', value: '1.609 km/h' },
-            { label: '1 knot =', value: '1.852 km/h' },
             { label: 'Speed of sound =', value: '343 m/s' }
-        ]
-    },
-    pressure: {
-        name: 'Pressure',
-        icon: '🌪️',
-        description: 'Convert between different units of pressure',
-        units: {
-            pascal: { name: 'Pascal (Pa)', factor: 1 },
-            kilopascal: { name: 'Kilopascal (kPa)', factor: 1000 },
-            bar: { name: 'Bar', factor: 100000 },
-            atmosphere: { name: 'Atmosphere (atm)', factor: 101325 },
-            torr: { name: 'Torr', factor: 133.322 },
-            psi: { name: 'PSI', factor: 6895 },
-            mmhg: { name: 'mmHg', factor: 133.322 }
-        },
-        references: [
-            { label: '1 Bar =', value: '100,000 Pa' },
-            { label: '1 Atmosphere =', value: '101,325 Pa' },
-            { label: '1 PSI =', value: '6,895 Pa' },
-            { label: 'Sea Level =', value: '1 atm' }
-        ]
-    },
-    energy: {
-        name: 'Energy',
-        icon: '⚡',
-        description: 'Convert between different units of energy and work',
-        units: {
-            joule: { name: 'Joule (J)', factor: 1 },
-            kilojoule: { name: 'Kilojoule (kJ)', factor: 1000 },
-            calorie: { name: 'Calorie (cal)', factor: 4.184 },
-            kilocalorie: { name: 'Kilocalorie (kcal)', factor: 4184 },
-            watt_hour: { name: 'Watt Hour (Wh)', factor: 3600 },
-            kwh: { name: 'Kilowatt Hour (kWh)', factor: 3600000 },
-            btu: { name: 'BTU', factor: 1055.06 },
-            erg: { name: 'Erg', factor: 0.0000001 }
-        },
-        references: [
-            { label: '1 kWh =', value: '3.6 MJ' },
-            { label: '1 kcal =', value: '4,184 J' },
-            { label: '1 BTU =', value: '1,055 J' },
-            { label: 'Food Calorie =', value: '1 kcal' }
-        ]
-    },
-    time: {
-        name: 'Time',
-        icon: '⏰',
-        description: 'Convert between different units of time',
-        units: {
-            second: { name: 'Second (s)', factor: 1 },
-            minute: { name: 'Minute (min)', factor: 60 },
-            hour: { name: 'Hour (hr)', factor: 3600 },
-            day: { name: 'Day', factor: 86400 },
-            week: { name: 'Week', factor: 604800 },
-            month: { name: 'Month (30 days)', factor: 2592000 },
-            year: { name: 'Year (365 days)', factor: 31536000 },
-            decade: { name: 'Decade', factor: 315360000 }
-        },
-        references: [
-            { label: '1 Minute =', value: '60 seconds' },
-            { label: '1 Hour =', value: '60 minutes' },
-            { label: '1 Day =', value: '24 hours' },
-            { label: '1 Year =', value: '365 days' }
         ]
     }
 };
@@ -206,61 +115,28 @@ let currentCategory = 'length';
 function initializeConverter() {
     populateUnitSelectors();
     updateQuickReference();
-    updateCategoryDisplay();
+    updateConverterTitle();
     clearResults();
-}
-
-// Setup responsive layout
-function setupResponsiveLayout() {
-    // Check screen size and apply appropriate layout
-    function checkScreenSize() {
-        const isDesktop = window.innerWidth >= 1024;
-        const sidebar = document.querySelector('.desktop-sidebar');
-        const mobileSelector = document.querySelector('.mobile-category-selector');
-        
-        if (isDesktop) {
-            if (sidebar) sidebar.style.display = 'flex';
-            if (mobileSelector) mobileSelector.style.display = 'none';
-        } else {
-            if (sidebar) sidebar.style.display = 'none';
-            if (mobileSelector) mobileSelector.style.display = 'block';
-        }
-    }
-
-    // Initial check
-    checkScreenSize();
-
-    // Listen for resize
-    window.addEventListener('resize', debounce(checkScreenSize, 250));
 }
 
 // Setup event listeners
 function setupEventListeners() {
-    // Desktop category navigation
-    const desktopCategoryItems = document.querySelectorAll('.category-nav-item');
-    desktopCategoryItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const category = this.getAttribute('data-category');
-            setActiveCategory(category);
-        });
-    });
-
-    // Mobile category cards
-    const mobileCategoryCards = document.querySelectorAll('.mobile-category-card');
-    mobileCategoryCards.forEach(card => {
+    // Category card clicks
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach(card => {
         card.addEventListener('click', function() {
             const category = this.getAttribute('data-category');
             setActiveCategory(category);
         });
     });
 
-    // Real-time conversion on input
+    // Real-time conversion
     const inputValue = document.getElementById('inputValue');
     const fromUnit = document.getElementById('fromUnit');
     const toUnit = document.getElementById('toUnit');
 
     [inputValue, fromUnit, toUnit].forEach(element => {
-        element.addEventListener('input', debounce(performConversion, 300));
+        element.addEventListener('input', performConversion);
     });
 
     // Enter key support
@@ -275,16 +151,8 @@ function setupEventListeners() {
 function setActiveCategory(category) {
     currentCategory = category;
 
-    // Update desktop navigation
-    document.querySelectorAll('.category-nav-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('data-category') === category) {
-            item.classList.add('active');
-        }
-    });
-
-    // Update mobile navigation
-    document.querySelectorAll('.mobile-category-card').forEach(card => {
+    // Update category cards
+    document.querySelectorAll('.category-card').forEach(card => {
         card.classList.remove('active');
         if (card.getAttribute('data-category') === category) {
             card.classList.add('active');
@@ -294,24 +162,19 @@ function setActiveCategory(category) {
     // Update interface
     populateUnitSelectors();
     updateQuickReference();
-    updateCategoryDisplay();
+    updateConverterTitle();
     clearResults();
 
-    showNotification(`Switched to ${conversionData[category].name} converter`, 'info');
+    showNotification(`Switched to ${conversionData[category].name} converter`);
 }
 
-// Update category display
-function updateCategoryDisplay() {
+// Update converter title
+function updateConverterTitle() {
     const categoryData = conversionData[currentCategory];
-    
-    // Update category header
-    const iconElement = document.getElementById('currentCategoryIcon');
-    const titleElement = document.getElementById('currentCategoryTitle');
-    const descElement = document.getElementById('currentCategoryDesc');
-    
-    if (iconElement) iconElement.textContent = categoryData.icon;
-    if (titleElement) titleElement.textContent = `${categoryData.name} Converter`;
-    if (descElement) descElement.textContent = categoryData.description;
+    const titleElement = document.getElementById('converterTitle');
+    if (titleElement) {
+        titleElement.textContent = `${categoryData.name} Converter`;
+    }
 }
 
 // Populate unit selectors
@@ -362,7 +225,7 @@ function performConversion() {
 
     // Validation
     if (!inputValue || !fromUnit || !toUnit || isNaN(inputValue)) {
-        clearResults();
+        hideResults();
         return;
     }
 
@@ -382,11 +245,11 @@ function performConversion() {
 
     } catch (error) {
         showNotification('Conversion error: ' + error.message, 'error');
-        clearResults();
+        hideResults();
     }
 }
 
-// Convert standard units (non-temperature)
+// Convert standard units
 function convertStandardUnit(value, fromUnit, toUnit) {
     const units = conversionData[currentCategory].units;
 
@@ -414,9 +277,6 @@ function convertTemperature(value, fromUnit, toUnit) {
         case 'kelvin':
             celsius = value - 273.15;
             break;
-        case 'rankine':
-            celsius = (value - 491.67) * 5/9;
-            break;
         default:
             throw new Error('Invalid temperature unit');
     }
@@ -429,8 +289,6 @@ function convertTemperature(value, fromUnit, toUnit) {
             return celsius * 9/5 + 32;
         case 'kelvin':
             return celsius + 273.15;
-        case 'rankine':
-            return celsius * 9/5 + 491.67;
         default:
             throw new Error('Invalid temperature unit');
     }
@@ -450,8 +308,7 @@ function getTemperatureFormula(input, fromUnit, toUnit, result) {
     const symbols = {
         celsius: '°C',
         fahrenheit: '°F',
-        kelvin: 'K',
-        rankine: '°R'
+        kelvin: 'K'
     };
 
     return `${input}${symbols[fromUnit]} = ${formatNumber(result)}${symbols[toUnit]}`;
@@ -462,16 +319,25 @@ function displayResult(result, formula) {
     document.getElementById('resultValue').textContent = formatNumber(result);
     document.getElementById('resultFormula').textContent = formula;
 
-    // Add animation
-    const resultCard = document.getElementById('conversionResult');
-    resultCard.classList.add('result-updated');
-    setTimeout(() => resultCard.classList.remove('result-updated'), 300);
+    // Show result section
+    const resultSection = document.getElementById('resultSection');
+    resultSection.style.display = 'block';
+
+    // Smooth scroll to result
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Hide results
+function hideResults() {
+    const resultSection = document.getElementById('resultSection');
+    resultSection.style.display = 'none';
 }
 
 // Clear results
 function clearResults() {
     document.getElementById('resultValue').textContent = '-';
     document.getElementById('resultFormula').textContent = '-';
+    hideResults();
 }
 
 // Clear entire converter
@@ -480,7 +346,7 @@ function clearConverter() {
     document.getElementById('fromUnit').selectedIndex = 0;
     document.getElementById('toUnit').selectedIndex = 0;
     clearResults();
-    showNotification('Converter cleared', 'info');
+    showNotification('Converter cleared');
 }
 
 // Swap units
@@ -497,7 +363,7 @@ function swapUnits() {
     // Trigger conversion if possible
     if (fromValue && toValue) {
         performConversion();
-        showNotification('Units swapped', 'info');
+        showNotification('Units swapped');
     }
 }
 
@@ -551,19 +417,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Debounce function for performance
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
 // Share functionality
 function shareResults() {
     const resultValue = document.getElementById('resultValue').textContent;
@@ -591,7 +444,7 @@ function shareResults() {
     }
 }
 
-// Navigation functions for tool cards
+// Navigation functions
 function goToEmiCalculator() {
     window.location.href = 'emi-calculator.html';
 }
@@ -621,4 +474,61 @@ function scrollToCalculators() {
     window.location.href = 'index.html#calculators';
 }
 
-console.log('PRATIX FINANCE Enhanced Unit Converter initialized successfully!');
+// Animation keyframes (to be added via CSS)
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+
+    .reference-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        transition: all 0.3s ease;
+        margin-bottom: 0.5rem;
+    }
+
+    .reference-item:hover {
+        border-color: var(--neon-cyan);
+        background: rgba(0, 212, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .ref-label {
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .ref-value {
+        color: var(--neon-blue);
+        font-weight: 700;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+    }
+`;
+document.head.appendChild(style);
+
+console.log('PRATIX FINANCE Simple Unit Converter initialized successfully!');

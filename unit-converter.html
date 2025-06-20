@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PRATIX FINANCE Unit Converter - Convert units for length, weight, area, volume, temperature, and more with precision and ease." />
+    <meta name="description" content="PRATIX FINANCE Unit Converter - Simple and easy unit conversion for length, weight, area, volume, temperature, and more." />
     <meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, area converter, volume converter, PRATIX FINANCE" />
     <meta name="author" content="Pratix Finance" />
     <title>Unit Converter - PRATIX FINANCE</title>
@@ -30,265 +29,151 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Desktop Sidebar Navigation -->
-        <nav class="desktop-sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo">
-                    <img src="logo.png" alt="PRATIX FINANCE" class="sidebar-logo-img">
-                    <h2 class="sidebar-title">UNIT CONVERTER</h2>
+        <!-- Standard Header -->
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="standard-app-logo">
+                    <h1 class="standard-app-title">UNIT CONVERTER</h1>
+                </div>
+                <div class="standard-nav-buttons">
+                    <a href="index.html" class="standard-nav-btn" title="Home">
+                        🏠
+                    </a>
+                    <button class="standard-nav-btn" onclick="shareResults()" title="Share">
+                        📤
+                    </button>
                 </div>
             </div>
+        </header>
 
-            <div class="sidebar-categories">
-                <div class="category-nav-item active" data-category="length">
-                    <div class="nav-icon">📏</div>
-                    <div class="nav-details">
-                        <h3>Length</h3>
-                        <p>Meter, Kilometer, Inch, Foot</p>
-                    </div>
-                </div>
+        <!-- Main Content -->
+        <main class="main-app-content">
+            <div class="main-content">
 
-                <div class="category-nav-item" data-category="weight">
-                    <div class="nav-icon">⚖️</div>
-                    <div class="nav-details">
-                        <h3>Weight</h3>
-                        <p>Kilogram, Gram, Pound, Ounce</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="area">
-                    <div class="nav-icon">📐</div>
-                    <div class="nav-details">
-                        <h3>Area</h3>
-                        <p>Square Meter, Acre, Hectare</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="volume">
-                    <div class="nav-icon">🪣</div>
-                    <div class="nav-details">
-                        <h3>Volume</h3>
-                        <p>Liter, Gallon, Cubic Meter</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="temperature">
-                    <div class="nav-icon">🌡️</div>
-                    <div class="nav-details">
-                        <h3>Temperature</h3>
-                        <p>Celsius, Fahrenheit, Kelvin</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="speed">
-                    <div class="nav-icon">⚡</div>
-                    <div class="nav-details">
-                        <h3>Speed</h3>
-                        <p>km/h, mph, m/s</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="pressure">
-                    <div class="nav-icon">🌪️</div>
-                    <div class="nav-details">
-                        <h3>Pressure</h3>
-                        <p>Pascal, Bar, Atmosphere</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="energy">
-                    <div class="nav-icon">⚡</div>
-                    <div class="nav-details">
-                        <h3>Energy</h3>
-                        <p>Joule, Calorie, kWh</p>
-                    </div>
-                </div>
-
-                <div class="category-nav-item" data-category="time">
-                    <div class="nav-icon">⏰</div>
-                    <div class="nav-details">
-                        <h3>Time</h3>
-                        <p>Second, Minute, Hour, Day</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-actions">
-                <a href="index.html" class="sidebar-btn home-btn">
-                    <span>🏠</span>
-                    <span>Home</span>
-                </a>
-                <button class="sidebar-btn share-btn" onclick="shareResults()">
-                    <span>📤</span>
-                    <span>Share</span>
-                </button>
-            </div>
-        </nav>
-
-        <!-- Mobile Category Selector -->
-        <div class="mobile-category-selector">
-            <div class="mobile-header">
-                <div class="mobile-logo">
-                    <img src="logo.png" alt="PRATIX FINANCE" class="mobile-logo-img">
-                    <h2 class="mobile-title">UNIT CONVERTER</h2>
-                </div>
-                <div class="mobile-nav-buttons">
-                    <a href="index.html" class="mobile-nav-btn">🏠</a>
-                    <button class="mobile-nav-btn" onclick="shareResults()">📤</button>
-                </div>
-            </div>
-
-            <div class="mobile-category-grid">
-                <div class="mobile-category-card active" data-category="length">
-                    <div class="mobile-category-icon">📏</div>
-                    <span>Length</span>
-                </div>
-                <div class="mobile-category-card" data-category="weight">
-                    <div class="mobile-category-icon">⚖️</div>
-                    <span>Weight</span>
-                </div>
-                <div class="mobile-category-card" data-category="area">
-                    <div class="mobile-category-icon">📐</div>
-                    <span>Area</span>
-                </div>
-                <div class="mobile-category-card" data-category="volume">
-                    <div class="mobile-category-icon">🪣</div>
-                    <span>Volume</span>
-                </div>
-                <div class="mobile-category-card" data-category="temperature">
-                    <div class="mobile-category-icon">🌡️</div>
-                    <span>Temperature</span>
-                </div>
-                <div class="mobile-category-card" data-category="speed">
-                    <div class="mobile-category-icon">⚡</div>
-                    <span>Speed</span>
-                </div>
-                <div class="mobile-category-card" data-category="pressure">
-                    <div class="mobile-category-icon">🌪️</div>
-                    <span>Pressure</span>
-                </div>
-                <div class="mobile-category-card" data-category="energy">
-                    <div class="mobile-category-icon">⚡</div>
-                    <span>Energy</span>
-                </div>
-                <div class="mobile-category-card" data-category="time">
-                    <div class="mobile-category-icon">⏰</div>
-                    <span>Time</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Converter Interface -->
-        <div class="main-converter-content">
-            <!-- Category Header -->
-            <div class="converter-header">
-                <div class="category-display">
-                    <div class="category-icon-large" id="currentCategoryIcon">📏</div>
-                    <div class="category-info">
-                        <h1 class="category-title" id="currentCategoryTitle">Length Converter</h1>
-                        <p class="category-description" id="currentCategoryDesc">Convert between different units of length and distance</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Converter Form -->
-            <div class="converter-interface">
+                <!-- Category Selection -->
                 <div class="glass-card">
-                    <div class="converter-form">
-                        <!-- Input Section -->
-                        <div class="input-section">
-                            <div class="input-group">
-                                <label for="inputValue">Enter Value</label>
-                                <input type="number" id="inputValue" class="calc-input" placeholder="Enter value to convert" step="any">
-                            </div>
-
-                            <div class="unit-selection-row">
-                                <div class="unit-selector">
-                                    <label for="fromUnit">From</label>
-                                    <select id="fromUnit" class="calc-input unit-select">
-                                        <option value="">Select Unit</option>
-                                    </select>
-                                </div>
-
-                                <div class="swap-button-container">
-                                    <button class="swap-btn" onclick="swapUnits()" title="Swap units">
-                                        <span>🔄</span>
-                                    </button>
-                                </div>
-
-                                <div class="unit-selector">
-                                    <label for="toUnit">To</label>
-                                    <select id="toUnit" class="calc-input unit-select">
-                                        <option value="">Select Unit</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="button-group">
-                                <button class="calculate-btn" onclick="performConversion()">
-                                    🔄 Convert
-                                </button>
-                                <button class="refresh-btn" onclick="clearConverter()">
-                                    🗑️ Clear
-                                </button>
-                            </div>
+                    <h2 class="section-title">Choose Conversion Type</h2>
+                    <div class="category-grid">
+                        <div class="category-card active" data-category="length">
+                            <div class="category-icon">📏</div>
+                            <h3>Length</h3>
+                            <p>Meter, Foot, Inch</p>
                         </div>
-
-                        <!-- Result Section -->
-                        <div class="result-display">
-                            <div class="result-card" id="conversionResult">
-                                <div class="result-header">
-                                    <h3>Conversion Result</h3>
-                                </div>
-                                <div class="result-content">
-                                    <div class="result-item">
-                                        <span class="result-label">Result:</span>
-                                        <span class="result-value" id="resultValue">-</span>
-                                    </div>
-                                    <div class="result-item">
-                                        <span class="result-label">Formula:</span>
-                                        <span class="result-formula" id="resultFormula">-</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="category-card" data-category="weight">
+                            <div class="category-icon">⚖️</div>
+                            <h3>Weight</h3>
+                            <p>Kg, Pound, Gram</p>
+                        </div>
+                        <div class="category-card" data-category="area">
+                            <div class="category-icon">📐</div>
+                            <h3>Area</h3>
+                            <p>m², Acre, Hectare</p>
+                        </div>
+                        <div class="category-card" data-category="volume">
+                            <div class="category-icon">🪣</div>
+                            <h3>Volume</h3>
+                            <p>Liter, Gallon, m³</p>
+                        </div>
+                        <div class="category-card" data-category="temperature">
+                            <div class="category-icon">🌡️</div>
+                            <h3>Temperature</h3>
+                            <p>°C, °F, Kelvin</p>
+                        </div>
+                        <div class="category-card" data-category="speed">
+                            <div class="category-icon">⚡</div>
+                            <h3>Speed</h3>
+                            <p>km/h, mph, m/s</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Quick Reference -->
-            <div class="quick-reference-section">
+                <!-- Converter Interface -->
+                <div class="glass-card">
+                    <h2 class="section-title" id="converterTitle">Length Converter</h2>
+
+                    <!-- Input Value -->
+                    <div class="input-group">
+                        <label for="inputValue">Enter Value</label>
+                        <input type="number" id="inputValue" class="calc-input" placeholder="Enter value to convert" step="any">
+                    </div>
+
+                    <!-- Unit Selection -->
+                    <div class="unit-selection-row">
+                        <div class="input-group">
+                            <label for="fromUnit">From</label>
+                            <select id="fromUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                            </select>
+                        </div>
+
+                        <div class="swap-button-container">
+                            <button class="swap-btn" onclick="swapUnits()" title="Swap units">
+                                🔄
+                            </button>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="toUnit">To</label>
+                            <select id="toUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="button-group">
+                        <button class="calculate-btn" onclick="performConversion()">
+                            🔄 Convert
+                        </button>
+                        <button class="refresh-btn" onclick="clearConverter()">
+                            🗑️ Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div class="glass-card" id="resultSection" style="display: none;">
+                    <h3 class="sub-title">Conversion Result</h3>
+                    <div class="result-display">
+                        <div class="result-item">
+                            <span class="result-label">Result:</span>
+                            <span class="result-value" id="resultValue">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Formula:</span>
+                            <span class="result-formula" id="resultFormula">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference -->
                 <div class="glass-card">
                     <h3 class="sub-title">Quick Reference</h3>
                     <div class="reference-grid" id="referenceGrid">
                         <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
-            </div>
 
-            <!-- Related Tools -->
-            <div class="related-tools-section">
+                <!-- Related Tools -->
                 <div class="glass-card">
                     <h3 class="sub-title">Related Financial Tools</h3>
                     <div class="tools-grid">
                         <div class="tool-card" onclick="goToEmiCalculator()">
                             <div class="tool-icon">🏠</div>
                             <h3>EMI Calculator</h3>
-                            <p>Calculate loan EMI payments and schedules</p>
+                            <p>Calculate loan EMI payments</p>
                         </div>
-
                         <div class="tool-card" onclick="goToSipCalculator()">
                             <div class="tool-icon">📈</div>
                             <h3>SIP Calculator</h3>
                             <p>Plan systematic investments</p>
                         </div>
-
                         <div class="tool-card" onclick="goToTaxCalculator()">
                             <div class="tool-icon">💼</div>
                             <h3>Tax Calculator</h3>
-                            <p>Calculate income tax liability</p>
+                            <p>Calculate income tax</p>
                         </div>
-
                         <div class="tool-card" onclick="goToGstCalculator()">
                             <div class="tool-icon">📊</div>
                             <h3>GST Calculator</h3>
@@ -296,134 +181,162 @@
                         </div>
                     </div>
                 </div>
+
             </div>
-        </div>
 
-        <!-- Enhanced Professional Footer -->
-        <footer class="professional-footer">
-            <div class="footer-container">
-                <!-- Elite Brand Section -->
-                <div class="footer-brand-elite">
-                    <div class="brand-header-elite">
-                        <img src="logo.png" alt="Pratix Finance" class="footer-logo-elite">
-                        <h3 class="brand-name-elite">PRATIX FINANCE</h3>
+            <!-- Enhanced Professional Footer -->
+            <footer class="professional-footer">
+                <div class="footer-container">
+                    <!-- Elite Brand Section -->
+                    <div class="footer-brand-elite">
+                        <div class="brand-header-elite">
+                            <img src="logo.png" alt="Pratix Finance" class="footer-logo-elite">
+                            <h3 class="brand-name-elite">PRATIX FINANCE</h3>
+                        </div>
+                        <p class="brand-tagline-elite">India's Most Trusted Financial Calculator Platform</p>
+                        <div class="world-no1-badge">
+                            <span>🏆</span>
+                            <span>#1 Financial Calculator Suite</span>
+                        </div>
                     </div>
-                    <p class="brand-tagline-elite">India's Most Trusted Financial Calculator Platform</p>
-                    <div class="world-no1-badge">
-                        <span>🏆</span>
-                        <span>#1 Financial Calculator Suite</span>
+
+                    <div class="footer-links-elite-grid">
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>🧮</span>
+                                Calculators
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="emi-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🏠</span>
+                                    EMI Calculator
+                                </a></li>
+                                <li><a href="sip-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📈</span>
+                                    SIP Calculator
+                                </a></li>
+                                <li><a href="fd-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🏦</span>
+                                    FD Calculator
+                                </a></li>
+                                <li><a href="gst-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📊</span>
+                                    GST Calculator
+                                </a></li>
+                                <li><a href="tax-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📋</span>
+                                    Tax Calculator
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>💼</span>
+                                Financial Tools
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="sip-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🎯</span>
+                                    Goal Planning
+                                </a></li>
+                                <li><a href="emi-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">💰</span>
+                                    Loan Planning
+                                </a></li>
+                                <li><a href="fd-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📊</span>
+                                    Investment Planning
+                                </a></li>
+                                <li><a href="tax-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🧾</span>
+                                    Tax Planning
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>📚</span>
+                                Resources
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="about.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">ℹ️</span>
+                                    About Us
+                                </a></li>
+                                <li><a href="contact.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📞</span>
+                                    Contact Support
+                                </a></li>
+                                <li><a href="feedback.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">💬</span>
+                                    Send Feedback
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>⚖️</span>
+                                Legal
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="privacy.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🔒</span>
+                                    Privacy Policy
+                                </a></li>
+                                <li><a href="terms.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📄</span>
+                                    Terms of Service
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Copyright -->
+                    <div class="footer-copyright-elite">
+                        <p class="copyright-text-elite">
+                            © 2025 <strong>PRATIX FINANCE</strong>. All rights reserved. 
+                        </p>
+                        <p class="tagline-elite">
+                            Empowering Financial Decisions Through Smart Calculations
+                        </p>
                     </div>
                 </div>
+            </footer>
+        </main>
 
-                <div class="footer-links-elite-grid">
-                    <div class="footer-section-elite">
-                        <h3 class="footer-section-title-elite">
-                            <span>🧮</span>
-                            Calculators
-                        </h3>
-                        <ul class="footer-links-list-elite">
-                            <li><a href="emi-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">🏠</span>
-                                EMI Calculator
-                            </a></li>
-                            <li><a href="sip-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">📈</span>
-                                SIP Calculator
-                            </a></li>
-                            <li><a href="fd-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">🏦</span>
-                                FD Calculator
-                            </a></li>
-                            <li><a href="gst-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">📊</span>
-                                GST Calculator
-                            </a></li>
-                            <li><a href="tax-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">📋</span>
-                                Tax Calculator
-                            </a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section-elite">
-                        <h3 class="footer-section-title-elite">
-                            <span>💼</span>
-                            Financial Tools
-                        </h3>
-                        <ul class="footer-links-list-elite">
-                            <li><a href="sip-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">🎯</span>
-                                Goal Planning
-                            </a></li>
-                            <li><a href="emi-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">💰</span>
-                                Loan Planning
-                            </a></li>
-                            <li><a href="fd-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">📊</span>
-                                Investment Planning
-                            </a></li>
-                            <li><a href="tax-calculator.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">🧾</span>
-                                Tax Planning
-                            </a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section-elite">
-                        <h3 class="footer-section-title-elite">
-                            <span>📚</span>
-                            Resources
-                        </h3>
-                        <ul class="footer-links-list-elite">
-                            <li><a href="about.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">ℹ️</span>
-                                About Us
-                            </a></li>
-                            <li><a href="contact.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">📞</span>
-                                Contact Support
-                            </a></li>
-                            <li><a href="feedback.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">💬</span>
-                                Send Feedback
-                            </a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section-elite">
-                        <h3 class="footer-section-title-elite">
-                            <span>⚖️</span>
-                            Legal
-                        </h3>
-                        <ul class="footer-links-list-elite">
-                            <li><a href="privacy.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">🔒</span>
-                                Privacy Policy
-                            </a></li>
-                            <li><a href="terms.html" class="footer-link-elite">
-                                <span class="footer-link-icon-elite">📄</span>
-                                Terms of Service
-                            </a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Enhanced Copyright -->
-                <div class="footer-copyright-elite">
-                    <p class="copyright-text-elite">
-                        © 2025 <strong>PRATIX FINANCE</strong>. All rights reserved. 
-                    </p>
-                    <p class="tagline-elite">
-                        Empowering Financial Decisions Through Smart Calculations
-                    </p>
-                </div>
-            </div>
-        </footer>
+        <!-- Bottom Navigation - Mobile Only -->
+        <nav class="standard-bottom-nav">
+            <a href="index.html" class="standard-nav-item">
+                <span class="standard-nav-icon">🏠</span>
+                <span class="standard-nav-label">Home</span>
+            </a>
+            <a href="emi-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">🏠</span>
+                <span class="standard-nav-label">EMI</span>
+            </a>
+            <a href="sip-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">📈</span>
+                <span class="standard-nav-label">SIP</span>
+            </a>
+            <a href="gst-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">📊</span>
+                <span class="standard-nav-label">GST</span>
+            </a>
+            <a href="tax-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">💼</span>
+                <span class="standard-nav-label">Tax</span>
+            </a>
+            <a href="unit-converter.html" class="standard-nav-item active">
+                <span class="standard-nav-icon">📐</span>
+                <span class="standard-nav-label">Convert</span>
+            </a>
+        </nav>
     </div>
 
     <!-- Scripts -->
-    <script src="universal-nav.js"></script>
     <script src="unit-converter-script.js"></script>
 </body>
 </html>
