@@ -986,8 +986,27 @@
                 </div>
             </div>
         </footer>
-          
+
+        <!-- AdSense Footer Ad -->
+        <div class="adsense-footer">
+            <div class="adsense-container">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3291480910940190" crossorigin="anonymous"></script>
+                <!-- Footer Horizontal Ad -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3291480910940190"
+                     data-ad-slot="3391404887"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
         </main>
+
+        </div>
     <!-- Fixed Bottom Navigation - Always visible at screen bottom -->
     <nav class="standard-bottom-nav" style="grid-template-columns: repeat(6, 1fr); position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 999999999 !important; width: 100vw !important;">
         <button class="standard-nav-item active" data-tab="emi-calculator" aria-label="EMI Calculator">
@@ -1065,7 +1084,7 @@
         // ENHANCED: Desktop and mobile tab navigation with error handling
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🔄 EMI Calculator: Initializing navigation...');
-            
+
             try {
                 // Handle both desktop and mobile navigation
                 const desktopNavItems = document.querySelectorAll('.tab-navigation .tab-nav-item[data-tab]');
@@ -1077,9 +1096,9 @@
 
                 function switchTab(targetTab) {
                     if (!targetTab) return;
-                    
+
                     console.log('🎯 Switching to tab:', targetTab);
-                    
+
                     // Remove active class from all nav items and tab contents
                     allNavItems.forEach(item => {
                         if (item) item.classList.remove('active');
@@ -1094,7 +1113,7 @@
                     // Add active class to corresponding nav items (both desktop and mobile)
                     const activeDesktopNav = document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`);
                     const activeMobileNav = document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);erySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`);
-                
+
                 if (activeDesktopNav) {
                     activeDesktopNav.classList.add('active');
                 }
@@ -1127,7 +1146,7 @@
                         switchTab(targetTab);
                     }
                 };
-                
+
                 item.addEventListener('click', handleTabSwitch);
                 item.addEventListener('touchend', function(e) {
                     e.preventDefault();
