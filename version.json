@@ -1,11 +1,20 @@
 
 {
-  "version": "1.0.2",
-  "releaseDate": "2024-01-15",
+  "version": "1.2.0",
+  "updateMessage": "Fixed mobile navigation, improved responsive design, and enhanced error handling",
+  "releaseDate": "2025-01-27",
   "features": [
-    "Added automatic update notification system",
-    "Enhanced user experience with refresh prompts",
-    "Improved PWA update handling"
+    "Fixed mobile navigation visibility issues",
+    "Improved responsive design across all devices",
+    "Enhanced error handling throughout the app",
+    "Optimized service worker caching",
+    "Better cross-device compatibility"
   ],
-  "updateMessage": "New version available! Please refresh to get the latest features."
+  "bugFixes": [
+    "Mobile bottom navigation now displays correctly on all pages",
+    "Fixed CSS conflicts causing layout issues",
+    "Resolved JavaScript errors in navigation",
+    "Fixed footer overlap issues",
+    "Improved touch responsiveness"
+  ]
 }

@@ -1399,3 +1399,23 @@
                 deferredPrompt = null;
 
             } catch (error) {
+            console.error('Download error:', error);
+
+            // Reset button on error
+            this.style.opacity = '1';
+            this.style.pointerEvents = 'auto';
+            this.innerHTML = originalText;
+
+            showInstallNotification('Installation failed. Please try again later.', 'error');
+        }
+    }
+
+    // Setup download buttons when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        setupDownloadButtons();
+    });
+
+    console.log('Homepage: All scripts loaded successfully');
+</script>
+</body>
+</html>
