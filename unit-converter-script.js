@@ -39,12 +39,11 @@ function initializeDesktopConverter() {
     setupEventListeners();
     setActiveCategory('length');
     
-    // Setup sidebar navigation
-    const sidebarItems = document.querySelectorAll('.sidebar-category-item');
-    sidebarItems.forEach(item => {
-        item.addEventListener('click', function() {
+    // Setup desktop category navigation
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach(card => {
+        card.addEventListener('click', function() {
             const category = this.getAttribute('data-category');
-            setActiveSidebarCategory(category);
             setActiveCategory(category);
         });
     });
@@ -66,14 +65,9 @@ function setupMobileEventListeners() {
     // Mobile uses onclick handlers in HTML
 }
 
-// Set active sidebar category (desktop)
-function setActiveSidebarCategory(category) {
-    document.querySelectorAll('.sidebar-category-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('data-category') === category) {
-            item.classList.add('active');
-        }
-    });
+// Desktop layout detection and initialization
+function checkDesktopLayout() {
+    return window.innerWidth >= 1024;
 }
 
 // Simple conversion data
