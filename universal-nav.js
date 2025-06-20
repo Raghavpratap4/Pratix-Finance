@@ -144,10 +144,12 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            // Add visual feedback
+            // Add visual feedback with better mobile support
             this.style.transform = 'scale(0.95)';
+            this.style.transition = 'transform 0.1s ease';
             setTimeout(() => {
                 this.style.transform = '';
+                this.style.transition = '';
             }, 150);
             
             const targetTab = this.getAttribute('data-tab');
@@ -163,16 +165,30 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add multiple event types for better cross-device support
         ['click', 'touchend'].forEach(eventType => {
             safeExecute(() => {
-                item.addEventListener(eventType, handleTabSwitch, { passive: false });
+                item.addEventListener(eventType, handleTabSwitch, { 
+                    passive: false,
+                    capture: false 
+                });
             }, `Error adding ${eventType} listener to nav item`);
         });
         
-        // Prevent unwanted touch behaviors
+        // Enhanced mobile touch support
         safeExecute(() => {
             item.addEventListener('touchstart', function(e) {
                 e.stopPropagation();
+                this.style.opacity = '0.8';
             }, { passive: true });
-        }, 'Error adding touchstart listener');
+            
+            item.addEventListener('touchcancel', function() {
+                this.style.opacity = '';
+                this.style.transform = '';
+            }, { passive: true });
+            
+            item.addEventListener('touchmove', function() {
+                this.style.opacity = '';
+                this.style.transform = '';
+            }, { passive: true });
+        }, 'Error adding enhanced touch listeners');
     });
 
     // Enhanced initialization with better error handling

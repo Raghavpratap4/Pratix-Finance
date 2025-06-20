@@ -5160,11 +5160,11 @@ html {
   transform: translateZ(0);
 }
 
-/* FIXED: Enhanced mobile navigation styling - Consistent across all devices */
+/* ENHANCED: Mobile navigation styling - Fixed for all calculators */
 @media (max-width: 1023px) {
   .standard-nav-item,
   .nav-item {
-      min-height: 64px !important;
+      min-height: 68px !important;
       padding: 0.5rem 0.25rem !important;
       gap: 0.3rem !important;
       border-radius: 12px !important;
@@ -5181,6 +5181,9 @@ html {
       user-select: none !important;
       -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2) !important;
       touch-action: manipulation !important;
+      position: relative !important;
+      text-decoration: none !important;
+      color: var(--text-muted) !important;
   }
 
   .standard-nav-icon,
