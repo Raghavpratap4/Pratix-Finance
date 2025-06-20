@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE Length Converter - Convert meters, feet, inches and more length units instantly" />
+    <title>Length Converter - PRATIX FINANCE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="app-container converter-page">
+        <!-- Header Only -->
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="standard-app-logo">
+                    <h1 class="standard-app-title">LENGTH CONVERTER</h1>
+                </div>
+                <div class="standard-nav-buttons">
+                    <a href="unit-converter.html" class="standard-nav-btn" title="Back">
+                        ←
+                    </a>
+                    <a href="index.html" class="standard-nav-btn" title="Home">
+                        🏠
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-app-content">
+            <div class="main-content">
+                
+                <div class="glass-card">
+                    <h2 class="section-title">Length Converter</h2>
+
+                    <!-- Input Value -->
+                    <div class="input-group">
+                        <label for="inputValue">Enter Length Value</label>
+                        <input type="number" id="inputValue" class="calc-input" placeholder="Enter length to convert" step="any">
+                    </div>
+
+                    <!-- Unit Selection -->
+                    <div class="unit-selection-row">
+                        <div class="input-group">
+                            <label for="fromUnit">From</label>
+                            <select id="fromUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                                <option value="meter">Meter (m)</option>
+                                <option value="kilometer">Kilometer (km)</option>
+                                <option value="centimeter">Centimeter (cm)</option>
+                                <option value="millimeter">Millimeter (mm)</option>
+                                <option value="inch">Inch (in)</option>
+                                <option value="foot">Foot (ft)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="mile">Mile (mi)</option>
+                            </select>
+                        </div>
+
+                        <div class="swap-button-container">
+                            <button class="swap-btn" onclick="swapUnits()" title="Swap units">
+                                🔄
+                            </button>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="toUnit">To</label>
+                            <select id="toUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                                <option value="meter">Meter (m)</option>
+                                <option value="kilometer">Kilometer (km)</option>
+                                <option value="centimeter">Centimeter (cm)</option>
+                                <option value="millimeter">Millimeter (mm)</option>
+                                <option value="inch">Inch (in)</option>
+                                <option value="foot">Foot (ft)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="mile">Mile (mi)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="button-group">
+                        <button class="calculate-btn" onclick="convertLength()">
+                            🔄 Convert Length
+                        </button>
+                        <button class="refresh-btn" onclick="clearConverter()">
+                            🗑️ Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div class="glass-card" id="resultSection" style="display: none;">
+                    <h3 class="sub-title">Conversion Result</h3>
+                    <div class="result-display">
+                        <div class="result-item">
+                            <span class="result-label">Result:</span>
+                            <span class="result-value" id="resultValue">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Formula:</span>
+                            <span class="result-formula" id="resultFormula">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference -->
+                <div class="glass-card">
+                    <h3 class="sub-title">Quick Reference</h3>
+                    <div class="reference-grid">
+                        <div class="reference-item">
+                            <span class="ref-label">1 Meter =</span>
+                            <span class="ref-value">100 cm</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">1 Kilometer =</span>
+                            <span class="ref-value">1000 m</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">1 Foot =</span>
+                            <span class="ref-value">12 inches</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">1 Mile =</span>
+                            <span class="ref-value">5280 ft</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Length conversion factors (to meters)
+        const lengthFactors = {
+            meter: 1,
+            kilometer: 1000,
+            centimeter: 0.01,
+            millimeter: 0.001,
+            inch: 0.0254,
+            foot: 0.3048,
+            yard: 0.9144,
+            mile: 1609.344
+        };
+
+        function convertLength() {
+            const inputValue = document.getElementById('inputValue').value;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            if (!inputValue || !fromUnit || !toUnit || isNaN(inputValue)) {
+                hideResults();
+                return;
+            }
+
+            const baseValue = parseFloat(inputValue) * lengthFactors[fromUnit];
+            const result = baseValue / lengthFactors[toUnit];
+
+            document.getElementById('resultValue').textContent = formatNumber(result);
+            document.getElementById('resultFormula').textContent = `${inputValue} ${fromUnit} = ${formatNumber(result)} ${toUnit}`;
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function swapUnits() {
+            const fromSelect = document.getElementById('fromUnit');
+            const toSelect = document.getElementById('toUnit');
+            const fromValue = fromSelect.value;
+            const toValue = toSelect.value;
+
+            fromSelect.value = toValue;
+            toSelect.value = fromValue;
+
+            if (fromValue && toValue) {
+                convertLength();
+            }
+        }
+
+        function clearConverter() {
+            document.getElementById('inputValue').value = '';
+            document.getElementById('fromUnit').selectedIndex = 0;
+            document.getElementById('toUnit').selectedIndex = 0;
+            hideResults();
+        }
+
+        function hideResults() {
+            document.getElementById('resultSection').style.display = 'none';
+        }
+
+        function formatNumber(num) {
+            if (Math.abs(num) >= 1e9) {
+                return num.toExponential(4);
+            } else if (Math.abs(num) >= 1000000) {
+                return (num / 1000000).toFixed(3) + 'M';
+            } else if (Math.abs(num) >= 1000) {
+                return (num / 1000).toFixed(3) + 'K';
+            } else if (Math.abs(num) < 0.001 && num !== 0) {
+                return num.toExponential(4);
+            } else {
+                return num.toFixed(6).replace(/\.?0+$/, '');
+            }
+        }
+
+        // Real-time conversion
+        document.getElementById('inputValue').addEventListener('input', convertLength);
+        document.getElementById('fromUnit').addEventListener('change', convertLength);
+        document.getElementById('toUnit').addEventListener('change', convertLength);
+    </script>
+</body>
+</html>

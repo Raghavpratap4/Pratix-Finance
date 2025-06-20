@@ -2,11 +2,79 @@
 // User-friendly and responsive for all devices
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Simple Unit Converter loaded successfully!');
+    console.log('Unit Converter loaded successfully!');
+    
+    // Check if desktop or mobile layout
+    if (window.innerWidth >= 1024) {
+        initializeDesktopConverter();
+        setupDesktopEventListeners();
+    } else {
+        initializeMobileConverter();
+        setupMobileEventListeners();
+    }
+});
+
+// Mobile converter page navigation
+function openConverterPage(category) {
+    // In mobile mode, open dedicated converter page
+    if (window.innerWidth < 1024) {
+        const converterPages = {
+            'length': 'converter-length.html',
+            'weight': 'converter-weight.html',
+            'area': 'converter-area.html',
+            'volume': 'converter-volume.html',
+            'temperature': 'converter-temperature.html',
+            'speed': 'converter-speed.html'
+        };
+        
+        if (converterPages[category]) {
+            window.location.href = converterPages[category];
+        }
+    }
+}
+
+// Desktop converter initialization
+function initializeDesktopConverter() {
     initializeConverter();
     setupEventListeners();
     setActiveCategory('length');
-});
+    
+    // Setup sidebar navigation
+    const sidebarItems = document.querySelectorAll('.sidebar-category-item');
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            setActiveSidebarCategory(category);
+            setActiveCategory(category);
+        });
+    });
+}
+
+// Mobile converter initialization
+function initializeMobileConverter() {
+    // Mobile shows category grid only
+    console.log('Mobile Unit Converter initialized');
+}
+
+// Desktop event listeners
+function setupDesktopEventListeners() {
+    setupEventListeners();
+}
+
+// Mobile event listeners
+function setupMobileEventListeners() {
+    // Mobile uses onclick handlers in HTML
+}
+
+// Set active sidebar category (desktop)
+function setActiveSidebarCategory(category) {
+    document.querySelectorAll('.sidebar-category-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-category') === category) {
+            item.classList.add('active');
+        }
+    });
+}
 
 // Simple conversion data
 const conversionData = {

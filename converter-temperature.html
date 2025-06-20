@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter - PRATIX FINANCE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="app-container converter-page">
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="standard-app-logo">
+                    <h1 class="standard-app-title">TEMPERATURE CONVERTER</h1>
+                </div>
+                <div class="standard-nav-buttons">
+                    <a href="unit-converter.html" class="standard-nav-btn" title="Back">←</a>
+                    <a href="index.html" class="standard-nav-btn" title="Home">🏠</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-app-content">
+            <div class="main-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Temperature Converter</h2>
+                    <div class="input-group">
+                        <label for="inputValue">Enter Temperature Value</label>
+                        <input type="number" id="inputValue" class="calc-input" placeholder="Enter temperature to convert" step="any">
+                    </div>
+                    <div class="unit-selection-row">
+                        <div class="input-group">
+                            <label for="fromUnit">From</label>
+                            <select id="fromUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                                <option value="celsius">Celsius (°C)</option>
+                                <option value="fahrenheit">Fahrenheit (°F)</option>
+                                <option value="kelvin">Kelvin (K)</option>
+                            </select>
+                        </div>
+                        <div class="swap-button-container">
+                            <button class="swap-btn" onclick="swapUnits()" title="Swap units">🔄</button>
+                        </div>
+                        <div class="input-group">
+                            <label for="toUnit">To</label>
+                            <select id="toUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                                <option value="celsius">Celsius (°C)</option>
+                                <option value="fahrenheit">Fahrenheit (°F)</option>
+                                <option value="kelvin">Kelvin (K)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="calculate-btn" onclick="convertTemperature()">🔄 Convert Temperature</button>
+                        <button class="refresh-btn" onclick="clearConverter()">🗑️ Clear</button>
+                    </div>
+                </div>
+
+                <div class="glass-card" id="resultSection" style="display: none;">
+                    <h3 class="sub-title">Conversion Result</h3>
+                    <div class="result-display">
+                        <div class="result-item">
+                            <span class="result-label">Result:</span>
+                            <span class="result-value" id="resultValue">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Formula:</span>
+                            <span class="result-formula" id="resultFormula">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="sub-title">Quick Reference</h3>
+                    <div class="reference-grid">
+                        <div class="reference-item">
+                            <span class="ref-label">Water Freezes:</span>
+                            <span class="ref-value">0°C / 32°F</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">Water Boils:</span>
+                            <span class="ref-value">100°C / 212°F</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">Room Temperature:</span>
+                            <span class="ref-value">20-25°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function convertTemperature() {
+            const inputValue = document.getElementById('inputValue').value;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            if (!inputValue || !fromUnit || !toUnit || isNaN(inputValue)) {
+                hideResults();
+                return;
+            }
+
+            const value = parseFloat(inputValue);
+            let celsius;
+
+            // Convert to Celsius first
+            switch(fromUnit) {
+                case 'celsius':
+                    celsius = value;
+                    break;
+                case 'fahrenheit':
+                    celsius = (value - 32) * 5/9;
+                    break;
+                case 'kelvin':
+                    celsius = value - 273.15;
+                    break;
+            }
+
+            // Convert from Celsius to target unit
+            let result;
+            switch(toUnit) {
+                case 'celsius':
+                    result = celsius;
+                    break;
+                case 'fahrenheit':
+                    result = celsius * 9/5 + 32;
+                    break;
+                case 'kelvin':
+                    result = celsius + 273.15;
+                    break;
+            }
+
+            const symbols = {
+                celsius: '°C',
+                fahrenheit: '°F',
+                kelvin: 'K'
+            };
+
+            document.getElementById('resultValue').textContent = formatNumber(result) + symbols[toUnit];
+            document.getElementById('resultFormula').textContent = `${inputValue}${symbols[fromUnit]} = ${formatNumber(result)}${symbols[toUnit]}`;
+
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromSelect = document.getElementById('fromUnit');
+            const toSelect = document.getElementById('toUnit');
+            const fromValue = fromSelect.value;
+            const toValue = toSelect.value;
+
+            fromSelect.value = toValue;
+            toSelect.value = fromValue;
+
+            if (fromValue && toValue) {
+                convertTemperature();
+            }
+        }
+
+        function clearConverter() {
+            document.getElementById('inputValue').value = '';
+            document.getElementById('fromUnit').selectedIndex = 0;
+            document.getElementById('toUnit').selectedIndex = 0;
+            hideResults();
+        }
+
+        function hideResults() {
+            document.getElementById('resultSection').style.display = 'none';
+        }
+
+        function formatNumber(num) {
+            return num.toFixed(2).replace(/\.?0+$/, '');
+        }
+
+        document.getElementById('inputValue').addEventListener('input', convertTemperature);
+        document.getElementById('fromUnit').addEventListener('change', convertTemperature);
+        document.getElementById('toUnit').addEventListener('change', convertTemperature);
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Converter - PRATIX FINANCE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="app-container converter-page">
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="standard-app-logo">
+                    <h1 class="standard-app-title">WEIGHT CONVERTER</h1>
+                </div>
+                <div class="standard-nav-buttons">
+                    <a href="unit-converter.html" class="standard-nav-btn" title="Back">←</a>
+                    <a href="index.html" class="standard-nav-btn" title="Home">🏠</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-app-content">
+            <div class="main-content">
+                <div class="glass-card">
+                    <h2 class="section-title">Weight Converter</h2>
+                    <div class="input-group">
+                        <label for="inputValue">Enter Weight Value</label>
+                        <input type="number" id="inputValue" class="calc-input" placeholder="Enter weight to convert" step="any">
+                    </div>
+                    <div class="unit-selection-row">
+                        <div class="input-group">
+                            <label for="fromUnit">From</label>
+                            <select id="fromUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                                <option value="kilogram">Kilogram (kg)</option>
+                                <option value="gram">Gram (g)</option>
+                                <option value="pound">Pound (lb)</option>
+                                <option value="ounce">Ounce (oz)</option>
+                                <option value="ton">Metric Ton</option>
+                            </select>
+                        </div>
+                        <div class="swap-button-container">
+                            <button class="swap-btn" onclick="swapUnits()" title="Swap units">🔄</button>
+                        </div>
+                        <div class="input-group">
+                            <label for="toUnit">To</label>
+                            <select id="toUnit" class="calc-input">
+                                <option value="">Select Unit</option>
+                                <option value="kilogram">Kilogram (kg)</option>
+                                <option value="gram">Gram (g)</option>
+                                <option value="pound">Pound (lb)</option>
+                                <option value="ounce">Ounce (oz)</option>
+                                <option value="ton">Metric Ton</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="calculate-btn" onclick="convertWeight()">🔄 Convert Weight</button>
+                        <button class="refresh-btn" onclick="clearConverter()">🗑️ Clear</button>
+                    </div>
+                </div>
+
+                <div class="glass-card" id="resultSection" style="display: none;">
+                    <h3 class="sub-title">Conversion Result</h3>
+                    <div class="result-display">
+                        <div class="result-item">
+                            <span class="result-label">Result:</span>
+                            <span class="result-value" id="resultValue">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Formula:</span>
+                            <span class="result-formula" id="resultFormula">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="sub-title">Quick Reference</h3>
+                    <div class="reference-grid">
+                        <div class="reference-item">
+                            <span class="ref-label">1 Kilogram =</span>
+                            <span class="ref-value">1000 g</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">1 Pound =</span>
+                            <span class="ref-value">16 oz</span>
+                        </div>
+                        <div class="reference-item">
+                            <span class="ref-label">1 Ton =</span>
+                            <span class="ref-value">1000 kg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const weightFactors = {
+            kilogram: 1000,
+            gram: 1,
+            pound: 453.592,
+            ounce: 28.3495,
+            ton: 1000000
+        };
+
+        function convertWeight() {
+            const inputValue = document.getElementById('inputValue').value;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            if (!inputValue || !fromUnit || !toUnit || isNaN(inputValue)) {
+                hideResults();
+                return;
+            }
+
+            const baseValue = parseFloat(inputValue) * weightFactors[fromUnit];
+            const result = baseValue / weightFactors[toUnit];
+
+            document.getElementById('resultValue').textContent = formatNumber(result);
+            document.getElementById('resultFormula').textContent = `${inputValue} ${fromUnit} = ${formatNumber(result)} ${toUnit}`;
+
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function swapUnits() {
+            const fromSelect = document.getElementById('fromUnit');
+            const toSelect = document.getElementById('toUnit');
+            const fromValue = fromSelect.value;
+            const toValue = toSelect.value;
+
+            fromSelect.value = toValue;
+            toSelect.value = fromValue;
+
+            if (fromValue && toValue) {
+                convertWeight();
+            }
+        }
+
+        function clearConverter() {
+            document.getElementById('inputValue').value = '';
+            document.getElementById('fromUnit').selectedIndex = 0;
+            document.getElementById('toUnit').selectedIndex = 0;
+            hideResults();
+        }
+
+        function hideResults() {
+            document.getElementById('resultSection').style.display = 'none';
+        }
+
+        function formatNumber(num) {
+            if (Math.abs(num) >= 1e9) {
+                return num.toExponential(4);
+            } else if (Math.abs(num) >= 1000000) {
+                return (num / 1000000).toFixed(3) + 'M';
+            } else if (Math.abs(num) >= 1000) {
+                return (num / 1000).toFixed(3) + 'K';
+            } else if (Math.abs(num) < 0.001 && num !== 0) {
+                return num.toExponential(4);
+            } else {
+                return num.toFixed(6).replace(/\.?0+$/, '');
+            }
+        }
+
+        document.getElementById('inputValue').addEventListener('input', convertWeight);
+        document.getElementById('fromUnit').addEventListener('change', convertWeight);
+        document.getElementById('toUnit').addEventListener('change', convertWeight);
+    </script>
+</body>
+</html>
