@@ -1,22 +1,25 @@
-// PRATIX FINANCE Unit Converter Script - Responsive Design
+
+// PRATIX FINANCE Enhanced Unit Converter Script - Responsive Design
 // Optimized for all screen sizes with modern UX
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Responsive Unit Converter loaded successfully!');
+    console.log('Enhanced Unit Converter loaded successfully!');
 
     // Initialize the converter
     initializeConverter();
     setupEventListeners();
+    setupResponsiveLayout();
 
     // Set default category
     setActiveCategory('length');
 });
 
-// Conversion factors database
+// Enhanced conversion factors database
 const conversionData = {
     length: {
         name: 'Length',
         icon: '📏',
+        description: 'Convert between different units of length and distance',
         units: {
             meter: { name: 'Meter (m)', factor: 1 },
             kilometer: { name: 'Kilometer (km)', factor: 1000 },
@@ -25,7 +28,8 @@ const conversionData = {
             inch: { name: 'Inch (in)', factor: 0.0254 },
             foot: { name: 'Foot (ft)', factor: 0.3048 },
             yard: { name: 'Yard (yd)', factor: 0.9144 },
-            mile: { name: 'Mile (mi)', factor: 1609.344 }
+            mile: { name: 'Mile (mi)', factor: 1609.344 },
+            nautical_mile: { name: 'Nautical Mile', factor: 1852 }
         },
         references: [
             { label: '1 Meter =', value: '100 cm' },
@@ -37,13 +41,15 @@ const conversionData = {
     weight: {
         name: 'Weight',
         icon: '⚖️',
+        description: 'Convert between different units of weight and mass',
         units: {
             kilogram: { name: 'Kilogram (kg)', factor: 1000 },
             gram: { name: 'Gram (g)', factor: 1 },
             pound: { name: 'Pound (lb)', factor: 453.592 },
             ounce: { name: 'Ounce (oz)', factor: 28.3495 },
             ton: { name: 'Metric Ton', factor: 1000000 },
-            stone: { name: 'Stone', factor: 6350.29 }
+            stone: { name: 'Stone', factor: 6350.29 },
+            carat: { name: 'Carat', factor: 0.2 }
         },
         references: [
             { label: '1 Kilogram =', value: '1000 g' },
@@ -55,6 +61,7 @@ const conversionData = {
     area: {
         name: 'Area',
         icon: '📐',
+        description: 'Convert between different units of area and surface',
         units: {
             square_meter: { name: 'Square Meter (m²)', factor: 1 },
             square_kilometer: { name: 'Square Kilometer (km²)', factor: 1000000 },
@@ -62,7 +69,8 @@ const conversionData = {
             square_foot: { name: 'Square Foot (ft²)', factor: 0.092903 },
             square_inch: { name: 'Square Inch (in²)', factor: 0.00064516 },
             acre: { name: 'Acre', factor: 4046.86 },
-            hectare: { name: 'Hectare', factor: 10000 }
+            hectare: { name: 'Hectare', factor: 10000 },
+            square_mile: { name: 'Square Mile', factor: 2589988.11 }
         },
         references: [
             { label: '1 Hectare =', value: '10,000 m²' },
@@ -74,6 +82,7 @@ const conversionData = {
     volume: {
         name: 'Volume',
         icon: '🪣',
+        description: 'Convert between different units of volume and capacity',
         units: {
             liter: { name: 'Liter (L)', factor: 1 },
             milliliter: { name: 'Milliliter (mL)', factor: 0.001 },
@@ -81,7 +90,8 @@ const conversionData = {
             gallon_us: { name: 'US Gallon', factor: 3.78541 },
             gallon_uk: { name: 'UK Gallon', factor: 4.54609 },
             cubic_foot: { name: 'Cubic Foot (ft³)', factor: 28.3168 },
-            cubic_inch: { name: 'Cubic Inch (in³)', factor: 0.0163871 }
+            cubic_inch: { name: 'Cubic Inch (in³)', factor: 0.0163871 },
+            barrel: { name: 'Barrel (Oil)', factor: 158.987 }
         },
         references: [
             { label: '1 Liter =', value: '1000 mL' },
@@ -93,6 +103,7 @@ const conversionData = {
     temperature: {
         name: 'Temperature',
         icon: '🌡️',
+        description: 'Convert between different temperature scales',
         units: {
             celsius: { name: 'Celsius (°C)' },
             fahrenheit: { name: 'Fahrenheit (°F)' },
@@ -109,18 +120,82 @@ const conversionData = {
     speed: {
         name: 'Speed',
         icon: '⚡',
+        description: 'Convert between different units of speed and velocity',
         units: {
             kmh: { name: 'Kilometers/Hour (km/h)', factor: 0.277778 },
             mph: { name: 'Miles/Hour (mph)', factor: 0.44704 },
             ms: { name: 'Meters/Second (m/s)', factor: 1 },
             fps: { name: 'Feet/Second (ft/s)', factor: 0.3048 },
-            knot: { name: 'Knot', factor: 0.514444 }
+            knot: { name: 'Knot', factor: 0.514444 },
+            mach: { name: 'Mach (at sea level)', factor: 343 }
         },
         references: [
             { label: '1 km/h =', value: '0.278 m/s' },
             { label: '1 mph =', value: '1.609 km/h' },
             { label: '1 knot =', value: '1.852 km/h' },
             { label: 'Speed of sound =', value: '343 m/s' }
+        ]
+    },
+    pressure: {
+        name: 'Pressure',
+        icon: '🌪️',
+        description: 'Convert between different units of pressure',
+        units: {
+            pascal: { name: 'Pascal (Pa)', factor: 1 },
+            kilopascal: { name: 'Kilopascal (kPa)', factor: 1000 },
+            bar: { name: 'Bar', factor: 100000 },
+            atmosphere: { name: 'Atmosphere (atm)', factor: 101325 },
+            torr: { name: 'Torr', factor: 133.322 },
+            psi: { name: 'PSI', factor: 6895 },
+            mmhg: { name: 'mmHg', factor: 133.322 }
+        },
+        references: [
+            { label: '1 Bar =', value: '100,000 Pa' },
+            { label: '1 Atmosphere =', value: '101,325 Pa' },
+            { label: '1 PSI =', value: '6,895 Pa' },
+            { label: 'Sea Level =', value: '1 atm' }
+        ]
+    },
+    energy: {
+        name: 'Energy',
+        icon: '⚡',
+        description: 'Convert between different units of energy and work',
+        units: {
+            joule: { name: 'Joule (J)', factor: 1 },
+            kilojoule: { name: 'Kilojoule (kJ)', factor: 1000 },
+            calorie: { name: 'Calorie (cal)', factor: 4.184 },
+            kilocalorie: { name: 'Kilocalorie (kcal)', factor: 4184 },
+            watt_hour: { name: 'Watt Hour (Wh)', factor: 3600 },
+            kwh: { name: 'Kilowatt Hour (kWh)', factor: 3600000 },
+            btu: { name: 'BTU', factor: 1055.06 },
+            erg: { name: 'Erg', factor: 0.0000001 }
+        },
+        references: [
+            { label: '1 kWh =', value: '3.6 MJ' },
+            { label: '1 kcal =', value: '4,184 J' },
+            { label: '1 BTU =', value: '1,055 J' },
+            { label: 'Food Calorie =', value: '1 kcal' }
+        ]
+    },
+    time: {
+        name: 'Time',
+        icon: '⏰',
+        description: 'Convert between different units of time',
+        units: {
+            second: { name: 'Second (s)', factor: 1 },
+            minute: { name: 'Minute (min)', factor: 60 },
+            hour: { name: 'Hour (hr)', factor: 3600 },
+            day: { name: 'Day', factor: 86400 },
+            week: { name: 'Week', factor: 604800 },
+            month: { name: 'Month (30 days)', factor: 2592000 },
+            year: { name: 'Year (365 days)', factor: 31536000 },
+            decade: { name: 'Decade', factor: 315360000 }
+        },
+        references: [
+            { label: '1 Minute =', value: '60 seconds' },
+            { label: '1 Hour =', value: '60 minutes' },
+            { label: '1 Day =', value: '24 hours' },
+            { label: '1 Year =', value: '365 days' }
         ]
     }
 };
@@ -131,14 +206,48 @@ let currentCategory = 'length';
 function initializeConverter() {
     populateUnitSelectors();
     updateQuickReference();
+    updateCategoryDisplay();
     clearResults();
+}
+
+// Setup responsive layout
+function setupResponsiveLayout() {
+    // Check screen size and apply appropriate layout
+    function checkScreenSize() {
+        const isDesktop = window.innerWidth >= 1024;
+        const sidebar = document.querySelector('.desktop-sidebar');
+        const mobileSelector = document.querySelector('.mobile-category-selector');
+        
+        if (isDesktop) {
+            if (sidebar) sidebar.style.display = 'flex';
+            if (mobileSelector) mobileSelector.style.display = 'none';
+        } else {
+            if (sidebar) sidebar.style.display = 'none';
+            if (mobileSelector) mobileSelector.style.display = 'block';
+        }
+    }
+
+    // Initial check
+    checkScreenSize();
+
+    // Listen for resize
+    window.addEventListener('resize', debounce(checkScreenSize, 250));
 }
 
 // Setup event listeners
 function setupEventListeners() {
-    // Category selection
-    const categoryCards = document.querySelectorAll('.category-card');
-    categoryCards.forEach(card => {
+    // Desktop category navigation
+    const desktopCategoryItems = document.querySelectorAll('.category-nav-item');
+    desktopCategoryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            setActiveCategory(category);
+        });
+    });
+
+    // Mobile category cards
+    const mobileCategoryCards = document.querySelectorAll('.mobile-category-card');
+    mobileCategoryCards.forEach(card => {
         card.addEventListener('click', function() {
             const category = this.getAttribute('data-category');
             setActiveCategory(category);
@@ -166,8 +275,16 @@ function setupEventListeners() {
 function setActiveCategory(category) {
     currentCategory = category;
 
-    // Update active card
-    document.querySelectorAll('.category-card').forEach(card => {
+    // Update desktop navigation
+    document.querySelectorAll('.category-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-category') === category) {
+            item.classList.add('active');
+        }
+    });
+
+    // Update mobile navigation
+    document.querySelectorAll('.mobile-category-card').forEach(card => {
         card.classList.remove('active');
         if (card.getAttribute('data-category') === category) {
             card.classList.add('active');
@@ -177,9 +294,24 @@ function setActiveCategory(category) {
     // Update interface
     populateUnitSelectors();
     updateQuickReference();
+    updateCategoryDisplay();
     clearResults();
 
     showNotification(`Switched to ${conversionData[category].name} converter`, 'info');
+}
+
+// Update category display
+function updateCategoryDisplay() {
+    const categoryData = conversionData[currentCategory];
+    
+    // Update category header
+    const iconElement = document.getElementById('currentCategoryIcon');
+    const titleElement = document.getElementById('currentCategoryTitle');
+    const descElement = document.getElementById('currentCategoryDesc');
+    
+    if (iconElement) iconElement.textContent = categoryData.icon;
+    if (titleElement) titleElement.textContent = `${categoryData.name} Converter`;
+    if (descElement) descElement.textContent = categoryData.description;
 }
 
 // Populate unit selectors
@@ -484,24 +616,9 @@ function goToProfitLossCalculator() {
     window.location.href = 'profit-loss-calculator.html';
 }
 
-// Utility function for smooth number animation
-function animateValue(element, start, end, duration = 1000) {
-    const startTime = Date.now();
-    const endTime = startTime + duration;
-    
-    function update() {
-        const now = Date.now();
-        const progress = Math.min((now - startTime) / duration, 1);
-        const current = start + (end - start) * progress;
-        
-        element.textContent = formatNumber(current);
-        
-        if (progress < 1) {
-            requestAnimationFrame(update);
-        }
-    }
-    
-    requestAnimationFrame(update);
+// Scroll to calculators function for homepage CTA
+function scrollToCalculators() {
+    window.location.href = 'index.html#calculators';
 }
 
-console.log('PRATIX FINANCE Responsive Unit Converter initialized successfully!');
+console.log('PRATIX FINANCE Enhanced Unit Converter initialized successfully!');

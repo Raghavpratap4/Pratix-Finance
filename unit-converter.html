@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,172 +30,269 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="main-app-content">
-            <!-- Header -->
-            <header class="standard-header">
-                <div class="standard-header-content">
-                    <div class="standard-logo-section">
-                        <img src="logo.png" alt="PRATIX FINANCE Logo" class="standard-app-logo">
-                        <h1 class="standard-app-title">UNIT CONVERTER</h1>
-                    </div>
-                    <div class="standard-nav-buttons">
-                        <a href="index.html" class="standard-nav-btn">
-                            <span>🏠</span>
-                        </a>
-                        <a href="#" class="standard-nav-btn" onclick="shareResults()">
-                            <span>📤</span>
-                        </a>
-                    </div>
+        <!-- Desktop Sidebar Navigation -->
+        <nav class="desktop-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="sidebar-logo-img">
+                    <h2 class="sidebar-title">UNIT CONVERTER</h2>
                 </div>
-            </header>
+            </div>
 
-            <div class="main-content">
-                <!-- Category Selection -->
-                <div class="converter-category-section">
-                    <div class="section-title">📐 Choose Conversion Type</div>
-
-                    <div class="category-grid">
-                        <div class="category-card active" data-category="length">
-                            <div class="category-icon">📏</div>
-                            <h3>Length</h3>
-                            <p>Meter, Kilometer, Inch, Foot</p>
-                        </div>
-
-                        <div class="category-card" data-category="weight">
-                            <div class="category-icon">⚖️</div>
-                            <h3>Weight</h3>
-                            <p>Kilogram, Gram, Pound, Ounce</p>
-                        </div>
-
-                        <div class="category-card" data-category="area">
-                            <div class="category-icon">📐</div>
-                            <h3>Area</h3>
-                            <p>Square Meter, Acre, Hectare</p>
-                        </div>
-
-                        <div class="category-card" data-category="volume">
-                            <div class="category-icon">🪣</div>
-                            <h3>Volume</h3>
-                            <p>Liter, Gallon, Cubic Meter</p>
-                        </div>
-
-                        <div class="category-card" data-category="temperature">
-                            <div class="category-icon">🌡️</div>
-                            <h3>Temperature</h3>
-                            <p>Celsius, Fahrenheit, Kelvin</p>
-                        </div>
-
-                        <div class="category-card" data-category="speed">
-                            <div class="category-icon">⚡</div>
-                            <h3>Speed</h3>
-                            <p>km/h, mph, m/s</p>
-                        </div>
+            <div class="sidebar-categories">
+                <div class="category-nav-item active" data-category="length">
+                    <div class="nav-icon">📏</div>
+                    <div class="nav-details">
+                        <h3>Length</h3>
+                        <p>Meter, Kilometer, Inch, Foot</p>
                     </div>
                 </div>
 
-                <!-- Converter Interface -->
-                <div class="converter-interface">
-                    <div class="glass-card">
-                        <div class="converter-form">
-                            <!-- Input Section -->
-                            <div class="input-section">
-                                <div class="input-group">
-                                    <label for="inputValue">Enter Value</label>
-                                    <input type="number" id="inputValue" class="calc-input" placeholder="Enter value to convert" step="any">
+                <div class="category-nav-item" data-category="weight">
+                    <div class="nav-icon">⚖️</div>
+                    <div class="nav-details">
+                        <h3>Weight</h3>
+                        <p>Kilogram, Gram, Pound, Ounce</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="area">
+                    <div class="nav-icon">📐</div>
+                    <div class="nav-details">
+                        <h3>Area</h3>
+                        <p>Square Meter, Acre, Hectare</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="volume">
+                    <div class="nav-icon">🪣</div>
+                    <div class="nav-details">
+                        <h3>Volume</h3>
+                        <p>Liter, Gallon, Cubic Meter</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="temperature">
+                    <div class="nav-icon">🌡️</div>
+                    <div class="nav-details">
+                        <h3>Temperature</h3>
+                        <p>Celsius, Fahrenheit, Kelvin</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="speed">
+                    <div class="nav-icon">⚡</div>
+                    <div class="nav-details">
+                        <h3>Speed</h3>
+                        <p>km/h, mph, m/s</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="pressure">
+                    <div class="nav-icon">🌪️</div>
+                    <div class="nav-details">
+                        <h3>Pressure</h3>
+                        <p>Pascal, Bar, Atmosphere</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="energy">
+                    <div class="nav-icon">⚡</div>
+                    <div class="nav-details">
+                        <h3>Energy</h3>
+                        <p>Joule, Calorie, kWh</p>
+                    </div>
+                </div>
+
+                <div class="category-nav-item" data-category="time">
+                    <div class="nav-icon">⏰</div>
+                    <div class="nav-details">
+                        <h3>Time</h3>
+                        <p>Second, Minute, Hour, Day</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-actions">
+                <a href="index.html" class="sidebar-btn home-btn">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </a>
+                <button class="sidebar-btn share-btn" onclick="shareResults()">
+                    <span>📤</span>
+                    <span>Share</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Category Selector -->
+        <div class="mobile-category-selector">
+            <div class="mobile-header">
+                <div class="mobile-logo">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="mobile-logo-img">
+                    <h2 class="mobile-title">UNIT CONVERTER</h2>
+                </div>
+                <div class="mobile-nav-buttons">
+                    <a href="index.html" class="mobile-nav-btn">🏠</a>
+                    <button class="mobile-nav-btn" onclick="shareResults()">📤</button>
+                </div>
+            </div>
+
+            <div class="mobile-category-grid">
+                <div class="mobile-category-card active" data-category="length">
+                    <div class="mobile-category-icon">📏</div>
+                    <span>Length</span>
+                </div>
+                <div class="mobile-category-card" data-category="weight">
+                    <div class="mobile-category-icon">⚖️</div>
+                    <span>Weight</span>
+                </div>
+                <div class="mobile-category-card" data-category="area">
+                    <div class="mobile-category-icon">📐</div>
+                    <span>Area</span>
+                </div>
+                <div class="mobile-category-card" data-category="volume">
+                    <div class="mobile-category-icon">🪣</div>
+                    <span>Volume</span>
+                </div>
+                <div class="mobile-category-card" data-category="temperature">
+                    <div class="mobile-category-icon">🌡️</div>
+                    <span>Temperature</span>
+                </div>
+                <div class="mobile-category-card" data-category="speed">
+                    <div class="mobile-category-icon">⚡</div>
+                    <span>Speed</span>
+                </div>
+                <div class="mobile-category-card" data-category="pressure">
+                    <div class="mobile-category-icon">🌪️</div>
+                    <span>Pressure</span>
+                </div>
+                <div class="mobile-category-card" data-category="energy">
+                    <div class="mobile-category-icon">⚡</div>
+                    <span>Energy</span>
+                </div>
+                <div class="mobile-category-card" data-category="time">
+                    <div class="mobile-category-icon">⏰</div>
+                    <span>Time</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Converter Interface -->
+        <div class="main-converter-content">
+            <!-- Category Header -->
+            <div class="converter-header">
+                <div class="category-display">
+                    <div class="category-icon-large" id="currentCategoryIcon">📏</div>
+                    <div class="category-info">
+                        <h1 class="category-title" id="currentCategoryTitle">Length Converter</h1>
+                        <p class="category-description" id="currentCategoryDesc">Convert between different units of length and distance</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Converter Form -->
+            <div class="converter-interface">
+                <div class="glass-card">
+                    <div class="converter-form">
+                        <!-- Input Section -->
+                        <div class="input-section">
+                            <div class="input-group">
+                                <label for="inputValue">Enter Value</label>
+                                <input type="number" id="inputValue" class="calc-input" placeholder="Enter value to convert" step="any">
+                            </div>
+
+                            <div class="unit-selection-row">
+                                <div class="unit-selector">
+                                    <label for="fromUnit">From</label>
+                                    <select id="fromUnit" class="calc-input unit-select">
+                                        <option value="">Select Unit</option>
+                                    </select>
                                 </div>
 
-                                <div class="unit-selection-row">
-                                    <div class="unit-selector">
-                                        <label for="fromUnit">From</label>
-                                        <select id="fromUnit" class="calc-input unit-select">
-                                            <option value="">Select Unit</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="swap-button-container">
-                                        <button class="swap-btn" onclick="swapUnits()" title="Swap units">
-                                            <span>🔄</span>
-                                        </button>
-                                    </div>
-
-                                    <div class="unit-selector">
-                                        <label for="toUnit">To</label>
-                                        <select id="toUnit" class="calc-input unit-select">
-                                            <option value="">Select Unit</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="button-group">
-                                    <button class="calculate-btn" onclick="performConversion()">
-                                        🔄 Convert
+                                <div class="swap-button-container">
+                                    <button class="swap-btn" onclick="swapUnits()" title="Swap units">
+                                        <span>🔄</span>
                                     </button>
-                                    <button class="refresh-btn" onclick="clearConverter()">
-                                        🗑️ Clear
-                                    </button>
+                                </div>
+
+                                <div class="unit-selector">
+                                    <label for="toUnit">To</label>
+                                    <select id="toUnit" class="calc-input unit-select">
+                                        <option value="">Select Unit</option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <!-- Result Section -->
-                            <div class="result-display">
-                                <div class="result-card" id="conversionResult">
-                                    <div class="result-header">
-                                        <h3>Conversion Result</h3>
+                            <div class="button-group">
+                                <button class="calculate-btn" onclick="performConversion()">
+                                    🔄 Convert
+                                </button>
+                                <button class="refresh-btn" onclick="clearConverter()">
+                                    🗑️ Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Result Section -->
+                        <div class="result-display">
+                            <div class="result-card" id="conversionResult">
+                                <div class="result-header">
+                                    <h3>Conversion Result</h3>
+                                </div>
+                                <div class="result-content">
+                                    <div class="result-item">
+                                        <span class="result-label">Result:</span>
+                                        <span class="result-value" id="resultValue">-</span>
                                     </div>
-                                    <div class="result-content">
-                                        <div class="result-item">
-                                            <span class="result-label">Result:</span>
-                                            <span class="result-value" id="resultValue">-</span>
-                                        </div>
-                                        <div class="result-item">
-                                            <span class="result-label">Formula:</span>
-                                            <span class="result-formula" id="resultFormula">-</span>
-                                        </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Formula:</span>
+                                        <span class="result-formula" id="resultFormula">-</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Quick Reference -->
-                <div class="quick-reference-section">
-                    <div class="glass-card">
-                        <h3 class="sub-title">Quick Reference</h3>
-                        <div class="reference-grid" id="referenceGrid">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
+            <!-- Quick Reference -->
+            <div class="quick-reference-section">
+                <div class="glass-card">
+                    <h3 class="sub-title">Quick Reference</h3>
+                    <div class="reference-grid" id="referenceGrid">
+                        <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
+            </div>
 
-                <!-- Related Tools -->
-                <div class="related-tools-section">
-                    <div class="glass-card">
-                        <h3 class="sub-title">Related Financial Tools</h3>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="goToEmiCalculator()">
-                                <div class="tool-icon">🏠</div>
-                                <h3>EMI Calculator</h3>
-                                <p>Calculate loan EMI payments and schedules</p>
-                            </div>
+            <!-- Related Tools -->
+            <div class="related-tools-section">
+                <div class="glass-card">
+                    <h3 class="sub-title">Related Financial Tools</h3>
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="goToEmiCalculator()">
+                            <div class="tool-icon">🏠</div>
+                            <h3>EMI Calculator</h3>
+                            <p>Calculate loan EMI payments and schedules</p>
+                        </div>
 
-                            <div class="tool-card" onclick="goToSipCalculator()">
-                                <div class="tool-icon">📈</div>
-                                <h3>SIP Calculator</h3>
-                                <p>Plan systematic investments</p>
-                            </div>
+                        <div class="tool-card" onclick="goToSipCalculator()">
+                            <div class="tool-icon">📈</div>
+                            <h3>SIP Calculator</h3>
+                            <p>Plan systematic investments</p>
+                        </div>
 
-                            <div class="tool-card" onclick="goToTaxCalculator()">
-                                <div class="tool-icon">💼</div>
-                                <h3>Tax Calculator</h3>
-                                <p>Calculate income tax liability</p>
-                            </div>
+                        <div class="tool-card" onclick="goToTaxCalculator()">
+                            <div class="tool-icon">💼</div>
+                            <h3>Tax Calculator</h3>
+                            <p>Calculate income tax liability</p>
+                        </div>
 
-                            <div class="tool-card" onclick="goToGstCalculator()">
-                                <div class="tool-icon">📊</div>
-                                <h3>GST Calculator</h3>
-                                <p>Calculate GST for business</p>
-                            </div>
+                        <div class="tool-card" onclick="goToGstCalculator()">
+                            <div class="tool-icon">📊</div>
+                            <h3>GST Calculator</h3>
+                            <p>Calculate GST for business</p>
                         </div>
                     </div>
                 </div>

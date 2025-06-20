@@ -103,7 +103,7 @@
                         <input type="text" class="enhanced-search-bar" placeholder="Search calculators..." id="searchInput">
                         <button class="search-filter-btn" id="searchFilterBtn">⚙️</button>
                     </div>
-                    
+
                     <!-- Advanced Search Filters -->
                     <div class="search-filters" id="searchFilters">
                         <div class="filter-group">
@@ -127,7 +127,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <!-- Quick Search Suggestions -->
                     <div class="quick-suggestions" id="quickSuggestions">
                         <div class="suggestion-tag" data-search="emi">EMI</div>
@@ -136,7 +136,7 @@
                         <div class="suggestion-tag" data-search="gst">GST</div>
                         <div class="suggestion-tag" data-search="fd">FD</div>
                     </div>
-                    
+
                     <!-- Enhanced Search Results -->
                     <div class="enhanced-search-results" id="searchResults"></div>
                 </div>
@@ -150,7 +150,7 @@
                     <h2 class="section-title">Financial Calculators</h2>
                     <p class="section-subtitle">Professional tools for smart financial decisions</p>
                 </div>
-                
+
                 <!-- Mobile-First Calculator Cards -->
                 <div class="mobile-optimized-grid" id="calculatorsGrid">
                     <!-- Compact EMI Calculator -->
@@ -347,16 +347,16 @@
                         <div class="floating-icon">🚀</div>
                         <div class="floating-icon">⚡</div>
                     </div>
-                    
+
                     <div class="premium-badge">
                         <span class="badge-icon">👑</span>
                         <span>India's #1 Choice</span>
                         <div class="badge-glow"></div>
                     </div>
-                    
+
                     <h2 class="mega-title">Why 50,000+ Users Choose PRATIX FINANCE</h2>
                     <p class="mega-subtitle">The most trusted financial calculator platform in India with cutting-edge technology and unmatched accuracy</p>
-                    
+
                     <!-- Elite Stats Bar -->
                     <div class="elite-stats-bar">
                         <div class="elite-stat">
@@ -615,7 +615,7 @@
                         <h3 class="stories-title">Real Success Stories</h3>
                         <p class="stories-subtitle">See how PRATIX FINANCE helped users save money and make better financial decisions</p>
                     </div>
-                    
+
                     <div class="testimonials-grid">
                         <div class="testimonial-card premium">
                             <div class="testimonial-header">
@@ -1812,6 +1812,28 @@
         });
 
         console.log('PRATIX FINANCE Homepage loaded successfully!');
+    </script>
+
+    <script>
+        // Scroll to calculators function
+        function scrollToCalculators() {
+            const calculatorsSection = document.querySelector('.calculators-section') || 
+                                     document.querySelector('#calculators') || 
+                                     document.querySelector('.mobile-optimized-grid');
+
+            if (calculatorsSection) {
+                calculatorsSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } else {
+                // Fallback - scroll to a reasonable position
+                window.scrollTo({
+                    top: window.innerHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }
     </script>
 </body>
 </html>
