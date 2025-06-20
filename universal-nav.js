@@ -1,16 +1,29 @@
 
-// FIXED: Universal Tab Navigation Script for PRATIX FINANCE Calculators
+// FIXED & ENHANCED: Universal Tab Navigation Script for PRATIX FINANCE Calculators
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Universal Navigation: Initializing...');
+    console.log('🚀 Universal Navigation: Initializing...');
     
-    // Enhanced error handling wrapper
+    // Enhanced error handling wrapper with better logging
     function safeExecute(fn, errorMsg) {
         try {
             return fn();
         } catch (error) {
-            console.warn(errorMsg, error);
+            console.warn('⚠️', errorMsg, error);
             return false;
         }
+    }
+
+    // Performance optimization: Debounced function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
 
     // Get all navigation items with better error handling
@@ -29,73 +42,100 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log(`Navigation: Found ${allNavItems.length} nav items and ${tabContents.length} tab contents`);
 
-    // Enhanced tab switching function
+    // ENHANCED: Tab switching function with mobile optimization
     function switchTab(targetTab) {
         if (!targetTab) {
-            console.warn('No target tab specified');
+            console.warn('❌ No target tab specified');
             return;
         }
         
-        console.log('Switching to tab:', targetTab);
+        console.log('🎯 Switching to tab:', targetTab);
+
+        // Performance: Use requestAnimationFrame for smooth transitions
+        requestAnimationFrame(() => {
         
         // Remove active class from all navigation items and tab contents
-        allNavItems.forEach(item => {
-            safeExecute(() => item.classList.remove('active'), 'Error removing active class from nav item');
-        });
-        
-        tabContents.forEach(content => {
-            safeExecute(() => content.classList.remove('active'), 'Error removing active class from tab content');
-        });
+            allNavItems.forEach(item => {
+                safeExecute(() => item.classList.remove('active'), 'Error removing active class from nav item');
+            });
+            
+            tabContents.forEach(content => {
+                safeExecute(() => {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                }, 'Error removing active class from tab content');
+            });
 
-        // Add active class to corresponding navigation items
-        const activeDesktopNav = safeExecute(() => 
-            document.querySelector(`.tab-navigation .tab-nav-item[data-tab="${targetTab}"], .tab-nav-item[data-tab="${targetTab}"]`)
-        , 'Error finding desktop nav for tab');
-        
-        const activeMobileNav = safeExecute(() => 
-            document.querySelector(`.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"], .bottom-nav .nav-item[data-tab="${targetTab}"]`)
-        , 'Error finding mobile nav for tab');
-        
-        if (activeDesktopNav) {
-            activeDesktopNav.classList.add('active');
-        }
-        if (activeMobileNav) {
-            activeMobileNav.classList.add('active');
-        }
+            // Enhanced navigation item selection with multiple selectors
+            const navSelectors = [
+                `.tab-navigation .tab-nav-item[data-tab="${targetTab}"]`,
+                `.tab-nav-item[data-tab="${targetTab}"]`,
+                `.standard-bottom-nav .standard-nav-item[data-tab="${targetTab}"]`,
+                `.bottom-nav .nav-item[data-tab="${targetTab}"]`,
+                `[data-tab="${targetTab}"]`
+            ];
 
-        // Show corresponding tab content
-        const activeTabContent = safeExecute(() => 
-            document.getElementById(targetTab)
-        , 'Error finding tab content');
-        
-        if (activeTabContent) {
-            activeTabContent.classList.add('active');
-            console.log('Tab content activated:', targetTab);
-        } else {
-            console.warn('Tab content not found for:', targetTab);
-        }
-
-        // Enhanced scrolling with device detection
-        safeExecute(() => {
-            if (window.innerWidth >= 1024) {
-                // Desktop: Scroll main content area
-                const mainAppContent = document.querySelector('.main-app-content');
-                if (mainAppContent) {
-                    mainAppContent.scrollTop = 0;
-                }
-            } else {
-                // Mobile/Tablet: Smooth scroll to top
-                window.scrollTo({ 
-                    top: 0, 
-                    behavior: 'smooth' 
+            // Find and activate all matching navigation items
+            navSelectors.forEach(selector => {
+                const navItems = document.querySelectorAll(selector);
+                navItems.forEach(item => {
+                    if (item) {
+                        safeExecute(() => item.classList.add('active'), `Error activating nav item: ${selector}`);
+                    }
                 });
-                
-                const mainContent = document.querySelector('.main-content');
-                if (mainContent) {
-                    mainContent.scrollTop = 0;
-                }
+            });
+
+            // Show corresponding tab content with smooth transition
+            const activeTabContent = safeExecute(() => 
+                document.getElementById(targetTab)
+            , 'Error finding tab content');
+            
+            if (activeTabContent) {
+                safeExecute(() => {
+                    activeTabContent.style.display = 'block';
+                    activeTabContent.classList.add('active');
+                    // Add smooth transition
+                    activeTabContent.style.opacity = '0';
+                    setTimeout(() => {
+                        activeTabContent.style.opacity = '1';
+                    }, 10);
+                }, 'Error activating tab content');
+                console.log('✅ Tab content activated:', targetTab);
+            } else {
+                console.warn('❌ Tab content not found for:', targetTab);
             }
-        }, 'Error during scroll handling');
+
+        // Enhanced scrolling with device detection and performance optimization
+            safeExecute(() => {
+                const scrollToTop = debounce(() => {
+                    if (window.innerWidth >= 1024) {
+                        // Desktop: Scroll main content area
+                        const mainAppContent = document.querySelector('.main-app-content');
+                        if (mainAppContent) {
+                            mainAppContent.scrollTop = 0;
+                        }
+                    } else {
+                        // Mobile/Tablet: Smooth scroll to top
+                        if ('scrollBehavior' in document.documentElement.style) {
+                            window.scrollTo({ 
+                                top: 0, 
+                                behavior: 'smooth' 
+                            });
+                        } else {
+                            // Fallback for older browsers
+                            window.scrollTo(0, 0);
+                        }
+                        
+                        const mainContent = document.querySelector('.main-content');
+                        if (mainContent) {
+                            mainContent.scrollTop = 0;
+                        }
+                    }
+                }, 100);
+                
+                scrollToTop();
+            }, 'Error during scroll handling');
+        });
     }
 
     // Enhanced event listener setup

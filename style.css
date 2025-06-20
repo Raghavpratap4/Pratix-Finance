@@ -702,27 +702,30 @@ body::after {
   }
 }
 
-/* Mobile-specific button improvements */
+/* OPTIMIZED: Mobile button improvements - Single consolidated section */
 @media (max-width: 767px) {
   .calculate-btn,
   .refresh-btn,
   .feature-btn,
-  .setting-btn {
-      padding: 1rem 1.5rem;
-      font-size: 1rem;
+  .setting-btn,
+  .glow-btn {
+      padding: 1rem 1.5rem !important;
+      font-size: 1rem !important;
       min-height: 52px !important;
-      margin-bottom: 0.875rem;
-      border-radius: 14px;
-      /* Improved active state for mobile */
-      -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2);
+      margin-bottom: 0.875rem !important;
+      border-radius: 14px !important;
+      width: 100% !important;
+      -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2) !important;
+      touch-action: manipulation !important;
   }
 
   .calculate-btn:active,
   .refresh-btn:active,
   .feature-btn:active,
-  .setting-btn:active {
-      transform: scale(0.98);
-      transition: transform 0.1s ease;
+  .setting-btn:active,
+  .glow-btn:active {
+      transform: scale(0.98) !important;
+      transition: transform 0.1s ease !important;
   }
 }
 
@@ -5109,42 +5112,94 @@ html {
   transform: translateZ(0);
 }
 
-/* Enhanced mobile navigation styling */
-@media (max-width: 767px) {
-  .standard-nav-item {
-      min-height: 60px !important;
-      padding: 0.4rem 0.2rem !important;
-      gap: 0.2rem !important;
-      border-radius: 10px !important;
+/* FIXED: Enhanced mobile navigation styling - Consistent across all devices */
+@media (max-width: 1023px) {
+  .standard-nav-item,
+  .nav-item {
+      min-height: 64px !important;
+      padding: 0.5rem 0.25rem !important;
+      gap: 0.3rem !important;
+      border-radius: 12px !important;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      margin: 0.1rem !important;
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      user-select: none !important;
+      -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2) !important;
+      touch-action: manipulation !important;
   }
 
-  .standard-nav-icon {
-      transform: scale(0.9);
-      transition: all 0.3s ease;
+  .standard-nav-icon,
+  .nav-icon {
+      font-size: 1.1rem !important;
+      transition: all 0.3s ease !important;
+      margin-bottom: 0.2rem !important;
   }
 
-  .standard-nav-label {
+  .standard-nav-label,
+  .nav-label {
       font-size: 0.65rem !important;
-      font-weight: 600;
-      line-height: 1.1;
+      font-weight: 600 !important;
+      line-height: 1.1 !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 100% !important;
   }
 
-  .standard-nav-item:active {
-      transform: scale(0.95);
+  .standard-nav-item:hover,
+  .nav-item:hover {
       background: rgba(0, 212, 255, 0.15) !important;
+      border-color: var(--neon-cyan) !important;
+      transform: translateY(-1px) !important;
   }
 
-  /* Force bottom navigation to be visible */
-  .standard-bottom-nav {
+  .standard-nav-item.active,
+  .nav-item.active {
+      background: rgba(0, 212, 255, 0.25) !important;
+      border-color: var(--neon-blue) !important;
+      color: var(--neon-blue) !important;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4) !important;
+  }
+
+  .standard-nav-item:active,
+  .nav-item:active {
+      transform: scale(0.96) !important;
+      transition: transform 0.1s ease !important;
+  }
+
+  /* FIXED: Force bottom navigation to be visible on ALL pages */
+  .standard-bottom-nav,
+  .bottom-nav {
       position: fixed !important;
       bottom: 0 !important;
-      display: grid !important;
-      z-index: 999999 !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      width: 100% !important;
       left: 0 !important;
       right: 0 !important;
+      width: 100% !important;
+      background: rgba(15, 23, 42, 0.98) !important;
+      backdrop-filter: blur(35px) !important;
+      border-top: 3px solid var(--neon-blue) !important;
+      padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom)) !important;
+      display: grid !important;
+      grid-template-columns: repeat(6, 1fr) !important;
+      gap: 0.25rem !important;
+      z-index: 999999999 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      height: 85px !important;
+      box-shadow: 
+          0 0 50px rgba(0, 212, 255, 0.6),
+          0 -12px 40px rgba(0, 0, 0, 0.7) !important;
+      transform: translateZ(0) !important;
+      will-change: transform !important;
+      contain: layout !important;
   }
 }
 
@@ -8585,60 +8640,109 @@ select.calc-input option {
   background: linear-gradient(135deg, var(--neon-cyan), var(--neon-green));
 }
 
-/* Enhanced mobile optimizations */
+/* FINAL: Enhanced mobile optimizations with error prevention */
 @media (max-width: 767px) {
-  /* Improve button spacing and sizing */
+  /* Comprehensive mobile fixes */
   .calculate-btn,
   .refresh-btn,
-  .feature-btn {
-      padding: 1rem 1.5rem;
-      font-size: 1rem;
-      min-height: 48px;
-      margin-bottom: 0.75rem;
+  .feature-btn,
+  .setting-btn,
+  .glow-btn {
+      padding: 1rem 1.5rem !important;
+      font-size: 1rem !important;
+      min-height: 52px !important;
+      margin-bottom: 0.875rem !important;
+      border-radius: 12px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      /* Prevent iOS zoom and improve touch */
+      -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2) !important;
+      touch-action: manipulation !important;
+      user-select: none !important;
   }
 
-  /* Better input field styling */
+  /* Optimized input field styling */
   .calc-input {
-      padding: 1rem;
-      font-size: 16px; /* Prevents zoom on iOS */
-      min-height: 48px;
+      padding: 1rem !important;
+      font-size: 16px !important; /* Critical: Prevents zoom on iOS */
+      min-height: 52px !important;
+      border-radius: 12px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      /* Enhanced mobile input support */
+      -webkit-appearance: none !important;
+      -moz-appearance: textfield !important;
+      outline: none !important;
+      /* Prevent zoom and improve UX */
+      autocomplete: off !important;
+      autocorrect: off !important;
+      autocapitalize: off !important;
+      spellcheck: false !important;
   }
 
-  /* Enhanced card styling */
+  /* Enhanced card styling with better touch targets */
   .glass-card {
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 12px;
+      padding: 1.25rem !important;
+      margin-bottom: 1rem !important;
+      border-radius: 16px !important;
+      /* Improve touch interaction */
+      touch-action: manipulation !important;
   }
 
-  /* Improved footer on mobile */
+  /* Clickable cards optimization */
+  .clickable-card {
+      cursor: pointer !important;
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2) !important;
+      user-select: none !important;
+      /* Improve accessibility */
+      outline: none !important;
+      transition: all 0.2s ease !important;
+  }
+
+  .clickable-card:focus {
+      outline: 2px solid var(--neon-cyan) !important;
+      outline-offset: 2px !important;
+  }
+
+  /* Error prevention: Ensure no content overlap */
+  .main-content {
+      padding-bottom: 120px !important;
+      margin-bottom: 0 !important;
+      overflow-x: hidden !important;
+  }
+
+  /* Body scroll fix */
+  body {
+      padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Prevent horizontal scroll issues */
+  * {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+  }
+
+  /* Footer improvements */
   .footer-section-collapsible {
-      margin-bottom: 0.75rem;
-      border-radius: 8px;
+      margin-bottom: 0.75rem !important;
+      border-radius: 12px !important;
   }
 
   .footer-section-header {
-      padding: 0.875rem 1rem;
-      min-height: 48px;
-  }
-
-  .footer-section-title-collapsible {
-      font-size: 0.9rem;
-  }
-
-  .footer-expand-icon {
-      font-size: 1rem;
-  }
-
-  .footer-section-content.expanded {
-      padding: 0.75rem 1rem;
+      padding: 1rem !important;
+      min-height: 52px !important;
+      touch-action: manipulation !important;
   }
 
   .footer-link-collapsible {
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      margin-bottom: 0.25rem;
-      min-height: 40px;
+      padding: 0.875rem !important;
+      font-size: 0.9rem !important;
+      margin-bottom: 0.5rem !important;
+      min-height: 48px !important;
+      touch-action: manipulation !important;
   }
 }
 

@@ -2,7 +2,7 @@
 const CACHE_NAME = 'pratix-finance-v1.2.0';
 const VERSION_CACHE = 'version-cache-v1';
 
-// FIXED: Enhanced URL caching with error handling
+// ENHANCED: Comprehensive URL caching with error handling and optimization
 const urlsToCache = [
   './',
   './index.html',
@@ -16,12 +16,21 @@ const urlsToCache = [
   './style.css',
   './script.js',
   './universal-nav.js',
+  './emi-script.js',
+  './sip-script.js',
+  './tax-script.js',
+  './fd-script.js',
+  './gst-script.js',
+  './profit-loss-script.js',
+  './construction-cost-script.js',
   './logo.png',
   './favicon.png',
   './favicon.ico',
   './manifest.json',
-  './version.json'
-];
+  './version.json',
+  './privacy.html',
+  './terms.html'
+].filter(url => url && typeof url === 'string');
 
 // FIXED: Enhanced install event with error handling
 self.addEventListener('install', (event) => {

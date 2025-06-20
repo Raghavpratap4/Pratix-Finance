@@ -154,8 +154,18 @@
 
                 <!-- Mobile-First Calculator Cards -->
                 <div class="mobile-optimized-grid" id="calculatorsGrid">
-                    <!-- Compact EMI Calculator -->
-                    <div class="compact-calculator-card featured clickable-card" data-name="EMI Calculator" data-keywords="emi loan mortgage home car personal finance interest" data-category="loan" data-type="basic" onclick="window.location.href='emi-calculator.html'" style="cursor: pointer;">
+                    <!-- FIXED: Compact EMI Calculator with enhanced mobile support -->
+                    <div class="compact-calculator-card featured clickable-card" 
+                         data-name="EMI Calculator" 
+                         data-keywords="emi loan mortgage home car personal finance interest" 
+                         data-category="loan" 
+                         data-type="basic" 
+                         onclick="safeNavigate('emi-calculator.html')" 
+                         style="cursor: pointer; touch-action: manipulation;"
+                         role="button" 
+                         tabindex="0"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){safeNavigate('emi-calculator.html');}"
+                         aria-label="EMI Calculator - Calculate loan EMIs and compare options">
                         <div class="compact-card-header">
                             <div class="calculator-icon">🏠</div>
                             <div class="card-badge">Popular</div>
@@ -1415,7 +1425,86 @@
         setupDownloadButtons();
     });
 
-    console.log('Homepage: All scripts loaded successfully');
+    // ENHANCED: Safe navigation function for better mobile experience
+    function safeNavigate(url) {
+        try {
+            if (url && typeof url === 'string') {
+                // Add loading indicator for better UX
+                const target = event.target.closest('.compact-calculator-card');
+                if (target) {
+                    target.style.opacity = '0.7';
+                    target.style.transform = 'scale(0.98)';
+                }
+                
+                // Use slight delay for better visual feedback
+                setTimeout(() => {
+                    window.location.href = url.startsWith('/') ? url : './' + url;
+                }, 150);
+            } else {
+                console.warn('❌ Invalid URL provided to navigation function');
+            }
+        } catch (error) {
+            console.error('❌ Navigation error:', error);
+            // Fallback navigation
+            window.location.href = './index.html';
+        }
+    }
+
+    // Enhanced accessibility and touch support
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add keyboard navigation support for calculator cards
+        const calculatorCards = document.querySelectorAll('.clickable-card');
+        calculatorCards.forEach(card => {
+            card.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.click();
+                }
+            });
+            
+            // Improve touch feedback
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            }, { passive: true });
+            
+            card.addEventListener('touchend', function() {
+                this.style.transform = '';
+            }, { passive: true });
+        });
+
+        // Enhanced search functionality for mobile
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            // Prevent zoom on iOS
+            searchInput.setAttribute('autocomplete', 'off');
+            searchInput.setAttribute('autocorrect', 'off');
+            searchInput.setAttribute('autocapitalize', 'off');
+            searchInput.setAttribute('spellcheck', 'false');
+            
+            // Add input validation
+            searchInput.addEventListener('input', debounce(function() {
+                const query = this.value.toLowerCase().trim();
+                if (query.length > 50) {
+                    this.value = query.substring(0, 50);
+                }
+            }, 300));
+        }
+    });
+
+    // Performance optimization: Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    console.log('✅ Homepage: All scripts loaded successfully with enhanced mobile support');
 </script>
 </body>
 </html>
