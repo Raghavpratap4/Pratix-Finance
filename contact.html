@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - PRATIX FINANCE</title>
+    <meta name="description" content="Contact PRATIX FINANCE for support, feedback, or business inquiries. Get in touch with our team for any questions about financial calculators.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">Contact Us</h1>
+                <button class="icon-btn" onclick="window.location.href='index.html'">🏠</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="glass-card">
+                <h1 class="section-title">Get in Touch with PRATIX FINANCE</h1>
+                <p class="text-center text-gray-300 mb-8">
+                    We're here to help you with your financial planning needs. Reach out to us for support, feedback, or business inquiries.
+                </p>
+
+                <!-- Contact Methods -->
+                <div class="contact-methods-grid">
+                    <div class="contact-method-card">
+                        <div class="contact-icon">📧</div>
+                        <h3>Email Support</h3>
+                        <p>For general inquiries, support, and feedback</p>
+                        <a href="mailto:pratixfinance4@gmail.com" class="contact-link">pratixfinance4@gmail.com</a>
+                        <div class="response-time">Response within 24-48 hours</div>
+                    </div>
+
+                    <div class="contact-method-card">
+                        <div class="contact-icon">💼</div>
+                        <h3>Business Inquiries</h3>
+                        <p>For partnerships, collaborations, and business opportunities</p>
+                        <a href="mailto:business@pratixfinance.com" class="contact-link">business@pratixfinance.com</a>
+                        <div class="response-time">Response within 48 hours</div>
+                    </div>
+
+                    <div class="contact-method-card">
+                        <div class="contact-icon">🐛</div>
+                        <h3>Bug Reports</h3>
+                        <p>Found a bug or technical issue? Let us know</p>
+                        <a href="mailto:bugs@pratixfinance.com" class="contact-link">bugs@pratixfinance.com</a>
+                        <div class="response-time">Priority response within 24 hours</div>
+                    </div>
+
+                    <div class="contact-method-card">
+                        <div class="contact-icon">💡</div>
+                        <h3>Feature Requests</h3>
+                        <p>Suggest new calculators or features</p>
+                        <a href="mailto:features@pratixfinance.com" class="contact-link">features@pratixfinance.com</a>
+                        <div class="response-time">Reviewed weekly</div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <section class="contact-form-section">
+                    <h2 class="section-title">Send us a Message</h2>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" required class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required class="form-input">
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="bug">Bug Report</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="business">Business Inquiry</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="6" required class="form-input" placeholder="Please provide details about your inquiry..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privacy" name="privacy" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="privacy.html" target="_blank">Privacy Policy</a> and <a href="terms.html" target="_blank">Terms of Service</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-icon">📧</span>
+                            <span>Send Message</span>
+                        </button>
+                    </form>
+                </section>
+
+                <!-- FAQ Section -->
+                <section class="faq-section">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <div class="faq-grid">
+                        <div class="faq-item">
+                            <h3>How accurate are your calculators?</h3>
+                            <p>Our calculators use industry-standard formulas and are regularly updated to ensure 99.9% accuracy. However, results should be used for estimation purposes only.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Is my financial data secure?</h3>
+                            <p>Yes! All calculations happen locally on your device. We don't collect, store, or transmit any of your financial information.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Do you charge for using the calculators?</h3>
+                            <p>No, all our basic calculators are completely free to use. We may introduce premium features in the future, but core functionality will always remain free.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Can I use these calculators for commercial purposes?</h3>
+                            <p>Yes, you can use our calculators for both personal and commercial purposes. Please refer to our Terms of Service for detailed usage rights.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>How often do you update the calculators?</h3>
+                            <p>We regularly update our calculators to reflect changes in tax laws, interest rates, and financial regulations. Updates are deployed automatically.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Can I request a new calculator?</h3>
+                            <p>Absolutely! We love user feedback and feature requests. Use the contact form above or email us your suggestions.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Office Information -->
+                <section class="office-info-section">
+                    <h2 class="section-title">Our Information</h2>
+                    <div class="office-details">
+                        <div class="office-detail">
+                            <h3>🏢 Business Name</h3>
+                            <p>PRATIX FINANCE</p>
+                        </div>
+                        <div class="office-detail">
+                            <h3>👨‍💼 Founder & CEO</h3>
+                            <p>Raghav Pratap</p>
+                        </div>
+                        <div class="office-detail">
+                            <h3>🌐 Website</h3>
+                            <p><a href="index.html">www.pratixfinance.com</a></p>
+                        </div>
+                        <div class="office-detail">
+                            <h3>📧 Primary Email</h3>
+                            <p><a href="mailto:pratixfinance4@gmail.com">pratixfinance4@gmail.com</a></p>
+                        </div>
+                        <div class="office-detail">
+                            <h3>🕒 Business Hours</h3>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM IST<br>
+                               Saturday - Sunday: Email support only</p>
+                        </div>
+                        <div class="office-detail">
+                            <h3>🌍 Service Area</h3>
+                            <p>India (Primary)<br>Global (Online Services)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Response Expectations -->
+                <section class="response-expectations">
+                    <h2 class="section-title">What to Expect</h2>
+                    <div class="expectations-grid">
+                        <div class="expectation-item">
+                            <div class="expectation-icon">⚡</div>
+                            <h3>Quick Response</h3>
+                            <p>Most emails are answered within 24-48 hours during business days</p>
+                        </div>
+                        <div class="expectation-item">
+                            <div class="expectation-icon">🎯</div>
+                            <h3>Personalized Support</h3>
+                            <p>Each inquiry receives individual attention from our team</p>
+                        </div>
+                        <div class="expectation-item">
+                            <div class="expectation-icon">📋</div>
+                            <h3>Follow-up</h3>
+                            <p>We ensure your issue is resolved to your satisfaction</p>
+                        </div>
+                        <div class="expectation-item">
+                            <div class="expectation-icon">🔒</div>
+                            <h3>Confidential</h3>
+                            <p>All communications are kept strictly confidential</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="simple-footer">
+            <div class="footer-container">
+                <div class="footer-brand-simple">
+                    <div class="brand-header-simple">
+                        <img src="logo.png" alt="Pratix Finance" class="footer-logo-simple">
+                        <h3 class="brand-name-simple">PRATIX FINANCE</h3>
+                    </div>
+                    <p class="brand-tagline-simple">Your Complete Financial Calculator Suite</p>
+                </div>
+
+                <div class="footer-copyright-simple">
+                    <div class="copyright-content-simple">
+                        <p class="copyright-text-simple">
+                            © 2025 <span class="highlight-simple">RAGHAV PRATAP | PRATIX FINANCE</span>
+                        </p>
+                        <div class="contact-info-simple">
+                            <a href="mailto:pratixfinance4@gmail.com" class="email-link-simple">
+                                📧 pratixfinance4@gmail.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="universal-nav.js"></script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Create mailto link
+            const subject = encodeURIComponent(`PRATIX FINANCE Contact: ${data.subject}`);
+            const body = encodeURIComponent(`
+Name: ${data.fullName}
+Email: ${data.email}
+Subject: ${data.subject}
+
+Message:
+${data.message}
+
+---
+Sent via PRATIX FINANCE Contact Form
+            `);
+            
+            const mailtoLink = `mailto:pratixfinance4@gmail.com?subject=${subject}&body=${body}`;
+            window.location.href = mailtoLink;
+            
+            // Show confirmation
+            alert('Thank you for your message! Your email client should open now. If it doesn\'t, please email us directly at pratixfinance4@gmail.com');
+        });
+    </script>
+</body>
+</html>

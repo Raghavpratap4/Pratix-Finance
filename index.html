@@ -507,6 +507,24 @@
                         </ul>
                     </div>
 
+                    <!-- Company Section -->
+                    <div class="footer-section-elite">
+                        <h3 class="footer-section-title-elite">
+                            <span>🏢</span>
+                            Company
+                        </h3>
+                        <ul class="footer-links-list-elite">
+                            <li><a href="about.html" class="footer-link-elite">
+                                <span class="footer-link-icon-elite">ℹ️</span>
+                                About Us
+                            </a></li>
+                            <li><a href="contact.html" class="footer-link-elite">
+                                <span class="footer-link-icon-elite">📞</span>
+                                Contact Us
+                            </a></li>
+                        </ul>
+                    </div>
+
                     <div class="footer-section-elite">
                         <h3 class="footer-section-title-elite">
                             <span>💼</span>
@@ -811,7 +829,7 @@
             addNotificationGlow() {
                 const notification = document.getElementById('updateNotification');
                 if (notification) {
-                    notification.style.animation = 'pulseGlow 2s ease-in-out infinite';
+                    notification.style.animation =`pulseGlow 2s ease-in-out infinite';
                 }
             }
 
@@ -1432,7 +1450,7 @@
                 console.warn('❌ Invalid URL provided to navigation function');
                 return;
             }
-            
+
             // Add loading indicator for better UX
             const target = event?.target?.closest?.('.compact-calculator-card');
             if (target) {
@@ -1440,18 +1458,18 @@
                 target.style.transform = 'scale(0.98)';
                 target.style.pointerEvents = 'none';
             }
-            
+
             // Clean URL and navigate
             const cleanUrl = url.startsWith('/') ? url.substring(1) : url;
             const finalUrl = cleanUrl.startsWith('./') ? cleanUrl : './' + cleanUrl;
-            
+
             console.log('🔗 Navigating to:', finalUrl);
-            
+
             // Use slight delay for better visual feedback
             setTimeout(() => {
                 window.location.href = finalUrl;
             }, 100);
-            
+
         } catch (error) {
             console.error('❌ Navigation error:', error);
             // Fallback navigation with error handling
@@ -1475,12 +1493,12 @@
                     this.click();
                 }
             });
-            
+
             // Improve touch feedback
             card.addEventListener('touchstart', function() {
                 this.style.transform = 'scale(0.98)';
             }, { passive: true });
-            
+
             card.addEventListener('touchend', function() {
                 this.style.transform = '';
             }, { passive: true });
@@ -1494,7 +1512,7 @@
             searchInput.setAttribute('autocorrect', 'off');
             searchInput.setAttribute('autocapitalize', 'off');
             searchInput.setAttribute('spellcheck', 'false');
-            
+
             // Add input validation
             searchInput.addEventListener('input', debounce(function() {
                 const query = this.value.toLowerCase().trim();
