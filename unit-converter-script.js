@@ -1,10 +1,10 @@
-// PRATIX FINANCE Simple Unit Converter Script
-// User-friendly and responsive for all devices
+// PRATIX FINANCE Enhanced Unit Converter Script
+// Optimized for desktop and mobile with modern UI
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Unit Converter loaded successfully!');
+    console.log('Enhanced Unit Converter loaded successfully!');
     
-    // Check if desktop or mobile layout
+    // Initialize converter based on screen size
     if (window.innerWidth >= 1024) {
         initializeDesktopConverter();
         setupDesktopEventListeners();
@@ -12,7 +12,30 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeMobileConverter();
         setupMobileEventListeners();
     }
+    
+    // Setup responsive listener
+    window.addEventListener('resize', handleResponsiveLayout);
 });
+
+// Handle responsive layout changes
+function handleResponsiveLayout() {
+    const currentWidth = window.innerWidth;
+    
+    if (currentWidth >= 1024) {
+        // Switch to desktop mode
+        if (!document.querySelector('.desktop-converter-layout').style.display || 
+            document.querySelector('.desktop-converter-layout').style.display === 'none') {
+            initializeDesktopConverter();
+            setupDesktopEventListeners();
+        }
+    } else {
+        // Switch to mobile mode
+        if (document.querySelector('.desktop-converter-layout').style.display !== 'none') {
+            initializeMobileConverter();
+            setupMobileEventListeners();
+        }
+    }
+}
 
 // Mobile converter page navigation
 function openConverterPage(category) {
@@ -33,18 +56,103 @@ function openConverterPage(category) {
     }
 }
 
-// Desktop converter initialization
+// Enhanced Desktop converter initialization
 function initializeDesktopConverter() {
+    console.log('Initializing Enhanced Desktop Unit Converter...');
+    
+    // Initialize core converter
     initializeConverter();
     setupEventListeners();
     setActiveCategory('length');
     
-    // Setup desktop category navigation
-    const categoryCards = document.querySelectorAll('.category-card');
-    categoryCards.forEach(card => {
-        card.addEventListener('click', function() {
+    // Setup enhanced desktop category navigation
+    const categoryItems = document.querySelectorAll('.sidebar-category-item');
+    categoryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove active class from all items
+            categoryItems.forEach(cat => cat.classList.remove('active'));
+            
+            // Add active class to clicked item
+            this.classList.add('active');
+            
             const category = this.getAttribute('data-category');
             setActiveCategory(category);
+            
+            // Add click animation
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+        
+        // Add hover effects
+        item.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateX(5px)';
+            }
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = '';
+            }
+        });
+    });
+    
+    // Add enhanced visual feedback
+    addDesktopVisualEffects();
+    
+    // Setup real-time conversion
+    setupRealTimeConversion();
+    
+    console.log('Enhanced Desktop Unit Converter initialized successfully!');
+}
+
+// Setup real-time conversion for desktop
+function setupRealTimeConversion() {
+    const inputValue = document.getElementById('inputValue');
+    const fromUnit = document.getElementById('fromUnit');
+    const toUnit = document.getElementById('toUnit');
+    
+    let conversionTimeout;
+    
+    function triggerRealTimeConversion() {
+        clearTimeout(conversionTimeout);
+        conversionTimeout = setTimeout(() => {
+            if (inputValue.value && fromUnit.value && toUnit.value) {
+                performConversion();
+            }
+        }, 300); // 300ms delay for smooth experience
+    }
+    
+    if (inputValue) inputValue.addEventListener('input', triggerRealTimeConversion);
+    if (fromUnit) fromUnit.addEventListener('change', triggerRealTimeConversion);
+    if (toUnit) toUnit.addEventListener('change', triggerRealTimeConversion);
+}
+
+// Add enhanced visual effects for desktop
+function addDesktopVisualEffects() {
+    // Add focus effects for accessibility
+    const inputs = document.querySelectorAll('.calc-input');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.input-group, .unit-selector')?.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.closest('.input-group, .unit-selector')?.classList.remove('focused');
+        });
+    });
+    
+    // Add hover effects for result items
+    const resultItems = document.querySelectorAll('.result-item');
+    resultItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px) scale(1.02)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
         });
     });
 }
@@ -209,11 +317,20 @@ function setupEventListeners() {
     });
 }
 
-// Set active category
+// Enhanced set active category with desktop support
 function setActiveCategory(category) {
     currentCategory = category;
+    console.log(`Switching to ${category} converter`);
 
-    // Update category cards
+    // Update sidebar category items (desktop)
+    document.querySelectorAll('.sidebar-category-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-category') === category) {
+            item.classList.add('active');
+        }
+    });
+
+    // Update mobile category cards
     document.querySelectorAll('.category-card').forEach(card => {
         card.classList.remove('active');
         if (card.getAttribute('data-category') === category) {
@@ -225,17 +342,48 @@ function setActiveCategory(category) {
     populateUnitSelectors();
     updateQuickReference();
     updateConverterTitle();
+    updateConverterDescription();
     clearResults();
 
     showNotification(`Switched to ${conversionData[category].name} converter`);
 }
 
-// Update converter title
+// Update converter description for desktop
+function updateConverterDescription() {
+    const categoryData = conversionData[currentCategory];
+    const descriptionElement = document.getElementById('converterDescription');
+    
+    const descriptions = {
+        length: 'Convert between different length units with precision',
+        weight: 'Convert weight and mass units accurately',
+        area: 'Convert area measurements for land and spaces',
+        volume: 'Convert liquid and solid volume measurements',
+        temperature: 'Convert between temperature scales worldwide',
+        speed: 'Convert velocity and speed measurements'
+    };
+    
+    if (descriptionElement) {
+        descriptionElement.textContent = descriptions[currentCategory] || 'Convert units with precision';
+    }
+}
+
+// Enhanced converter title with icons
 function updateConverterTitle() {
     const categoryData = conversionData[currentCategory];
     const titleElement = document.getElementById('converterTitle');
+    
+    const titleIcons = {
+        length: '📏',
+        weight: '⚖️',
+        area: '📐',
+        volume: '🪣',
+        temperature: '🌡️',
+        speed: '⚡'
+    };
+    
     if (titleElement) {
-        titleElement.textContent = `${categoryData.name} Converter`;
+        const icon = titleIcons[currentCategory] || '📐';
+        titleElement.textContent = `${icon} ${categoryData.name} Converter`;
     }
 }
 

@@ -1,6 +1,6 @@
 
 // PRATIX FINANCE Advanced Currency Converter Script
-// Live exchange rates with advanced features
+// Live exchange rates with enhanced desktop experience
 
 class CurrencyConverter {
     constructor() {
@@ -57,6 +57,11 @@ class CurrencyConverter {
         setInterval(() => {
             this.loadExchangeRates(true);
         }, 300000);
+        
+        // Auto-convert with default values
+        setTimeout(() => {
+            this.convertCurrency();
+        }, 1000);
     }
 
     async loadExchangeRates(silent = false) {
@@ -198,18 +203,39 @@ class CurrencyConverter {
 
     setupEventListeners() {
         // Real-time conversion
-        document.getElementById('amount').addEventListener('input', () => this.convertCurrency());
-        document.getElementById('fromCurrency').addEventListener('change', () => {
-            this.updateExchangeRateDisplays();
-            this.convertCurrency();
-        });
-        document.getElementById('toCurrency').addEventListener('change', () => {
-            this.updateExchangeRateDisplays();
-            this.convertCurrency();
-        });
+        const amountInput = document.getElementById('amount');
+        const fromSelect = document.getElementById('fromCurrency');
+        const toSelect = document.getElementById('toCurrency');
         
-        // Auto-convert on page load
-        setTimeout(() => this.convertCurrency(), 1000);
+        if (amountInput) {
+            amountInput.addEventListener('input', () => this.convertCurrency());
+            amountInput.addEventListener('focus', () => {
+                amountInput.select(); // Select all text on focus for easy editing
+            });
+        }
+        
+        if (fromSelect) {
+            fromSelect.addEventListener('change', () => {
+                this.updateExchangeRateDisplays();
+                this.convertCurrency();
+            });
+        }
+        
+        if (toSelect) {
+            toSelect.addEventListener('change', () => {
+                this.updateExchangeRateDisplays();
+                this.convertCurrency();
+            });
+        }
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                this.convertCurrency();
+            } else if (e.key === 'Escape') {
+                this.clearConverter();
+            }
+        });
     }
 
     getExchangeRate(fromCurrency, toCurrency) {
@@ -243,38 +269,57 @@ class CurrencyConverter {
         
         this.displayResult(amount, fromCurrency, convertedAmount, toCurrency, exchangeRate);
         this.updateChart(fromCurrency, toCurrency);
+        
+        // Add visual feedback
+        this.addConversionAnimation();
     }
 
     displayResult(amount, fromCurrency, convertedAmount, toCurrency, exchangeRate) {
         // Main result display
-        document.getElementById('resultAmount').textContent = 
-            `${this.formatCurrency(convertedAmount, toCurrency)} ${toCurrency}`;
+        const resultAmountEl = document.getElementById('resultAmount');
+        const conversionRateEl = document.getElementById('conversionRate');
+        const inputDisplayEl = document.getElementById('inputDisplay');
         
-        document.getElementById('conversionRate').textContent = 
-            `1 ${fromCurrency} = ${this.formatCurrency(exchangeRate, toCurrency)} ${toCurrency}`;
+        if (resultAmountEl) {
+            resultAmountEl.textContent = `${this.formatCurrency(convertedAmount, toCurrency)} ${toCurrency}`;
+        }
         
-        // Breakdown display
-        document.getElementById('inputDisplay').textContent = 
-            `${this.formatCurrency(amount, fromCurrency)} ${fromCurrency}`;
+        if (conversionRateEl) {
+            conversionRateEl.textContent = `1 ${fromCurrency} = ${this.formatCurrency(exchangeRate, toCurrency)} ${toCurrency}`;
+        }
         
-        document.getElementById('rateDisplay').textContent = 
-            `1 ${fromCurrency} = ${this.formatCurrency(exchangeRate, toCurrency)} ${toCurrency}`;
-        
-        document.getElementById('resultDisplay').textContent = 
-            `${this.formatCurrency(convertedAmount, toCurrency)} ${toCurrency}`;
+        if (inputDisplayEl) {
+            inputDisplayEl.textContent = `${this.formatCurrency(amount, fromCurrency)} ${fromCurrency}`;
+        }
         
         // Show results with animation
         const resultSection = document.getElementById('resultSection');
-        resultSection.style.display = 'block';
-        resultSection.classList.add('result-updated');
-        
-        setTimeout(() => {
-            resultSection.classList.remove('result-updated');
-        }, 500);
+        if (resultSection) {
+            resultSection.style.display = 'block';
+            resultSection.classList.add('result-updated');
+            
+            setTimeout(() => {
+                resultSection.classList.remove('result-updated');
+            }, 500);
+        }
+    }
+
+    addConversionAnimation() {
+        // Add a subtle pulse animation to the convert button
+        const convertBtn = document.querySelector('.calculate-btn');
+        if (convertBtn) {
+            convertBtn.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                convertBtn.style.transform = '';
+            }, 150);
+        }
     }
 
     hideResults() {
-        document.getElementById('resultSection').style.display = 'none';
+        const resultSection = document.getElementById('resultSection');
+        if (resultSection) {
+            resultSection.style.display = 'none';
+        }
     }
 
     formatCurrency(amount, currency) {
@@ -301,37 +346,59 @@ class CurrencyConverter {
 
     populateQuickConversions() {
         const container = document.getElementById('quickConversions');
-        const quickAmounts = [1, 10, 100, 1000];
+        if (!container) return;
+        
+        const quickAmounts = [100, 500, 1000, 5000, 10000];
         
         container.innerHTML = quickAmounts.map(amount => `
             <div class="quick-convert-item" onclick="currencyConverter.setQuickAmount(${amount})">
-                <div class="quick-amount">${amount}</div>
+                <div class="quick-amount">${this.formatNumber(amount)}</div>
                 <div class="quick-label">Quick Convert</div>
             </div>
         `).join('');
     }
 
+    formatNumber(num) {
+        if (num >= 1000) {
+            return (num / 1000) + 'K';
+        }
+        return num.toString();
+    }
+
     setQuickAmount(amount) {
-        document.getElementById('amount').value = amount;
-        this.convertCurrency();
+        const amountInput = document.getElementById('amount');
+        if (amountInput) {
+            amountInput.value = amount;
+            amountInput.focus();
+            this.convertCurrency();
+            
+            // Add visual feedback
+            const clickedItem = event.currentTarget;
+            clickedItem.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                clickedItem.style.transform = '';
+            }, 150);
+        }
     }
 
     populatePopularPairs() {
         const container = document.getElementById('popularPairs');
+        if (!container) return;
+        
         const popularPairs = [
-            ['USD', 'INR'],
-            ['EUR', 'USD'],
-            ['GBP', 'USD'],
-            ['USD', 'JPY'],
-            ['AUD', 'USD'],
-            ['USD', 'CAD']
+            ['USD', 'INR', '🇺🇸→🇮🇳'],
+            ['EUR', 'USD', '🇪🇺→🇺🇸'],
+            ['GBP', 'USD', '🇬🇧→🇺🇸'],
+            ['USD', 'JPY', '🇺🇸→🇯🇵'],
+            ['AUD', 'USD', '🇦🇺→🇺🇸'],
+            ['USD', 'CAD', '🇺🇸→🇨🇦']
         ];
         
-        container.innerHTML = popularPairs.map(([from, to]) => {
+        container.innerHTML = popularPairs.map(([from, to, flags]) => {
             const rate = this.getExchangeRate(from, to);
             return `
                 <div class="popular-pair-item" onclick="currencyConverter.setPopularPair('${from}', '${to}')">
-                    <div class="pair-currencies">${from}/${to}</div>
+                    <div class="pair-currencies">${flags}</div>
                     <div class="pair-rate">${this.formatCurrency(rate, to)}</div>
                     <div class="pair-change">📈</div>
                 </div>
@@ -344,18 +411,25 @@ class CurrencyConverter {
         document.getElementById('toCurrency').value = toCurrency;
         this.updateExchangeRateDisplays();
         this.convertCurrency();
+        
+        // Add visual feedback
+        showNotification(`Switched to ${fromCurrency} → ${toCurrency}`, 'success');
     }
 
     initializeChart() {
         const canvas = document.getElementById('rateChart');
+        if (!canvas) return;
+        
         const ctx = canvas.getContext('2d');
         
         // Simple chart implementation
-        this.drawChart(ctx, canvas.width, canvas.height, 'USD', 'INR');
+        this.drawChart(ctx, canvas.width, canvas.height, 'INR', 'USD');
     }
 
     updateChart(fromCurrency, toCurrency) {
         const canvas = document.getElementById('rateChart');
+        if (!canvas) return;
+        
         const ctx = canvas.getContext('2d');
         
         // Clear and redraw
@@ -440,6 +514,17 @@ class CurrencyConverter {
         ctx.font = '12px Inter';
         ctx.fillText(`Current: ${this.formatCurrency(currentRate, toCurrency)}`, width / 2, height - 10);
     }
+
+    clearConverter() {
+        document.getElementById('amount').value = '1000';
+        document.getElementById('fromCurrency').value = 'INR';
+        document.getElementById('toCurrency').value = 'USD';
+        
+        this.updateExchangeRateDisplays();
+        this.convertCurrency();
+        
+        showNotification('Converter reset!', 'info');
+    }
 }
 
 // Global functions for HTML onclick events
@@ -457,32 +542,30 @@ function swapCurrencies() {
     currencyConverter.convertCurrency();
     
     // Add visual feedback
-    const swapBtn = document.querySelector('.swap-currencies-btn');
-    swapBtn.style.transform = 'rotate(180deg)';
+    const swapBtn = document.querySelector('.swap-btn');
+    swapBtn.style.transform = 'rotate(180deg) scale(1.1)';
     setTimeout(() => {
         swapBtn.style.transform = '';
     }, 300);
+    
+    showNotification('Currencies swapped!', 'success');
 }
 
 function clearConverter() {
-    document.getElementById('amount').value = '1';
-    document.getElementById('fromCurrency').value = 'INR';
-    document.getElementById('toCurrency').value = 'USD';
-    
-    currencyConverter.updateExchangeRateDisplays();
-    currencyConverter.convertCurrency();
+    currencyConverter.clearConverter();
 }
 
 function refreshRates() {
     currencyConverter.retryCount = 0;
     currencyConverter.loadExchangeRates();
+    showNotification('Refreshing exchange rates...', 'info');
 }
 
 function shareResults() {
     const amount = document.getElementById('amount').value;
     const fromCurrency = document.getElementById('fromCurrency').value;
     const toCurrency = document.getElementById('toCurrency').value;
-    const resultAmount = document.getElementById('resultAmount').textContent;
+    const resultAmount = document.getElementById('resultAmount')?.textContent || '';
     
     const shareText = `💱 ${amount} ${fromCurrency} = ${resultAmount}\n\nCalculated using PRATIX FINANCE Currency Converter\n${window.location.href}`;
     
@@ -496,6 +579,8 @@ function shareResults() {
         // Fallback: copy to clipboard
         navigator.clipboard.writeText(shareText).then(() => {
             showNotification('Conversion result copied to clipboard!', 'success');
+        }).catch(() => {
+            showNotification('Unable to copy to clipboard', 'error');
         });
     }
 }
@@ -519,6 +604,7 @@ function showNotification(message, type = 'info') {
         animation: slideInRight 0.3s ease;
         max-width: 300px;
         font-size: 0.9rem;
+        border: 1px solid rgba(255,255,255,0.2);
     `;
     notification.textContent = message;
 
@@ -540,6 +626,12 @@ let currencyConverter;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('PRATIX FINANCE Currency Converter loaded!');
     currencyConverter = new CurrencyConverter();
+    
+    // Add loading animation
+    document.body.classList.add('loading');
+    setTimeout(() => {
+        document.body.classList.remove('loading');
+    }, 1000);
 });
 
 // Add CSS animations
@@ -554,242 +646,220 @@ style.textContent = `
         to { opacity: 0; transform: translateX(100%); }
     }
     
-    .status-loading { border-color: #ffa500 !important; }
-    .status-success { border-color: #00ff88 !important; }
-    .status-warning { border-color: #ff9500 !important; }
-    .status-active { border-color: #00d4ff !important; }
+    .status-loading { 
+        border-color: #ffa500 !important; 
+        background: rgba(255, 165, 0, 0.1) !important;
+    }
+    .status-success { 
+        border-color: #00ff88 !important; 
+        background: rgba(0, 255, 136, 0.1) !important;
+    }
+    .status-warning { 
+        border-color: #ff9500 !important; 
+        background: rgba(255, 149, 0, 0.1) !important;
+    }
+    .status-active { 
+        border-color: #00d4ff !important; 
+        background: rgba(0, 212, 255, 0.1) !important;
+    }
     
     .result-updated {
         transform: scale(1.02);
         transition: transform 0.3s ease;
+        border-color: var(--neon-green) !important;
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.4) !important;
     }
     
-    .currency-selection-grid {
+    .loading {
+        overflow: hidden;
+    }
+    
+    .loading * {
+        animation-duration: 0.6s;
+    }
+    
+    /* Enhanced Desktop Layout */
+    .desktop-converter-layout {
         display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 1rem;
-        align-items: end;
-        margin: 1.5rem 0;
+        grid-template-columns: 1fr 400px;
+        gap: 2rem;
+        margin-top: 2rem;
     }
     
-    .currency-selector-card {
+    .converter-main-area {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 1.5rem;
     }
     
-    .currency-select-wrapper {
-        position: relative;
-    }
-    
-    .exchange-rate {
-        font-size: 0.8rem;
-        color: var(--neon-green);
-        text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
-        margin-top: 0.5rem;
-        text-align: center;
-    }
-    
-    .swap-container {
+    .converter-sidebar {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 1.5rem;
+        flex-direction: column;
+        gap: 1.5rem;
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
     }
     
-    .swap-currencies-btn {
-        background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
-        border: none;
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    /* Enhanced Interface Styling */
+    .converter-interface {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 255, 136, 0.05) 100%);
+        border: 2px solid rgba(0, 212, 255, 0.3);
     }
     
-    .swap-currencies-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 30px rgba(255, 0, 128, 0.6);
-    }
-    
-    .rates-status-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-    
-    .status-indicator {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-    
-    .status-icon {
-        font-size: 1.2rem;
-    }
-    
-    .status-text {
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-    
-    .last-updated {
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-    }
-    
-    .conversion-result {
-        text-align: center;
-        padding: 2rem;
-        background: rgba(0, 255, 136, 0.1);
-        border-radius: 16px;
+    .result-display {
+        background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
         border: 2px solid rgba(0, 255, 136, 0.3);
-        margin-bottom: 1.5rem;
     }
     
-    .result-amount {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: var(--neon-green);
-        text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
-        margin-bottom: 0.5rem;
+    .quick-reference-card {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(255, 0, 128, 0.05) 100%);
+        border: 2px solid rgba(139, 92, 246, 0.3);
     }
     
-    .conversion-rate {
-        font-size: 1.1rem;
-        color: var(--text-secondary);
-        font-weight: 600;
-    }
-    
-    .result-breakdown {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .breakdown-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .breakdown-item:last-child {
-        border-bottom: none;
-    }
-    
-    .breakdown-label {
-        color: var(--text-secondary);
-        font-weight: 600;
-    }
-    
-    .breakdown-value {
-        color: var(--neon-blue);
-        font-weight: 700;
-        text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
-    }
-    
-    .quick-convert-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 0.75rem;
-    }
-    
+    /* Enhanced Quick Convert Items */
     .quick-convert-item {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(0, 212, 255, 0.3);
-        border-radius: 12px;
-        padding: 1rem;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+        border: 2px solid rgba(0, 212, 255, 0.3);
+        border-radius: 16px;
+        padding: 1.5rem 1rem;
         text-align: center;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .quick-convert-item::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+        opacity: 0;
     }
     
     .quick-convert-item:hover {
-        background: rgba(0, 212, 255, 0.1);
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 255, 136, 0.1) 100%);
         border-color: var(--neon-cyan);
-        transform: translateY(-2px);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 
+            0 0 25px rgba(0, 255, 255, 0.4),
+            0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .quick-convert-item:hover::before {
+        opacity: 1;
+        animation: shimmer 0.6s ease-in-out;
     }
     
     .quick-amount {
-        font-size: 1.2rem;
-        font-weight: 700;
+        font-size: 1.5rem;
+        font-weight: 800;
         color: var(--neon-blue);
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
     }
     
     .quick-label {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: var(--text-secondary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
-    .popular-pairs-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 0.75rem;
-    }
-    
+    /* Enhanced Popular Pairs */
     .popular-pair-item {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(0, 255, 136, 0.3);
-        border-radius: 12px;
-        padding: 1rem;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+        border: 2px solid rgba(0, 255, 136, 0.3);
+        border-radius: 16px;
+        padding: 1.25rem;
         text-align: center;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
     
     .popular-pair-item:hover {
-        background: rgba(0, 255, 136, 0.1);
+        background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 212, 255, 0.1) 100%);
         border-color: var(--neon-green);
-        transform: translateY(-2px);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 
+            0 0 25px rgba(0, 255, 136, 0.4),
+            0 12px 30px rgba(0, 0, 0, 0.4);
     }
     
     .pair-currencies {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: var(--neon-green);
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
     }
     
     .pair-rate {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: var(--text-secondary);
         margin-bottom: 0.25rem;
+        font-weight: 600;
     }
     
     .pair-change {
-        font-size: 0.8rem;
+        font-size: 1rem;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 1023px) {
+        .desktop-converter-layout {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .converter-sidebar {
+            position: relative;
+            top: auto;
+            max-height: none;
+            overflow-y: visible;
+        }
     }
     
     @media (max-width: 768px) {
-        .currency-selection-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
+        .quick-convert-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
         }
         
-        .swap-container {
-            order: 2;
-            margin: 0.5rem 0;
+        .popular-pairs-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
         }
         
-        .result-amount {
-            font-size: 2rem;
+        .quick-convert-item {
+            padding: 1rem 0.75rem;
         }
         
-        .rates-status-content {
-            flex-direction: column;
-            text-align: center;
-            gap: 0.5rem;
+        .quick-amount {
+            font-size: 1.2rem;
         }
+        
+        .quick-label {
+            font-size: 0.75rem;
+        }
+    }
+    
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
     }
 `;
 document.head.appendChild(style);
 
-console.log('PRATIX FINANCE Currency Converter Script loaded successfully!');
+console.log('PRATIX FINANCE Enhanced Currency Converter Script loaded successfully!');

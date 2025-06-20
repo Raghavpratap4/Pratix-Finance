@@ -35,7 +35,7 @@
             <div class="standard-header-content">
                 <div class="standard-logo-section">
                     <img src="logo.png" alt="PRATIX FINANCE" class="standard-app-logo">
-                    <h1 class="standard-app-title">CURRENCY CONVERTER</h1>
+                    <h1 class="standard-app-title">💱 CURRENCY CONVERTER</h1>
                 </div>
                 <div class="standard-nav-buttons">
                     <a href="index.html" class="standard-nav-btn" title="Home">
@@ -54,189 +54,202 @@
         <!-- Main Content -->
         <main class="main-app-content">
             <div class="main-content">
-                <!-- Live Rates Status -->
-                <div class="glass-card" id="ratesStatus">
-                    <div class="rates-status-content">
-                        <div class="status-indicator">
-                            <span class="status-icon" id="statusIcon">🔄</span>
-                            <span class="status-text" id="statusText">Loading live rates...</span>
+                <!-- Hero Section with Live Rates Status -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span class="badge-icon">⚡</span>
+                            <span>Live Exchange Rates</span>
                         </div>
-                        <div class="last-updated" id="lastUpdated">
-                            Last updated: --
+                        <h1 class="hero-title">Smart Currency Converter</h1>
+                        <p class="hero-subtitle">Convert currencies instantly with real-time exchange rates from around the world</p>
+                        
+                        <!-- Live Status Card -->
+                        <div class="glass-card" id="ratesStatus" style="max-width: 600px; margin: 2rem auto;">
+                            <div class="rates-status-content">
+                                <div class="status-indicator">
+                                    <span class="status-icon" id="statusIcon">🔄</span>
+                                    <span class="status-text" id="statusText">Loading live rates...</span>
+                                </div>
+                                <div class="last-updated" id="lastUpdated">
+                                    Last updated: --
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Currency Converter -->
-                <div class="calculator-layout">
-                    <!-- Left Column: Converter Form -->
-                    <div class="calculator-form">
-                        <div class="glass-card">
-                            <h2 class="section-title">Currency Converter</h2>
-
-                            <!-- Amount Input -->
-                            <div class="input-group">
-                                <label for="amount">Amount</label>
-                                <div class="input-wrapper">
-                                    <input type="number" id="amount" class="calc-input" placeholder="Enter amount to convert" step="0.01" value="1">
+                <!-- Enhanced Currency Converter Layout -->
+                <div class="desktop-converter-layout">
+                    <!-- Main Converter Interface -->
+                    <div class="converter-main-area">
+                        <div class="glass-card converter-interface">
+                            <div class="converter-header">
+                                <h2 class="section-title">💰 Convert Your Money</h2>
+                                <div class="converter-subtitle">
+                                    <p>Enter amount and select currencies for instant conversion</p>
                                 </div>
                             </div>
 
-                            <!-- Currency Selection -->
-                            <div class="currency-selection-grid">
-                                <div class="currency-selector-card">
-                                    <label for="fromCurrency">From Currency</label>
-                                    <div class="currency-select-wrapper">
-                                        <select id="fromCurrency" class="calc-input currency-select">
-                                            <option value="USD">🇺🇸 USD - US Dollar</option>
-                                            <option value="EUR">🇪🇺 EUR - Euro</option>
-                                            <option value="GBP">🇬🇧 GBP - British Pound</option>
-                                            <option value="INR" selected>🇮🇳 INR - Indian Rupee</option>
-                                            <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
-                                            <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
-                                            <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
-                                            <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
-                                            <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
-                                            <option value="SEK">🇸🇪 SEK - Swedish Krona</option>
-                                            <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
-                                            <option value="MXN">🇲🇽 MXN - Mexican Peso</option>
-                                            <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
-                                            <option value="HKD">🇭🇰 HKD - Hong Kong Dollar</option>
-                                            <option value="NOK">🇳🇴 NOK - Norwegian Krone</option>
-                                            <option value="TRY">🇹🇷 TRY - Turkish Lira</option>
-                                            <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
-                                            <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
-                                            <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
-                                            <option value="KRW">🇰🇷 KRW - South Korean Won</option>
-                                        </select>
-                                        <div class="exchange-rate" id="fromRate">1 INR = 1 INR</div>
+                            <div class="converter-form">
+                                <!-- Amount Input Section -->
+                                <div class="input-section">
+                                    <div class="input-group">
+                                        <label for="amount">💵 Amount to Convert</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="amount" class="calc-input" placeholder="Enter amount" step="0.01" value="1000" min="0">
+                                        </div>
+                                        <small class="input-help">Enter the amount you want to convert</small>
                                     </div>
                                 </div>
 
-                                <div class="swap-container">
-                                    <button class="swap-currencies-btn" onclick="swapCurrencies()" title="Swap currencies">
-                                        ⇄
+                                <!-- Currency Selection Section -->
+                                <div class="unit-selection-section">
+                                    <div class="unit-selection-row">
+                                        <div class="unit-selector">
+                                            <label for="fromCurrency">🌍 From Currency</label>
+                                            <select id="fromCurrency" class="calc-input currency-select">
+                                                <option value="USD">🇺🇸 USD - US Dollar</option>
+                                                <option value="EUR">🇪🇺 EUR - Euro</option>
+                                                <option value="GBP">🇬🇧 GBP - British Pound</option>
+                                                <option value="INR" selected>🇮🇳 INR - Indian Rupee</option>
+                                                <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                                                <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                                                <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                                                <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+                                                <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                                                <option value="SEK">🇸🇪 SEK - Swedish Krona</option>
+                                                <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
+                                                <option value="MXN">🇲🇽 MXN - Mexican Peso</option>
+                                                <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                                                <option value="HKD">🇭🇰 HKD - Hong Kong Dollar</option>
+                                                <option value="NOK">🇳🇴 NOK - Norwegian Krone</option>
+                                                <option value="TRY">🇹🇷 TRY - Turkish Lira</option>
+                                                <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
+                                                <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
+                                                <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
+                                                <option value="KRW">🇰🇷 KRW - South Korean Won</option>
+                                            </select>
+                                            <div class="exchange-rate" id="fromRate">1 INR = 1 INR</div>
+                                        </div>
+
+                                        <div class="swap-button-container">
+                                            <button class="swap-btn" onclick="swapCurrencies()" title="Swap currencies">
+                                                ⇄
+                                            </button>
+                                        </div>
+
+                                        <div class="unit-selector">
+                                            <label for="toCurrency">🎯 To Currency</label>
+                                            <select id="toCurrency" class="calc-input currency-select">
+                                                <option value="USD" selected>🇺🇸 USD - US Dollar</option>
+                                                <option value="EUR">🇪🇺 EUR - Euro</option>
+                                                <option value="GBP">🇬🇧 GBP - British Pound</option>
+                                                <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                                                <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                                                <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                                                <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                                                <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+                                                <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                                                <option value="SEK">🇸🇪 SEK - Swedish Krona</option>
+                                                <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
+                                                <option value="MXN">🇲🇽 MXN - Mexican Peso</option>
+                                                <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                                                <option value="HKD">🇭🇰 HKD - Hong Kong Dollar</option>
+                                                <option value="NOK">🇳🇴 NOK - Norwegian Krone</option>
+                                                <option value="TRY">🇹🇷 TRY - Turkish Lira</option>
+                                                <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
+                                                <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
+                                                <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
+                                                <option value="KRW">🇰🇷 KRW - South Korean Won</option>
+                                            </select>
+                                            <div class="exchange-rate" id="toRate">1 USD = 1 USD</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="result-actions">
+                                    <button class="calculate-btn" onclick="currencyConverter.convertCurrency()">
+                                        <span>💱</span>
+                                        <span>Convert Now</span>
                                     </button>
                                 </div>
-
-                                <div class="currency-selector-card">
-                                    <label for="toCurrency">To Currency</label>
-                                    <div class="currency-select-wrapper">
-                                        <select id="toCurrency" class="calc-input currency-select">
-                                            <option value="USD" selected>🇺🇸 USD - US Dollar</option>
-                                            <option value="EUR">🇪🇺 EUR - Euro</option>
-                                            <option value="GBP">🇬🇧 GBP - British Pound</option>
-                                            <option value="INR">🇮🇳 INR - Indian Rupee</option>
-                                            <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
-                                            <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
-                                            <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
-                                            <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
-                                            <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
-                                            <option value="SEK">🇸🇪 SEK - Swedish Krona</option>
-                                            <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
-                                            <option value="MXN">🇲🇽 MXN - Mexican Peso</option>
-                                            <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
-                                            <option value="HKD">🇭🇰 HKD - Hong Kong Dollar</option>
-                                            <option value="NOK">🇳🇴 NOK - Norwegian Krone</option>
-                                            <option value="TRY">🇹🇷 TRY - Turkish Lira</option>
-                                            <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
-                                            <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
-                                            <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
-                                            <option value="KRW">🇰🇷 KRW - South Korean Won</option>
-                                        </select>
-                                        <div class="exchange-rate" id="toRate">1 USD = 1 USD</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="button-group">
-                                <button class="calculate-btn" onclick="convertCurrency()">
-                                    💱 Convert
-                                </button>
-                                <button class="refresh-btn" onclick="clearConverter()">
-                                    🗑️ Clear
-                                </button>
                             </div>
                         </div>
 
-                        <!-- Quick Conversion -->
+                        <!-- Quick Conversions -->
                         <div class="glass-card">
-                            <h3 class="sub-title">Quick Conversions</h3>
+                            <h3 class="sub-title">⚡ Quick Convert</h3>
+                            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">Click any amount for instant conversion</p>
                             <div class="quick-convert-grid" id="quickConversions">
                                 <!-- Will be populated by JavaScript -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column: Results + Additional Info -->
-                    <div class="result-section">
+                    <!-- Results and Additional Info Sidebar -->
+                    <div class="converter-sidebar">
                         <!-- Conversion Result -->
-                        <div class="glass-card" id="resultSection" style="display: none;">
-                            <h3 class="sub-title">Conversion Result</h3>
-                            <div class="result-display">
-                                <div class="conversion-result">
-                                    <div class="result-amount" id="resultAmount">0.00 USD</div>
-                                    <div class="conversion-rate" id="conversionRate">1 INR = 0.012 USD</div>
+                        <div class="glass-card result-display" id="resultSection" style="display: none;">
+                            <div class="result-header">
+                                <h3 class="result-title">✨ Conversion Result</h3>
+                            </div>
+                            <div class="result-content">
+                                <div class="result-item">
+                                    <span class="result-label">Converted Amount:</span>
+                                    <span class="result-value" id="resultAmount">0.00 USD</span>
                                 </div>
-                                <div class="result-breakdown">
-                                    <div class="breakdown-item">
-                                        <span class="breakdown-label">Amount:</span>
-                                        <span class="breakdown-value" id="inputDisplay">1 INR</span>
-                                    </div>
-                                    <div class="breakdown-item">
-                                        <span class="breakdown-label">Exchange Rate:</span>
-                                        <span class="breakdown-value" id="rateDisplay">1 INR = 0.012 USD</span>
-                                    </div>
-                                    <div class="breakdown-item">
-                                        <span class="breakdown-label">Result:</span>
-                                        <span class="breakdown-value" id="resultDisplay">0.012 USD</span>
-                                    </div>
+                                <div class="result-item">
+                                    <span class="result-label">Exchange Rate:</span>
+                                    <span class="result-formula" id="conversionRate">1 INR = 0.012 USD</span>
                                 </div>
+                                <div class="result-item">
+                                    <span class="result-label">Original Amount:</span>
+                                    <span class="result-value" id="inputDisplay">1000 INR</span>
+                                </div>
+                            </div>
+                            <div class="try-now-section">
+                                <button class="try-now-btn" onclick="shareResults()">
+                                    <span>📤</span>
+                                    <span>Share Result</span>
+                                    <span class="arrow">→</span>
+                                </button>
                             </div>
                         </div>
 
                         <!-- Exchange Rate Chart -->
-                        <div class="glass-card">
-                            <h3 class="sub-title">Exchange Rate Trends</h3>
+                        <div class="glass-card quick-reference-card">
+                            <h3 class="sub-title">📈 Rate Trends</h3>
                             <div class="chart-container">
                                 <div class="chart-wrapper">
-                                    <canvas id="rateChart" width="400" height="200"></canvas>
+                                    <canvas id="rateChart" width="350" height="200"></canvas>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Popular Currency Pairs -->
                         <div class="glass-card">
-                            <h3 class="sub-title">Popular Currency Pairs</h3>
+                            <h3 class="sub-title">🔥 Popular Pairs</h3>
+                            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Click to convert instantly</p>
                             <div class="popular-pairs-grid" id="popularPairs">
                                 <!-- Will be populated by JavaScript -->
                             </div>
                         </div>
 
                         <!-- Related Tools -->
-                        <div class="glass-card">
-                            <h3 class="sub-title">Related Financial Tools</h3>
+                        <div class="glass-card related-tools">
+                            <h3 class="sub-title">🛠️ Related Tools</h3>
                             <div class="tools-grid">
                                 <div class="tool-card" onclick="window.location.href='emi-calculator.html'">
                                     <div class="tool-icon">🏠</div>
-                                    <h3>EMI Calculator</h3>
-                                    <p>Calculate loan EMI payments</p>
+                                    <h4>EMI Calculator</h4>
+                                    <p>Calculate loan payments</p>
                                 </div>
                                 <div class="tool-card" onclick="window.location.href='sip-calculator.html'">
                                     <div class="tool-icon">📈</div>
-                                    <h3>SIP Calculator</h3>
-                                    <p>Plan systematic investments</p>
-                                </div>
-                                <div class="tool-card" onclick="window.location.href='gst-calculator.html'">
-                                    <div class="tool-icon">📊</div>
-                                    <h3>GST Calculator</h3>
-                                    <p>Calculate GST for business</p>
-                                </div>
-                                <div class="tool-card" onclick="window.location.href='fd-calculator.html'">
-                                    <div class="tool-icon">🏦</div>
-                                    <h3>FD Calculator</h3>
-                                    <p>Calculate fixed deposit returns</p>
+                                    <h4>SIP Calculator</h4>
+                                    <p>Plan investments</p>
                                 </div>
                             </div>
                         </div>
