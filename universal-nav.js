@@ -138,19 +138,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Enhanced event listener setup
+    // PROFESSIONAL: Enhanced event listener setup with better error handling
     allNavItems.forEach((item, index) => {
         const handleTabSwitch = function(e) {
             e.preventDefault();
             e.stopPropagation();
             
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
             const targetTab = this.getAttribute('data-tab');
-            console.log(`Tab clicked (${index}):`, targetTab);
+            console.log(`Professional Tab Navigation (${index}):`, targetTab);
             
             if (targetTab) {
                 switchTab(targetTab);
             } else {
-                console.warn('No data-tab attribute found on nav item');
+                console.warn('⚠️ No data-tab attribute found on nav item');
             }
         };
         
@@ -193,13 +199,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Tab navigation initialized successfully');
     }, 'Error during tab navigation initialization');
 
-    // ENHANCED: Mobile navigation visibility with better detection
+    // PROFESSIONAL: Mobile navigation visibility with enhanced detection
     function ensureMobileNavVisibility() {
         safeExecute(() => {
             const mobileNavs = document.querySelectorAll('.standard-bottom-nav, .bottom-nav');
             const isMobile = window.innerWidth <= 1023;
             
-            console.log(`📱 Device check: ${isMobile ? 'Mobile/Tablet' : 'Desktop'} (${window.innerWidth}px)`);
+            console.log(`🎯 Professional Device Detection: ${isMobile ? 'Mobile/Tablet' : 'Desktop'} (${window.innerWidth}px)`);
             
             mobileNavs.forEach((mobileNav, index) => {
                 if (!mobileNav) return;
@@ -280,18 +286,32 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Universal Navigation: Initialized successfully');
 });
 
-// FIXED: Global navigation functions with error handling
+// PROFESSIONAL: Enhanced navigation functions with smooth transitions
 function safeNavigate(url) {
     try {
-        if (url && typeof url === 'string') {
-            window.location.href = url.startsWith('/') ? url : '/' + url;
-        } else {
-            console.warn('Invalid URL provided to navigation function');
+        if (!url || typeof url !== 'string') {
+            console.warn('⚠️ Invalid URL provided to navigation function');
+            return;
         }
+        
+        // Add loading state
+        document.body.style.opacity = '0.9';
+        document.body.style.transition = 'opacity 0.2s ease';
+        
+        // Clean and navigate
+        const cleanUrl = url.replace(/^\.?\//, '');
+        const finalUrl = cleanUrl.includes('.html') ? cleanUrl : cleanUrl + '.html';
+        
+        console.log('🔗 Professional Navigation:', finalUrl);
+        
+        setTimeout(() => {
+            window.location.href = finalUrl;
+        }, 100);
+        
     } catch (error) {
-        console.error('Navigation error:', error);
-        // Fallback to home
-        window.location.href = '/index.html';
+        console.error('❌ Navigation error:', error);
+        document.body.style.opacity = '1';
+        window.location.href = 'index.html';
     }
 }
 

@@ -1,6 +1,6 @@
 
-const CACHE_NAME = 'pratix-finance-v1.3.0';
-const VERSION_CACHE = 'version-cache-v2';
+const CACHE_NAME = 'pratix-finance-v1.4.0';
+const VERSION_CACHE = 'version-cache-v3';
 
 // OPTIMIZED: Essential files for better performance
 const urlsToCache = [
