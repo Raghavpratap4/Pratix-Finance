@@ -4388,23 +4388,24 @@ body::after {
   }
 }</old_str>
 
-  /* FIXED: Enhanced bottom navigation for mobile - Consolidated and optimized */
+  /* OPTIMIZED: Universal Mobile Navigation - Single consolidated section */
+@media (max-width: 1023px) {
   .bottom-nav,
   .standard-bottom-nav {
       position: fixed !important;
       bottom: 0 !important;
       left: 0 !important;
       right: 0 !important;
-      width: 100% !important;
-      height: 85px !important;
+      width: 100vw !important;
+      height: 90px !important;
       background: rgba(15, 23, 42, 0.98) !important;
       backdrop-filter: blur(35px) !important;
       border-top: 3px solid var(--neon-blue) !important;
-      padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom)) !important;
+      padding: 0.5rem 0.25rem calc(0.75rem + env(safe-area-inset-bottom)) !important;
       box-shadow: 
           0 0 50px rgba(0, 212, 255, 0.6),
           0 -12px 40px rgba(0, 0, 0, 0.7) !important;
-      z-index: 999999 !important;
+      z-index: 999999999 !important;
       display: grid !important;
       grid-template-columns: repeat(6, 1fr) !important;
       gap: 0.25rem !important;
@@ -4412,45 +4413,92 @@ body::after {
       opacity: 1 !important;
       transform: translateZ(0) !important;
       will-change: transform !important;
+      contain: layout !important;
   }
 
-  .nav-item {
-      min-height: 64px !important;
-      padding: 0.4rem 0.2rem !important;
-      gap: 0.2rem !important;
-      border-radius: 10px !important;
-      background: rgba(0, 0, 0, 0.3) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  .nav-item,
+  .standard-nav-item {
+      min-height: 68px !important;
+      padding: 0.5rem 0.25rem !important;
+      gap: 0.3rem !important;
+      border-radius: 12px !important;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
       margin: 0.1rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      user-select: none !important;
+      -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2) !important;
+      touch-action: manipulation !important;
+      pointer-events: auto !important;
+      color: var(--text-muted) !important;
+      text-decoration: none !important;
+      flex: 1 !important;
   }
 
   .nav-item:hover,
-  .nav-item:focus {
+  .nav-item:focus,
+  .standard-nav-item:hover,
+  .standard-nav-item:focus {
       background: rgba(0, 212, 255, 0.15) !important;
       border-color: var(--neon-cyan) !important;
+      color: var(--neon-cyan) !important;
       transform: translateY(-1px) !important;
   }
 
-  .nav-item.active {
-      background: rgba(0, 212, 255, 0.2) !important;
+  .nav-item.active,
+  .standard-nav-item.active {
+      background: rgba(0, 212, 255, 0.25) !important;
       border-color: var(--neon-blue) !important;
+      color: var(--neon-blue) !important;
       box-shadow: 0 0 20px rgba(0, 212, 255, 0.4) !important;
   }
 
-  .nav-item:active {
-      transform: scale(0.95) !important;
+  .nav-item:active,
+  .standard-nav-item:active {
+      transform: scale(0.96) !important;
       transition: transform 0.1s ease !important;
   }
 
-  /* Ensure content has proper spacing */
+  .nav-icon,
+  .standard-nav-icon {
+      font-size: 1.1rem !important;
+      margin-bottom: 0.2rem !important;
+      transition: all 0.3s ease !important;
+  }
+
+  .nav-label,
+  .standard-nav-label {
+      font-size: 0.65rem !important;
+      font-weight: 600 !important;
+      line-height: 1.1 !important;
+      text-align: center !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+  }
+
+  /* Ensure proper content spacing */
   .main-content {
-      padding-bottom: 130px !important;
+      padding-bottom: 110px !important;
+  }
+
+  .main-app-content {
+      padding-bottom: 110px !important;
   }
 
   .simple-footer,
   .professional-footer {
-      margin-bottom: 130px !important;
+      margin-bottom: 110px !important;
   }
+
+  body {
+      padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
+  }
+}
 
   .calculator-layout {
       display: flex;

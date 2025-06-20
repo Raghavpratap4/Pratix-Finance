@@ -58,28 +58,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enhanced Tab Navigation for All Devices
     function initTabNavigation() {
-        console.log('🔄 Initializing enhanced tab navigation...');
+        console.log('🔄 SIP: Initializing enhanced tab navigation...');
         
         try {
             // Get ALL navigation items (desktop + mobile)
             const allNavItems = document.querySelectorAll('[data-tab], .tab-nav-item[data-tab], .standard-nav-item[data-tab]');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            console.log('✅ Found nav items:', allNavItems.length);
-            console.log('✅ Found tab contents:', tabContents.length);
+            console.log('✅ SIP: Found nav items:', allNavItems.length);
+            console.log('✅ SIP: Found tab contents:', tabContents.length);
 
             function switchTab(targetTab) {
-                console.log('🎯 Switching to tab:', targetTab);
+                if (!targetTab) {
+                    console.warn('❌ SIP: No target tab specified');
+                    return;
+                }
+                
+                console.log('🎯 SIP: Switching to tab:', targetTab);
 
                 // Remove active from ALL navigation items
                 allNavItems.forEach(item => {
-                    item.classList.remove('active');
+                    if (item) item.classList.remove('active');
                 });
 
                 // Hide ALL tab contents
                 tabContents.forEach(content => {
-                    content.classList.remove('active');
-                    content.style.display = 'none';
+                    if (content) {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    }
+                });
                 });
 
                 // Activate target navigation items (both desktop and mobile)

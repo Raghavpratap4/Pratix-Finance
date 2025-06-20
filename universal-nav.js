@@ -169,29 +169,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 'Error adding touchstart listener');
     });
 
-    // Enhanced initialization
+    // Enhanced initialization with better error handling
     safeExecute(() => {
-        const activeTab = document.querySelector('.tab-content.active');
-        if (activeTab) {
-            const tabId = activeTab.id;
-            switchTab(tabId);
-        } else if (allNavItems.length > 0) {
-            const firstTab = allNavItems[0].getAttribute('data-tab');
-            if (firstTab) {
-                switchTab(firstTab);
+        // Try to find currently active tab
+        let activeTab = document.querySelector('.tab-content.active');
+        
+        if (activeTab && activeTab.id) {
+            switchTab(activeTab.id);
+        } else {
+            // Find first available tab if no active tab
+            const firstTabContent = document.querySelector('.tab-content');
+            if (firstTabContent && firstTabContent.id) {
+                switchTab(firstTabContent.id);
+            } else if (allNavItems.length > 0) {
+                // Fallback to first nav item's data-tab
+                const firstTab = allNavItems[0].getAttribute('data-tab');
+                if (firstTab) {
+                    switchTab(firstTab);
+                }
             }
         }
-    }, 'Error during initialization');
+        
+        console.log('✅ Tab navigation initialized successfully');
+    }, 'Error during tab navigation initialization');
 
-    // FIXED: Enhanced mobile navigation visibility
+    // ENHANCED: Mobile navigation visibility with better detection
     function ensureMobileNavVisibility() {
         safeExecute(() => {
             const mobileNavs = document.querySelectorAll('.standard-bottom-nav, .bottom-nav');
             const isMobile = window.innerWidth <= 1023;
             
-            mobileNavs.forEach(mobileNav => {
-                if (mobileNav && isMobile) {
-                    // Force mobile nav visibility
+            console.log(`📱 Device check: ${isMobile ? 'Mobile/Tablet' : 'Desktop'} (${window.innerWidth}px)`);
+            
+            mobileNavs.forEach((mobileNav, index) => {
+                if (!mobileNav) return;
+                
+                if (isMobile) {
+                    // Enhanced mobile nav visibility
                     const styles = {
                         display: 'grid',
                         visibility: 'visible',
@@ -200,23 +214,38 @@ document.addEventListener('DOMContentLoaded', function() {
                         bottom: '0',
                         left: '0',
                         right: '0',
-                        zIndex: '999999',
+                        zIndex: '999999999',
                         width: '100vw',
+                        height: '90px',
+                        background: 'rgba(15, 23, 42, 0.98)',
+                        backdropFilter: 'blur(35px)',
+                        borderTop: '3px solid var(--neon-blue)',
+                        padding: '0.5rem 0.25rem calc(0.75rem + env(safe-area-inset-bottom))',
                         transform: 'translateZ(0)',
                         willChange: 'transform',
                         gridTemplateColumns: 'repeat(6, 1fr)',
-                        gap: '0.25rem'
+                        gap: '0.25rem',
+                        contain: 'layout'
                     };
                     
                     Object.assign(mobileNav.style, styles);
-                } else if (mobileNav && !isMobile) {
+                    console.log(`✅ Mobile nav ${index + 1} configured`);
+                } else {
                     // Hide on desktop
                     mobileNav.style.display = 'none';
+                    console.log(`🖥️ Mobile nav ${index + 1} hidden on desktop`);
                 }
             });
             
-            // Adjust body padding
-            document.body.style.paddingBottom = isMobile ? '100px' : '0';
+            // Adjust body padding with better detection
+            const currentPadding = isMobile ? 'calc(110px + env(safe-area-inset-bottom))' : '0';
+            document.body.style.paddingBottom = currentPadding;
+            
+            // Adjust main content padding
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.style.paddingBottom = isMobile ? '110px' : '2rem';
+            }
             
         }, 'Error ensuring mobile nav visibility');
     }

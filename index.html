@@ -1425,28 +1425,42 @@
         setupDownloadButtons();
     });
 
-    // ENHANCED: Safe navigation function for better mobile experience
+    // ENHANCED: Safe navigation function with better error handling
     function safeNavigate(url) {
         try {
-            if (url && typeof url === 'string') {
-                // Add loading indicator for better UX
-                const target = event.target.closest('.compact-calculator-card');
-                if (target) {
-                    target.style.opacity = '0.7';
-                    target.style.transform = 'scale(0.98)';
-                }
-                
-                // Use slight delay for better visual feedback
-                setTimeout(() => {
-                    window.location.href = url.startsWith('/') ? url : './' + url;
-                }, 150);
-            } else {
+            if (!url || typeof url !== 'string') {
                 console.warn('❌ Invalid URL provided to navigation function');
+                return;
             }
+            
+            // Add loading indicator for better UX
+            const target = event?.target?.closest?.('.compact-calculator-card');
+            if (target) {
+                target.style.opacity = '0.7';
+                target.style.transform = 'scale(0.98)';
+                target.style.pointerEvents = 'none';
+            }
+            
+            // Clean URL and navigate
+            const cleanUrl = url.startsWith('/') ? url.substring(1) : url;
+            const finalUrl = cleanUrl.startsWith('./') ? cleanUrl : './' + cleanUrl;
+            
+            console.log('🔗 Navigating to:', finalUrl);
+            
+            // Use slight delay for better visual feedback
+            setTimeout(() => {
+                window.location.href = finalUrl;
+            }, 100);
+            
         } catch (error) {
             console.error('❌ Navigation error:', error);
-            // Fallback navigation
-            window.location.href = './index.html';
+            // Fallback navigation with error handling
+            try {
+                window.location.href = './index.html';
+            } catch (fallbackError) {
+                console.error('❌ Fallback navigation failed:', fallbackError);
+                window.location.reload();
+            }
         }
     }
 
