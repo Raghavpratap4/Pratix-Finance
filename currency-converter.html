@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRATIX FINANCE Currency Converter - Convert currencies with live exchange rates instantly" />
+    <meta name="keywords" content="currency converter, exchange rates, USD, EUR, INR, live rates, PRATIX FINANCE" />
+    <meta name="author" content="Pratix Finance" />
+    <title>Currency Converter - PRATIX FINANCE</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#31417F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pratix Finance">
+    <meta name="msapplication-TileColor" content="#31417F">
+    <meta name="msapplication-TileImage" content="/favicon.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enhanced Header -->
+        <header class="standard-header">
+            <div class="standard-header-content">
+                <div class="standard-logo-section">
+                    <img src="logo.png" alt="PRATIX FINANCE" class="standard-app-logo">
+                    <h1 class="standard-app-title">CURRENCY CONVERTER</h1>
+                </div>
+                <div class="standard-nav-buttons">
+                    <a href="index.html" class="standard-nav-btn" title="Home">
+                        🏠
+                    </a>
+                    <button class="standard-nav-btn" onclick="shareResults()" title="Share">
+                        📤
+                    </button>
+                    <button class="standard-nav-btn" onclick="refreshRates()" title="Refresh Rates">
+                        🔄
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-app-content">
+            <div class="main-content">
+                <!-- Live Rates Status -->
+                <div class="glass-card" id="ratesStatus">
+                    <div class="rates-status-content">
+                        <div class="status-indicator">
+                            <span class="status-icon" id="statusIcon">🔄</span>
+                            <span class="status-text" id="statusText">Loading live rates...</span>
+                        </div>
+                        <div class="last-updated" id="lastUpdated">
+                            Last updated: --
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currency Converter -->
+                <div class="calculator-layout">
+                    <!-- Left Column: Converter Form -->
+                    <div class="calculator-form">
+                        <div class="glass-card">
+                            <h2 class="section-title">Currency Converter</h2>
+
+                            <!-- Amount Input -->
+                            <div class="input-group">
+                                <label for="amount">Amount</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="amount" class="calc-input" placeholder="Enter amount to convert" step="0.01" value="1">
+                                </div>
+                            </div>
+
+                            <!-- Currency Selection -->
+                            <div class="currency-selection-grid">
+                                <div class="currency-selector-card">
+                                    <label for="fromCurrency">From Currency</label>
+                                    <div class="currency-select-wrapper">
+                                        <select id="fromCurrency" class="calc-input currency-select">
+                                            <option value="USD">🇺🇸 USD - US Dollar</option>
+                                            <option value="EUR">🇪🇺 EUR - Euro</option>
+                                            <option value="GBP">🇬🇧 GBP - British Pound</option>
+                                            <option value="INR" selected>🇮🇳 INR - Indian Rupee</option>
+                                            <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                                            <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                                            <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                                            <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+                                            <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                                            <option value="SEK">🇸🇪 SEK - Swedish Krona</option>
+                                            <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
+                                            <option value="MXN">🇲🇽 MXN - Mexican Peso</option>
+                                            <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                                            <option value="HKD">🇭🇰 HKD - Hong Kong Dollar</option>
+                                            <option value="NOK">🇳🇴 NOK - Norwegian Krone</option>
+                                            <option value="TRY">🇹🇷 TRY - Turkish Lira</option>
+                                            <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
+                                            <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
+                                            <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
+                                            <option value="KRW">🇰🇷 KRW - South Korean Won</option>
+                                        </select>
+                                        <div class="exchange-rate" id="fromRate">1 INR = 1 INR</div>
+                                    </div>
+                                </div>
+
+                                <div class="swap-container">
+                                    <button class="swap-currencies-btn" onclick="swapCurrencies()" title="Swap currencies">
+                                        ⇄
+                                    </button>
+                                </div>
+
+                                <div class="currency-selector-card">
+                                    <label for="toCurrency">To Currency</label>
+                                    <div class="currency-select-wrapper">
+                                        <select id="toCurrency" class="calc-input currency-select">
+                                            <option value="USD" selected>🇺🇸 USD - US Dollar</option>
+                                            <option value="EUR">🇪🇺 EUR - Euro</option>
+                                            <option value="GBP">🇬🇧 GBP - British Pound</option>
+                                            <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                                            <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                                            <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                                            <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                                            <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+                                            <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                                            <option value="SEK">🇸🇪 SEK - Swedish Krona</option>
+                                            <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
+                                            <option value="MXN">🇲🇽 MXN - Mexican Peso</option>
+                                            <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                                            <option value="HKD">🇭🇰 HKD - Hong Kong Dollar</option>
+                                            <option value="NOK">🇳🇴 NOK - Norwegian Krone</option>
+                                            <option value="TRY">🇹🇷 TRY - Turkish Lira</option>
+                                            <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
+                                            <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
+                                            <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
+                                            <option value="KRW">🇰🇷 KRW - South Korean Won</option>
+                                        </select>
+                                        <div class="exchange-rate" id="toRate">1 USD = 1 USD</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="button-group">
+                                <button class="calculate-btn" onclick="convertCurrency()">
+                                    💱 Convert
+                                </button>
+                                <button class="refresh-btn" onclick="clearConverter()">
+                                    🗑️ Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Conversion -->
+                        <div class="glass-card">
+                            <h3 class="sub-title">Quick Conversions</h3>
+                            <div class="quick-convert-grid" id="quickConversions">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Results + Additional Info -->
+                    <div class="result-section">
+                        <!-- Conversion Result -->
+                        <div class="glass-card" id="resultSection" style="display: none;">
+                            <h3 class="sub-title">Conversion Result</h3>
+                            <div class="result-display">
+                                <div class="conversion-result">
+                                    <div class="result-amount" id="resultAmount">0.00 USD</div>
+                                    <div class="conversion-rate" id="conversionRate">1 INR = 0.012 USD</div>
+                                </div>
+                                <div class="result-breakdown">
+                                    <div class="breakdown-item">
+                                        <span class="breakdown-label">Amount:</span>
+                                        <span class="breakdown-value" id="inputDisplay">1 INR</span>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <span class="breakdown-label">Exchange Rate:</span>
+                                        <span class="breakdown-value" id="rateDisplay">1 INR = 0.012 USD</span>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <span class="breakdown-label">Result:</span>
+                                        <span class="breakdown-value" id="resultDisplay">0.012 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exchange Rate Chart -->
+                        <div class="glass-card">
+                            <h3 class="sub-title">Exchange Rate Trends</h3>
+                            <div class="chart-container">
+                                <div class="chart-wrapper">
+                                    <canvas id="rateChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Popular Currency Pairs -->
+                        <div class="glass-card">
+                            <h3 class="sub-title">Popular Currency Pairs</h3>
+                            <div class="popular-pairs-grid" id="popularPairs">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Related Tools -->
+                        <div class="glass-card">
+                            <h3 class="sub-title">Related Financial Tools</h3>
+                            <div class="tools-grid">
+                                <div class="tool-card" onclick="window.location.href='emi-calculator.html'">
+                                    <div class="tool-icon">🏠</div>
+                                    <h3>EMI Calculator</h3>
+                                    <p>Calculate loan EMI payments</p>
+                                </div>
+                                <div class="tool-card" onclick="window.location.href='sip-calculator.html'">
+                                    <div class="tool-icon">📈</div>
+                                    <h3>SIP Calculator</h3>
+                                    <p>Plan systematic investments</p>
+                                </div>
+                                <div class="tool-card" onclick="window.location.href='gst-calculator.html'">
+                                    <div class="tool-icon">📊</div>
+                                    <h3>GST Calculator</h3>
+                                    <p>Calculate GST for business</p>
+                                </div>
+                                <div class="tool-card" onclick="window.location.href='fd-calculator.html'">
+                                    <div class="tool-icon">🏦</div>
+                                    <h3>FD Calculator</h3>
+                                    <p>Calculate fixed deposit returns</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Footer -->
+            <footer class="professional-footer">
+                <div class="footer-container">
+                    <!-- Elite Brand Section -->
+                    <div class="footer-brand-elite">
+                        <div class="brand-header-elite">
+                            <img src="logo.png" alt="Pratix Finance" class="footer-logo-elite">
+                            <h3 class="brand-name-elite">PRATIX FINANCE</h3>
+                        </div>
+                        <p class="brand-tagline-elite">India's Most Trusted Financial Calculator Platform</p>
+                        <div class="world-no1-badge">
+                            <span>🏆</span>
+                            <span>#1 Financial Calculator Suite</span>
+                        </div>
+                    </div>
+
+                    <div class="footer-links-elite-grid">
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>🧮</span>
+                                Calculators
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="emi-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🏠</span>
+                                    EMI Calculator
+                                </a></li>
+                                <li><a href="sip-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📈</span>
+                                    SIP Calculator
+                                </a></li>
+                                <li><a href="currency-converter.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">💱</span>
+                                    Currency Converter
+                                </a></li>
+                                <li><a href="gst-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📊</span>
+                                    GST Calculator
+                                </a></li>
+                                <li><a href="tax-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📋</span>
+                                    Tax Calculator
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>💼</span>
+                                Financial Tools
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="sip-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🎯</span>
+                                    Goal Planning
+                                </a></li>
+                                <li><a href="emi-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">💰</span>
+                                    Loan Planning
+                                </a></li>
+                                <li><a href="fd-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📊</span>
+                                    Investment Planning
+                                </a></li>
+                                <li><a href="tax-calculator.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🧾</span>
+                                    Tax Planning
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>📚</span>
+                                Resources
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="about.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">ℹ️</span>
+                                    About Us
+                                </a></li>
+                                <li><a href="contact.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📞</span>
+                                    Contact Support
+                                </a></li>
+                                <li><a href="feedback.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">💬</span>
+                                    Send Feedback
+                                </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="footer-section-elite">
+                            <h3 class="footer-section-title-elite">
+                                <span>⚖️</span>
+                                Legal
+                            </h3>
+                            <ul class="footer-links-list-elite">
+                                <li><a href="privacy.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">🔒</span>
+                                    Privacy Policy
+                                </a></li>
+                                <li><a href="terms.html" class="footer-link-elite">
+                                    <span class="footer-link-icon-elite">📄</span>
+                                    Terms of Service
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Copyright -->
+                    <div class="footer-copyright-elite">
+                        <p class="copyright-text-elite">
+                            © 2025 <strong>PRATIX FINANCE</strong>. All rights reserved. 
+                        </p>
+                        <p class="tagline-elite">
+                            Empowering Financial Decisions Through Smart Calculations
+                        </p>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+
+        <!-- Bottom Navigation - Mobile Only -->
+        <nav class="standard-bottom-nav">
+            <a href="index.html" class="standard-nav-item">
+                <span class="standard-nav-icon">🏠</span>
+                <span class="standard-nav-label">Home</span>
+            </a>
+            <a href="emi-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">🏠</span>
+                <span class="standard-nav-label">EMI</span>
+            </a>
+            <a href="sip-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">📈</span>
+                <span class="standard-nav-label">SIP</span>
+            </a>
+            <a href="currency-converter.html" class="standard-nav-item active">
+                <span class="standard-nav-icon">💱</span>
+                <span class="standard-nav-label">Currency</span>
+            </a>
+            <a href="gst-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">📊</span>
+                <span class="standard-nav-label">GST</span>
+            </a>
+            <a href="tax-calculator.html" class="standard-nav-item">
+                <span class="standard-nav-icon">💼</span>
+                <span class="standard-nav-label">Tax</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="currency-converter-script.js"></script>
+</body>
+</html>
